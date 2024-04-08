@@ -7,13 +7,12 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @SpringBootApplication
-public class OgadaApplication {
+public class OdigaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(OgadaApplication.class, args);
+        SpringApplication.run(OdigaApplication.class, args);
     }
 
 

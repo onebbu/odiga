@@ -5,10 +5,10 @@ const BoardList = () => {
     const [hello, setHello] = useState('');
 
     useEffect(() => {
-        // axios.get('/board')
-        //     .then((res) => {
-        //         setHello(res.data);
-        //     })
+        axios.get('/board')
+            .then((res) => {
+                setHello(res.data);
+            })
     }, []);
     return (
         <div className="App">

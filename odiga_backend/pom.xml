@@ -8,11 +8,11 @@
         <version>3.2.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.ogada</groupId>
-    <artifactId>ogada</artifactId>
+    <groupId>com.odiga</groupId>
+    <artifactId>odiga</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>ogada2</name>
-    <description>ogada2</description>
+    <name>odiga</name>
+    <description>odiga</description>
     <properties>
         <java.version>17</java.version>
     </properties>
