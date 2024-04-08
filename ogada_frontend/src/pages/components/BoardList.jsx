@@ -5,14 +5,14 @@ const BoardList = () => {
     const [hello, setHello] = useState('');
 
     useEffect(() => {
-        axios.get('/board')
-            .then((res) => {
-                setHello(res.data);
-            })
+        // axios.get('/board')
+        //     .then((res) => {
+        //         setHello(res.data);
+        //     })
     }, []);
     return (
         <div className="App">
-            {/*백엔드 데이터 : {hello}*/}
+            {/*백엔드 데이터 : {hello.level}*/}
         </div>
     );
 };

@@ -10,10 +10,10 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @SpringBootApplication
-public class Ogada2Application {
+public class OgadaApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(Ogada2Application.class, args);
+        SpringApplication.run(OgadaApplication.class, args);
     }
 
 

@@ -3,20 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ogada.mytrip.dao.BoardDAO">
-<!--    <resultMap id="articlesResult" type="productVO">-->
-<!--        <result property="articleNO" column="articleNO" />-->
-<!--        <result property="parentNO" column="parentNO" />-->
-<!--        <result property="title" column="title" />-->
-<!--        <result property="content" column="content" />-->
-<!--        <result property="writeDate" column="writeDate" />-->
-<!--        <result property="imageFileName" column="imageFileName" />-->
-<!--    </resultMap>-->
 
-<!--    <resultMap id="imgResult" type="imageVO">-->
-<!--        <result property="imageFileNO" column="imageFileNO" />-->
-<!--        <result property="articleNO" column="articleNO" />-->
-<!--        <result property="imageFileName" column="imageFileName" />-->
-<!--    </resultMap>-->
 
     <select id="selectAll" resultType="BoardVO" >
     <![CDATA[
