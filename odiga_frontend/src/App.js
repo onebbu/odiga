@@ -4,6 +4,7 @@ import Main from "./pages/main/Main";
 import Login from "./pages/login/Login";
 import BoardList from "./pages/boardList/BoardList";
 import SignUp from "./pages/sign-up/SignUp";
+import TravelDetailPage from './pages/traveldetailpage/TravelDetailPage';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                     <Route exact path="/login" element={<Login />}></Route>
                     <Route exact path="/sign-up" element={<SignUp />}></Route>
                     <Route exact path="/board-list" element={<BoardList />}></Route>
+                    <Route exact path="/detail" element={<TravelDetailPage />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>
