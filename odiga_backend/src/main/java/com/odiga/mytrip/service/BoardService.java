@@ -1,6 +1,6 @@
-package com.ogada.mytrip.service;
+package com.odiga.mytrip.service;
 
-import com.ogada.mytrip.dao.BoardDAO;
+import com.odiga.mytrip.dao.BoardDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

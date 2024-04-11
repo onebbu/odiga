@@ -1,7 +1,7 @@
-package com.ogada.mytrip.controller;
+package com.odiga.mytrip.controller;
 
-import com.ogada.mytrip.service.BoardService;
-import com.ogada.mytrip.vo.BoardVO;
+import com.odiga.mytrip.service.BoardService;
+import com.odiga.mytrip.vo.BoardVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
