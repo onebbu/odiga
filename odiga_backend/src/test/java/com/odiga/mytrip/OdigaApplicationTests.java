@@ -1,10 +1,10 @@
-package com.ogada.mytrip;
+package com.odiga.mytrip;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class Ogada2ApplicationTests {
+class OdigaApplicationTests {
 
     @Test
     void contextLoads() {
