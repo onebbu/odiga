@@ -1,4 +1,4 @@
-package com.ogada.mytrip;
+package com.odiga.mytrip;
 
 import org.apache.catalina.filters.CorsFilter;
 import org.springframework.boot.SpringApplication;
