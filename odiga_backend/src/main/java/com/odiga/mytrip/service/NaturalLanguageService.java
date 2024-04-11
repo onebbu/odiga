@@ -1,4 +1,4 @@
-package com.ogada.mytrip.service;
+package com.odiga.mytrip.service;
 
 import com.google.cloud.language.v1.Document;
 import com.google.cloud.language.v1.LanguageServiceClient;

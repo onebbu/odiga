@@ -1,6 +1,6 @@
-package com.ogada.mytrip.dao;
+package com.odiga.mytrip.dao;
 
-import com.ogada.mytrip.vo.BoardVO;
+import com.odiga.mytrip.vo.BoardVO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
