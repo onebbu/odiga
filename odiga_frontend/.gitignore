@@ -12,11 +12,8 @@ package-lock.json
 # production
 /build
 
-<<<<<<< HEAD
 .idea
 
-=======
->>>>>>> db820d9fca9e5c5c72a155341e21c1d3628a310c
 # misc
 .DS_Store
 .env.local
