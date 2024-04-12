@@ -9,9 +9,13 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import GoogleLoginButton from "../component/google-login/GoogleLogin";
+import {createTheme, ThemeProvider} from '@mui/material/styles';
+import KakaoLoginButton from "../component/Oauth/kakao/KakaoLogin";
+import "./Login.css";
+import NaverLoginButton from "../component/Oauth/naver/NaverLoginButton";
+import GoogleLogin from "../component/Oauth/google/GoogleLogin";
 
+// localhost:3000/login
 
 function Copyright(props) {
     return (
@@ -45,7 +49,7 @@ export default function SignIn() {
         <div>
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
-                    <CssBaseline />
+                    <CssBaseline/>
                     <Box
                         sx={{
                             marginTop: 8,
@@ -54,13 +58,13 @@ export default function SignIn() {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
+                        <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                            <LockOutlinedIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
                             로그인
                         </Typography>
-                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+                        <Box component="form" onSubmit={handleSubmit} noValidate sx={{mt: 1}}>
                             <TextField
                                 margin="normal"
                                 required
@@ -85,7 +89,7 @@ export default function SignIn() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
+                                sx={{mt: 3, mb: 2}}
                             >
                                 Sign In
                             </Button>
@@ -108,8 +112,10 @@ export default function SignIn() {
             </ThemeProvider>
         </div>
         {/*kakao, google, naver login api & button*/}
-        <div>
-            <GoogleLoginButton />
+        <div className="oauth">
+            <GoogleLogin/>
+            <KakaoLoginButton/>
+            <NaverLoginButton/>
         </div>
         </body>
     );
