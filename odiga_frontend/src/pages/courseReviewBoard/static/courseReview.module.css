@@ -1,0 +1,26 @@
+.main-banner {
+  background-image: url(../static/banner-bg.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  text-align: center;
+  background-color: #2a2a2a;
+  position: relative;
+}
+
+.cr-row {
+  color: white;
+  width: 100%;
+}
+.cr-row em {
+  color: #00bdfe;
+  font-style: normal;
+}
+
+.col-lg-12 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+}

@@ -1,0 +1,8 @@
+.mypageitem:hover {
+	color: #f84646;
+	background: none;
+}
+
+.mypageitem {
+	text-decoration: none;
+}
