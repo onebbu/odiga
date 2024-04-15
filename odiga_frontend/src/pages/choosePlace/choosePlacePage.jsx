@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState} from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -6,9 +6,9 @@ import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import './cPP.css';
+import Item from './Place';
 
 const Body= Styled.div`
     margin: 0;
@@ -26,20 +26,18 @@ function ChoosePlace() {
             <Wrapper>
                 <CustomizedAccordions/>
                 <Section>
-                    <div class="item">
+                    <div className="item">
                         <p> 여행지를 드래그하여 채워보세요! </p>
                         <h2>서울시의 꼭! 가봐야 할 여행지 </h2>
                     </div>
-                    <div class="item">
+                    <div className="item">
                         인기순 | 가나다순 | 별점순
                     </div>
-                    <RowAndColumnSpacing />
-                    <div class="item">
-                        <button type="button" class="button" id="load">
-                            <span class="button__text">Add Item</span>
-                            <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" class="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
-                        </button>
-                    </div>
+                    <Item />
+                    <button type="button" className="button" id="load">
+                      <span className="button__text">Add Item</span>
+                      <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
+                  </button>
                 </Section>
             </Wrapper>
         </Body>
@@ -47,47 +45,30 @@ function ChoosePlace() {
 }
 
 
-const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
-
-
-const Img=Styled.img`width:100%; height: 180px;`;
-
-function Item() {
-    return(
-        <div>
-            <Img src="https://source.unsplash.com/featured/?mountain" alt="산"/>
-            여행지 이름 <br/>
-            <Rate>4.5</Rate> <p style={{display:"inline", fontSize:'12px', color:'#909090'}}>리뷰 10000개</p>
-        </div>
-    );
-}
+// const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
+// const Img=Styled.img`width:100%; height: 180px;`;
+// const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
+// function Item() {
+//     return(
+//         <div>
+//             <Img src="https://source.unsplash.com/featured/?mountain" alt="산"/>
+//             여행지 이름 <P>| 대구 중구</P> <br/>
+//             <Rate>4.5</Rate> <P>리뷰 10000개</P>
+//         </div>
+//     );
+// }
 
 function RowAndColumnSpacing() {
+  const [isShowMore, setIsShowMore] = useState(true);
+  function showGrid() {
+    setIsShowMore((isShowMore) => !isShowMore);
+  }
+ 
     return (
       <Box sx={{ width: '100%' }}>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={4}>
-            <Item> 1 </Item>
-          </Grid>
-          <Grid item xs={4}>
-            <Item> 2 </Item>
-          </Grid>
-          <Grid item xs={4}>
-            <Item> 3 </Item>
-          </Grid>
-          <Grid item xs={4}>
-            <Item> 4 </Item>
-          </Grid>
-          <Grid item xs={4}>
-            <Item> 5 </Item>
-          </Grid>
-          <Grid item xs={4}>
-            <Item> 6 </Item>
-          </Grid>
-          <Grid item xs={4}>
-            <Item> 7 </Item>
-          </Grid>
-        </Grid>
+        <div className="item grid" >
+          <div className="grid-item"><Item/></div>
+        </div>
       </Box>
     );
 }
