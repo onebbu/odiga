@@ -2,7 +2,8 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.odiga.mytrip.dao.TravelDAO">
+<mapper namespace="com.odiga.mytrip.travel.dao.TravelDAO">
+
 
     <!-- 여행지 정보 가져오기 -->
     <select id="getTravelInfo" resultType="com.odiga.mytrip.vo.TravelListVO">
