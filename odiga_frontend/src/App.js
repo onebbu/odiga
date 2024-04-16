@@ -5,8 +5,9 @@ import Login from "./pages/login/Login";
 import BoardList from "./pages/boardList/BoardList";
 import SignUp from "./pages/sign-up/SignUp";
 import TravelDetailPage from './pages/traveldetailpage/TravelDetailPage';
-import Test from './pages/traveldetailpage/Test';
 import ResultList from "./pages/result-list/ResultList";
+import ChoosePreference from './pages/choosePreference/ChoosePage';
+import CourseImport from './pages/courseimport/CourseImport';
 
 
 function App() {
@@ -19,8 +20,9 @@ function App() {
                     <Route exact path="/sign-up" element={<SignUp />}></Route>
                     <Route exact path="/board-list" element={<BoardList />}></Route>
                     <Route exact path="/detail" element={<TravelDetailPage />}></Route>
-                    <Route exact path="/test" element={<Test />}></Route>
                     <Route exact path="/result-list" element={<ResultList />}></Route>
+                    <Route exact path="/preference" element={<ChoosePreference />}></Route>
+                    <Route exact path="/courseimport" element={<CourseImport />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>
