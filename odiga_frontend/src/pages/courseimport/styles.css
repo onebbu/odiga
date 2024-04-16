@@ -1,56 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
 
-body {
-    font-family: 'Noto Sans KR', sans-serif;
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    color: #333; /* 기본 텍스트 색상을 조금 어둡게 설정 */
-}
-
-header {
-    background-color: #007bff; /* 푸른색 계열로 변경 */
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-}
-
-main {
-    padding: 20px;
-}
-
-section {
-    position: relative;
-    margin: 30px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    max-width: 70%; 
-}
-
-h2 {
-    margin-bottom: 10px;
-}
-
-.tag {
-    display: inline-block;
-    background-color: #e7f5ff; /* 푸른색 계열의 밝은 배경색 */
-    color: #333;
-    padding: 5px 10px;
-    margin-right: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-}
-
-input[type="text"] {
-    width: 70%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    text-align: left;
-    vertical-align: top;
-}
 
 #action-bar {
     display: flex;
