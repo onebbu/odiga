@@ -4,10 +4,10 @@ aside .item p{font-weight: lighter; color:#233433;}
 aside h3{ padding:15px 0 15px 0; }
 aside .space{min-height: 400px; background-color: #F4FFFF;}
 /*section .item{border:solid 1px;}*/
-.grid{display:grid; grid-template-columns: 1fr 1fr 1fr; min-height:500px; grid-gap: 20px; padding: 10px;}
-.grid-item{border:solid 1px; min-height: 200px;}
-.img{width:100%; height: 180px; }
-.item p{color:#909090;}
+/* .grid{display:grid; grid-template-columns: 1fr 1fr 1fr; min-height:500px; grid-gap: 20px; padding: 10px;}
+.grid-item{border:solid 1px; min-height: 200px;} */
+/* .img{width:100%; height: 180px; }
+.item p{color:#909090;} */
             
 
             /* button css 인터넷에서 주워옴 */
@@ -21,3 +21,31 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
             .button:hover .button__icon {  width: 148px;  transform: translateX(0); }
             .button:active .button__icon {  background-color: #4c8d8b; }
             .button:active {  border: 1px solid #4c8d8b; }
+            
+
+/*DropContainer.js*/     
+.placebox{
+    border: 1px solid blue;
+    margin-bottom: .5rem;
+    width: 100%;
+    padding: 0.5rem;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-size: 14px;
+}
+.placebox > div {
+    display: flex;
+    justify-content: space-between;
+}
+.drop-area {
+    height: 20px;
+    width: 100%;
+    text-align: center;
+    background-color: burlywood;
+  }
+
+.highlight {   
+    display: block;
+    border: 2px solid red;
+}
+              

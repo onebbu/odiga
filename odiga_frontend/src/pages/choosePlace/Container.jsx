@@ -7,30 +7,12 @@ const Sty = styled.div `
     display:flex, flex-direction:column, flexWrap:wrap, border: '2px solid'
 `
 const ITEMS = [
-  {
-    id: 1,
-    text: 'A',
-  },
-  {
-    id: 2,
-    text: 'B',
-  },
-  {
-    id: 3,
-    text: 'C',
-  },
-  {
-    id: 4,
-    text: 'D',
-  },
-  {
-    id: 5,
-    text: 'E',
-  },
-  {
-    id: 6,
-    text: 'F',
-  }
+  {    id: 1,    text: 'A',  },
+  {    id: 2,    text: 'B',  },
+  {    id: 3,    text: 'C',  },
+  {    id: 4,    text: 'D',  },
+  {    id: 5,    text: 'E',  },
+  {    id: 6,    text: 'F',  }
 ]
 
 // DND를 담는 컨테이너

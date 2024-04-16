@@ -4,7 +4,7 @@ import {useDrag, useDrop} from 'react-dnd'
 const style = {
   border: '1px solid blue',
   margin: '0.5rem',
-  width: '180px',
+  width: '190px',
   padding: '0.5rem',
   backgroundColor: 'white',
   cursor: 'pointer',

@@ -1,9 +1,11 @@
 import React from "react";
 import Styled from "styled-components";
+import {useDrag} from 'react-dnd';
+
 const places = [
     {
         pic : "https://source.unsplash.com/featured/?mountain",
-        name: "산",
+        name: "대구산",
         region: "대구시 중구",
         rate: "4.0",
         review: "10000개"
@@ -24,7 +26,7 @@ const places = [
     },
     {
         pic : "https://source.unsplash.com/featured/?meseum",
-        name: "산",
+        name: "충주시 산",
         region: "충청북도 충주시",
         rate: "4.5",
         review: "10060개"
@@ -38,27 +40,27 @@ const places = [
     },
     {
         pic : "https://source.unsplash.com/featured/?activity",
-        name: "산",
+        name: "서울 산",
         region: "서울특별시 중구",
         rate: "4.5",
         review: "10300개"
     },
     {
         pic : "https://source.unsplash.com/featured/?beach",
-        name: "산",
+        name: "강원도 산",
         region: "강원도",
         rate: "4.5",
         review: "20개"
     },
     {
         pic : "https://source.unsplash.com/featured/?meseum",
-        name: "산",
+        name: "산산",
         region: "대구시 중구",
         rate: "4.5",
         review: "24개"
     },{
         pic : "https://source.unsplash.com/featured/?mountain",
-        name: "산",
+        name: "산산2",
         region: "대구시 중구",
         rate: "4.0",
         review: "10000개"
@@ -224,43 +226,50 @@ const places = [
         rate: "4.5",
         review: "24개"
     },
-
-
 ];
+
 
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const Img=Styled.img`width:100%; height: 180px;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
-function Item() {
-    const showPlace = (places).slice(0, 8);
 
+const PLACE = 'placeitem';
+const Place = ({pic,name,region,rate,review}) =>{ //개별 플레이스 drag 가능~
+    const[,drag] = useDrag({
+        type: PLACE,
+        item:{
+            pic,
+            name,
+            region,
+            rate,
+            review
+        }
+    });
+    return(
+        <div className="grid-item" ref={drag} style={{border: "solid 1px",minHeight: "200px",}}>
+            <Img src={pic}/>
+            {name} <P>| {region}</P><br/>
+            <Rate>{rate}</Rate> <P>{review}</P>
+        </div>
+    )
+}
+
+function ListPlace() {
+    const showPlace = (places).slice(0, 8);
     return (
-        <>
         <div style={{
             padding: "5px",
             display: "grid",
             gridTemplateRows: "1fr ",
             gridTemplateColumns: "1fr 1fr 1fr 1fr",
             gridGap: "20px",
-
           }}>
-            {showPlace.map((place) =>{
-                return(
-                    <div className="grid-item">
-                        <Img src={place.pic}/>
-                        {place.name} <P>| {place.region}</P><br/>
-                        <Rate>{place.rate}</Rate> <P>{place.review}</P>
-                    </div>
-                )
-            })}
+            {showPlace.map(item => ( <Place pic={item.pic} name={item.name} region={item.region} rate={item.rate} review={item.review}/> ))}
         </div>
 
-
-        
-        </>
 
     )
 
 }
 
-export default Item;
+export default ListPlace;

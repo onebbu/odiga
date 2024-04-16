@@ -8,9 +8,10 @@ import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import './cPP.css';
-import Item from './Place';
+import ListPlace from './Place';
 import  Container from "./Container";
-import { DndProvider } from 'react-dnd';
+import DropContainer from "./DropContainer";
+import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const Body= Styled.div`
@@ -24,8 +25,10 @@ const AccordionWrap=Styled.div`width:20%; height: 100%;position:fixed;`;
 const Section=Styled.div`width: 75%; margin-left:20%; display: flex; flex-direction: column; width:80%; padding: 16px;`;
 
 function ChoosePlace() {
+  // let [items, setItems] = useState(data);
     return(
         <Body>
+          <DndProvider backend={HTML5Backend}>
             <Wrapper>
                 <CustomizedAccordions/>
                 <Section>
@@ -36,30 +39,18 @@ function ChoosePlace() {
                     <div className="item">
                         인기순 | 가나다순 | 별점순
                     </div>
-                    <Item />
+                    <DndProvider backend={HTML5Backend}><ListPlace /></DndProvider>
                     <button type="button" className="button" id="load">
                       <span className="button__text">Add Item</span>
                       <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
                   </button>
                 </Section>
             </Wrapper>
+            </DndProvider>
         </Body>
     );
 }
 
-
-// const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
-// const Img=Styled.img`width:100%; height: 180px;`;
-// const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
-// function Item() {
-//     return(
-//         <div>
-//             <Img src="https://source.unsplash.com/featured/?mountain" alt="산"/>
-//             여행지 이름 <P>| 대구 중구</P> <br/>
-//             <Rate>4.5</Rate> <P>리뷰 10000개</P>
-//         </div>
-//     );
-// }
 
 function RowAndColumnSpacing() {
   const [isShowMore, setIsShowMore] = useState(true);
@@ -70,7 +61,7 @@ function RowAndColumnSpacing() {
     return (
       <Box sx={{ width: '100%' }}>
         <div className="item grid" >
-          <div className="grid-item"><Item/></div>
+          <div className="grid-item"><ListPlace/></div>
         </div>
       </Box>
     );
@@ -125,10 +116,10 @@ function CustomizedAccordions() {
             <Typography> DAY 1 </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {/* <Typography>
+            <Typography>
               가고 싶은 여행지를 드래그하여 채워보세요.
-            </Typography> */}
-            <DndProvider backend={HTML5Backend}> <Container  /> </DndProvider>
+            </Typography>
+            <DropContainer />
           </AccordionDetails>
         </Accordion>
         <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
@@ -139,6 +130,7 @@ function CustomizedAccordions() {
             <Typography>
                 가고 싶은 여행지를 드래그하여 채워보세요.
             </Typography>
+            <DropContainer />
           </AccordionDetails>
         </Accordion>
         <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
@@ -149,6 +141,7 @@ function CustomizedAccordions() {
             <Typography>
                 가고 싶은 여행지를 드래그하여 채워보세요.
             </Typography>
+            <Container  />
           </AccordionDetails>
         </Accordion>
       </AccordionWrap>
