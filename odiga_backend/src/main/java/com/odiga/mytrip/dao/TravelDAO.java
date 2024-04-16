@@ -2,9 +2,11 @@ package com.odiga.mytrip.dao;
 
 
 import org.apache.ibatis.annotations.Mapper;
-import com.odiga.mytrip.api.ApiVO;
+import com.odiga.mytrip.vo.TravelListVO;
 
 @Mapper
 public interface TravelDAO {
-    ApiVO getTravelInfo(String contentId);
+    TravelListVO getTravelInfo(String contentId);
+    void countPlusOne(String contentId);
 }
+

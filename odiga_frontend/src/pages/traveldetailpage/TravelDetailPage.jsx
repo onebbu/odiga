@@ -54,19 +54,38 @@ const InputText = styled.input`
 `;
 
 function TravelDetailPage() {
-  const [likes, setLikes] = useState(0);
-  const [data, setData] = useState(null); // DB에서 가져온 데이터를 저장할 상태
+    const [likes, setLikes] = useState(0);
+    const [data, setData] = useState(null);
+    const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
+    // let mountCount = 1
 
-  useEffect(() => {
-      // 백엔드 API 호출
-      axios.get('/detail/128414')
+    useEffect(() => {
+        // console.log('mount: ', mountCount)
+        // mountCount++
+        setDidMount(true)
+        return () => {
+        //   console.log('unmount')
+        }
+      }, [])
+
+
+    useEffect(() => {
+    //   console.log('didMount: ', didMount);
+      if (didMount) {
+        // 백엔드 API 호출
+        axios.get('/detail/128414')
           .then(response => {
-              setData(response.data); // 데이터를 상태에 저장
+            setData(response.data); // 데이터를 상태에 저장
+            // console.log('view count +1');
           })
           .catch(error => {
-              console.error('Error fetching data:', error);
+            console.error('Error fetching data:', error);
           });
-  }, []);
+      }
+    }, [didMount]);     
+
+
+
 
     return (
         <Container>
@@ -75,7 +94,7 @@ function TravelDetailPage() {
             </Header>
 
             <Main>
-                <LikeButton likes={likes} setLikes={setLikes} />
+                <LikeButton likes={likes} setLikes={setLikes} data={data}/>
                 <Section id="travel-name">
                     <H2>여행지 이름</H2>
                     <p id="name-placeholder">{data && data.title}</p>
@@ -90,7 +109,7 @@ function TravelDetailPage() {
 
                 <Section id="detail-info">
                     <H2>상세 정보</H2>
-                    <p id="detail-placeholder">이 축제는 저시깽 모시깽 이러이러 한 벛꽃축제입니다.</p>
+                    <p id="detail-placeholder">{data && data.overview}</p>
                 </Section>
 
                 <Section id="tag-list">
@@ -137,13 +156,13 @@ function TravelDetailPage() {
     );
 }
 
-function LikeButton({ likes, setLikes }) {
+function LikeButton({ likes, setLikes , data}) {
     return (
         <Section id="action-bar">
             <div id="count-container">
-                <img src="view-icon.png" alt="icon" />
-                <span id="view-count">조회수: 100</span>
-                <img src="like-icon.png" alt="icon" />
+                {/* <img src="view-icon.png" alt="icon" /> */}
+                <span id="view-count">조회수: {data && data.travelviewcount}</span>
+                {/* <img src="like-icon.png" alt="icon" /> */}
                 <span id="like-count">좋아요: {likes}</span>
             </div>
             <button id="like-button" onClick={() => setLikes(likes + 1)}>
