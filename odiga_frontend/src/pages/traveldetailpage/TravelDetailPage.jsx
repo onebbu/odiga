@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState ,  useEffect } from "react";
+import axios from 'axios';
 import styled from 'styled-components';
 
 const Container = styled.body`
@@ -53,7 +54,19 @@ const InputText = styled.input`
 `;
 
 function TravelDetailPage() {
-    const [likes, setLikes] = useState(0);
+  const [likes, setLikes] = useState(0);
+  const [data, setData] = useState(null); // DB에서 가져온 데이터를 저장할 상태
+
+  useEffect(() => {
+      // 백엔드 API 호출
+      axios.get('/detail/128414')
+          .then(response => {
+              setData(response.data); // 데이터를 상태에 저장
+          })
+          .catch(error => {
+              console.error('Error fetching data:', error);
+          });
+  }, []);
 
     return (
         <Container>
@@ -65,7 +78,7 @@ function TravelDetailPage() {
                 <LikeButton likes={likes} setLikes={setLikes} />
                 <Section id="travel-name">
                     <H2>여행지 이름</H2>
-                    <p id="name-placeholder">벛꽃 축제.</p>
+                    <p id="name-placeholder">{data && data.title}</p>
                 </Section>
 
                 <Section id="map-location">
