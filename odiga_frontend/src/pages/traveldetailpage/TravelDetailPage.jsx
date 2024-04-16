@@ -169,7 +169,9 @@ function LikeButton({ likes, setLikes , data}) {
                 좋아요
             </button>
         </Section>
+           
     );
 }
 
 export default TravelDetailPage;
+
