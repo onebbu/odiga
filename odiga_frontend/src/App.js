@@ -8,6 +8,8 @@ import TravelDetailPage from './pages/traveldetailpage/TravelDetailPage';
 import ResultList from "./pages/result-list/ResultList";
 import ChoosePreference from './pages/choosePreference/ChoosePage';
 import ChoosePlace from './pages/choosePlace/choosePlacePage';
+import CourseImport from './pages/courseimport/CourseImport';
+
 
 
 function App() {
@@ -23,6 +25,7 @@ function App() {
                     <Route exact path="/result-list" element={<ResultList />}></Route>
                     <Route exact path="/preference" element={<ChoosePreference />}></Route>
                     <Route exact path="/place" element={<ChoosePlace />}></Route>
+                    <Route exact path="/courseimport" element={<CourseImport />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

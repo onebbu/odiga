@@ -9,6 +9,9 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import './cPP.css';
 import Item from './Place';
+import  Container from "./Container";
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 
 const Body= Styled.div`
     margin: 0;
@@ -122,9 +125,10 @@ function CustomizedAccordions() {
             <Typography> DAY 1 </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
+            {/* <Typography>
               가고 싶은 여행지를 드래그하여 채워보세요.
-            </Typography>
+            </Typography> */}
+            <DndProvider backend={HTML5Backend}> <Container  /> </DndProvider>
           </AccordionDetails>
         </Accordion>
         <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
