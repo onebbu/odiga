@@ -60,6 +60,7 @@ function TravelDetailPage() {
     // let mountCount = 1
 
     useEffect(() => {
+
         // console.log('mount: ', mountCount)
         // mountCount++
         setDidMount(true)
@@ -73,7 +74,7 @@ function TravelDetailPage() {
     //   console.log('didMount: ', didMount);
       if (didMount) {
         // 백엔드 API 호출
-        axios.get('/detail/2909009')
+        axios.get('/detail/2701017')
           .then(response => {
             setData(response.data); // 데이터를 상태에 저장
             // console.log('view count +1');
@@ -82,7 +83,50 @@ function TravelDetailPage() {
             console.error('Error fetching data:', error);
           });
       }
-    }, [didMount]);     
+    }, [didMount]);
+    
+    useEffect(() => {
+        if (data) {
+            const script = document.createElement('script');
+            script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+            script.async = true;
+            script.onload = () => {
+                const mapOptions = {
+                    center: new window.naver.maps.LatLng(data.mapy, data.mapx),
+                    zoom: 80
+                };
+                
+                const map = new window.naver.maps.Map('map', mapOptions);
+                
+                const markerOptions = {
+                    position: new window.naver.maps.LatLng(data.mapy, data.mapx),
+                    map: map
+                };
+                
+                const marker = new window.naver.maps.Marker(markerOptions);
+                
+                const contentString = `
+                    <div>
+                        <h2>${data.title}</h2>
+                        <p>${data.overview}</p>
+                    </div>
+                `;
+                
+                const infoWindow = new window.naver.maps.InfoWindow({
+                    content: contentString
+                });
+                
+                window.naver.maps.Event.addListener(marker, 'click', function() {
+                    infoWindow.open(map, marker);
+                });
+            };
+            document.body.appendChild(script);
+            return () => {
+                document.body.removeChild(script);
+            };
+        }
+    }, [data]);
+    
 
 
 
@@ -103,9 +147,7 @@ function TravelDetailPage() {
 
                 <Section id="map-location">
                     <H2>지도 위치</H2>
-                    <div id="map-placeholder">
-                        <img src="https://spi.maps.daum.net/map2/map/imageservice?IW=600&IH=350&MX=400205&MY=-11702&SCALE=2.5&service=open" alt="" />
-                    </div>
+                    <div id="map" style={{ width: '100%', height: '400px' }}></div>
                 </Section>
 
                 <Section id="detail-info">
@@ -125,7 +167,7 @@ function TravelDetailPage() {
                 <Section id="similar-destinations">
                     <H2>비슷한 여행지 추천 목록</H2>
                     <div id="similar-destinations-placeholder">
-                        <img src="https://a.cdn-hotels.com/gdcs/production75/d1444/e66988b1-f783-4e8f-a7ea-8c5eebe88436.jpg?impolicy=fcrop&w=800&h=533&q=medium" alt="비슷한 여행지 사진 1" />
+                        <img src={data && data.firstimage} alt="비슷한 여행지 사진 1" />
                         <img src="https://image.ajunews.com/content/image/2020/10/29/20201029110919207531.jpg" alt="비슷한 여행지 사진 2" />
                         <img src="https://img.freepik.com/free-photo/woman-traveler-with-backpack-walking-in-row-of-yellow-ginkgo-tree-in-autumn-autumn-park-in-tokyo-japan_335224-178.jpg?size=626&ext=jpg&ga=GA1.1.1546980028.1712102400&semt=ais" alt="비슷한 여행지 사진 3" />
                     </div>
