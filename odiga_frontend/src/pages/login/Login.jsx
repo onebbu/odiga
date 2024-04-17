@@ -14,34 +14,60 @@ import KakaoLoginButton from "../component/Oauth/kakao/KakaoLogin";
 import "./Login.css";
 import NaverLoginButton from "../component/Oauth/naver/NaverLoginButton";
 import GoogleLogin from "../component/Oauth/google/GoogleLogin";
+import {useState} from "react";
+import axios from "axios";
+import {useNavigate} from "react-router-dom";
 
 // localhost:3000/login
 
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
+/**
+ * 해야할 일
+ * UI 수정 및 이메일 형식 입력 가능하게
+ * 아이디, 비밀번호가 틀릴경우 틀렸다고 alert 메세지
+ */
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
+
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+    const [isSubmitted, setIsSubmitted] = useState(false); // 한 번만 submit 하도록 상태 추가
+    const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
         });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // 이미 제출된 경우 다시 제출하지 않음
+        if (isSubmitted) {
+            return;
+        }
+
+        setIsSubmitted(true); // 제출 상태로 설정
+
+        try {
+            const response = await axios.post('/auth/login', formData);
+            const token = response.data; // 서버에서 전달받은 토큰
+
+            // 토큰을 로컬 스토리지에 저장
+            localStorage.setItem('token', token);
+
+            // 로그인 성공 후 리다이렉트할 경로
+            navigate("/");
+        } catch (error) {
+            console.error('로그인 실패:', error);
+            setIsSubmitted(false); // 제출 상태 초기화
+        }
     };
 
     return (
@@ -74,6 +100,7 @@ export default function SignIn() {
                                 name="email"
                                 autoComplete="email"
                                 autoFocus
+                                onChange={handleChange}
                             />
                             <TextField
                                 margin="normal"
@@ -84,11 +111,13 @@ export default function SignIn() {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={handleChange}
                             />
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
+                                disabled={isSubmitted}
                                 sx={{mt: 3, mb: 2}}
                             >
                                 Sign In

@@ -33,7 +33,7 @@ public class JWTFilter extends OncePerRequestFilter {
         // Authorization 헤더가 비어있거나 "Bearer " 로 시작하지 않은 경우
         if(authorization == null || !authorization.startsWith("Bearer ")){
 
-            log.info("token null");
+            log.info("Authorization 헤더 검증:token null");
             // 토큰이 유효하지 않으므로 request와 response를 다음 필터로 넘겨줌
             filterChain.doFilter(request, response);
 
@@ -58,9 +58,6 @@ public class JWTFilter extends OncePerRequestFilter {
         // session에 user 정보 설정
         String email = jwtUtil.getEmail(token);
         Role role = Role.valueOf(jwtUtil.getRole(token));
-
-        log.info("email={}", email);
-        log.info("role={}", role);// 로그인 아이디만 문제가 있써여ㅛ...
 
         Member member = new Member();
         member.setEmail(email);
