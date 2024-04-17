@@ -1,4 +1,4 @@
-package com.odiga.mytrip.vo;
+package com.odiga.mytrip.travel.vo;
 
 import lombok.*;
 
