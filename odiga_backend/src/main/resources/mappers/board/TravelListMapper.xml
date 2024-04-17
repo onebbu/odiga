@@ -16,4 +16,10 @@
         SET TRAVELVIEWCOUNT = COALESCE(TRAVELVIEWCOUNT, 0) + 1
         WHERE contentId = #{contentId}
     </select>
+    <!--페이지 방문시 overview가없으면 그정보 받아와서 db저장-->
+    <update id="fetchOverview" parameterType="com.odiga.mytrip.travel.vo.TravelListVO">
+        UPDATE TRAVELLIST
+        SET overview = #{overview}
+        WHERE contentid = #{contentid}
+    </update>
 </mapper>
