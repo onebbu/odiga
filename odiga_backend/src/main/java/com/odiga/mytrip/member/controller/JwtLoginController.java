@@ -7,6 +7,7 @@ import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.member.vo.LoginRequest;
 import com.odiga.mytrip.member.vo.Member;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,14 +21,14 @@ import java.util.Iterator;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/jwt-login")
+@RequestMapping("/auth")
 public class JwtLoginController {
 
     private final MemberService memberService;
     private final JWTUtil jwtUtil;
 
     @GetMapping(value = {"", "/"})
-    public String home(Model model) {
+    public Member home(Model model) {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
@@ -44,7 +45,7 @@ public class JwtLoginController {
             model.addAttribute("nickname", loginMember.getNickname());
         }
 
-        return "home";
+        return loginMember;
     }
 
     @GetMapping("/join")

@@ -9,7 +9,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import './cPP.css';
 import ListPlace from './Place';
-import  Container from "./Container";
 import DropContainer from "./DropContainer";
 import { DndProvider, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -132,10 +131,7 @@ function CustomizedAccordions() {
             <Typography> DAY 3 </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            {/* <Typography>
-                가고 싶은 여행지를 드래그하여 채워보세요.
-            </Typography> */}
-            <Container  />
+            <DropContainer />
           </AccordionDetails>
         </Accordion>
       </AccordionWrap>
