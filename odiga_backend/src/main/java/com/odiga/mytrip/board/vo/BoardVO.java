@@ -1,4 +1,4 @@
-package com.odiga.mytrip.vo;
+package com.odiga.mytrip.board.vo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
