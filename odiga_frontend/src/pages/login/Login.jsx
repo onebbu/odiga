@@ -23,112 +23,58 @@ import * as Yup from 'yup';
 
 const defaultTheme = createTheme();
 
-const SignInSchema = Yup.object().shape({
+const LoginSchema = Yup.object().shape({
     email: Yup.string().email('유효하지 않은 이메일 주소입니다.').required('필수 항목입니다.'),
     password: Yup.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.').required('필수 항목입니다.'),
 });
 
-const SignInForm = ({ handleSubmit, formData, handleChange, isEmailValid, isPasswordValid, isFormValid, isSubmitted }) => (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="이메일을 입력하세요"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            onChange={handleChange}
-            error={formData.email && !isEmailValid(formData.email)}
-            helperText={formData.email && !isEmailValid(formData.email) ? "올바른 이메일 형식으로 입력하세요" : ""}
-        />
-        <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="비밀번호를 입력하세요"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            onChange={handleChange}
-            error={formData.password && !isPasswordValid(formData.password)}
-            helperText={formData.password && !isPasswordValid(formData.password) ? "비밀번호는 8자 이상으로 입력하세요" : ""}
-        />
-        <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            disabled={isSubmitted || !isFormValid}
-            sx={{ mt: 3, mb: 2 }}
-        >
-            Sign In
-        </Button>
-        <Grid container>
-            <Grid item>
-                <Link href="http://localhost:3000/sign-up" variant="body2">
-                    계정이 없으신가요? 회원가입하기
-                </Link>
-            </Grid>
-        </Grid>
-    </Box>
-);
+export default function Login() {
 
-export default function SignIn() {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
     });
 
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isFormValid, setIsFormValid] = useState(false);
+    const [errors, setErrors] = useState({}); // 에러 상태 추가
 
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData({
             ...formData,
             [name]: value
         });
-
-        SignInSchema.isValid({ ...formData, [name]: value }).then(valid => setIsFormValid(valid));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (isSubmitted) {
-            return;
-        }
-
-        setIsSubmitted(true);
-
         try {
-            const response = await axios.post('/auth/login', formData);
-            const token = response.data;
 
-            if (token === "이메일 또는 비밀번호가 일치하지 않습니다!") {
-                alert(token);
+            await LoginSchema.validate(formData, {abortEarly: false}); // 유효성 검사 수행
+            // 유효성 검사 통과 후에만 axios post 요청을 보냄
+            const response = await axios.post('/auth/login', formData);
+            const result = response.data;
+
+            if (result === "EMAIL_PASSWORD_NOT_MATCH") {
+                alert("이메일 또는 비밀번호가 일치하지 않습니다!");
                 window.location.href = "/login";
             } else {
-                localStorage.setItem('token', token);
+                localStorage.setItem('token', result);
                 navigate("/");
             }
         } catch (error) {
-            console.error('로그인 실패:', error);
-            setIsSubmitted(false);
+            if (error.name === 'ValidationError') {
+                const newErrors = {};
+                error.inner.forEach(err => {
+                    newErrors[err.path] = err.message;
+                });
+                setErrors(newErrors); // 유효성 검사 실패 시 에러 상태 업데이트
+            } else {
+                console.error('로그인 실패:', error);
+            }
         }
-    };
-
-    const isEmailValid = (email) => {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailRegex.test(email);
-    };
-
-    const isPasswordValid = (password) => {
-        return password.length >= 8;
     };
 
     return (
@@ -136,7 +82,7 @@ export default function SignIn() {
         <div>
             <ThemeProvider theme={defaultTheme}>
                 <Container component="main" maxWidth="xs">
-                    <CssBaseline />
+                    <CssBaseline/>
                     <Box
                         sx={{
                             marginTop: 8,
@@ -145,29 +91,66 @@ export default function SignIn() {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
+                        <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                            <LockOutlinedIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            로그인
+                            회원가입
                         </Typography>
-                        <SignInForm
-                            handleSubmit={handleSubmit}
-                            formData={formData}
-                            handleChange={handleChange}
-                            isEmailValid={isEmailValid}
-                            isPasswordValid={isPasswordValid}
-                            isFormValid={isFormValid}
-                            isSubmitted={isSubmitted}
-                        />
+                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="이메일을 입력하세요"
+                                        name="email"
+                                        autoComplete="email"
+                                        onChange={handleChange}
+                                        error={Boolean(errors.email)} // 에러가 있으면 true, 없으면 false
+                                        helperText={errors.email ? errors.email : ""} // 에러 메시지 표시
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        required
+                                        fullWidth
+                                        name="password"
+                                        label="비밀번호를 입력하세요"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="new-password"
+                                        onChange={handleChange}
+                                        error={Boolean(errors.password)} // 에러가 있으면 true, 없으면 false
+                                        helperText={errors.password ? errors.password : ""} // 에러 메시지 표시
+                                    />
+                                </Grid>
+                            </Grid>
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                sx={{mt: 3, mb: 2}}
+                            >
+                                로그인
+                            </Button>
+                            <Grid container justifyContent="flex-end">
+                                <Grid item>
+                                    <Link href="http://localhost:3000/sign-up" variant="body2">
+                                        계정이 없으신가요? 회원가입하기
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </Box>
                     </Box>
                 </Container>
             </ThemeProvider>
         </div>
         <div className="oauth">
-            <GoogleLogin />
-            <KakaoLoginButton />
-            <NaverLoginButton />
+            <GoogleLogin/>
+            <KakaoLoginButton/>
+            <NaverLoginButton/>
         </div>
         </body>
     );
