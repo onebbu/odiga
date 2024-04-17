@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+
+
+#action-bar {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+}
+
+#count-container {
+    display: flex;
+    align-items: center;
+}
+
+#view-count, #like-count {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+#like-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* 부드러운 색상 전환 효과 */
+}
+
+#like-button:hover {
+    background-color: #0056b3; /* 호버 시 색상 변경 */
+}
+
+#count-container img {
+    width: 20px;
+    height: 20px;
+}
+
+#similar-destinations-placeholder img {
+    width: 300px;
+    height: 200px;
+    border-radius: 10px; /* 이미지 모서리를 둥글게 */
+}
+
+.user-review {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.user-profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.user-review-content {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.user-review-buttons button {
+    margin-right: 10px;
+}
+.star {
+    cursor: pointer; /* 마우스 커서를 별 위에 올렸을 때 클릭 가능한 커서로 변경 */
+}
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.course-icon {
+    border-radius: 50%; /* 원형으로 만듭니다 */
+    width: 50px; /* 원의 크기를 정합니다 */
+    height: 50px; /* 원의 크기를 정합니다 */
+    margin: 5px; /* 버튼 사이의 간격을 조절합니다 */
+    font-size: 20px; /* 버튼 내 텍스트 크기를 조절합니다 */
+    border: 1px solid #000; /* 테두리 스타일을 정의합니다 */
+    cursor: pointer; /* 마우스 오버 시 커서 스타일을 변경합니다 */
+    background-color: #fff; /* 배경색을 정의합니다 */
+    transition: background-color 0.3s; /* 배경색 변경 효과를 부드럽게 합니다 */
+}
+
+.course-icon:hover {
+    background-color: #f0f0f0; /* 버튼에 마우스 오버 시 배경색을 변경합니다 */
+}
+
+.arrow {
+    font-size: 24px; /* 화살표 크기를 조절합니다 */
+    margin: 0 10px; /* 화살표와 버튼 사이의 간격을 조절합니다 */
+}
+#fetch-my-course {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#fetch-my-course:hover {
+    background-color: #45a049;
+}
+.selected-icon {
+    background-color: #007bff; 
+    color: white; 
+}
+
+

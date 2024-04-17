@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.odiga.mytrip.member.dao.MemberDAO">
+
+
+    <select id="findByLoginEmail" resultType="Member" parameterType="String">
+        SELECT * FROM member WHERE email = #{email}
+    </select>
+
+    <!--SELECT LOGIN_ID as loginId, NICKNAME as , PASSWORD, ROLE
+        FROM member
+        WHERE LOGIN_ID = #{loginId}-->
+
+    <select id="existsByLoginEmail" resultType="int" parameterType="String">
+        SELECT CASE
+        WHEN EXISTS(SELECT email FROM member WHERE email = #{email})
+        THEN 1
+        ELSE 0
+        END AS email
+        FROM dual
+    </select>
+
+    <insert id="save" parameterType="Member">
+        INSERT INTO member (email, nickname, password, role)
+        VALUES (#{member.email}, #{member.nickname}, #{member.password}, #{member.role})
+    </insert>
+
+</mapper>

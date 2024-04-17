@@ -18,6 +18,8 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+application-secret.properties
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
