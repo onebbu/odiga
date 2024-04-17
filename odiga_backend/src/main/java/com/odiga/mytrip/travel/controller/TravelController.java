@@ -1,13 +1,11 @@
-package com.odiga.mytrip.controller;
+package com.odiga.mytrip.travel.controller;
 
-import com.odiga.mytrip.service.TravelService;
-import com.odiga.mytrip.vo.TravelListVO;
+import com.odiga.mytrip.travel.service.TravelService;
+import com.odiga.mytrip.travel.vo.TravelListVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
