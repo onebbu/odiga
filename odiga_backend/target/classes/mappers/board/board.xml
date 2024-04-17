@@ -5,11 +5,11 @@
 <mapper namespace="com.ogada.mytrip.dao.BoardDAO">
 
 
-    <select id="selectAll" resultType="BoardVO" >
-    <![CDATA[
-        SELECT *
-        from t_board
-        ]]>
-  </select>
+<!--    <select id="selectAll" resultType="BoardVO" >-->
+<!--    <![CDATA[-->
+<!--        SELECT *-->
+<!--        from t_board-->
+<!--        ]]>-->
+<!--  </select>-->
 
 </mapper>
