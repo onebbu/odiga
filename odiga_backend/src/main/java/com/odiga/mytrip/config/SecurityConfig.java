@@ -29,8 +29,7 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-
-    // 시큐리티 필터 메서드
+    // jwt를 통한 로그인(url: auth)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
@@ -51,8 +50,7 @@ public class SecurityConfig {
         // 경로별 인가 작업
         http
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/jwt-login", "/jwt-login/", "/jwt-login/login", "/jwt-login/join").permitAll()
-                        .requestMatchers("/jwt-login/admin").hasRole("ADMIN")
+                        .requestMatchers("/auth", "/auth/", "/auth/login", "/auth/join").permitAll()
                         .anyRequest().permitAll()
                 );
 
@@ -73,9 +71,10 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     // BCrypt password encoder를 리턴하는 메서드
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder(){
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
 
 
         return new BCryptPasswordEncoder();
