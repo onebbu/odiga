@@ -74,7 +74,7 @@ function TravelDetailPage() {
     //   console.log('didMount: ', didMount);
       if (didMount) {
         // 백엔드 API 호출
-        axios.get('/detail/2701017')
+        axios.get('/detail/128414')
           .then(response => {
             setData(response.data); // 데이터를 상태에 저장
             // console.log('view count +1');
@@ -127,6 +127,7 @@ function TravelDetailPage() {
         }
     }, [data]);
     
+
 
 
 
