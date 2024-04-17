@@ -125,7 +125,7 @@ const DropContainer = () => {
   return (
     <div className='container'>
         <div className={`${ boxes.length>0 ? 'after':''}`}>
-            가고 싶은 여행지를 드래그하여 채워보세요.
+            가고 싶은 여행지를 <br/> 드래그하여 채워보세요.
         </div> 
         {/* {boxes.map(place => (
           <div className='placebox'>

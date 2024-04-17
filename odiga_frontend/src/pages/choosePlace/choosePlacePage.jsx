@@ -1,4 +1,4 @@
-import React,{useState} from "react";
+import React from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -6,17 +6,18 @@ import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import './cPP.css';
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
-import { DndProvider, useDrop } from 'react-dnd';
+import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+
+
+// http://localhost:3000/place
 
 const Body= Styled.div`
     margin: 0;
     padding: 0;
-    font-family: 'JalnanGothic';
     background: #f3f4f6; /* 미미한 회색 */
 `;
 const Wrapper=Styled.div` display: flex; min-height: 100vh; `;
@@ -51,21 +52,6 @@ function ChoosePlace() {
 }
 
 
-function RowAndColumnSpacing() {
-  const [isShowMore, setIsShowMore] = useState(true);
-  function showGrid() {
-    setIsShowMore((isShowMore) => !isShowMore);
-  }
- 
-    return (
-      <Box sx={{ width: '100%' }}>
-        <div className="item grid" >
-          <div className="grid-item"><ListPlace/></div>
-        </div>
-      </Box>
-    );
-}
-
 {/* 왼쪽 메뉴 --------------------------------------------------- */}
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -96,7 +82,7 @@ const AccordionSummary = styled((props) => (
 }));
   
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-    padding: '4px',
+    paddingTop: '20px',
     borderTop: '1px solid rgba(0, 0, 0, .125)',
     minHeight: '450px'
 }));

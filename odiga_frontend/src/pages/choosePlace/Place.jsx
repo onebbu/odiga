@@ -202,7 +202,7 @@ const Place = ({id,pic,name,region,rate,review}) =>{ //개별 플레이스 drag 
     const opacity = isDragging ? 0 : 1
     return(
         <div className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}>
-            <img src={pic}/>
+            <img src={pic} />
             {name} <P>| {region}</P><br/>
             <Rate>{rate}</Rate> <P>{review}</P>
         </div>
@@ -213,11 +213,11 @@ function ListPlace() {
     const showPlace = (places).slice(0, 8);
     return (
         <div style={{
-            padding: "5px",
+            padding: "10px",
             display: "grid",
             gridTemplateRows: "1fr ",
             gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            gridGap: "20px",
+            gridGap: "30px",
           }}>
             {showPlace.map(item => ( <Place key={item.id} pic={item.pic} name={item.name} region={item.region} rate={item.rate} review={item.review}/> ))}
         </div>
