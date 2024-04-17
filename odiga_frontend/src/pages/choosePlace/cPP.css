@@ -10,17 +10,17 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
 .item p{color:#909090;} */
             
 
-            /* button css 인터넷에서 주워옴 */
-            .button {  position: relative;  width: 150px;  height: 40px;  cursor: pointer;  display: flex;  align-items: center;  border: 1px solid #549C9B;  background-color: #549C9B; }
-            .button, .button__icon, .button__text {  transition: all 0.3s;}
-            .button .button__text {  transform: translateX(30px);  color: #fff;  font-weight: 600; }
-            .button .button__icon {  position: absolute;  transform: translateX(109px);  height: 100%;  width: 39px;  background-color: #549C9B;  display: flex;  align-items: center;  justify-content: center; }
-            .button .svg {  width: 30px;  stroke: #fff;}
-            .button:hover {  background: #549C9B; }
-            .button:hover .button__text {  color: transparent;}
-            .button:hover .button__icon {  width: 148px;  transform: translateX(0); }
-            .button:active .button__icon {  background-color: #4c8d8b; }
-            .button:active {  border: 1px solid #4c8d8b; }
+/* button css 인터넷에서 주워옴 */
+.button {  position: relative;  width: 150px;  height: 40px;  cursor: pointer;  display: flex;  align-items: center;  border: 1px solid #549C9B;  background-color: #549C9B; }
+.button, .button__icon, .button__text {  transition: all 0.3s;}
+.button .button__text {  transform: translateX(30px); color: #fff; font-weight: 600; }
+.button .button__icon {  position: absolute;  transform: translateX(109px);  height: 100%;  width: 39px;  background-color: #549C9B;  display: flex;  align-items: center;  justify-content: center; }
+.button .svg {  width: 30px;  stroke: #fff;}
+.button:hover {  background: #549C9B; }
+.button:hover .button__text {  color: transparent;}
+.button:hover .button__icon {  width: 148px;  transform: translateX(0); }
+.button:active .button__icon {  background-color: #4c8d8b; }
+.button:active {  border: 1px solid #4c8d8b; }
             
 
 /*DropContainer.js*/     
@@ -29,22 +29,31 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
     margin-bottom: .5rem;
     width: 100%;
     padding: 0.5rem;
-    cursor: pointer;
-    flex-shrink: 0;
+    cursor: move;
     font-size: 14px;
-}
-.placebox > div {
     display: flex;
     justify-content: space-between;
 }
+.placebox .delete {
+    color:red;
+    font-size:10px;
+    cursor:pointer;
+    width:10px;
+}
+.message{
+    color:black;
+}
+.after{
+    display: none;
+}
 .drop-area {
-    height: 20px;
+    height: 30px;
     width: 100%;
     text-align: center;
     background-color: burlywood;
   }
 
-.highlight {   
+.highlight {
     display: block;
     border: 2px solid red;
 }

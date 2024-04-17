@@ -2,6 +2,7 @@ import React from "react";
 import Styled from "styled-components";
 import {useDrag} from 'react-dnd';
 
+
 const places = [
     {
         pic : "https://source.unsplash.com/featured/?mountain",
@@ -234,15 +235,14 @@ const Img=Styled.img`width:100%; height: 180px;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
 
 const PLACE = 'placeitem';
+
 const Place = ({pic,name,region,rate,review}) =>{ //개별 플레이스 drag 가능~
+
     const[,drag] = useDrag({
         type: PLACE,
         item:{
-            pic,
             name,
             region,
-            rate,
-            review
         }
     });
     return(

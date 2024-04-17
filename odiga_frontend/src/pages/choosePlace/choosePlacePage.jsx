@@ -97,7 +97,7 @@ const AccordionSummary = styled((props) => (
 }));
   
 const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
-    padding: theme.spacing(2),
+    padding: '4px',
     borderTop: '1px solid rgba(0, 0, 0, .125)',
     minHeight: '450px'
 }));
@@ -116,9 +116,6 @@ function CustomizedAccordions() {
             <Typography> DAY 1 </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-              가고 싶은 여행지를 드래그하여 채워보세요.
-            </Typography>
             <DropContainer />
           </AccordionDetails>
         </Accordion>
@@ -127,9 +124,6 @@ function CustomizedAccordions() {
             <Typography> DAY 2 </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
-                가고 싶은 여행지를 드래그하여 채워보세요.
-            </Typography>
             <DropContainer />
           </AccordionDetails>
         </Accordion>
@@ -138,9 +132,9 @@ function CustomizedAccordions() {
             <Typography> DAY 3 </Typography>
           </AccordionSummary>
           <AccordionDetails>
-            <Typography>
+            {/* <Typography>
                 가고 싶은 여행지를 드래그하여 채워보세요.
-            </Typography>
+            </Typography> */}
             <Container  />
           </AccordionDetails>
         </Accordion>
