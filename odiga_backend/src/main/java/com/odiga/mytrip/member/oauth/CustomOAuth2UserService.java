@@ -54,10 +54,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // 사용자 저장 또는 업데이트
         Member member = saveOrUpdateAndGet(attributes);
 
-        log.info("사용자 저장 or 업데이트 완료={}", member.getEmail());
-
-        // 세션에 사용자 정보 저장
-        // 여서부터 문제가 생겼어요... 체크 해주세요...
         httpSession.setAttribute("member", new SessionMember(member));
 
         log.info("세션 정보={}", httpSession.getAttribute(member.getEmail()));
@@ -73,13 +69,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
         Member member = memberDAO.findByLoginEmail(attributes.getEmail());
 
+
         if (member != null) {
             // 구글 사용자 정보 업데이트(이미 가입된 사용자) => 업데이트
-            memberDAO.updateOauthMember(member);
+            memberDAO.updateOauthMember(attributes.toEntity());
 
         } else {
             // 가입되지 않은 사용자 / 계정이 없으면 DB에 insert
-            // 멤버가 비어 있으니께
             memberDAO.save(attributes.toEntity());
         }
 
