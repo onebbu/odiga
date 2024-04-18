@@ -1,0 +1,105 @@
+/*
+aside .item{min-height: 50px; text-align: center; }
+aside .item p{font-weight: lighter; color:#233433;}
+aside h3{ padding:15px 0 15px 0; }
+aside .space{min-height: 400px; background-color: #F4FFFF;}
+/*section .item{border:solid 1px;}*/
+/* .grid{display:grid; grid-template-columns: 1fr 1fr 1fr; min-height:500px; grid-gap: 20px; padding: 10px;}
+.grid-item{border:solid 1px; min-height: 200px;} */
+/* .img{width:100%; height: 180px; } */
+.item p{color:#909090; font-family: 'JalnanGothic'; }
+.item h2{font-family: 'JalnanGothic';}
+            
+
+/* button css 인터넷에서 주워옴 */
+.button {  position: relative;  width: 150px;  height: 40px;  cursor: pointer;  display: flex;  align-items: center;  border: 1px solid #549C9B;  background-color: #549C9B; }
+.button, .button__icon, .button__text {  transition: all 0.3s;}
+.button .button__text {  transform: translateX(30px); color: #fff; font-weight: 600; }
+.button .button__icon {  position: absolute;  transform: translateX(109px);  height: 100%;  width: 39px;  background-color: #549C9B;  display: flex;  align-items: center;  justify-content: center; }
+.button .svg {  width: 30px;  stroke: #fff;}
+.button:hover {  background: #549C9B; }
+.button:hover .button__text {  color: transparent;}
+.button:hover .button__icon {  width: 148px;  transform: translateX(0); }
+.button:active .button__icon {  background-color: #4c8d8b; }
+.button:active {  border: 1px solid #4c8d8b; }
+
+* {
+    font-family: 'GmarketSansMedium';
+}
+/*Place.jsx*/
+.grid-item{
+    min-height: 200px;
+}
+.grid-item img{
+    width:100%; 
+    height: 180px;
+    transition: transform 0.3s ease;
+    margin-bottom: 8px;
+    border-radius :10px;
+}
+
+.grid-item:hover img{
+    transform: translateY(-5px) scale(1);
+    z-index: 10;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+/*DropContainer.js*/  
+.placebox{
+    font-family: GmarketSansMedium;
+    border: 1px solid blue;
+    margin-bottom: .5rem;
+    width: 100%;
+    padding: 0.5rem;
+    cursor: move;
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+}
+.placebox .delete {
+    color:red;
+    font-size:10px;
+    cursor:pointer;
+    width:10px;
+}
+.container > div{
+    padding-bottom:5px;
+}
+.dragging{
+    background-color: #4c8d8b46;
+}
+
+.message{
+    color:black;
+}
+.before{
+    background-color: rgba(250, 96, 96, 0.582);
+    color:white;
+    text-align: center;
+    padding:2px;
+    margin-bottom: 5px;
+    font-size: 12px;
+    cursor: pointer;
+}
+.after{
+    display: none;
+}
+.drop-area {
+    height: 60px;
+    width: 100%;
+    background-color: rgba(196, 195, 194, 0.386);
+    text-align: center;
+    padding-top:16px;
+  }
+
+.highlight {
+    display: block;
+    border: 2px solid rgba(85, 85, 85, 0.553);
+}
+
+
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
