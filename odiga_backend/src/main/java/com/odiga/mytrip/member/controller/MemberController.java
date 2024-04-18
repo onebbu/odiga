@@ -2,29 +2,31 @@ package com.odiga.mytrip.member.controller;
 
 
 import com.odiga.mytrip.member.jwt.JWTUtil;
+import com.odiga.mytrip.member.oauth.SessionMember;
 import com.odiga.mytrip.member.service.MemberService;
 import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.member.vo.LoginRequest;
 import com.odiga.mytrip.member.vo.Member;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/auth")
-public class JwtLoginController {
+public class MemberController {
 
     private final MemberService memberService;
     private final JWTUtil jwtUtil;
@@ -99,9 +101,21 @@ public class JwtLoginController {
         return "email : " + loginMember.getEmail() + "\n이름 : " + loginMember.getNickname() + "\nrole : " + loginMember.getRole();
     }
 
-    @GetMapping("/admin")
-    public String adminPage(Model model) {
+    // 세션 정보를 가져와서 클라이언트로 전송하는 컨트롤러 메서드
+    @GetMapping("/session-info")
+    @ResponseBody
+    public Map<String, String> getSessionInfo(HttpSession session) {
+        Map<String, String> sessionInfo = new HashMap<>();
 
-        return "AUTH_COMPLETE";
+        // 세션에 저장된 정보를 가져와서 Map에 담습니다.
+        SessionMember sessionMember = (SessionMember) session.getAttribute("member");
+        if (sessionMember != null) {
+            sessionInfo.put("email", sessionMember.getEmail());
+            sessionInfo.put("nickname", sessionMember.getNickname());
+        }
+
+        return sessionInfo;
     }
+
+
 }
