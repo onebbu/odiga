@@ -3,6 +3,7 @@ package com.odiga.mytrip.travel.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odiga.mytrip.travel.dao.TravelDAO;
+import com.odiga.mytrip.travel.vo.ReviewDataVO;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 
 import java.io.BufferedReader;
@@ -75,5 +76,14 @@ public class TravelService {
 
         return overview;
 
-}
+    }
+
+    public void importReviewData(ReviewDataVO reviewData) {
+        try {
+            travelDAO.importReviewData(reviewData);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // 예외 처리
+        }
+    }
 }

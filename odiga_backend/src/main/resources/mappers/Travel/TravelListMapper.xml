@@ -22,4 +22,10 @@
         SET overview = #{overview}
         WHERE contentid = #{contentid}
     </update>
+    <!--리뷰 임포트-->
+    <insert id="importReviewData" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
+        INSERT INTO TRAVELREVIEW
+        (REVIEWNO, EMAIL, NICKNAME, CONTENTID, REVIEWCOMMENT, REVIEWGRADE, REVIEWDATE)
+        VALUES (REVIEWNO_SEQ.NEXTVAL, 'aaaa@aaa.com' , '테스트 유저', #{contentid}, #{reviewcomment}, #{reviewgrade}, SYSDATE)
+    </insert>
 </mapper>

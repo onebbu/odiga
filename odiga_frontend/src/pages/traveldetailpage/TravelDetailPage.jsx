@@ -1,6 +1,7 @@
 import React, { useState ,  useEffect } from "react";
 import axios from 'axios';
 import styled from 'styled-components';
+import ReviewImportForm from './component/ReviewImportForm';
 
 const Container = styled.body`
     margin: 0;
@@ -43,15 +44,6 @@ const Tag = styled.span`
     font-size: 14px;
 `;
 
-const InputText = styled.input`
-    width: 70%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    text-align: left;
-    vertical-align: top;
-`;
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
@@ -74,7 +66,7 @@ function TravelDetailPage() {
     //   console.log('didMount: ', didMount);
       if (didMount) {
         // 백엔드 API 호출
-        axios.get('/detail/128414')
+        axios.get('/detail/129534')
           .then(response => {
             setData(response.data); // 데이터를 상태에 저장
             // console.log('view count +1');
@@ -108,7 +100,8 @@ function TravelDetailPage() {
                 const contentString = `
                     <div>
                         <h2>${data.title}</h2>
-                        <p>${data.overview}</p>
+                        <p>${data.addr1}</p>
+                        <img src=${data && data.firstimage} style="max-width: 200px;"></img>
                     </div>
                 `;
                 
@@ -126,6 +119,7 @@ function TravelDetailPage() {
             };
         }
     }, [data]);
+
     
 
 
@@ -153,7 +147,7 @@ function TravelDetailPage() {
 
                 <Section id="detail-info">
                     <H2>상세 정보</H2>
-                    <p id="detail-placeholder">{data && data.overview}</p>
+                    <p id="detail-placeholder">{data && data.overview && data.overview.replace(/<br\s*\/?>/ig, '')}</p>
                 </Section>
 
                 <Section id="tag-list">
@@ -175,18 +169,7 @@ function TravelDetailPage() {
                 </Section>
 
                 <Section id="reviews">
-                    <H2>후기와 별점 매기기</H2>
-                    <div id="reviews-placeholder">
-                        <InputText type="text" />
-                        <div className="rating">
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9734;</span>
-                        </div>
-                        <button>submit</button>
-                    </div>
+                    <ReviewImportForm/>
                 </Section>
 
                 <Section id="review-display">
@@ -205,7 +188,7 @@ function LikeButton({ likes, setLikes , data}) {
         <Section id="action-bar">
             <div id="count-container">
                 {/* <img src="view-icon.png" alt="icon" /> */}
-                <span id="view-count">조회수: {data && data.travelviewcount}</span>
+                <span id="view-count">조회수: {data && (data.travelviewcount || 0)}</span>
                 {/* <img src="like-icon.png" alt="icon" /> */}
                 <span id="like-count">좋아요: {likes}</span>
             </div>

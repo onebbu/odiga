@@ -9,6 +9,7 @@ import ResultList from "./pages/result-list/ResultList";
 import ChoosePreference from "./pages/choosePreference/ChoosePage";
 import MypageMain from "./pages/mypage/MypageMain";
 import CourseReview from "./pages/courseReview/CourseReview";
+import CourseImport from "./pages/courseimport/CourseImport";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route exact path="/preference" element={<ChoosePreference />}></Route>
           <Route exact path="/mypage/*" element={<MypageMain />}></Route>
           <Route exact path="/coursereview/*"  element={<CourseReview />}></Route>
+          <Route exact path="/courseimport"  element={<CourseImport />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>
