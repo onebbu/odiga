@@ -4,7 +4,9 @@ import com.odiga.mytrip.member.vo.Member;
 import com.odiga.mytrip.member.vo.Role;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Getter
@@ -31,6 +33,14 @@ public class OAuthAttributes {
                                      String userNameAttributeName,
                                      Map<String, Object> attributes) {
 
+        if ("naver".equals(registrationId)) {
+            return ofNaver("id", attributes); // id를 user_name으로 지정
+        }
+
+        if ("kakao".equals(registrationId)) {
+            return ofKakao("nickname", attributes); // id user_name으로 지정
+        }
+
         return ofGoogle(userNameAttributeName, attributes);
     }
 
@@ -41,6 +51,31 @@ public class OAuthAttributes {
                 .email((String) attributes.get("email"))
                 .nickname(attributes.get("nickname") == null ? "google_" + attributes.get("sub") : (String) attributes.get("nickname"))
                 .attributes(attributes)
+                .nameAttributeKey(usernameAttributeName)
+                .build();
+    }
+
+    // 네이버 생성자
+    private static OAuthAttributes ofNaver(String usernameAttributeName,
+                                           Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        return OAuthAttributes.builder()
+                .email((String) response.get("email"))
+                .nickname((String) response.get("nickname"))
+                .attributes(response)
+                .nameAttributeKey(usernameAttributeName)
+                .build();
+    }
+
+    // 카카오 생성자
+    private static OAuthAttributes ofKakao(String usernameAttributeName,
+                                           Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("properties");
+
+        return OAuthAttributes.builder()
+                .email((String) response.get("nickname"))
+                .nickname("kakao_"+response.get("nickname"))
+                .attributes(response)
                 .nameAttributeKey(usernameAttributeName)
                 .build();
     }
