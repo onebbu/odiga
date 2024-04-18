@@ -4,6 +4,8 @@ import com.odiga.mytrip.travel.service.TravelService;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,5 +36,9 @@ public class TravelController {
             e.printStackTrace();
             return "Error"; // 예외 처리
         }
+    }
+    @GetMapping("/reviews/{contentId}")
+    public List<ReviewDataVO> reviewInfo(@PathVariable String contentId) {
+        return travelService.ReviewList(contentId);
     }   
 }

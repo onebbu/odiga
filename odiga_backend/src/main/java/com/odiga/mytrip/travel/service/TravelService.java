@@ -1,8 +1,17 @@
 package com.odiga.mytrip.travel.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odiga.mytrip.travel.dao.TravelDAO;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
 import com.odiga.mytrip.travel.vo.TravelListVO;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,13 +78,19 @@ public class TravelService {
         return overview;
 
     }
-
+    
+    @Transactional
     public void importReviewData(ReviewDataVO reviewData) {
         try {
+            System.out.println(reviewData);
             travelDAO.importReviewData(reviewData);
         } catch (Exception e) {
             e.printStackTrace();
             // 예외 처리
         }
+    }
+
+    public List<ReviewDataVO> ReviewList(String contentId) {
+        return travelDAO.getReviewList(contentId);
     }
 }

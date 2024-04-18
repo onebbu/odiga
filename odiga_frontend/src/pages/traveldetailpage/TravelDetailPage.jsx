@@ -2,6 +2,7 @@ import React, { useState ,  useEffect } from "react";
 import axios from 'axios';
 import styled from 'styled-components';
 import ReviewImportForm from './component/ReviewImportForm';
+import ReviewDisplay from "./component/ReviewDisplay";
 
 const Container = styled.body`
     margin: 0;
@@ -173,10 +174,7 @@ function TravelDetailPage() {
                 </Section>
 
                 <Section id="review-display">
-                    <H2>리뷰</H2>
-                    <div id="review-display-placeholder">
-                        <h3>reviews</h3>
-                    </div>
+                    <ReviewDisplay/>
                 </Section>
             </Main>
         </Container>
