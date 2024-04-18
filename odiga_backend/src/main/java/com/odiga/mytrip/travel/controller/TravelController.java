@@ -1,7 +1,7 @@
 package com.odiga.mytrip.travel.controller;
 
 import com.odiga.mytrip.travel.service.TravelService;
-import com.odiga.mytrip.vo.TravelListVO;
+import com.odiga.mytrip.travel.vo.TravelListVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
