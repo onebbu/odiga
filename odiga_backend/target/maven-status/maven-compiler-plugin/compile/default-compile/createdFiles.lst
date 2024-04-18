@@ -6,9 +6,15 @@ com\odiga\mytrip\board\vo\BoardVO.class
 com\odiga\mytrip\board\service\BoardService.class
 com\odiga\mytrip\member\vo\Role.class
 com\odiga\mytrip\member\controller\JwtLoginController.class
+com\odiga\mytrip\member\oauth\google\CustomOauth2UserDetails.class
 com\odiga\mytrip\member\jwt\JWTFilter.class
+com\odiga\mytrip\member\oauth\google\OAuth2UserInfo.class
+com\odiga\mytrip\member\oauth\google\CustomOauth2UserService.class
+com\odiga\mytrip\member\oauth\google\GoogleUserDetails.class
+com\odiga\mytrip\service\TravelService.class
 com\odiga\mytrip\member\jwt\JWTUtil.class
 com\odiga\mytrip\member\vo\Member.class
+com\odiga\mytrip\dao\TravelDAO.class
 com\odiga\mytrip\member\jwt\CustomUserDetails$1.class
 com\odiga\mytrip\OdigaApplication.class
 com\odiga\mytrip\config\SecurityConfig.class
@@ -16,7 +22,9 @@ com\odiga\mytrip\member\service\MemberService.class
 com\odiga\mytrip\board\dao\BoardDAO.class
 com\odiga\mytrip\member\jwt\CustomUserDetailService.class
 com\odiga\mytrip\travel\dao\TravelDAO.class
+com\odiga\mytrip\member\oauth\google\CustomSecurityUserDetails$1.class
 com\odiga\mytrip\member\vo\Member$MemberBuilder.class
+com\odiga\mytrip\member\oauth\google\CustomOauth2UserDetails$1.class
 com\odiga\mytrip\travel\controller\TravelController.class
 com\odiga\mytrip\vo\TravelListVO.class
 com\odiga\mytrip\api\ApiService.class
@@ -24,7 +32,9 @@ com\odiga\mytrip\board\controller\BoardController.class
 com\odiga\mytrip\config\CORSFilter.class
 com\odiga\mytrip\api\ApiController.class
 com\odiga\mytrip\api\ApiDAO.class
+com\odiga\mytrip\controller\TravelController.class
 com\odiga\mytrip\travel\service\TravelService.class
 com\odiga\mytrip\travel\vo\TravelListVO.class
 com\odiga\mytrip\member\jwt\CustomUserDetails.class
 com\odiga\mytrip\member\vo\JoinRequest.class
+com\odiga\mytrip\member\oauth\google\CustomSecurityUserDetails.class
