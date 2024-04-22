@@ -1,13 +1,21 @@
-import React from "react";
+import * as React from 'react';
+import Header from "../tiles/Header";
+import Banner from "./Banner";
+import KoreaLocations from "./KoreaLocations";
+import Maincontents from "./MainContents";
 
 function Main() {
-    return(
-        <body>
+    return (
+
         <div>
-            메인페이지입니다.
+            <Header/>
+            <Banner/>
+            <KoreaLocations/>
+            <Maincontents/>
         </div>
-        </body>
-    )
+
+    );
+
 }
 
 export default Main;

@@ -1,9 +1,79 @@
-import React, { useState } from 'react';
-import './styles.css'; 
+import React, { useState  , useEffect} from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+
+const Container = styled.div`
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+`;
+
+const Header = styled.header`
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+`;
+
+const Main = styled.main`
+    padding: 20px;
+`;
+
+const Section = styled.section`
+    position: relative;
+    margin: 30px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    max-width: 70%; 
+`;
+
+const H2 = styled.h2`
+    margin-bottom: 10px;
+`;
+
+const Tag = styled.span`
+    display: inline-block;
+    background-color: #e7f5ff;
+    color: #333;
+    padding: 5px 10px;
+    margin-right: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+`;
+
+const Textarea = styled.textarea`
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    text-align: left;
+    vertical-align: top;
+`;
 
 const CourseImport = () => {
   const [selectedCourse, setSelectedCourse] = useState('1');
   const [reviewText, setReviewText] = useState('');
+  const [data, setData] = useState(null);
+
+  useEffect(() => {   
+        // 백엔드 API 호출
+        axios.get(`/CourseDisplay`, {
+            params: {
+                nickname: 'odiga'
+            }
+        })
+        .then(response => {
+            setData(response.data);
+            console.log(data); // 데이터를 상태에 저장
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+},[]);
+
 
   const courseImages = {
     '1': 'https://a.cdn-hotels.com/gdcs/production75/d1444/e66988b1-f783-4e8f-a7ea-8c5eebe88436.jpg?impolicy=fcrop&w=800&h=533&q=medium',
@@ -33,13 +103,13 @@ const CourseImport = () => {
   };
 
   return (
-    <div>
-      <header>
+    <Container>
+      <Header>
         <h1>나만의 여행 코스 작성</h1>
-      </header>
-      <main>
-        <section id="course-selection">
-          <h2>여행 코스 선택</h2>
+      </Header>
+      <Main>
+        <Section id="course-selection">
+          <H2>여행 코스 선택</H2>
           <div className="icon-container">
             {Object.keys(courseImages).map(courseNumber => (
               <React.Fragment key={courseNumber}>
@@ -54,32 +124,32 @@ const CourseImport = () => {
             ))}
           </div>
           <button id="fetch-my-course">내 여행 코스 가져오기</button>
-        </section>
+        </Section>
 
-        <section id="similar-destinations-placeholder">
+        <Section id="similar-destinations-placeholder">
           <h2>여행지 상세 정보</h2>
           <img src={courseImages[selectedCourse]} alt="여행지 이미지" id="similar-destinations" />
           <div id="tags">
             {courseTags[selectedCourse] && courseTags[selectedCourse].map((tag, index) => (
-              <span className="tag" key={index}>{tag}</span>
+              <Tag key={index}>{tag}</Tag>
             ))}
           </div>
-        </section>
-        <section id="course-review">
-          <h2>여행 후기 작성</h2>
+        </Section>
+        <Section id="course-review">
+          <H2>여행 후기 작성</H2>
           <form>
-            <textarea
+            <Textarea
               id="review-text"
               rows="5"
               placeholder="여기에 여행 후기를 작성하세요."
               value={reviewText}
               onChange={handleReviewChange}
-            ></textarea>
+            ></Textarea>
           </form>
           <button type="button" id="submit-review" onClick={handleSubmitReview}>submit</button>
-        </section>
-      </main>
-    </div>
+        </Section>
+      </Main>
+    </Container>
   );
 };
 
