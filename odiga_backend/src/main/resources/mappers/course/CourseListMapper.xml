@@ -11,7 +11,7 @@
         WHERE nickname = #{nickname}
     </select>
 
-    <resultMap id="courseResultMap" type="CourseVO">
+    <resultMap id="courseResultMap" type="com.odiga.mytrip.course.vo.CourseVO">
         <result property="courseno" column="COURSENO"/>
         <result property="travelnum" column="TRAVELNUM"/>
         <result property="contentid" column="CONTENTID"/>
