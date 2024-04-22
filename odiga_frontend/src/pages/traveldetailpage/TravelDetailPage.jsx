@@ -1,6 +1,8 @@
 import React, { useState ,  useEffect } from "react";
 import axios from 'axios';
 import styled from 'styled-components';
+import ReviewImportForm from './component/ReviewImportForm';
+import ReviewDisplay from "./component/ReviewDisplay";
 
 const Container = styled.body`
     margin: 0;
@@ -43,23 +45,17 @@ const Tag = styled.span`
     font-size: 14px;
 `;
 
-const InputText = styled.input`
-    width: 70%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    text-align: left;
-    vertical-align: top;
-`;
+//현재는 임의로 설정 추후 수정요망
+export const contentID = 2370995;
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     // let mountCount = 1
-
+    
     useEffect(() => {
+
         // console.log('mount: ', mountCount)
         // mountCount++
         setDidMount(true)
@@ -73,7 +69,7 @@ function TravelDetailPage() {
     //   console.log('didMount: ', didMount);
       if (didMount) {
         // 백엔드 API 호출
-        axios.get('/detail/2909009')
+        axios.get(`/detail/${contentID}`)
           .then(response => {
             setData(response.data); // 데이터를 상태에 저장
             // console.log('view count +1');
@@ -82,7 +78,53 @@ function TravelDetailPage() {
             console.error('Error fetching data:', error);
           });
       }
-    }, [didMount]);     
+    }, [didMount]);
+    
+    useEffect(() => {
+        if (data) {
+            const script = document.createElement('script');
+            script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+            script.async = true;
+            script.onload = () => {
+                const mapOptions = {
+                    center: new window.naver.maps.LatLng(data.mapy, data.mapx),
+                    zoom: 80
+                };
+                
+                const map = new window.naver.maps.Map('map', mapOptions);
+                
+                const markerOptions = {
+                    position: new window.naver.maps.LatLng(data.mapy, data.mapx),
+                    map: map
+                };
+                
+                const marker = new window.naver.maps.Marker(markerOptions);
+                
+                const contentString = `
+                    <div>
+                        <h2>${data.title}</h2>
+                        <p>${data.addr1}</p>
+                        <img src=${data && data.firstimage} style="max-width: 200px;"></img>
+                    </div>
+                `;
+                
+                const infoWindow = new window.naver.maps.InfoWindow({
+                    content: contentString
+                });
+                
+                window.naver.maps.Event.addListener(marker, 'click', function() {
+                    infoWindow.open(map, marker);
+                });
+            };
+            document.body.appendChild(script);
+            return () => {
+                document.body.removeChild(script);
+            };
+        }
+    }, [data]);
+
+    
+
 
 
 
@@ -103,14 +145,12 @@ function TravelDetailPage() {
 
                 <Section id="map-location">
                     <H2>지도 위치</H2>
-                    <div id="map-placeholder">
-                        <img src="https://spi.maps.daum.net/map2/map/imageservice?IW=600&IH=350&MX=400205&MY=-11702&SCALE=2.5&service=open" alt="" />
-                    </div>
+                    <div id="map" style={{ width: '100%', height: '400px' }}></div>
                 </Section>
 
                 <Section id="detail-info">
                     <H2>상세 정보</H2>
-                    <p id="detail-placeholder">{data && data.overview}</p>
+                    <p id="detail-placeholder">{data && data.overview && data.overview.replace(/<br\s*\/?>/ig, '')}</p>
                 </Section>
 
                 <Section id="tag-list">
@@ -125,48 +165,44 @@ function TravelDetailPage() {
                 <Section id="similar-destinations">
                     <H2>비슷한 여행지 추천 목록</H2>
                     <div id="similar-destinations-placeholder">
-                        <img src="https://a.cdn-hotels.com/gdcs/production75/d1444/e66988b1-f783-4e8f-a7ea-8c5eebe88436.jpg?impolicy=fcrop&w=800&h=533&q=medium" alt="비슷한 여행지 사진 1" />
+                        <img src={data && data.firstimage} alt="비슷한 여행지 사진 1" />
                         <img src="https://image.ajunews.com/content/image/2020/10/29/20201029110919207531.jpg" alt="비슷한 여행지 사진 2" />
                         <img src="https://img.freepik.com/free-photo/woman-traveler-with-backpack-walking-in-row-of-yellow-ginkgo-tree-in-autumn-autumn-park-in-tokyo-japan_335224-178.jpg?size=626&ext=jpg&ga=GA1.1.1546980028.1712102400&semt=ais" alt="비슷한 여행지 사진 3" />
                     </div>
                 </Section>
 
                 <Section id="reviews">
-                    <H2>후기와 별점 매기기</H2>
-                    <div id="reviews-placeholder">
-                        <InputText type="text" />
-                        <div className="rating">
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9733;</span>
-                            <span className="star">&#9734;</span>
-                        </div>
-                        <button>submit</button>
-                    </div>
+                    <ReviewImportForm/>
                 </Section>
 
                 <Section id="review-display">
-                    <H2>리뷰</H2>
-                    <div id="review-display-placeholder">
-                        <h3>reviews</h3>
-                    </div>
+                    <ReviewDisplay/>
                 </Section>
             </Main>
         </Container>
     );
 }
 
-function LikeButton({ likes, setLikes , data}) {
+function LikeButton({data}) {
+    const sendLikeRequest = () => {
+        // axios를 사용하여 GET 요청 보내기
+        axios.get(`/travelLike/${contentID}`)
+            .then(response => {
+                console.log("좋아요누름");
+            })
+            .catch(error => {
+                console.error('There was a problem with the request:', error);
+            });
+    };
     return (
         <Section id="action-bar">
             <div id="count-container">
                 {/* <img src="view-icon.png" alt="icon" /> */}
-                <span id="view-count">조회수: {data && data.travelviewcount}</span>
+                <span id="view-count">조회수: {data && (data.travelviewcount || 0)}</span>
                 {/* <img src="like-icon.png" alt="icon" /> */}
-                <span id="like-count">좋아요: {likes}</span>
+                <span id="like-count">좋아요: {data && (data.likecount || 0)}</span>
             </div>
-            <button id="like-button" onClick={() => setLikes(likes + 1)}>
+            <button id="like-button" onClick={sendLikeRequest}>
                 좋아요
             </button>
         </Section>

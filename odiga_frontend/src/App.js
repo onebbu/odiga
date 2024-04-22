@@ -11,7 +11,6 @@ import MypageMain from "./pages/mypage/MypageMain";
 import CourseReview from "./pages/courseReview/CourseReview";
 import Main from "./pages/main/Main";
 
-
 function App() {
     return(
         <BrowserRouter>

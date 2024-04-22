@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState  , useEffect} from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Container = styled.div`
     margin: 0;
@@ -55,6 +56,24 @@ const Textarea = styled.textarea`
 const CourseImport = () => {
   const [selectedCourse, setSelectedCourse] = useState('1');
   const [reviewText, setReviewText] = useState('');
+  const [data, setData] = useState(null);
+
+  useEffect(() => {   
+        // 백엔드 API 호출
+        axios.get(`/CourseDisplay`, {
+            params: {
+                nickname: 'odiga'
+            }
+        })
+        .then(response => {
+            setData(response.data);
+            console.log(data); // 데이터를 상태에 저장
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+},[]);
+
 
   const courseImages = {
     '1': 'https://a.cdn-hotels.com/gdcs/production75/d1444/e66988b1-f783-4e8f-a7ea-8c5eebe88436.jpg?impolicy=fcrop&w=800&h=533&q=medium',
