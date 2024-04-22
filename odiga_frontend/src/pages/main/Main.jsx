@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 
@@ -9,6 +10,13 @@ import axios from "axios";
  *
  *
  */
+=======
+import * as React from 'react';
+import Header from "../tiles/Header";
+import Banner from "./Banner";
+import KoreaLocations from "./KoreaLocations";
+import MainContents from "./MainContents";
+>>>>>>> Stashed changes
 
 function Main() {
     const [member, setMember] = useState(null);
@@ -51,11 +59,18 @@ function Main() {
     return(
         <body>
         <div>
+<<<<<<< Updated upstream
             메인페이지입니다.
             <br />
             {member && member.nickname && (
                 <div>안녕하세요 {member.nickname} 님</div>
             )}
+=======
+            <Header/>
+            <Banner/>
+            <KoreaLocations/>
+            <MainContents/>
+>>>>>>> Stashed changes
         </div>
         </body>
     )
