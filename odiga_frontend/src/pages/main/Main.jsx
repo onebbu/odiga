@@ -14,7 +14,8 @@ function Main() {
             <Maincontents/>
         </div>
 
-);
+    );
+
 }
 
 export default Main;
