@@ -11,7 +11,6 @@ import ChoosePlace from './pages/choosePlace/choosePlacePage';
 import CourseImport from './pages/courseimport/CourseImport';
 import MypageMain from "./pages/mypage/MypageMain";
 import CourseReview from "./pages/courseReview/CourseReview";
-import CourseImport from "./pages/courseimport/CourseImport";
 
 function App() {
     return(

@@ -13,5 +13,6 @@ public interface TravelDAO {
     void fetchOverview(String contentid , String overview);
     void importReviewData(ReviewDataVO reviewData);
     List<ReviewDataVO> getReviewList(String contentId);
+    void Like(String contentId);
 }
 

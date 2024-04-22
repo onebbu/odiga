@@ -34,4 +34,11 @@
         FROM TRAVELREVIEW
         WHERE contentId = #{contentId}
     </select>
+    <!-- 좋아요 수 1 증가 -->
+    <update id="Like" parameterType="string">
+        UPDATE TravelList
+        SET LIKECOUNT = COALESCE(LIKECOUNT, 0) + 1
+        WHERE contentId = #{contentId}
+    </update>
+
 </mapper>

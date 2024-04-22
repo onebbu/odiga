@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 
+
 @RestController
 public class TravelController {
 
@@ -28,7 +29,6 @@ public class TravelController {
         travelService.updateViewCount(contentId);
         if (travelInfo.getOverview() == null){
             String newOverview = travelService.fetchOverviewData(contentId);
-
             travelInfo.setOverview(newOverview);
         }
         return travelInfo;
@@ -49,6 +49,11 @@ public class TravelController {
     public List<ReviewDataVO> reviewInfo(@PathVariable String contentId) {
         return travelService.ReviewList(contentId);
     }
+    @GetMapping("/travelLike/{contentId}")
+    public void getMethodName(@PathVariable String contentId) {
+        travelService.LikePlusOne(contentId);
+    }
+    
 
        
 }

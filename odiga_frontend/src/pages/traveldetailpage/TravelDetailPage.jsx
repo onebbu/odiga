@@ -44,7 +44,9 @@ const Tag = styled.span`
     border-radius: 5px;
     font-size: 14px;
 `;
-export const contentID = 2912460;
+
+//현재는 임의로 설정 추후 수정요망
+export const contentID = 2370995;
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
@@ -181,7 +183,17 @@ function TravelDetailPage() {
     );
 }
 
-function LikeButton({ likes, setLikes , data}) {
+function LikeButton({data}) {
+    const sendLikeRequest = () => {
+        // axios를 사용하여 GET 요청 보내기
+        axios.get(`/travelLike/${contentID}`)
+            .then(response => {
+                console.log("좋아요누름");
+            })
+            .catch(error => {
+                console.error('There was a problem with the request:', error);
+            });
+    };
     return (
         <Section id="action-bar">
             <div id="count-container">
@@ -190,7 +202,7 @@ function LikeButton({ likes, setLikes , data}) {
                 {/* <img src="like-icon.png" alt="icon" /> */}
                 <span id="like-count">좋아요: {data && (data.likecount || 0)}</span>
             </div>
-            <button id="like-button" onClick={() => setLikes(likes + 1)}>
+            <button id="like-button" onClick={sendLikeRequest}>
                 좋아요
             </button>
         </Section>

@@ -94,5 +94,9 @@ public class TravelService {
         return travelDAO.getReviewList(contentId);
     }
 
+    public void LikePlusOne(String contentId){
+        travelDAO.Like(contentId);
+    }
+
     
 }
