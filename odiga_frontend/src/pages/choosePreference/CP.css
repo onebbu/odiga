@@ -8,7 +8,7 @@
         .content em{font-style: normal; font-weight: 500;}
         .content .grid1{display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
         .content .grid2{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-        .grid1 button{ border-radius: 9999px; border-width: 1px; border-color: rgb(209 213 219); padding:8px; background: white;}
+        .buttonList {border-radius: 9999px; border:1px solid rgb(209 213 219); padding:8px;}
         .select_priod{display: flex; justify-content: space-evenly; margin-left: 1rem; }
         .select_priod button{display: flex; flex-direction: column; align-items: center; border-width: 1px; border-color: rgb(209 213 219); border-radius: 0.5rem; padding:16px;}
         .select_priod img{width:48px; height: 48px;}
@@ -23,3 +23,11 @@
             font-weight: normal;
             font-style: normal;
         }
+
+.not{ background-color: white; color:black; }
+.isSelected{
+    background-color: #549C9B;
+    color:white;
+    font-weight: bolder;
+    box-shadow: 0px 0px 10px -2px #949494;
+}
