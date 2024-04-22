@@ -59,7 +59,7 @@ export default function Login() {
 
             if (result === "EMAIL_PASSWORD_NOT_MATCH") {
                 alert("이메일 또는 비밀번호가 일치하지 않습니다!");
-                window.location.href = "/login";
+                // window.location.href = "/login";
             } else {
                 localStorage.setItem('token', result);
                 navigate("/");
@@ -95,7 +95,7 @@ export default function Login() {
                             <LockOutlinedIcon/>
                         </Avatar>
                         <Typography component="h1" variant="h5">
-                            회원가입
+                            로그인
                         </Typography>
                         <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
                             <Grid container spacing={3}>

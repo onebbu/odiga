@@ -24,7 +24,18 @@
 
     <insert id="save" parameterType="Member">
         INSERT INTO member (email, nickname, password, role)
-        VALUES (#{member.email}, #{member.nickname}, #{member.password}, #{member.role})
+        VALUES (#{member.email}, #{member.nickname},
+        <choose>
+            <when test="member.password != null">#{member.password}</when>
+            <otherwise>NULL</otherwise>
+        </choose>,
+        #{member.role})
     </insert>
+
+    <update id="updateOauthMember" parameterType="Member">
+        UPDATE member
+        SET nickname = #{member.nickname}
+        WHERE email = #{member.email}
+    </update>
 
 </mapper>
