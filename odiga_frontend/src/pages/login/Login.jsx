@@ -10,10 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
-import KakaoLoginButton from "../component/Oauth/kakao/KakaoLogin";
 import "./Login.css";
-import NaverLoginButton from "../component/Oauth/naver/NaverLoginButton";
-import GoogleLogin from "../component/Oauth/google/GoogleLogin";
 import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -148,9 +145,6 @@ export default function Login() {
             </ThemeProvider>
         </div>
         <div className="oauth">
-            <GoogleLogin/>
-            <KakaoLoginButton/>
-            <NaverLoginButton/>
         </div>
         </body>
     );
