@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Main from "./pages/main/Main";
 import Login from "./pages/login/Login";
 import BoardList from "./pages/boardList/BoardList";
 import SignUp from "./pages/sign-up/SignUp";
@@ -11,6 +10,7 @@ import ChoosePlace from './pages/choosePlace/choosePlacePage';
 import CourseImport from './pages/courseimport/CourseImport';
 import MypageMain from "./pages/mypage/MypageMain";
 import CourseReview from "./pages/courseReview/CourseReview";
+import Main from "./pages/main/Main";
 
 
 function App() {
