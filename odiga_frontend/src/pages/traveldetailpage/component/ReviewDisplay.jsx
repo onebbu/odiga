@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { contentID } from "../TravelDetailPage";
 
 function ReviewDisplay() {
     const [reviews, setReviews] = useState([]);
@@ -10,7 +11,7 @@ function ReviewDisplay() {
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.get("/reviews/129534"); // 적절한 엔드포인트로 변경
+            const response = await axios.get(`/reviews/${contentID}`); 
             setReviews(response.data);
         } catch (error) {
             console.error("리뷰를 불러오는 중 오류가 발생했습니다:", error);
@@ -23,8 +24,8 @@ function ReviewDisplay() {
             <div id="review-display-placeholder">
                 {reviews.map((review, index) => (
                     <div key={index}>
-                        <h3>{review.nickname}</h3>
-                        <p>{review.reviewcomment}</p>
+                        <h3>닉네임 : {review.nickname}</h3>
+                        <p>리뷰내용 : {review.reviewcomment}</p>
                     </div>
                 ))}
             </div>

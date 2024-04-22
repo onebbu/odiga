@@ -78,7 +78,7 @@ public class TravelService {
         return overview;
 
     }
-    
+
     @Transactional
     public void importReviewData(ReviewDataVO reviewData) {
         try {
@@ -93,4 +93,6 @@ public class TravelService {
     public List<ReviewDataVO> ReviewList(String contentId) {
         return travelDAO.getReviewList(contentId);
     }
+
+    
 }

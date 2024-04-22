@@ -4,6 +4,7 @@ import com.odiga.mytrip.travel.service.TravelService;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
+
 @RestController
 public class TravelController {
 
@@ -21,9 +23,15 @@ public class TravelController {
     private TravelService travelService;
 
     @GetMapping("/detail/{contentId}")
-    public TravelListVO getTravelInfo(@PathVariable String contentId) {
+    public TravelListVO getTravelInfo(@PathVariable String contentId) throws IOException{
+        TravelListVO travelInfo = travelService.TravelList(contentId);
         travelService.updateViewCount(contentId);
-        return travelService.TravelList(contentId);
+        if (travelInfo.getOverview() == null){
+            String newOverview = travelService.fetchOverviewData(contentId);
+
+            travelInfo.setOverview(newOverview);
+        }
+        return travelInfo;
     }
     @PostMapping("/reviewImport")
     public String importReviewData(@RequestBody ReviewDataVO reviewData) {
@@ -40,5 +48,7 @@ public class TravelController {
     @GetMapping("/reviews/{contentId}")
     public List<ReviewDataVO> reviewInfo(@PathVariable String contentId) {
         return travelService.ReviewList(contentId);
-    }   
+    }
+
+       
 }

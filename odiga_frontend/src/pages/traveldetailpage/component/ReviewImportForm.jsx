@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styled from 'styled-components';
+import { contentID } from "../TravelDetailPage";
 
 const StarRatingContainer = styled.div`
     display: inline-block;
@@ -41,7 +42,7 @@ function ReviewImportForm() {
 
     const handleSubmit = () => {
         axios.post('/reviewImport',{
-            contentid : 129534 ,
+            contentid : contentID ,
             reviewcomment : reviewComment ,
             reviewgrade : reviewGrade
         })

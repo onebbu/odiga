@@ -44,14 +44,14 @@ const Tag = styled.span`
     border-radius: 5px;
     font-size: 14px;
 `;
-
+export const contentID = 2912460;
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     // let mountCount = 1
-
+    
     useEffect(() => {
 
         // console.log('mount: ', mountCount)
@@ -67,7 +67,7 @@ function TravelDetailPage() {
     //   console.log('didMount: ', didMount);
       if (didMount) {
         // 백엔드 API 호출
-        axios.get('/detail/129534')
+        axios.get(`/detail/${contentID}`)
           .then(response => {
             setData(response.data); // 데이터를 상태에 저장
             // console.log('view count +1');
@@ -188,7 +188,7 @@ function LikeButton({ likes, setLikes , data}) {
                 {/* <img src="view-icon.png" alt="icon" /> */}
                 <span id="view-count">조회수: {data && (data.travelviewcount || 0)}</span>
                 {/* <img src="like-icon.png" alt="icon" /> */}
-                <span id="like-count">좋아요: {likes}</span>
+                <span id="like-count">좋아요: {data && (data.likecount || 0)}</span>
             </div>
             <button id="like-button" onClick={() => setLikes(likes + 1)}>
                 좋아요

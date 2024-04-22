@@ -26,7 +26,7 @@
     <insert id="importReviewData" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
         INSERT INTO TRAVELREVIEW
         (REVIEWNO, EMAIL, NICKNAME, CONTENTID, REVIEWCOMMENT, REVIEWGRADE, REVIEWDATE)
-        VALUES (REVIEWNO_SEQ.NEXTVAL, 'aaaa@aaa.com' , '테스트 유저', #{contentid}, #{reviewcomment}, #{reviewgrade}, SYSDATE)
+        VALUES (REVIEWNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{contentid}, #{reviewcomment}, #{reviewgrade}, SYSDATE)
     </insert>
     <!-- 리뷰 리스트 가져오기 -->
     <select id="getReviewList" resultType="com.odiga.mytrip.travel.vo.ReviewDataVO">
