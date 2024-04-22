@@ -22,4 +22,23 @@
         SET overview = #{overview}
         WHERE contentid = #{contentid}
     </update>
+    <!--리뷰 임포트-->
+    <insert id="importReviewData" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
+        INSERT INTO TRAVELREVIEW
+        (REVIEWNO, EMAIL, NICKNAME, CONTENTID, REVIEWCOMMENT, REVIEWGRADE, REVIEWDATE)
+        VALUES (REVIEWNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{contentid}, #{reviewcomment}, #{reviewgrade}, SYSDATE)
+    </insert>
+    <!-- 리뷰 리스트 가져오기 -->
+    <select id="getReviewList" resultType="com.odiga.mytrip.travel.vo.ReviewDataVO">
+        SELECT *
+        FROM TRAVELREVIEW
+        WHERE contentId = #{contentId}
+    </select>
+    <!-- 좋아요 수 1 증가 -->
+    <update id="Like" parameterType="string">
+        UPDATE TravelList
+        SET LIKECOUNT = COALESCE(LIKECOUNT, 0) + 1
+        WHERE contentId = #{contentId}
+    </update>
+
 </mapper>
