@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import Styled from "styled-components";
 import {useDrag} from 'react-dnd';
 import './cPP.css';
@@ -184,24 +184,23 @@ const places = [
 
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
+// const MoreButton = Styled.button`  
+// `;
 
 const Place = ({id,pic,name,region,rate,review}) =>{ //개별 플레이스 drag 가능~
 
     const[{ isDragging },drag] = useDrag({
         type: 'placeitem',
-        item: () => {
-            return {
-                name : name,
-                region : region, }
-        },
+        item: { id, name, region },
         collect: (monitor) => ({
             isDragging: monitor.isDragging(),
         }),
-        
     });
-    const opacity = isDragging ? 0 : 1
+
+    const opacity = isDragging ? 0 : 1;
+
     return(
-        <div className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}>
+        <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}> 
             <img src={pic} />
             {name} <P>| {region}</P><br/>
             <Rate>{rate}</Rate> <P>{review}</P>
@@ -210,21 +209,27 @@ const Place = ({id,pic,name,region,rate,review}) =>{ //개별 플레이스 drag 
 }
 
 function ListPlace() {
-    const showPlace = (places).slice(0, 8);
+    const [displayCount, setDisplayCount] = useState(8);
+    const showPlace = places.slice(0, displayCount);
+    const handleShowMore = () => {
+        setDisplayCount(displayCount + 4);
+    };
     return (
-        <div style={{
-            padding: "10px",
-            display: "grid",
-            gridTemplateRows: "1fr ",
-            gridTemplateColumns: "1fr 1fr 1fr 1fr",
-            gridGap: "30px",
-          }}>
-            {showPlace.map(item => ( <Place key={item.id} pic={item.pic} name={item.name} region={item.region} rate={item.rate} review={item.review}/> ))}
+        <div>
+            <div style={{
+                padding: "10px",
+                display: "grid",
+                gridTemplateRows: "1fr ",
+                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                gridGap: "30px",
+            }}>
+                {showPlace.map(item => ( <Place key={item.id} id={item.id} pic={item.pic} name={item.name} region={item.region} rate={item.rate} review={item.review}/> ))}
+            </div>
+            {displayCount < places.length && (
+                <button className="buttondesign" onClick={handleShowMore}>More</button>
+            )}
         </div>
-
-
     )
-
 }
 
 export default ListPlace;
