@@ -22,6 +22,14 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
 * {
     font-family: 'GmarketSansMedium';
 }
+
+/*Drawer.js*/
+.drawer{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; padding-bottom: 10px;}
+.drawer-item{display: flex; border: solid 1px rgba(70, 70, 70, 0.235); padding:5px; height: 58px;
+    line-height: 53px;}
+.drawer img{width:48px; height: 48px; border-radius: 9999px;}
+.drawer span{padding-left: 10px;}
+
 /*Place.jsx*/
 .grid-item{
     min-height: 200px;

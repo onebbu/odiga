@@ -28,25 +28,24 @@ const OpenButton = Styled.button`position: fixed; top: 0px; right: 100px; width:
     background-color: #549C9B; /* Green */ border: none; border-radius: 0 0 10px 10px; cursor: pointer; outline: none;
     transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
-// const ItemsContainer = Styled.div` margin-top: ${props => (props.drawerOpen ? `${props.drawerHeight}px` : '0')};
-//     transition: margin-top 0.3s ease-in-out; `;
 const ItemsContainer = Styled.div`
-  margin-top: ${props => (props.drawerOpen ? `${props.drawerHeight}px` : '0')};
-  transition: margin-top 0.3s ease-in-out;
-`;
-
-function ChoosePlace() {
+    margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
+    transition: margin-top 0.3s ease-in-out;
+  `;
+const ChoosePlace = () => {
 
   const containerRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      const height = containerRef.current.clientHeight;
-      setContainerHeight(height);
-    }
-  }, [isDrawerOpen]);
+  // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
+  //   if (containerRef.current) {
+  //     const height = containerRef.current.clientHeight;
+  //     console.log('isDrawerOpen:', isDrawerOpen);
+  //     console.log('containerHeight:', containerHeight);
+  //     setContainerHeight(height);
+  //   }
+  // }, [isDrawerOpen, containerHeight]);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -60,21 +59,32 @@ function ChoosePlace() {
                 <Section>
                   <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
                   <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
-                  <ItemsContainer drawerOpen={isDrawerOpen} drawerHeight={containerHeight}>
-                    <div className="item">
-                      <p> 여행지를 드래그하여 채워보세요! </p>
-                      <h2>서울시의 꼭! 가봐야 할 여행지 </h2>
-                    </div>
-                    <div className="item">  인기순 | 가나다순 | 별점순  </div>
-                    <ListPlace />
-                  </ItemsContainer>
+                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} />
                 </Section>
             </Wrapper>
             </DndProvider>
         </Body>
     );
 }
+// const ItemsContainer = Styled.div`
+//   margin-top: ${(props) => props.isDrawerOpen ? `${props.containerHeight}px` : '0'};
+//   transition: margin-top 0.3s ease-in-out;
+// `;
 
+
+const ItemsWrapper = ({ isDrawerOpen, containerHeight }) => {
+  return(<>
+    <ItemsContainer isDrawerOpen={isDrawerOpen} containerHeight={containerHeight}>
+      <div className="item">
+          <p> 여행지를 드래그하여 채워보세요! </p>
+          <h2>서울시의 꼭! 가봐야 할 여행지 </h2>
+      </div>
+      <div className="item">  인기순 | 가나다순 | 별점순  </div>
+      <ListPlace />
+    </ItemsContainer>
+  
+  </>)
+}
 
 {/* 왼쪽 메뉴 --------------------------------------------------- */}
 const Accordion = styled((props) => (
