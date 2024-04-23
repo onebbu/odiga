@@ -208,9 +208,10 @@ const Place = ({id,pic,name,region,rate,review}) =>{ //개별 플레이스 drag 
     )
 }
 
-function ListPlace() {
+function ListPlace({data}) {
     const [displayCount, setDisplayCount] = useState(8);
     const showPlace = places.slice(0, displayCount);
+    const testdata = data => data.title;
     const handleShowMore = () => {
         setDisplayCount(displayCount + 4);
     };
@@ -223,7 +224,7 @@ function ListPlace() {
                 gridTemplateColumns: "1fr 1fr 1fr 1fr",
                 gridGap: "30px",
             }}>
-                {showPlace.map(item => ( <Place key={item.id} id={item.id} pic={item.pic} name={item.name} region={item.region} rate={item.rate} review={item.review}/> ))}
+                {showPlace.map(item => ( <Place key={item.id} id={item.id} pic={item.pic} name={testdata} region={item.region} rate={item.rate} review={item.review}/> ))}
             </div>
             {displayCount < places.length && (
                 <button className="buttondesign" onClick={handleShowMore}>More</button>

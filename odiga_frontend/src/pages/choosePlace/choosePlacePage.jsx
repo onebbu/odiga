@@ -12,6 +12,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
+import axios from 'axios';
 
 // http://localhost:3000/place
 
@@ -32,12 +33,19 @@ const ItemsContainer = Styled.div`
     margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
     transition: margin-top 0.3s ease-in-out;
   `;
+
+
+//현재는 임의로 설정 추후 수정요망
+export const areacode = 3;
+
 const ChoosePlace = () => {
 
   const containerRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  
+  const [data, setData] = useState(null);
+  const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
   // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
   //   if (containerRef.current) {
   //     const height = containerRef.current.clientHeight;
@@ -46,6 +54,24 @@ const ChoosePlace = () => {
   //     setContainerHeight(height);
   //   }
   // }, [isDrawerOpen, containerHeight]);
+
+  useEffect(() => {
+    setDidMount(true); // Set didMount to true after component mounts
+  }, []);
+
+  useEffect(() => {
+      if (didMount) {
+        // 백엔드 API 호출
+        axios.get(`/place/${areacode}`)
+          .then(response => {
+            console.log('Data received:', response.data);
+            setData(response.data); // 데이터를 상태에 저장
+          })
+          .catch(error => {
+            console.error('Error fetching data:', error);
+          });
+      }
+    }, [didMount, areacode]);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -57,9 +83,20 @@ const ChoosePlace = () => {
             <Wrapper>
                 <CustomizedAccordions/>
                 <Section>
+
+    <div>
+      {/* Render data once it's fetched and not null */}
+      {data && (
+        <div>
+          <h1>{data.title}</h1>
+          {/* Render other properties from data */}
+        </div>
+      )}
+    </div>
+  
                   <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
                   <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
-                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} />
+                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} data={data} />
                 </Section>
             </Wrapper>
             </DndProvider>
@@ -72,7 +109,7 @@ const ChoosePlace = () => {
 // `;
 
 
-const ItemsWrapper = ({ isDrawerOpen, containerHeight }) => {
+const ItemsWrapper = ({ isDrawerOpen, containerHeight, data }) => {
   return(<>
     <ItemsContainer isDrawerOpen={isDrawerOpen} containerHeight={containerHeight}>
       <div className="item">
@@ -80,7 +117,7 @@ const ItemsWrapper = ({ isDrawerOpen, containerHeight }) => {
           <h2>서울시의 꼭! 가봐야 할 여행지 </h2>
       </div>
       <div className="item">  인기순 | 가나다순 | 별점순  </div>
-      <ListPlace />
+      <ListPlace data={data}/>
     </ItemsContainer>
   
   </>)
