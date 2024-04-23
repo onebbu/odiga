@@ -5,22 +5,40 @@
 <mapper namespace="com.odiga.mytrip.course.dao.CourseDAO">
 
     <!-- 리뷰 리스트 가져오기 -->
-    <select id="getResultList" parameterType ="String" resultMap="courseResultMap">
-        SELECT *
-        FROM RESULTLIST
-        WHERE nickname = #{nickname}
-    </select>
+    <select id="getResultList" parameterType="String" resultMap="courseResultMap">
+    SELECT 
+        r.COURSENO, 
+        r.COURSEDAY, 
+        r.TRAVELNUM, 
+        r.CONTENTID, 
+        r.NICKNAME, 
+        r.EMAIL, 
+        r.STARTDATE, 
+        r.ENDDATE, 
+        r.COURSEYN,
+        t.FIRSTIMAGE,
+        t.title
+    FROM 
+        RESULTLIST r
+    JOIN 
+        TRAVELLIST t ON r.CONTENTID = t.CONTENTID
+    WHERE 
+        r.nickname = #{nickname}
+</select>
+
 
     <resultMap id="courseResultMap" type="CourseVO">
         <result property="courseno" column="COURSENO"/>
+        <result property="courseday" column="COURSEDAY"/>
         <result property="travelnum" column="TRAVELNUM"/>
         <result property="contentid" column="CONTENTID"/>
-        <result property="email" column="EMAIL"/>
         <result property="nickname" column="NICKNAME"/>
+        <result property="email" column="EMAIL"/>
         <result property="startdate" column="STARTDATE"/>
         <result property="enddate" column="ENDDATE"/>
         <result property="courseyn" column="COURSEYN"/>
-        <result property="courseday" column="COURSEDAY"/>
+        <result property="firstimage" column="FIRSTIMAGE"/>
+        <result property="title" column="TITLE"/>
     </resultMap>
 
 </mapper>
