@@ -6,11 +6,16 @@
 
 
     <!-- 여행지 지역별 리스트 가져오기 -->
-    <select id="getPlaceList" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
+    <select id="getPlaceList" resultType="com.odiga.mytrip.travel.vo.TravelListVO" parameterType="String">
+        SELECT * FROM 
+            (SELECT * from travellist WHERE AREACODE = #{areacode} order by ${order} ) 
+            WHERE ROWNUM <![CDATA[<= ]]> #{displayCount}
+    </select>
 
-        SELECT *
-        FROM TravelList
-        WHERE areacode = #{areacode} and ROWNUM = 2
-
+    <!-- 여행지별 리뷰 평균 별점 조회 -->
+    <select id="getPlaceRate" resultType="java.util.Map" parameterType="String">
+        SELECT NVL(ROUND(AVG(REVIEWGRADE)),0) AS "averageRate", count(*) as "cntRating"
+        FROM TRAVELREVIEW
+        WHERE contentid = #{contentID}
     </select>
 </mapper>

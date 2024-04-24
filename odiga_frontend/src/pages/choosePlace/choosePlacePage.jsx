@@ -1,4 +1,4 @@
-import React, {useState , useRef, useEffect } from "react";
+import React, {useState , useRef } from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -9,10 +9,9 @@ import Typography from '@mui/material/Typography';
 import './cPP.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import ListPlace from './Place';
+import ListPlace, { areacode } from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
-import axios from 'axios';
 
 // http://localhost:3000/place
 
@@ -33,10 +32,29 @@ const ItemsContainer = Styled.div`
     margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
     transition: margin-top 0.3s ease-in-out;
   `;
+// 찾고자 하는 areacode
+const targetAreacode = '6';
+const order = "title"; //title //travelviewcount //
 
-
-//현재는 임의로 설정 추후 수정요망
-export const areacode = 3;
+const areaList = [
+    { areacode: '1', areaname: '서울' },
+    { areacode: '2', areaname: '인천' },
+    { areacode: '3', areaname: '대전' },
+    { areacode: '4', areaname: '대구' },
+    { areacode: '5', areaname: '광주' },
+    { areacode: '6', areaname: '부산' },
+    { areacode: '7', areaname: '울산' },
+    { areacode: '8', areaname: '세종특별자치시' },
+    { areacode: '31', areaname: '경기도' },
+    { areacode: '32', areaname: '강원도' },
+    { areacode: '33', areaname: '충청북도' },
+    { areacode: '34', areaname: '충청남도' },
+    { areacode: '35', areaname: '경상북도' },
+    { areacode: '36', areaname: '경상남도' },
+    { areacode: '37', areaname: '전라북도' },
+    { areacode: '38', areaname: '전라남도' },
+    { areacode: '39', areaname: '제주도' },
+];
 
 const ChoosePlace = () => {
 
@@ -44,8 +62,6 @@ const ChoosePlace = () => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
-  const [data, setData] = useState(null);
-  const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
   // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
   //   if (containerRef.current) {
   //     const height = containerRef.current.clientHeight;
@@ -55,23 +71,6 @@ const ChoosePlace = () => {
   //   }
   // }, [isDrawerOpen, containerHeight]);
 
-  useEffect(() => {
-    setDidMount(true); // Set didMount to true after component mounts
-  }, []);
-
-  useEffect(() => {
-      if (didMount) {
-        // 백엔드 API 호출
-        axios.get(`/place/${areacode}`)
-          .then(response => {
-            console.log('Data received:', response.data);
-            setData(response.data); // 데이터를 상태에 저장
-          })
-          .catch(error => {
-            console.error('Error fetching data:', error);
-          });
-      }
-    }, [didMount, areacode]);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -82,21 +81,10 @@ const ChoosePlace = () => {
           <DndProvider backend={HTML5Backend}>
             <Wrapper>
                 <CustomizedAccordions/>
-                <Section>
-
-    <div>
-      {/* Render data once it's fetched and not null */}
-      {data && (
-        <div>
-          <h1>{data.title}</h1>
-          {/* Render other properties from data */}
-        </div>
-      )}
-    </div>
-  
+                <Section>  
                   <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
                   <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
-                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} data={data} />
+                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} targetAreacode={targetAreacode}/>
                 </Section>
             </Wrapper>
             </DndProvider>
@@ -109,15 +97,20 @@ const ChoosePlace = () => {
 // `;
 
 
-const ItemsWrapper = ({ isDrawerOpen, containerHeight, data }) => {
+const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode}) => {
+  // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
+  const foundArea = areaList.find(area => area.areacode === targetAreacode);
+  const foundAreaName = foundArea ? foundArea.areaname : '없음';
   return(<>
     <ItemsContainer isDrawerOpen={isDrawerOpen} containerHeight={containerHeight}>
       <div className="item">
           <p> 여행지를 드래그하여 채워보세요! </p>
-          <h2>서울시의 꼭! 가봐야 할 여행지 </h2>
+          <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
-      <div className="item">  인기순 | 가나다순 | 별점순  </div>
-      <ListPlace data={data}/>
+      <div className="item"> <span>인기순 | 가나다순 | 별점순 </span>  </div>
+      <div className="item">
+        <ListPlace areacode={targetAreacode} order={order}/>
+      </div>
     </ItemsContainer>
   
   </>)

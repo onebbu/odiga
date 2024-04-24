@@ -1,193 +1,40 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Styled from "styled-components";
 import {useDrag} from 'react-dnd';
+import axios from "axios";
 import './cPP.css';
 
+//"https://source.unsplash.com/featured/?mountain"
 
-const places = [
-    {
-        id : 1,
-        pic : "https://source.unsplash.com/featured/?mountain",
-        name: "대구산",
-        region: "대구시 중구",
-        rate: "4.0",
-        review: "10000개"
-    },
-    {
-        id : 2,
-        pic : "https://source.unsplash.com/featured/?sunflower",
-        name: "해바라기",
-        region: "부산광역시 중구",
-        rate: "4.5",
-        review: "13300개"
-    },
-    {
-        id : 3,
-        pic : "https://source.unsplash.com/featured/?fire",
-        name: "산불",
-        region: "대구시 중구",
-        rate: "4.2",
-        review: "10500개"
-    },
-    {
-        id : 4,
-        pic : "https://source.unsplash.com/featured/?cat",
-        name: "충주시 산",
-        region: "충청북도 충주시",
-        rate: "4.5",
-        review: "10060개"
-    },
-    {
-        id : 5,
-        pic : "https://source.unsplash.com/featured/?flower",
-        name: "꽃밭",
-        region: "대구시 달서구",
-        rate: "4.5",
-        review: "20000개"
-    },
-    {
-        id : 6,
-        pic : "https://source.unsplash.com/featured/?activity",
-        name: "서울 산",
-        region: "서울특별시 중구",
-        rate: "4.5",
-        review: "10300개"
-    },
-    {
-        id : 7,
-        pic : "https://source.unsplash.com/featured/?beach",
-        name: "강원도 산",
-        region: "강원도",
-        rate: "4.5",
-        review: "20개"
-    },
-    {
-        id : 8,
-        pic : "https://source.unsplash.com/featured/?meseum",
-        name: "산산",
-        region: "대구시 중구",
-        rate: "4.5",
-        review: "24개"
-    },
-    {   id : 9,
-        pic : "https://source.unsplash.com/featured/?mountain",
-        name: "산산2",
-        region: "대구시 중구",
-        rate: "4.0",
-        review: "10000개"
-    },
-    {
-        id : 10,
-        pic : "https://source.unsplash.com/featured/?sunflower",
-        name: "해바라기",
-        region: "부산광역시 중구",
-        rate: "4.5",
-        review: "13300개"
-    },
-    {
-        id : 11,
-        pic : "https://source.unsplash.com/featured/?fire",
-        name: "산불",
-        region: "대구시 중구",
-        rate: "4.2",
-        review: "10500개"
-    },
-    {
-        id : 12,
-        pic : "https://source.unsplash.com/featured/?meseum",
-        name: "산",
-        region: "충청북도 충주시",
-        rate: "4.5",
-        review: "10060개"
-    },
-    {
-        id : 13,
-        pic : "https://source.unsplash.com/featured/?flower",
-        name: "꽃밭",
-        region: "대구시 달서구",
-        rate: "4.5",
-        review: "20000개"
-    },
-    {
-        id : 14,
-        pic : "https://source.unsplash.com/featured/?activity",
-        name: "산",
-        region: "서울특별시 중구",
-        rate: "4.5",
-        review: "10300개"
-    },
-    {
-        id : 15,
-        pic : "https://source.unsplash.com/featured/?beach",
-        name: "산",
-        region: "강원도",
-        rate: "4.5",
-        review: "20개"
-    },
-    {
-        id : 16,
-        pic : "https://source.unsplash.com/featured/?meseum",
-        name: "산",
-        region: "대구시 중구",
-        rate: "4.5",
-        review: "24개"
-    },
-    {
-        id : 17,
-        pic : "https://source.unsplash.com/featured/?mountain",
-        name: "산",
-        region: "대구시 중구",
-        rate: "4.0",
-        review: "10000개"
-    },
-    {
-        id : 18,
-        pic : "https://source.unsplash.com/featured/?sunflower",
-        name: "해바라기",
-        region: "부산광역시 중구",
-        rate: "4.5",
-        review: "13300개"
-    },
-    {
-        id : 19,
-        pic : "https://source.unsplash.com/featured/?fire",
-        name: "산불",
-        region: "대구시 중구",
-        rate: "4.2",
-        review: "10500개"
-    },
-    {
-        id : 20,
-        pic : "https://source.unsplash.com/featured/?meseum",
-        name: "산",
-        region: "충청북도 충주시",
-        rate: "4.5",
-        review: "10060개"
-    },
-    {
-        id : 21,
-        pic : "https://source.unsplash.com/featured/?flower",
-        name: "꽃밭",
-        region: "대구시 달서구",
-        rate: "4.5",
-        review: "20000개"
-    },
-    {
-        id : 22,
-        pic : "https://source.unsplash.com/featured/?activity",
-        name: "산",
-        region: "서울특별시 중구",
-        rate: "4.5",
-        review: "10300개"
-    }
-];
+//const region_url = `https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json`;
+
 
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
 // const MoreButton = Styled.button`  
 // `;
 
-const Place = ({id,pic,name,region,rate,review}) =>{ //개별 플레이스 drag 가능~
+const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
+    const [avgrate, setAvgrate] = useState(0);
+    const [cntrate, setCntrate] = useState(0);
+    const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
+    useEffect(() => {
+        setDidMount(true); // Set didMount to true after component mounts
+    }, []);
+    
+    useEffect(() => {
+        if (didMount) {
+          // 백엔드 API 호출
+          axios.get(`/placerate/${id}`)
+            .then((response) => {
+              response.data.averageRate !== null ? setAvgrate(response.data.averageRate) : setAvgrate('빵점');
+              response.data.cntRating !== null ? setCntrate(response.data.cntRating) : setCntrate(0);
+            })
+            .catch((error) => {
+              console.error('Error fetching data:', error);
+            });
+        }
+    }, [didMount]);
 
     const[{ isDragging },drag] = useDrag({
         type: 'placeitem',
@@ -202,19 +49,38 @@ const Place = ({id,pic,name,region,rate,review}) =>{ //개별 플레이스 drag 
     return(
         <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}> 
             <img src={pic} />
-            {name} <P>| {region}</P><br/>
-            <Rate>{rate}</Rate> <P>{review}</P>
+            {name} <P> <br/>{region}</P><br/>
+            <Rate>{avgrate}</Rate> <P>/{cntrate}개</P>
         </div>
     )
 }
 
-function ListPlace({data}) {
+function ListPlace({areacode, order}) {
+    
+    const [dataList, setDataList] = useState(null);
+    const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     const [displayCount, setDisplayCount] = useState(8);
-    const showPlace = places.slice(0, displayCount);
-    const testdata = data => data.title;
     const handleShowMore = () => {
-        setDisplayCount(displayCount + 4);
+        setDisplayCount(displayCount + 8);
     };
+    useEffect(() => {
+        setDidMount(true); // Set didMount to true after component mounts
+    }, []);
+    
+    useEffect(() => {
+        if (didMount) {
+          // 백엔드 API 호출
+          axios.get(`/place/${areacode}/${displayCount}/${order}`)
+            .then((response) => {
+              console.log('Data received:', response.data);
+              setDataList(response.data); // 데이터를 상태에 저장
+            })
+            .catch((error) => {
+              console.error('Error fetching data:', error);
+            });
+        }
+    }, [didMount, areacode, displayCount, order]);
+    
     return (
         <div>
             <div style={{
@@ -224,9 +90,10 @@ function ListPlace({data}) {
                 gridTemplateColumns: "1fr 1fr 1fr 1fr",
                 gridGap: "30px",
             }}>
-                {showPlace.map(item => ( <Place key={item.id} id={item.id} pic={item.pic} name={testdata} region={item.region} rate={item.rate} review={item.review}/> ))}
+                {dataList && dataList.map(
+                    (data) => ( <Place key={data.contentid} id={data.contentid} pic={data.firstimage} name={data.title} region={data.addr1}/> ))}
             </div>
-            {displayCount < places.length && (
+            {displayCount < 100 && ( // 100개 이상은 안보여줌.
                 <button className="buttondesign" onClick={handleShowMore}>More</button>
             )}
         </div>

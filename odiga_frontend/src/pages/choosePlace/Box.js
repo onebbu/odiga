@@ -60,7 +60,7 @@ export const Box = ({ id, name, region, index, moveBox, onRemove }) => {
     drag(drop(refB))
     return (
       <div ref={refB} className={`placebox ${opacity ? '' : 'dragging'}`}>
-          <div> {id}, {name} | {region} </div> <div className='delete' onClick={()=>onRemove(id)}> X </div>
+          <div> {name} | {region} </div> <div className='delete' onClick={()=>onRemove(id)}> X </div>
       </div>
     )
   }
