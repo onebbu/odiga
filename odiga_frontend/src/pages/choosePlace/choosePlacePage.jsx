@@ -1,4 +1,4 @@
-import React, {useState , useRef, useEffect } from "react";
+import React, {useState , useRef } from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import './cPP.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import ListPlace from './Place';
+import ListPlace, { areacode } from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
 
@@ -32,12 +32,36 @@ const ItemsContainer = Styled.div`
     margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
     transition: margin-top 0.3s ease-in-out;
   `;
+// 찾고자 하는 areacode
+const targetAreacode = '6';
+const order = "title"; //title //travelviewcount //
+
+const areaList = [
+    { areacode: '1', areaname: '서울' },
+    { areacode: '2', areaname: '인천' },
+    { areacode: '3', areaname: '대전' },
+    { areacode: '4', areaname: '대구' },
+    { areacode: '5', areaname: '광주' },
+    { areacode: '6', areaname: '부산' },
+    { areacode: '7', areaname: '울산' },
+    { areacode: '8', areaname: '세종특별자치시' },
+    { areacode: '31', areaname: '경기도' },
+    { areacode: '32', areaname: '강원도' },
+    { areacode: '33', areaname: '충청북도' },
+    { areacode: '34', areaname: '충청남도' },
+    { areacode: '35', areaname: '경상북도' },
+    { areacode: '36', areaname: '경상남도' },
+    { areacode: '37', areaname: '전라북도' },
+    { areacode: '38', areaname: '전라남도' },
+    { areacode: '39', areaname: '제주도' },
+];
+
 const ChoosePlace = () => {
 
   const containerRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
+  
   // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
   //   if (containerRef.current) {
   //     const height = containerRef.current.clientHeight;
@@ -46,6 +70,7 @@ const ChoosePlace = () => {
   //     setContainerHeight(height);
   //   }
   // }, [isDrawerOpen, containerHeight]);
+
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -56,10 +81,10 @@ const ChoosePlace = () => {
           <DndProvider backend={HTML5Backend}>
             <Wrapper>
                 <CustomizedAccordions/>
-                <Section>
+                <Section>  
                   <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
                   <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
-                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} />
+                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} targetAreacode={targetAreacode}/>
                 </Section>
             </Wrapper>
             </DndProvider>
@@ -72,15 +97,20 @@ const ChoosePlace = () => {
 // `;
 
 
-const ItemsWrapper = ({ isDrawerOpen, containerHeight }) => {
+const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode}) => {
+  // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
+  const foundArea = areaList.find(area => area.areacode === targetAreacode);
+  const foundAreaName = foundArea ? foundArea.areaname : '없음';
   return(<>
     <ItemsContainer isDrawerOpen={isDrawerOpen} containerHeight={containerHeight}>
       <div className="item">
           <p> 여행지를 드래그하여 채워보세요! </p>
-          <h2>서울시의 꼭! 가봐야 할 여행지 </h2>
+          <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
-      <div className="item">  인기순 | 가나다순 | 별점순  </div>
-      <ListPlace />
+      <div className="item"> <span>인기순 | 가나다순 | 별점순 </span>  </div>
+      <div className="item">
+        <ListPlace areacode={targetAreacode} order={order}/>
+      </div>
     </ItemsContainer>
   
   </>)
