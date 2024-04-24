@@ -31,9 +31,15 @@ public class CourseDisplayController {
         return courseInfo;
     }
     @PostMapping("/courseimport")
-    public String postMethodName(@RequestBody String entity) {
-        System.out.println(entity);
-        return entity;
+    public String postMethodName(@RequestBody Map<String, String> courseRequest) {
+        String boardTitle = courseRequest.get("Title");
+        String boardContent = courseRequest.get("BoardContent");
+        courseService.saveCourse(boardTitle,boardContent);
+        System.out.println("courseimport컨트롤러 실행");
+        System.out.println("제목: " + boardTitle);
+        System.out.println("내용: " + boardContent);
+        return "코스 정보가 성공적으로 저장되었습니다.";
     }
+
     
 }
