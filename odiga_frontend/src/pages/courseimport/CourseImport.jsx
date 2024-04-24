@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import styled from "styled-components";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "./static/slider.css";
 import { red } from "@mui/material/colors";
 import axios from "axios";
+
 
 const Input = styled.input`
   width: 100%;
@@ -63,6 +64,91 @@ function CourseImport() {
     console.log(dayCourseData);
     setSelectedCourse(dayCourseData);
   };
+
+  useEffect((mapx , mapy) => {
+    setSelectedDay({mapx , mapy});
+    if (mapx && mapy) {
+      // userdata가 존재하는 경우
+      const script = document.createElement('script');
+      script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+      script.async = true;
+      script.onload = () => {
+        const mapOptions = {
+          center: new window.naver.maps.LatLng(mapy,mapx),
+          zoom: 80
+        };
+        
+        const map = new window.naver.maps.Map('map', mapOptions);
+        
+        const markerOptions = {
+          position: new window.naver.maps.LatLng(mapy, mapx),
+          map: map
+        };
+        
+        const marker = new window.naver.maps.Marker(markerOptions);
+        
+        const contentString = `
+          <div>
+            <h2>${userdata.title}</h2>
+            <p>${userdata.addr1}</p>
+            <img src=${userdata && userdata.firstimage} style="max-width: 200px;"></img>
+          </div>
+        `;
+        
+        const infoWindow = new window.naver.maps.InfoWindow({
+          content: contentString
+        });
+        
+        window.naver.maps.Event.addListener(marker, 'click', function() {
+          infoWindow.open(map, marker);
+        });
+      };
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    } else {
+      // userdata가 없는 경우 서울역 좌표를 기본으로 사용
+      const script = document.createElement('script');
+      script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+      script.async = true;
+      script.onload = () => {
+        const mapOptions = {
+          center: new window.naver.maps.LatLng(37.554722, 126.970833), // 서울역 좌표
+          zoom: 15
+        };
+        
+        const map = new window.naver.maps.Map('map', mapOptions);
+        
+        const markerOptions = {
+          position: new window.naver.maps.LatLng(37.554722, 126.970833), // 서울역 좌표
+          map: map
+        };
+        
+        const marker = new window.naver.maps.Marker(markerOptions);
+        
+        const contentString = `
+          <div>
+            <h2>서울역</h2>
+            <p>서울특별시 중구</p>
+          </div>
+        `;
+        
+        const infoWindow = new window.naver.maps.InfoWindow({
+          content: contentString
+        });
+        
+        window.naver.maps.Event.addListener(marker, 'click', function() {
+          infoWindow.open(map, marker);
+        });
+      };
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  },[userdata]);
+  
 
   return (
     <>
@@ -166,15 +252,7 @@ function CourseImport() {
               backgroundColor: "white",
             }}
           >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6215.7725807321685!2d126.69860724487357!3d37.78789857262643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357c8b8a0a9d3671%3A0xd2b2c34c16b1778c!2z7Zek7J2066asIOyYiOyIoOuniOydhA!5e0!3m2!1sko!2skr!4v1713327112832!5m2!1sko!2skr"
-              style={{
-                width: "100%",
-                height: "400px",
-                textAlign: "left",
-                display: "inline-block",
-              }}
-            ></iframe>
+            <div id="map" style={{ width: '100%', height: '400px' }}></div>
           </Div>
 
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>

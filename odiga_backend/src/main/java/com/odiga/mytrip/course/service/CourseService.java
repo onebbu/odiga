@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.odiga.mytrip.course.dao.CourseDAO;
 import com.odiga.mytrip.course.vo.CourseVO;
@@ -20,8 +21,12 @@ public class CourseService {
         }
         List<CourseVO> Courselist = courseDAO.getResultList(nickname);
         System.out.println(Courselist);
-        return Courselist;
-          
+        return Courselist;    
+    }
+    
+    @Transactional
+    public void saveCourse(String boardTitle, String boardContent) {
+        courseDAO.saveCourseData(boardTitle, boardContent);
     }
     
 }

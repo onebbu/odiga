@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,49 @@ public class TravelService {
         return overview;
 
     }
+
+    @Transactional
+    public List<String> img(String contentId) throws IOException {
+
+        String apiKey = "eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D";
+        String additionalApiUrl = "https://apis.data.go.kr/B551011/KorService1/detailImage1" +
+                "?serviceKey=" + apiKey +
+                "&MobileOS=ETC" +
+                "&MobileApp=AppTest" +
+                "&_type=json" +
+                "&contentId=" + contentId +
+                "&imageYN=Y" +
+                "&subImageYN=Y" +
+                "&numOfRows=10" +
+                "&pageNo=1";
+
+        URL url = new URL(additionalApiUrl);
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        urlConnection.setRequestMethod("GET");
+
+        StringBuilder imgResult = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
+            String returnLine;
+            while ((returnLine = br.readLine()) != null) {
+                imgResult.append(returnLine).append("\n\r");
+            }
+        } finally {
+            urlConnection.disconnect();
+        }
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode rootNode = objectMapper.readTree(imgResult.toString());
+
+        List<String> imgUrls = new ArrayList<>();
+        JsonNode itemsNode = rootNode.path("response").path("body").path("items").path("item");
+        for (JsonNode itemNode : itemsNode) {
+            String imgUrl = itemNode.path("originimgurl").asText();
+            imgUrls.add(imgUrl);
+        }
+
+        return imgUrls;
+    }
+
 
     @Transactional
     public void importReviewData(ReviewDataVO reviewData) {

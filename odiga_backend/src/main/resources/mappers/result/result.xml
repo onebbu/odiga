@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.odiga.mytrip.resultlist.dao.ResultDAO">
+    <resultMap id="travelResult" type="ResultVO">
+        <!--사용자 닉네임+코스번호+날짜+여행지 순서번호 합치기(ex odiga_01_01_01)-->
+        <result property="resultId" column="resultId" />
+        <!--사용자가 몇번째로 생성한 코스인지-->
+        <result property="courseNo" column="courseNo" />
+        <!--여행 날짜(몇일차인지)-->
+        <result property="courseDay" column="courseDay" />
+        <!--여행지 순서 번호-->
+        <result property="travelNum" column="travelNum" />
+        <result property="contentId" column="contentId" />
+        <result property="nickname" column="nickname" />
+        <result property="email" column="email" />
+        <result property="startDate" column="startDate" />
+        <result property="endDate" column="endDate" />
+        <result property="courseYN" column="courseYN" />
+    </resultMap>
+
+    <select id="selectResultList" resultMap="travelResult" parameterType="String">
+      <![CDATA[
+        select *
+        from resultlist
+        where courseNo=#{courseNo}
+        order by courseday, travelnum
+        ]]>
+	</select>
+
+    <select id="maxTravelNum" resultType="int" parameterType="map">
+        SELECT max(travelnum)
+        FROM resultlist
+        WHERE courseNo = #{courseNo} and courseday=#{courseDay}
+    </select>
+
+</mapper>

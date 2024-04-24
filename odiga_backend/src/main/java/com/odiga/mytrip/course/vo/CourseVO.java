@@ -18,5 +18,7 @@ public class CourseVO {
     private String courseyn;
     private String firstimage;
     private String title;
+    private String mapx;
+    private String mapy;
       
 }

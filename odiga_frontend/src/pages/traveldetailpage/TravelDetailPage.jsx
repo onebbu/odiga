@@ -46,11 +46,12 @@ const Tag = styled.span`
 `;
 
 //현재는 임의로 설정 추후 수정요망
-export const contentID = 2370995;
+export const contentID = 2852232;
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
+    const [imgs , setImgs] = useState(null);
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     // let mountCount = 1
     
@@ -77,8 +78,19 @@ function TravelDetailPage() {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
-      }
+        }
     }, [didMount]);
+    useEffect(()=> {
+        
+            axios.get(`/imgs/${contentID}`)
+            .then(response => {
+                setImgs((response.data));
+              })
+              .catch(error => {
+                console.error('Error fetching data:', error);
+              });
+        
+    },[didMount])
     
     useEffect(() => {
         if (data) {
@@ -163,13 +175,14 @@ function TravelDetailPage() {
                 </Section>
 
                 <Section id="similar-destinations">
-                    <H2>비슷한 여행지 추천 목록</H2>
-                    <div id="similar-destinations-placeholder">
-                        <img src={data && data.firstimage} alt="비슷한 여행지 사진 1" />
-                        <img src="https://image.ajunews.com/content/image/2020/10/29/20201029110919207531.jpg" alt="비슷한 여행지 사진 2" />
-                        <img src="https://img.freepik.com/free-photo/woman-traveler-with-backpack-walking-in-row-of-yellow-ginkgo-tree-in-autumn-autumn-park-in-tokyo-japan_335224-178.jpg?size=626&ext=jpg&ga=GA1.1.1546980028.1712102400&semt=ais" alt="비슷한 여행지 사진 3" />
-                    </div>
+                    <H2>여행지 사진</H2>
+                        <div id="similar-destinations-placeholder" >
+                            {data && data.firstimage && <img src={data.firstimage} alt="비슷한 여행지 사진 1" style={{ width: '300px', height: 'auto', marginBottom: '10px' }} /> }
+                            {imgs && imgs.length > 0 && <img src={imgs[0]} alt="비슷한 여행지 사진 2" style={{ width: '300px', height: 'auto', marginBottom: '10px' }}/>}
+                            {imgs && imgs.length > 1 && <img src={imgs[1]} alt="비슷한 여행지 사진 3"style={{ width: '300px', height: 'auto', marginBottom: '10px' }} />}
+                        </div>
                 </Section>
+
 
                 <Section id="reviews">
                     <ReviewImportForm/>
