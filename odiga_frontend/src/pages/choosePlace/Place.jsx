@@ -4,19 +4,15 @@ import {useDrag} from 'react-dnd';
 import axios from "axios";
 import './cPP.css';
 
-//"https://source.unsplash.com/featured/?mountain"
-
 //const region_url = `https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json`;
 
 
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
-// const MoreButton = Styled.button`  
-// `;
 
 const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
-    const [avgrate, setAvgrate] = useState(0);
-    const [cntrate, setCntrate] = useState(0);
+    const [avgrate, setAvgrate] = useState(0); // 여행지 평균 별점
+    const [cntrate, setCntrate] = useState(0); // 여행지 리뷰 개수
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     useEffect(() => {
         setDidMount(true); // Set didMount to true after component mounts
@@ -56,10 +52,10 @@ const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
 }
 
 function ListPlace({areacode, order}) {
-    
     const [dataList, setDataList] = useState(null);
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     const [displayCount, setDisplayCount] = useState(8);
+    
     const handleShowMore = () => {
         setDisplayCount(displayCount + 8);
     };
@@ -73,6 +69,7 @@ function ListPlace({areacode, order}) {
           axios.get(`/place/${areacode}/${displayCount}/${order}`)
             .then((response) => {
               console.log('Data received:', response.data);
+              console.log('order =',order);
               setDataList(response.data); // 데이터를 상태에 저장
             })
             .catch((error) => {

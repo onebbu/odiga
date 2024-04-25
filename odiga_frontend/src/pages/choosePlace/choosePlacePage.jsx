@@ -1,4 +1,4 @@
-import React, {useState , useRef } from "react";
+import React, {useState , useRef, useEffect } from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -9,7 +9,8 @@ import Typography from '@mui/material/Typography';
 import './cPP.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import ListPlace, { areacode } from './Place';
+import { useLocation } from "react-router-dom";
+import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
 
@@ -33,8 +34,7 @@ const ItemsContainer = Styled.div`
     transition: margin-top 0.3s ease-in-out;
   `;
 // 찾고자 하는 areacode
-const targetAreacode = '6';
-const order = "title"; //title //travelviewcount //
+// const targetAreacode = '6';
 
 const areaList = [
     { areacode: '1', areaname: '서울' },
@@ -61,7 +61,29 @@ const ChoosePlace = () => {
   const containerRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+
+  // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
+  const [targetArea, setTargetArea] = useState('1');
+  const [targetDura, setTargetDura] = useState('3');
+  const [targetTheme, setTargetTheme] = useState(null);
+  const location = useLocation();
+  useEffect(() => {
+      const receivedValues  = location.state;
+      console.log("선택한 값들:", receivedValues); // 선택한 값들을 콘솔에 출력
+      setTargetArea(receivedValues.region);
+      setTargetDura(receivedValues.duration);
+      setTargetTheme(receivedValues.theme);
+  }, [location]); 
+  // ^^^^^^^^^^^^^^^choosePage의 Preference들 ^^^^^^^^^^^^^^
+
+  useEffect(() => {
+    // 여기서 데이터를 받아오고 로딩 상태를 false로 변경
+    // 예를 들어, duration을 받아오는 API 호출 등
+    // 만약 duration이 외부에서 받아온다면 그에 따른 처리 필요
+    setIsLoading(false);
+  }, []);
+
   // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
   //   if (containerRef.current) {
   //     const height = containerRef.current.clientHeight;
@@ -70,44 +92,60 @@ const ChoosePlace = () => {
   //     setContainerHeight(height);
   //   }
   // }, [isDrawerOpen, containerHeight]);
-
+  // const ItemsContainer = Styled.div`
+  //   margin-top: ${(props) => props.isDrawerOpen ? `${props.containerHeight}px` : '0'};
+  //   transition: margin-top 0.3s ease-in-out;
+  // `;
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-    return(
-        <Body>
-          <DndProvider backend={HTML5Backend}>
-            <Wrapper>
-                <CustomizedAccordions/>
-                <Section>  
-                  <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
-                  <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
-                  <ItemsWrapper isDrawerOpen={isDrawerOpen} containerHeight={containerHeight} targetAreacode={targetAreacode}/>
-                </Section>
-            </Wrapper>
-            </DndProvider>
-        </Body>
-    );
+  return(
+    <Body>
+      <DndProvider backend={HTML5Backend}>
+        <Wrapper>
+          {!isLoading && <CustomizedAccordions duration={targetDura} />}
+            <Section>  
+              <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
+              <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
+              <ItemsWrapper isDrawerOpen={isDrawerOpen} 
+                            containerHeight={containerHeight} 
+                            targetAreacode={targetArea}
+                            targetTheme={targetTheme}/>
+            </Section>
+        </Wrapper>
+        </DndProvider>
+    </Body>
+  );
 }
-// const ItemsContainer = Styled.div`
-//   margin-top: ${(props) => props.isDrawerOpen ? `${props.containerHeight}px` : '0'};
-//   transition: margin-top 0.3s ease-in-out;
-// `;
 
 
-const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode}) => {
+const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode, targetTheme}) => {
+  const [order, setOrder] = useState('title'); //order defalt = 'title'
   // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
   const foundArea = areaList.find(area => area.areacode === targetAreacode);
   const foundAreaName = foundArea ? foundArea.areaname : '없음';
+
+  const Orderbtn = ({name, orderID }) => {
+    return (
+      <div  onClick={()=>setOrder(orderID)} style={{cursor:"pointer", display:"inline", padding:'7px'}}>
+        {name}
+      </ div>
+    )
+  }; 
+
   return(<>
     <ItemsContainer isDrawerOpen={isDrawerOpen} containerHeight={containerHeight}>
       <div className="item">
           <p> 여행지를 드래그하여 채워보세요! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
-      <div className="item"> <span>인기순 | 가나다순 | 별점순 </span>  </div>
+      {targetTheme}
+      <div className="item"> <span> 
+                <Orderbtn name={'조회순'} orderID={'travelviewcount'}/>|
+                <Orderbtn name={'가나다순'} orderID={'title'}/>|
+                <Orderbtn name={'별점순'} orderID={'likecount'}/> </span>    </div>
       <div className="item">
         <ListPlace areacode={targetAreacode} order={order}/>
       </div>
@@ -145,45 +183,43 @@ const AccordionSummary = styled((props) => (
     },
 }));
   
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+const AccordionDetails = styled(MuiAccordionDetails)(() => ({
     paddingTop: '20px',
     borderTop: '1px solid rgba(0, 0, 0, .125)',
     minHeight: '450px'
 }));
-  
-function CustomizedAccordions() {
-    const [expanded, setExpanded] = React.useState('panel1');
-  
-    const handleChange = (panel) => (event, newExpanded) => {
-      setExpanded(newExpanded ? panel : false);
-    };
-  
+
+const scheduleData = [
+  { id: 1, title: 'DAY 1', duration: ['당일여행', '1박2일', '2박3일'] },
+  { id: 2, title: 'DAY 2', duration: ['1박2일', '2박3일'] },
+  { id: 3, title: 'DAY 3', duration: ['2박3일'] },
+];
+
+function CustomizedAccordions({duration}) {
+  const [expanded, setExpanded] = useState('');
+  const handleChange = (panel) => (newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
     return (
       <AccordionWrap>
-        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-          <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-            <Typography> DAY 1 </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <DropContainer />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-          <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-            <Typography> DAY 2 </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <DropContainer />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-          <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-            <Typography> DAY 3 </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <DropContainer />
-          </AccordionDetails>
-        </Accordion>
+        {scheduleData.map(schedule => {
+            if (duration && schedule.duration.includes(duration)) {
+              return (
+                <Accordion key={schedule.id} expanded={expanded === `panel${schedule.id}`} onChange={handleChange(`panel${schedule.id}`)}>
+                  <AccordionSummary aria-controls={`panel${schedule.id}d-content`} id={`panel${schedule.id}d-header`}>
+                    <Typography>{schedule.title}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                      <DropContainer />
+                  </AccordionDetails>
+                </Accordion>
+              );
+            } else {
+              return null;
+            }
+          })
+        }
       </AccordionWrap>
     );
 }
