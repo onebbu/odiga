@@ -4,7 +4,6 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./static/slider.css";
-import { red } from "@mui/material/colors";
 import axios from "axios";
 
 
@@ -12,7 +11,7 @@ const Input = styled.input`
   width: 100%;
   padding: 5px;
   font-size: 16px;
-  border-radius: 5px;
+  border-radius: 5px; 
   border: 2px solid black;
   margin-bottom: 10px;
 `;
@@ -64,90 +63,8 @@ function CourseImport() {
     console.log(dayCourseData);
     setSelectedCourse(dayCourseData);
   };
+  
 
-  useEffect((mapx , mapy) => {
-    setSelectedDay({mapx , mapy});
-    if (mapx && mapy) {
-      // userdata가 존재하는 경우
-      const script = document.createElement('script');
-      script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
-      script.async = true;
-      script.onload = () => {
-        const mapOptions = {
-          center: new window.naver.maps.LatLng(mapy,mapx),
-          zoom: 80
-        };
-        
-        const map = new window.naver.maps.Map('map', mapOptions);
-        
-        const markerOptions = {
-          position: new window.naver.maps.LatLng(mapy, mapx),
-          map: map
-        };
-        
-        const marker = new window.naver.maps.Marker(markerOptions);
-        
-        const contentString = `
-          <div>
-            <h2>${userdata.title}</h2>
-            <p>${userdata.addr1}</p>
-            <img src=${userdata && userdata.firstimage} style="max-width: 200px;"></img>
-          </div>
-        `;
-        
-        const infoWindow = new window.naver.maps.InfoWindow({
-          content: contentString
-        });
-        
-        window.naver.maps.Event.addListener(marker, 'click', function() {
-          infoWindow.open(map, marker);
-        });
-      };
-      document.body.appendChild(script);
-      return () => {
-        document.body.removeChild(script);
-      };
-    } else {
-      // userdata가 없는 경우 서울역 좌표를 기본으로 사용
-      const script = document.createElement('script');
-      script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
-      script.async = true;
-      script.onload = () => {
-        const mapOptions = {
-          center: new window.naver.maps.LatLng(37.554722, 126.970833), // 서울역 좌표
-          zoom: 15
-        };
-        
-        const map = new window.naver.maps.Map('map', mapOptions);
-        
-        const markerOptions = {
-          position: new window.naver.maps.LatLng(37.554722, 126.970833), // 서울역 좌표
-          map: map
-        };
-        
-        const marker = new window.naver.maps.Marker(markerOptions);
-        
-        const contentString = `
-          <div>
-            <h2>서울역</h2>
-            <p>서울특별시 중구</p>
-          </div>
-        `;
-        
-        const infoWindow = new window.naver.maps.InfoWindow({
-          content: contentString
-        });
-        
-        window.naver.maps.Event.addListener(marker, 'click', function() {
-          infoWindow.open(map, marker);
-        });
-      };
-      document.body.appendChild(script);
-      return () => {
-        document.body.removeChild(script);
-      };
-    }
-  },[userdata]);
   
 
   return (
@@ -282,12 +199,13 @@ function CourseImport() {
 function carousel(selectedCourse) {
   const settings = {
     dots: true,
-    infinite: true,
+    infinite: false,
     speed: 1000,
-    slidesToShow: selectedCourse && selectedCourse.length >= 3 ? 3 : selectedCourse ? selectedCourse.length : 1,
+    slidesToShow: selectedCourse && selectedCourse.length > 1 ? 3 : selectedCourse ? selectedCourse.length : 1, // 존재하고 
     slidesToScroll: 1,
     row: 1,
   };
+
 
   return (
     <div style={{ top: "50%", textAlign: "center" }}>
@@ -295,7 +213,7 @@ function carousel(selectedCourse) {
         <Slider {...settings}>
           {selectedCourse.map((course) => (
             <div key={course.courseno}>
-              {ItemImg(course.firstimage)}
+              {ItemImg(course.firstimage , course.mapx , course.mapy ,course.title , course.addr1)}             
               {ItemTitle(course.title)}
             </div>
           ))}
@@ -313,7 +231,90 @@ function ItemTitle(title) {
   );
 }
 
-function ItemImg(imgSrc) {
+function ItemImg(imgSrc, mapx , mapy , title , addr1)  {
+  const handleImageClick = () =>{
+    if (mapx && mapy) {
+      // userdata가 존재하는 경우
+      const script = document.createElement('script');
+      script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+      script.async = true;
+      script.onload = () => {
+        const mapOptions = {
+          center: new window.naver.maps.LatLng(mapy,mapx),
+          zoom: 80
+        };
+        
+        const map = new window.naver.maps.Map('map', mapOptions);
+        
+        const markerOptions = {
+          position: new window.naver.maps.LatLng(mapy, mapx),
+          map: map
+        };
+        
+        const marker = new window.naver.maps.Marker(markerOptions);
+        
+        const contentString = `
+          <div>
+            <h2>${title}</h2>
+            <p>${addr1}</p>
+            <img src=${imgSrc} style="max-width: 200px;"></img>
+          </div>
+        `;
+        
+        const infoWindow = new window.naver.maps.InfoWindow({
+          content: contentString
+        });
+        
+        window.naver.maps.Event.addListener(marker, 'click', function() {
+          infoWindow.open(map, marker);
+        });
+      };
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    } else {
+      // userdata가 없는 경우 서울역 좌표를 기본으로 사용
+      const script = document.createElement('script');
+      script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+      script.async = true;
+      script.onload = () => {
+        const mapOptions = {
+          center: new window.naver.maps.LatLng(37.554722, 126.970833), // 서울역 좌표
+          zoom: 15
+        };
+        
+        const map = new window.naver.maps.Map('map', mapOptions);
+        
+        const markerOptions = {
+          position: new window.naver.maps.LatLng(37.554722, 126.970833), // 서울역 좌표
+          map: map
+        };
+        
+        const marker = new window.naver.maps.Marker(markerOptions);
+        
+        const contentString = `
+          <div>
+            <h2>서울역</h2>
+            <p>서울특별시 중구</p>
+          </div>
+        `;
+        
+        const infoWindow = new window.naver.maps.InfoWindow({
+          content: contentString
+        });
+        
+        window.naver.maps.Event.addListener(marker, 'click', function() {
+          infoWindow.open(map, marker);
+        });
+      };
+      document.body.appendChild(script);
+      return () => {
+        document.body.removeChild(script);
+      };
+    }
+  }
+  
   return (
     <button
       style={{
@@ -323,6 +324,7 @@ function ItemImg(imgSrc) {
         border: "0px",
         backgroundColor: "lightblue",
       }}
+      onClick={handleImageClick}
     >
       <img
         style={{
