@@ -3,6 +3,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import ReviewImportForm from './component/ReviewImportForm';
 import ReviewDisplay from "./component/ReviewDisplay";
+import LikeButton from "./LikeButton";
 
 const Container = styled.body`
     margin: 0;
@@ -149,7 +150,7 @@ function TravelDetailPage() {
             </Header>
 
             <Main>
-                <LikeButton likes={likes} setLikes={setLikes} data={data}/>
+                <LikeButton likes={likes} setLikes={setLikes} data={data} contentID={contentID}/>
                 <Section id="travel-name">
                     <H2>여행지 이름</H2>
                     <p id="name-placeholder">{data && data.title}</p>
@@ -196,32 +197,6 @@ function TravelDetailPage() {
     );
 }
 
-function LikeButton({data}) {
-    const sendLikeRequest = () => {
-        // axios를 사용하여 GET 요청 보내기
-        axios.get(`/travelLike/${contentID}`)
-            .then(response => {
-                console.log("좋아요누름");
-            })
-            .catch(error => {
-                console.error('There was a problem with the request:', error);
-            });
-    };
-    return (
-        <Section id="action-bar">
-            <div id="count-container">
-                {/* <img src="view-icon.png" alt="icon" /> */}
-                <span id="view-count">조회수: {data && (data.travelviewcount || 0)}</span>
-                {/* <img src="like-icon.png" alt="icon" /> */}
-                <span id="like-count">좋아요: {data && (data.likecount || 0)}</span>
-            </div>
-            <button id="like-button" onClick={sendLikeRequest}>
-                좋아요
-            </button>
-        </Section>
-           
-    );
-}
 
 export default TravelDetailPage;
 
