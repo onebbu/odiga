@@ -2,6 +2,7 @@ import React, { useState  } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import carousel from "./carousel";
+import TextEditor from "../component/Ckeditor/TextEditor";
 
 
 const Input = styled.input`
@@ -15,23 +16,20 @@ const Input = styled.input`
 
 function CourseImport() {
   const [title, setTitle] = useState("");
-  const [boardcontent, setBoardContent] = useState("");
   const [userdata, setUserData] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courseDayData, setCourseDayData] = useState(null);
+  const [boardContent , setBoardContent] = useState("");
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
   };
 
-  const handleContentChange = (event) => {
-    setBoardContent(event.target.value);
-  };
 
   const courseImport = () => {
     axios.post("/courseimport", {
       Title: title,
-      BoardContent: boardcontent,
+      BoardContent: boardContent,
     })
       .then((response) => {
         console.log(response, "가 전송됐습니다.");
@@ -116,7 +114,6 @@ function CourseImport() {
               />
             </h4>
           </div>
-
           <Div
             style={{
               textAlign: "left",
@@ -130,12 +127,7 @@ function CourseImport() {
               borderRadius: "10px",
             }}
           >
-            <Input
-              type="textarea"
-              placeholder="글 내용을 입력하세요."
-              value={boardcontent}
-              onChange={handleContentChange}
-            />
+            <TextEditor setData={setBoardContent}/>
           </Div>
           <h4> 여행코스 정보 </h4>
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
