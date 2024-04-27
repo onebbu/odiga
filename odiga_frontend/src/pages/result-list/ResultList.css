@@ -1,30 +1,27 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
-.nav{
-    background-color: cornflowerblue;
-}
-.footer{
-    background-color: cornflowerblue;
-}
-
 .wrapper{
     display: flex;
     color: #031A29;
+    padding-top: 110px;
 }
 
 .result-wrap {
     display: flex;
-    flex-grow: 1;
     flex-direction: column;
-    width: 20rem;
+    width: 50rem;
+    height: 85vh;
     margin-left: 1rem;
     margin-right: 1rem;
+    padding-bottom: 4rem;
+    overflow: auto;
 }
 
 .result-plan {
     display: flex;
     align-items: center;
     height: 4rem;
+    justify-content: center;
 }
 
 .result-plan h6 {
@@ -33,7 +30,7 @@
 }
 
 .wrapper hr {
-    width : 100%;
+    width : 98%;
     margin: 0;
 }
 
@@ -42,15 +39,52 @@
     padding-top: 1rem;
 }
 
-.location{
-    display: flex;
-    align-items: center;
+
+.v-line {
+    width: 30px; /* 세로 선의 너비 */
+    height: 100%; /* 세로 선의 높이는 부모 요소의 높이와 동일하게 설정 */
+    background-color: black; /* 세로 선의 색상 */
+    display: block; /* 세로 선을 블록 요소로 표시 */
+    margin: auto; /* 가운데 정렬을 위한 margin 설정 */
 }
 
-.location-num{
-    padding-right: 1rem;
-    color: gray;
 
+
+.location {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+}
+
+.location-num-wrap{
+    width: 1.8rem;
+    height: 1.8rem;
+    /*background-color: red;*/
+    border-radius: 50%;
+    text-align:center;
+}
+
+.color-red {
+    background-color: red; /* travelNum이 1인 경우의 글씨 색 */
+}
+
+.color-green {
+    background-color: green; /* travelNum이 2인 경우의 글씨 색 */
+}
+
+.color-blue {
+    background-color: blue; /* travelNum이 3인 경우의 글씨 색 */
+}
+
+.location-num {
+    color: white;
+    padding-top: 0.3rem;
+}
+
+.day-num{
+    font-family: 'JalnanGothic';
+    font-width: bold;
 }
 
 .location-info{
@@ -63,6 +97,7 @@
 
 .location-img-wrap {
     text-align:center;
+    padding-left: 1rem;
     display:table;
     /*border:1px solid #cecece;*/
     width:5.5rem;
@@ -87,11 +122,53 @@
     font-size: 0.8rem;
 }
 
+.duration-time{
+    background-color: white;
+    color: gray;
+    font-size: 14px;
+    z-index: 0;
+    height: 2rem;
+    padding-top: 0.2rem;
 
-.result-map{
+}
+
+.duration-time-wrap {
+    position: relative;
+}
+
+.duration-time-wrap::before {
+    content: '';
+    position: absolute;
+    top: -3rem;
+    left: 1.5rem;
+    transform: translateX(-50%);
+    height: 10rem;
+    width: 0.1rem; /* 세로선의 너비 */
+    background-color: rgb(80,80,80,0.3); /* 세로선의 색상 */
+    z-index: -1;
+}
+
+
+
+/*스크롤바*/
+::-webkit-scrollbar {
+     width: 8px;
+     height: 8px;
+     border-radius: 6px;
+     background: rgba(255, 255, 255, 0.4);
+ }
+::-webkit-scrollbar-thumb {
+     background: rgba(0, 0, 0, 0.3);
+     border-radius: 6px;
+ }
+
+
+.result-map {
     text-align: center;
-    height: 100%;
+    width: 100%; /* 가로 공간을 확보하기 위해 추가 */
+    height: auto; /* 세로 공간을 내용에 따라 조정하기 위해 변경 */
     margin-left: auto;
+    flex-grow: 1;
 }
 
 .kakao {
