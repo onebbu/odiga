@@ -6,25 +6,33 @@
 
     <!-- 리뷰 리스트 가져오기 -->
     <select id="getResultList" parameterType="String" resultMap="courseResultMap">
-    SELECT 
-        r.COURSENO, 
-        r.COURSEDAY, 
-        r.TRAVELNUM, 
-        r.CONTENTID, 
-        r.NICKNAME, 
-        r.EMAIL, 
-        r.STARTDATE, 
-        r.ENDDATE, 
-        r.COURSEYN,
-        t.FIRSTIMAGE,
-        t.title
-    FROM 
-        RESULTLIST r
-    JOIN 
-        TRAVELLIST t ON r.CONTENTID = t.CONTENTID
-    WHERE 
-        r.nickname = #{nickname}
-</select>
+        SELECT 
+            r.COURSENO, 
+            r.COURSEDAY, 
+            r.TRAVELNUM, 
+            r.CONTENTID, 
+            r.NICKNAME, 
+            r.EMAIL, 
+            r.STARTDATE, 
+            r.ENDDATE, 
+            r.COURSEYN,
+            t.FIRSTIMAGE,
+            t.title,
+            t.mapx,
+            t.mapy,
+            t.addr1
+        FROM 
+            RESULTLIST r
+        JOIN 
+            TRAVELLIST t ON r.CONTENTID = t.CONTENTID
+        WHERE 
+            r.nickname = #{nickname}
+    </select>
+    <insert id="saveCourseData" parameterType="String">
+        INSERT INTO TRAVELCOURSEREVIEW
+        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN)
+        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y')
+    </insert>
 
 
     <resultMap id="courseResultMap" type="CourseVO">
@@ -39,6 +47,8 @@
         <result property="courseyn" column="COURSEYN"/>
         <result property="firstimage" column="FIRSTIMAGE"/>
         <result property="title" column="TITLE"/>
+        <result property="mapx" column="MAPX"/>
+        <result property="mapy" column="MAPY"/>
     </resultMap>
 
 </mapper>
