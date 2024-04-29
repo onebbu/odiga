@@ -26,10 +26,10 @@ public class FileUploadController {
    private String bucket;
 
    @PostMapping
-   public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+   public ResponseEntity<String> uploadFile(@RequestParam("upload") MultipartFile file) {
       try {
          String fileName = file.getOriginalFilename();
-         String fileUrl = "https://" + bucket + "/test/" + fileName;
+         String fileUrl = "https://projectodiga.s3.ap-northeast-2.amazonaws.com/" + fileName;
 
          ObjectMetadata metadata = new ObjectMetadata();
          metadata.setContentType(file.getContentType());

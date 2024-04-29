@@ -22,6 +22,7 @@ function CourseImport() {
   const [boardContent , setBoardContent] = useState("");
 
   const handleTitleChange = (event) => {
+    console.log(boardContent);
     setTitle(event.target.value);
   };
 

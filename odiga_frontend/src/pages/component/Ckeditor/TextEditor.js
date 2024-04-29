@@ -3,6 +3,8 @@
 // The editor creator to use.
 import  Editor  from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
+import MyCustomUploadAdapterPlugin from './MyUploadAdapter';
+import Base64UploaderPlugin from './Base64Upload';
 
 
 const TextEditor = ({setData}) => {
@@ -28,6 +30,7 @@ const TextEditor = ({setData}) => {
 			shouldNotGroupWhenFull: true
 		},
 		language: 'ko',
+		extraPlugins : [MyCustomUploadAdapterPlugin],
 		image: {
 			toolbar: [
 				'imageTextAlternative',
