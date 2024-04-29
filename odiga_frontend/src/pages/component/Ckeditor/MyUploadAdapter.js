@@ -39,14 +39,17 @@ class UploadAdapter {
     }
 
     _initListeners(resolve, reject, file) {
-        const xhr = this.xhr 
+        const xhr = this.xhr;
         const loader = this.loader;
-        const genericErrorText = '이미지를 업로드 할수없습니다.'
+        const genericErrorText = '이미지를 업로드 할수 없습니다.'
 
         xhr.addEventListener('error', () => {reject(genericErrorText)})
         xhr.addEventListener('abort', () => reject())
         xhr.addEventListener('load', () => {
             const response = xhr.response
+            if(!response || response.error) {
+                return reject( response && response.error ? response.error.message : genericErrorText );
+            }
             
         
             resolve({

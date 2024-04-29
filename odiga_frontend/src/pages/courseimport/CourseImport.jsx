@@ -129,6 +129,7 @@ function CourseImport() {
             }}
           >
             <TextEditor setData={setBoardContent} />
+
           </Div>
           <h4> 여행코스 정보 </h4>
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
