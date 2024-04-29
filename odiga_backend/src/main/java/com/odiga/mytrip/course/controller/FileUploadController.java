@@ -14,6 +14,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
+import org.json.JSONObject;
 
 @RestController
 @RequestMapping("/upload")
@@ -37,10 +38,16 @@ public class FileUploadController {
 
          amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 
-         return ResponseEntity.ok(fileUrl);
+         // 파일 URL을 JSON 형식으로 생성
+         JSONObject jsonResponse = new JSONObject();
+         jsonResponse.put("fileUrl", fileUrl);
+
+         // JSON 형식으로 응답
+         return ResponseEntity.ok(jsonResponse.toString());
       } catch (IOException e) {
          e.printStackTrace();
          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
       }
    }
 }
+
