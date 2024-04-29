@@ -19,7 +19,8 @@
             t.FIRSTIMAGE,
             t.title,
             t.mapx,
-            t.mapy
+            t.mapy,
+            t.addr1
         FROM 
             RESULTLIST r
         JOIN 

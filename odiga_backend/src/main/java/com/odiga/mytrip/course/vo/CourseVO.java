@@ -20,5 +20,6 @@ public class CourseVO {
     private String title;
     private String mapx;
     private String mapy;
+    private String addr1;
       
 }
