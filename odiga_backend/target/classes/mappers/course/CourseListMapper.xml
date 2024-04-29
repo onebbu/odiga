@@ -30,8 +30,8 @@
     </select>
     <insert id="saveCourseData" parameterType="String">
         INSERT INTO TRAVELCOURSEREVIEW
-        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN)
-        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y')
+        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , MAINIMAGE)
+        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{mainimage})
     </insert>
 
 

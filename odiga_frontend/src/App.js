@@ -10,6 +10,7 @@ import MypageMain from "./pages/mypage/MypageMain";
 import CourseReview from "./pages/courseReview/CourseReview";
 import Main from "./pages/main/Main";
 import ResultView from "./pages/result-list/ResultView";
+import SearchPage from "./pages/SearchPage/SearchPage";
 
 function App() {
     return(
@@ -26,6 +27,7 @@ function App() {
                     <Route exact path="/courseimport" element={<CourseImport />}></Route>
                     <Route exact path="/mypage/*" element={<MypageMain />}></Route>
                     <Route exact path="/coursereview/*"  element={<CourseReview />}></Route>
+                    <Route exact path="/SearchPage"  element={<SearchPage />}></Route>
                     
                 </Route>
             </Routes>
