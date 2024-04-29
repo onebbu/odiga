@@ -1,44 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import axios from "axios";
+import React from 'react';
 import NaverMap from "./NaverMap";
 
-function NaverMapView() {
+function NaverMapView({data}) {
     // axios에서 다 가져오기
 
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        async function fetchData() {
-            try {
-                const result = await axios.get(`/courseId/odiga_3`);
-                setData(result.data);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
-        }
-
-        fetchData();
-
-        // cleanup 함수에서 completed 변수 제거
-        return () => {
-            setData(""); // 컴포넌트가 unmount될 때 data 초기화
-        };
-    }, []);
-
     const markerGroups = [];
-    // const markers = [];
-
-    let currentGroup = []; // 현재 그룹에 속하는 마커들을 저장할 배열
-
-    // 위도, 경도, contentID(여행지 상세창 이동 이벤트), courseDay(몇일차), travelNum(순서번호)
 
     let centerLatitude = 0;
     let centerLongitude = 0;
     let length = 0;
-
-    // const travel
-
-    console.log(data)
 
     for (const dateKey in data) {
         if (data.hasOwnProperty(dateKey)) {
@@ -69,9 +39,6 @@ function NaverMapView() {
     centerLongitude = centerLongitude / length;
 
     const center = {latitude: centerLatitude, longitude: centerLongitude};
-
-    console.log("markerGroups", typeof markerGroups);
-    console.log("center", center);
 
     return <NaverMap markers={markerGroups} center={center}/>;
 
