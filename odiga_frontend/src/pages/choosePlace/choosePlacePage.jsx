@@ -61,8 +61,6 @@ const ChoosePlace = () => {
   const containerRef = useRef(null);
   const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-
   // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
   const [targetArea, setTargetArea] = useState('1');
   const [targetDura, setTargetDura] = useState('3');
@@ -76,13 +74,26 @@ const ChoosePlace = () => {
       setTargetTheme(receivedValues.theme);
   }, [location]); 
   // ^^^^^^^^^^^^^^^choosePage의 Preference들 ^^^^^^^^^^^^^^
-
+  // vvvvvvvvvvvv 페이지 로딩되는데 걸리는 시간 측정 vvvvvvvvvv
   useEffect(() => {
-    // 여기서 데이터를 받아오고 로딩 상태를 false로 변경
-    // 예를 들어, duration을 받아오는 API 호출 등
-    // 만약 duration이 외부에서 받아온다면 그에 따른 처리 필요
-    setIsLoading(false);
-  }, []);
+    const startTime = performance.now();
+
+    // 페이지가 완전히 로드된 후 시간 측정 종료 및 출력
+    const handleLoad = () => {
+      const endTime = performance.now();
+      const totalTime = endTime - startTime;
+      console.log("페이지 로딩 시간:", totalTime, "밀리초");
+    };
+
+    window.addEventListener("load", handleLoad);
+
+    // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("load", handleLoad);
+    };
+    
+  }, []); //빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행되도록
+  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
   //   if (containerRef.current) {
@@ -104,18 +115,18 @@ const ChoosePlace = () => {
   return(
     <Body>
       <DndProvider backend={HTML5Backend}>
-        <Wrapper>
-          {!isLoading && <CustomizedAccordions duration={targetDura} />}
+      <Wrapper>
+        <CustomizedAccordions duration={targetDura} />
             <Section>  
               <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
-              <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
+              <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
               <ItemsWrapper isDrawerOpen={isDrawerOpen} 
                             containerHeight={containerHeight} 
                             targetAreacode={targetArea}
                             targetTheme={targetTheme}/>
             </Section>
         </Wrapper>
-        </DndProvider>
+      </DndProvider>
     </Body>
   );
 }
@@ -195,13 +206,22 @@ const scheduleData = [
   { id: 3, title: 'DAY 3', duration: ['2박3일'] },
 ];
 
+const Position = Styled.div`
+  position: relative;
+`;
+
 function CustomizedAccordions({duration}) {
   const [expanded, setExpanded] = useState('');
   const handleChange = (panel) => (newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
+  const sendData = () => {
+    // 여기에 정보를 전송하는 코드를 작성합니다.
+    alert('정보를 전송합니다.');
+  }
 
     return (
+      <Position>
       <AccordionWrap>
         {scheduleData.map(schedule => {
             if (duration && schedule.duration.includes(duration)) {
@@ -220,7 +240,10 @@ function CustomizedAccordions({duration}) {
             }
           })
         }
+        <button className="buttondesign save" onClick={sendData}>저장하기</button>
       </AccordionWrap>
+      
+      </Position>
     );
 }
 

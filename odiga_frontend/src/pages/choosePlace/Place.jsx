@@ -13,13 +13,8 @@ const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
 const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
     const [avgrate, setAvgrate] = useState(0); // 여행지 평균 별점
     const [cntrate, setCntrate] = useState(0); // 여행지 리뷰 개수
-    const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
-    useEffect(() => {
-        setDidMount(true); // Set didMount to true after component mounts
-    }, []);
     
     useEffect(() => {
-        if (didMount) {
           // 백엔드 API 호출
           axios.get(`/placerate/${id}`)
             .then((response) => {
@@ -29,8 +24,8 @@ const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
             .catch((error) => {
               console.error('Error fetching data:', error);
             });
-        }
-    }, [didMount]);
+
+    }, [id]);
 
     const[{ isDragging },drag] = useDrag({
         type: 'placeitem',
@@ -53,43 +48,47 @@ const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
 
 function ListPlace({areacode, order}) {
     const [dataList, setDataList] = useState(null);
-    const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
+    const [isLoading, setIsLoading] = useState(true);
     const [displayCount, setDisplayCount] = useState(8);
     
     const handleShowMore = () => {
         setDisplayCount(displayCount + 8);
     };
-    useEffect(() => {
-        setDidMount(true); // Set didMount to true after component mounts
-    }, []);
     
-    useEffect(() => {
-        if (didMount) {
+    const fetchList = () => {
+        setIsLoading(true);
           // 백엔드 API 호출
-          axios.get(`/place/${areacode}/${displayCount}/${order}`)
+        axios.get(`/place/${areacode}/${displayCount}/${order}`)
             .then((response) => {
               console.log('Data received:', response.data);
-              console.log('order =',order);
               setDataList(response.data); // 데이터를 상태에 저장
+              setIsLoading(false);
             })
             .catch((error) => {
               console.error('Error fetching data:', error);
-            });
-        }
-    }, [didMount, areacode, displayCount, order]);
+              setIsLoading(true);
+        });
+        
+    };
     
+    useEffect(() => {
+        fetchList();
+    }, [areacode, displayCount, order]);
+
     return (
         <div>
-            <div style={{
-                padding: "10px",
-                display: "grid",
-                gridTemplateRows: "1fr ",
-                gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                gridGap: "30px",
-            }}>
-                {dataList && dataList.map(
-                    (data) => ( <Place key={data.contentid} id={data.contentid} pic={data.firstimage} name={data.title} region={data.addr1}/> ))}
-            </div>
+            {isLoading ? ( <><p>Loading....</p> <button onClick={fetchList}>다시 시도</button></> ) : (
+                <div style={{
+                    padding: "10px",
+                    display: "grid",
+                    gridTemplateRows: "1fr ",
+                    gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                    gridGap: "30px",
+                }}>
+                    {dataList && dataList.map(
+                        (data) => ( <Place key={data.contentid} id={data.contentid} pic={data.firstimage} name={data.title} region={data.addr1}/> ))}
+                </div>
+            )}
             {displayCount < 100 && ( // 100개 이상은 안보여줌.
                 <button className="buttondesign" onClick={handleShowMore}>More</button>
             )}

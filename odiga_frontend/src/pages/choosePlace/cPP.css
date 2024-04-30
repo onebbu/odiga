@@ -23,6 +23,11 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
 * {
     font-family: 'GmarketSansMedium';
 }
+.save{
+    position:absolute; 
+    bottom: 15px;
+    right: 15px;
+}
 
 /*Drawer.js*/
 .drawer{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; padding-bottom: 10px;}

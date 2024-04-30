@@ -26,8 +26,14 @@ function ChoosePreference() {
 
     // 다음 페이지로 선택된 값들을 전달하는 함수
     const goToNextPage = () => {
-        // 다음 페이지의 경로와 함께 선택된 값들을 전달합니다.
-        navigate('/place', { state: selectedValues });
+        // 모든 영역에서 선택된 값들을 검사하여 누락된 값이 있는지 확인
+        if (selectedValues.region === null || selectedValues.duration === null || selectedValues.theme.length < 2) {
+            // 누락된 값이 있으면 사용자에게 알림을 표시
+            alert('모든 영역에서 선택이 완료되지 않았습니다. 선택을 완료해주세요.');
+        } else {
+            // 모든 값이 선택되었으면 다음 페이지 경로와 함께 선택된 값들을 전달합니다.
+            navigate('/place', { state: selectedValues });
+        }        
     };
     // region 선택 시 selectedValues 업데이트
     const handleRegionSelect = (region) => {
