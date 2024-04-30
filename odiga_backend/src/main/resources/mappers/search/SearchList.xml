@@ -6,24 +6,36 @@
 
 
     <!-- 여행지 지역별 리스트 가져오기 -->
-    <select id="getSearchList" resultType="com.odiga.mytrip.search.vo.SearchVO" parameterType="String">
-        SELECT *
+    <select id="getSearchList" resultType="com.odiga.mytrip.search.vo.SearchVO" parameterType="java.util.Map">
+    SELECT *
     FROM (
         SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.title) AS row_num
         FROM travellist t
         WHERE t.title LIKE '%' || #{text} || '%'
         AND t.areacode = #{areacode}
+        <choose>
+            <when test="catcode != null">
+                AND t.cat3 = #{catcode}
+            </when>
+        </choose>
     ) sub
     WHERE sub.row_num BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
-
     </select>
 
-    <select id="getResultCount" resultType="int">
+
+
+    <select id="getResultCount" resultType="int" parameterType="java.util.Map">
     SELECT COUNT(*)
     FROM TRAVELLIST
     WHERE areacode = #{areacode}
     AND title LIKE '%' || #{text} || '%'
+    <choose>
+        <when test="catcode != null">
+            AND cat3 = #{catcode}
+        </when>
+    </choose>
     </select>
+
 
     <select id="getCatList" resultType="com.odiga.mytrip.search.vo.CatVO">
     SELECT *

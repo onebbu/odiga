@@ -37,7 +37,7 @@ function SearchPage() {
 
   const handleCatkrSelection = (selectedCatcode) => {
     setCatCode(selectedCatcode);
-    console.log(catCode);
+    fetchSearchResults(1);
   };
 
   const fetchCategories = async () => {
@@ -56,7 +56,8 @@ function SearchPage() {
         params: {
           page: page,
           text: searchText,
-          areacode: selectedAreaCode
+          areacode: selectedAreaCode,
+          catcode : catCode
         }
       });
       const { searchList, totalPages, resultCount } = response.data;
