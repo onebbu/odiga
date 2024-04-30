@@ -2,12 +2,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./static/slider.css";
-import { useState } from "react";
 
-
-
-function Carousel({selectedCourse, MainImage, setMainImage }) {
-
+function carousel(selectedCourse) {
     const settings = {
       dots: true,
       infinite: false,
@@ -16,13 +12,6 @@ function Carousel({selectedCourse, MainImage, setMainImage }) {
       slidesToScroll: 1,
       row: 1,
     };
-
-
-    const handleImageSelect = (course) => {
-      setMainImage(course.firstimage);
-      console.log(MainImage);
-    }
-    
   
   
     return (
@@ -33,7 +22,6 @@ function Carousel({selectedCourse, MainImage, setMainImage }) {
               <div key={course.courseno}>
                 {ItemImg(course.firstimage , course.mapx , course.mapy ,course.title , course.addr1)}             
                 {ItemTitle(course.title)}
-                <button onClick={() => handleImageSelect(course)}>Select Image</button>
               </div>
             ))}
           </Slider>
@@ -161,4 +149,4 @@ function Carousel({selectedCourse, MainImage, setMainImage }) {
     );
   }
 
-  export default Carousel;
+  export default carousel;

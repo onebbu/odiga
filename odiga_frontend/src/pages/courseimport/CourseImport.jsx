@@ -1,7 +1,7 @@
 import React, { useState  } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import Carousel from "./Carousel";
+import carousel from "./carousel";
 import TextEditor from "../component/Ckeditor/TextEditor";
 
 
@@ -20,10 +20,9 @@ function CourseImport() {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [courseDayData, setCourseDayData] = useState(null);
   const [boardContent , setBoardContent] = useState("");
-  const [MainImage, setMainImage] = useState(null);
 
   const handleTitleChange = (event) => {
-    // console.log(MainImage);
+    console.log(boardContent);
     setTitle(event.target.value);
   };
 
@@ -32,7 +31,6 @@ function CourseImport() {
     axios.post("/courseimport", {
       Title: title,
       BoardContent: boardContent,
-      MainImage : MainImage
     })
       .then((response) => {
         console.log(response, "가 전송됐습니다.");
@@ -131,7 +129,6 @@ function CourseImport() {
             }}
           >
             <TextEditor setData={setBoardContent} />
-
           </Div>
           <h4> 여행코스 정보 </h4>
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
@@ -169,7 +166,7 @@ function CourseImport() {
             <button className="btn btn-secondary" type="button" onClick={() => handleDayButtonClick(3)}>
               DAY3
             </button>
-            <Carousel selectedCourse={courseDayData} MainImage={MainImage} setMainImage={setMainImage} />
+            {carousel(courseDayData)}
           </Div>
 
           <Div

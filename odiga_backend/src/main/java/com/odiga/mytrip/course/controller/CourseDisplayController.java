@@ -34,9 +34,7 @@ public class CourseDisplayController {
     public String postMethodName(@RequestBody Map<String, String> courseRequest) {
         String boardTitle = courseRequest.get("Title");
         String boardContent = courseRequest.get("BoardContent");
-        String mainimage = courseRequest.get("MainImage");
-        System.out.println("메인이미지: "+ mainimage);
-        courseService.saveCourse(boardTitle,boardContent,mainimage);
+        courseService.saveCourse(boardTitle,boardContent);
         System.out.println("courseimport컨트롤러 실행");
         System.out.println("제목: " + boardTitle);
         System.out.println("내용: " + boardContent);
