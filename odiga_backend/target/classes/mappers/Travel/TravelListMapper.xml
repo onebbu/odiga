@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.odiga.mytrip.travel.dao.TravelDAO">
+
+    <!-- 여행지 정보 가져오기 -->
+    <select id="getTravelInfo" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
+        SELECT *
+        FROM TravelList
+        WHERE contentId = #{contentId}
+    </select>
+    <!-- 페이지 방문후 뷰카운트 1증가 -->
+    <select id="countPlusOne" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
+        UPDATE TravelList
+        SET TRAVELVIEWCOUNT = COALESCE(TRAVELVIEWCOUNT, 0) + 1
+        WHERE contentId = #{contentId}
+    </select>
+    <!--페이지 방문시 overview가없으면 그정보 받아와서 db저장-->
+    <update id="fetchOverview" parameterType="com.odiga.mytrip.travel.vo.TravelListVO">
+        UPDATE TRAVELLIST
+        SET overview = #{overview}
+        WHERE contentid = #{contentid}
+    </update>
+    <!--리뷰 임포트-->
+    <insert id="importReviewData" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
+        INSERT INTO TRAVELREVIEW
+        (REVIEWNO, EMAIL, NICKNAME, CONTENTID, REVIEWCOMMENT, REVIEWGRADE, REVIEWDATE)
+        VALUES (REVIEWNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{contentid}, #{reviewcomment}, #{reviewgrade}, SYSDATE)
+    </insert>
+    <!-- 리뷰 리스트 가져오기 -->
+    <select id="getReviewList" resultType="com.odiga.mytrip.travel.vo.ReviewDataVO">
+        SELECT *
+        FROM TRAVELREVIEW
+        WHERE contentId = #{contentId}
+    </select>
+    <!-- 좋아요 수 1 증가 -->
+    <update id="Like" parameterType="string">
+        UPDATE TravelList
+        SET LIKECOUNT = COALESCE(LIKECOUNT, 0) + 1
+        WHERE contentId = #{contentId}
+    </update>
+
+</mapper>
