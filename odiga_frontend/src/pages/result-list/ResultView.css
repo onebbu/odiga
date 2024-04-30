@@ -1,0 +1,46 @@
+
+.wrapper{
+    display: flex;
+    color: #031A29;
+    padding-top: 110px;
+}
+
+.loading-wrap {
+    display: flex; /* Flex 컨테이너 설정 */
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    width: 150vh;
+    height: 75vh;
+    flex-direction: column
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+.loading {
+    display: flex; /* Flex 컨테이너 설정 */
+    justify-content: center; /* 가로 가운데 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+
+.result-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 50rem;
+    height: 85vh;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-bottom: 4rem;
+    overflow: auto;
+}
+
+.result-map {
+    text-align: center;
+    width: 100%; /* 가로 공간을 확보하기 위해 추가 */
+    height: auto; /* 세로 공간을 내용에 따라 조정하기 위해 변경 */
+    margin-left: auto;
+    flex-grow: 1;
+}
