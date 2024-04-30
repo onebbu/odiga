@@ -9,6 +9,7 @@ function NaverMap({markers, center}) {
 
         const centerLocation = new naver.maps.LatLng(center.latitude, center.longitude);
 
+
         const mapOptions = {
             center: centerLocation,
             // 중앙에 배치할 위치

@@ -20,20 +20,17 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Controller
-// @RestController
-// @RequestMapping("resultId")
 @RequiredArgsConstructor
 public class ResultController {
 
     private final ResultService resultService;
     private final TravelService travelService;
-
     private final NaverApiService naverApiService;
 
 
     // http://localhost:8080/courseId/odiga_2
     @GetMapping("/courseId/{courseNo}")
-    public ResponseEntity<Map<String, Map<String, Map<String, Object>>>> result(@PathVariable String courseNo) {
+    public ResponseEntity<Map<String, Map<Integer, Map<String, Object>>>> result(@PathVariable String courseNo) {
 
         /**
          * 프론트로 보낼 맵 설정 이중 맵
@@ -49,7 +46,7 @@ public class ResultController {
          */
 
 
-        Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
+        Map<String, Map<Integer, Map<String, Object>>> resultMap = new HashMap<>();
 
 
         List<ResultVO> travelList = resultService.findById(courseNo); // 코스NO를 통해 사용자가 선택한 정보들 모두 저장됨
@@ -66,7 +63,7 @@ public class ResultController {
                 resultMap.put(currentDay, new HashMap<>());
             }
 
-            Map<String, Map<String, Object>> dayMap = resultMap.get(currentDay);
+            Map<Integer, Map<String, Object>> dayMap = resultMap.get(currentDay);
 
 
             // 다음 요소가 있는지 확인
@@ -88,12 +85,14 @@ public class ResultController {
                 locationMap.put("mapY", currentTravel.getMapy());
                 locationMap.put("courseDay", current.getCourseDay());
                 locationMap.put("travelNum", current.getTravelNum());
-                locationMap.put("maxtravelNum", maxtravelNum);
+                locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
                     locationMap.put("duration", 0);
+                    locationMap.put("directionUrl", "");
+
                 }
                 // 하루에 장소가 2개 이상 경우
                 if (maxtravelNum >= 2) {
@@ -102,13 +101,18 @@ public class ResultController {
                     Map<String, Object> directionResult = naverApiService.getDirection(start, goal);
                     String duration = DirectionResultParsing(directionResult);
                     locationMap.put("duration", duration);
+                    locationMap.put("directionUrl", "http://map.naver.com/index.nhn?slng="+currentTravel.getMapx()+"&slat="+currentTravel.getMapy()+"&stext="+currentTravel.getTitle()+"&elng="+nextTravel.getMapx()+"&elat="+nextTravel.getMapy()+"&pathType=0&showMap=true&etext="+nextTravel.getTitle()+"&menu=route");
+
+                //     y / lat / 위도  // x / lng / 경도
+
                 }
                 // 다음 요소가 없는 경우에는 duration을 0으로 설정
                 if (current.getTravelNum() == maxtravelNum) {
                     locationMap.put("duration", 0);
+                    locationMap.put("directionUrl", "");
                 }
 
-                dayMap.put(current.getCourseDay() + "_" + current.getTravelNum(), locationMap);
+                dayMap.put(i, locationMap);
             } else {
 
                 Map<String, Object> locationMap = new HashMap<>();
@@ -121,7 +125,7 @@ public class ResultController {
                 locationMap.put("mapY", currentTravel.getMapy());
                 locationMap.put("courseDay", current.getCourseDay());
                 locationMap.put("travelNum", current.getTravelNum());
-                locationMap.put("maxtravelNum", maxtravelNum);
+                locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
 
                 // 하루에 장소가 1개일 경우
@@ -132,13 +136,21 @@ public class ResultController {
                 if (current.getTravelNum() == maxtravelNum) {
                     locationMap.put("duration", 0);
                 }
-                dayMap.put(current.getCourseDay() + "_" + current.getTravelNum(), locationMap);
+                dayMap.put(i, locationMap);
             }
 
             // 반복 변수 증가
             i++;
         }
-        return ResponseEntity.ok(resultMap);
+
+        List<String> sortedKeys = new ArrayList<>(resultMap.keySet());
+        Collections.sort(sortedKeys);
+        Map<String, Map<Integer, Map<String, Object>>> sortedMap = new LinkedHashMap<>();
+        for (String key : sortedKeys) {
+            sortedMap.put(key, resultMap.get(key));
+        }
+
+        return ResponseEntity.ok(sortedMap);
     }
 
     // 네이버 api(driving-5)
