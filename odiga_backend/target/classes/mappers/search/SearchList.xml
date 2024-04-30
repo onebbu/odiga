@@ -25,6 +25,11 @@
     AND title LIKE '%' || #{text} || '%'
     </select>
 
+    <select id="getCatList" resultType="com.odiga.mytrip.search.vo.CatVO">
+    SELECT *
+    FROM TRAVELCAT
+    </select>
+
     <!-- 여행지별 리뷰 평균 별점 조회 placeList에서 가져온거 커스텀해야함.
     <select id="getPlaceRate" resultType="java.util.Map" parameterType="String">
         SELECT NVL(ROUND(AVG(REVIEWGRADE)),0) AS "averageRate", count(*) as "cntRating"

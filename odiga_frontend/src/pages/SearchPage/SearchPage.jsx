@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Sidebar from './SideBar';
 
 function SearchPage() {
   const [searchText, setSearchText] = useState('');
@@ -8,10 +9,14 @@ function SearchPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [resultCount, setResultCount] = useState(0);
+  const [catList, setCatList] = useState([1]); 
+  const [catCode , setCatCode] = useState(null);
+
 
   useEffect(() => {
     // 페이지 변경 시 검색 결과 요청
     fetchSearchResults(currentPage);
+    fetchCategories();
   }, [currentPage]);
 
   // 함수: 검색어 입력 시 상태 업데이트
@@ -27,6 +32,21 @@ function SearchPage() {
   // 함수: 페이지 변경 시 상태 업데이트
   const handlePageChange = (page) => {
     setCurrentPage(page);
+    fetchSearchResults(page);
+  };
+
+  const handleCatkrSelection = (selectedCatcode) => {
+    setCatCode(selectedCatcode);
+    console.log(catCode);
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('/categories'); // 카테고리 가져오는 API 엔드포인트
+      setCatList(response.data);
+    } catch (error) {
+      console.error('카테고리를 불러오는 중 에러 발생:', error);
+    }
   };
 
   // 함수: 검색 결과 요청
@@ -54,7 +74,8 @@ function SearchPage() {
 
   // 함수: 검색 버튼 클릭 시 검색 수행
   const handleSearch = () => {
-    setCurrentPage(1); // 검색어가 변경되면 첫 페이지로 초기화
+    setCurrentPage(1);
+    fetchSearchResults(1); 
   };
 // 페이지 번호를 생성하는 함수 (5개씩 표시)
   const renderPageNumbers = () => {
@@ -81,12 +102,34 @@ function SearchPage() {
 
   return (
     <div className="search-page">
+      {/* 사이드바 */}
+      <Sidebar
+        catList={catList}
+        // catKr={catKr}
+        setCatCode={handleCatkrSelection}
+      />
       {/* 검색 입력 폼 */}
       <div className="search-form">
         {/* 시군구 옵션 */}
         <select value={selectedAreaCode} onChange={handleAreaChange}>
           <option value="">전체</option>
           <option value="1">서울</option>
+          <option value="2">인천</option>
+          <option value="3">대전</option>
+          <option value="4">대구</option>
+          <option value="5">광주</option>
+          <option value="6">부산</option>
+          <option value="7">울산</option>
+          <option value="8">세종</option>
+          <option value="31">경기도</option>
+          <option value="32">강원도</option>
+          <option value="33">충청북도</option>
+          <option value="34">충청남도</option>
+          <option value="35">경상북도</option>
+          <option value="36">경상남도</option>
+          <option value="37">전라북도</option>
+          <option value="38">전라남도</option>
+          <option value="39">제주도</option>
           {/* 옵션 목록 */}
         </select>
 

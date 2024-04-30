@@ -10,5 +10,6 @@ public class SearchVO {
     private String addr1;
     private String areacode;
     private String sigungucode;
+    private String cat3;
     
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.odiga.mytrip.search.service.SearchService;
+import com.odiga.mytrip.search.vo.CatVO;
 import com.odiga.mytrip.search.vo.SearchVO;
 
 @RestController
@@ -42,4 +43,9 @@ public class SearchController {
             throw new RuntimeException("Failed to fetch travel information.");
         }
     }
+    @GetMapping("/categories")
+    public List<CatVO> getMethodName() throws IOException{
+        return searchService.CatList();
+    }
+    
 }
