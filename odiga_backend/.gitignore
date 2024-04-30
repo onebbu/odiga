@@ -38,4 +38,4 @@ out/
 
 application-secret.properties
 
-/target
+/target/
