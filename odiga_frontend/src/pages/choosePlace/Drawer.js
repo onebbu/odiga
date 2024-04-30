@@ -112,7 +112,7 @@ const steamGames = [
 
 const Drawer = ({ isOpen, onClose, ref }) => {
   return (
-    <DrawerContainer isOpen={isOpen} ref={ref}>
+    <DrawerContainer isopen={isOpen} ref={ref}>
       <DrawerContent>
         {/* <ul>
             {steamGames.map((game, index) => (

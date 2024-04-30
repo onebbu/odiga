@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.*;
 
 @RestController
 public class PlaceController {
     @Autowired
     private PlaceService placeService;
-    
+    // Logger 선언
+    private static final Logger logger = Logger.getLogger(PlaceController.class.getName());
+
     @GetMapping("/place/{areacode}/{displayCount}/{order}")
     public List<TravelListVO> getPlaceList(
         @PathVariable String areacode, 
@@ -26,17 +29,14 @@ public class PlaceController {
             String orderByClause = validateAndTransformOrder(order);
             List<TravelListVO> placeList = placeService.placeList(areacode, displayCount, orderByClause);
             System.out.println(areacode+" "+displayCount+" "+orderByClause);
-            // Perform additional logic if needed
-            // Example: Fetch overview data if it's null
-            // if (travelInfo.getOverview() == null) {
-            //     String newOverview = placeService.fetchOverviewData(areacode);
-            //     travelInfo.setOverview(newOverview);
-            // }
+             // 로그 추가
+            logger.info("Place list 성공적으로 불러옴. Area code: " + areacode + ", Display count: " + displayCount + ", Order: " + orderByClause);
+            System.out.println(logger);
             return placeList;
         } catch (Exception e) {
-            // Handle IOException appropriately (e.g., log error, return error response)
-            System.err.println("Error processing request: " + e.getMessage());
-            throw new RuntimeException("Failed to fetch travel information.");
+            // 예외 발생 시 로그 추가 및 예외 다시 던지기
+            logger.log(Level.SEVERE, "Error processing request", e);
+            throw new RuntimeException("Failed to fetch place information.");
         }
     }
 
@@ -65,8 +65,16 @@ public class PlaceController {
 
         Map<String, Object> resultMap = placeService.placeRate(contentID);
         // resultMap = {averageRate, cntRating} 
+        // 로그 추가
+        logger.info("Place rate fetched successfully. Content ID: " + contentID);
         return resultMap;
     }
 
-    
+    @GetMapping("/place") // 잘못된 URL
+    public String redirectToCorrectPage() {
+        // "/place" 뒤에 어떠한 경로도 오지 않은 경우에는 wrongpathPage를 보여줍니다.
+        // 올바른 페이지로 리디렉션
+        return "redirect:/wrongpath/preference";
+    }
+
 }
