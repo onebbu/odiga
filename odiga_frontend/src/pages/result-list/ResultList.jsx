@@ -1,6 +1,7 @@
 import * as React from 'react';
 import "./ResultList.css";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import {Link} from "react-router-dom";
 
 export default function ResultList({data}) {
     return (
@@ -25,6 +26,7 @@ export default function ResultList({data}) {
                                 const title = data[dateKey][dayKey].title;
                                 const addr = data[dateKey][dayKey].addr;
                                 const duration = data[dateKey][dayKey].duration;
+                                const directionUrl = data[dateKey][dayKey].directionUrl;
 
                                 // 이전 courseDay 값과 현재 courseDay 값이 다른 경우에만 Day 출력
                                 const dayOutputJSX = courseDay !== prevCourseDay ?
@@ -54,7 +56,10 @@ export default function ResultList({data}) {
                                             {duration !== 0 && (
                                                 <div className="duration-time-wrap">
                                                     <div className="duration-time">
-                                                        <p><DirectionsCarIcon/> {duration}</p>
+                                                        <Link to={directionUrl}
+                                                              target="_blank"
+                                                              rel="noopener noreferrer"
+                                                        className="custom-link"><DirectionsCarIcon/>{duration} ></Link>
                                                     </div>
                                                 </div>
                                             )}
