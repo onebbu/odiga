@@ -1,7 +1,7 @@
 import React, { useState  } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import Carousel from "./carousel.js";
+import Carousel from "./Carousel";
 import TextEditor from "../component/Ckeditor/TextEditor";
 
 
