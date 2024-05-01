@@ -167,8 +167,21 @@
     font-family: 'GmarketSansMedium';
 }
 
-.kakao {
+.badge{
+    display: inline-block;
+    padding: 0.25em 0.5em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
     text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    background-color: #007bff;
+    color: #fff;
 }
 
 
+.kakao {
+    text-align: center;
+}
