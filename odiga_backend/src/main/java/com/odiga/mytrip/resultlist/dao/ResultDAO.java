@@ -14,6 +14,9 @@ public interface ResultDAO {
 
     int maxTravelNum(@Param("courseNo") String courseNo, @Param("courseDay")int courseDay);
 
+    String findCategory(@Param("category") String category);
+    String findCategoryKR(@Param("category") String category);
+
 
 
 }

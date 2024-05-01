@@ -24,8 +24,15 @@ public class ResultService {
         return resultDAO.selectResultList(courseNo);
     }
 
-
     public int findMaxTravelNum(String courseNo, int courseDay){
         return resultDAO.maxTravelNum(courseNo, courseDay);
+    }
+
+    public String findCategory(String category) {
+        return resultDAO.findCategory(category);
+    }
+
+    public String findCategoryKR(String category) {
+        return resultDAO.findCategoryKR(category);
     }
 }

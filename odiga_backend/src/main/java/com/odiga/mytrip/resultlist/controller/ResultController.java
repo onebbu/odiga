@@ -87,6 +87,7 @@ public class ResultController {
                 locationMap.put("travelNum", current.getTravelNum());
                 locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
+                locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
@@ -127,6 +128,8 @@ public class ResultController {
                 locationMap.put("travelNum", current.getTravelNum());
                 locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
+                locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
+
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
@@ -151,6 +154,36 @@ public class ResultController {
         }
 
         return ResponseEntity.ok(sortedMap);
+    }
+
+    @GetMapping("/contentId/{contentId}")
+    public ResponseEntity<Map<String, Map<String, Object>>> resultModal(@PathVariable String contentId) {
+
+
+        Map<String, Map<String, Object>> resultMap = new HashMap<>();
+
+        Map<String, Object> contentInfo = new HashMap<>();
+
+        TravelListVO content = travelService.TravelList(contentId);
+
+        String title = content.getTitle();
+        int likeCount = content.getLikecount() == null? 0 : Integer.parseInt(content.getLikecount());
+        String img = content.getFirstimage();
+        String addr = content.getAddr1();
+        log.info("cat={}", content.getCat3());
+        String cat = resultService.findCategory(content.getCat3());
+        String catKR = resultService.findCategoryKR(content.getCat3());
+
+        contentInfo.put("title", title);
+        contentInfo.put("likeCount", likeCount);
+        contentInfo.put("img", img);
+        contentInfo.put("addr", addr);
+        contentInfo.put("cat", cat);
+        contentInfo.put("catkr", catKR);
+
+        resultMap.put(contentId, contentInfo);
+
+        return ResponseEntity.ok(resultMap);
     }
 
     // 네이버 api(driving-5)
