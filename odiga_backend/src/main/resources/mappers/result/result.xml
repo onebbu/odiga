@@ -36,4 +36,22 @@
         WHERE courseNo = #{courseNo} and courseday=#{courseDay}
     </select>
 
+    <select id="findCategory" resultType="String" parameterType="String">
+        SELECT cattype
+        FROM TRAVELCAT
+        WHERE catcode=#{category}
+    </select>
+
+    <select id="findCategoryKR" resultType="String" parameterType="String">
+        SELECT catkr
+        FROM TRAVELCAT
+        WHERE catcode=#{category}
+    </select>
+
+    <update id="savePw" parameterType="map">
+        UPDATE resultlist
+        SET coursePW = #{coursePw}
+        WHERE courseNo = #{courseNo}
+    </update>
+
 </mapper>

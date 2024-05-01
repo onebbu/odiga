@@ -2,6 +2,7 @@ package com.odiga.mytrip.resultlist.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.resultlist.service.ResultService;
 import com.odiga.mytrip.resultlist.vo.ResultVO;
 import com.odiga.mytrip.travel.service.NaverApiService;
@@ -11,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -87,6 +89,7 @@ public class ResultController {
                 locationMap.put("travelNum", current.getTravelNum());
                 locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
+                locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
@@ -127,6 +130,8 @@ public class ResultController {
                 locationMap.put("travelNum", current.getTravelNum());
                 locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
+                locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
+
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
@@ -151,6 +156,47 @@ public class ResultController {
         }
 
         return ResponseEntity.ok(sortedMap);
+    }
+
+    @GetMapping("/contentId/{contentId}")
+    public ResponseEntity<Map<String, Map<String, Object>>> resultModal(@PathVariable String contentId) {
+
+
+        Map<String, Map<String, Object>> resultMap = new HashMap<>();
+
+        Map<String, Object> contentInfo = new HashMap<>();
+
+        TravelListVO content = travelService.TravelList(contentId);
+
+        String title = content.getTitle();
+        int likeCount = content.getLikecount() == null? 0 : Integer.parseInt(content.getLikecount());
+        String img = content.getFirstimage();
+        String addr = content.getAddr1();
+        log.info("cat={}", content.getCat3());
+        String cat = resultService.findCategory(content.getCat3());
+        String catKR = resultService.findCategoryKR(content.getCat3());
+
+        contentInfo.put("title", title);
+        contentInfo.put("likeCount", likeCount);
+        contentInfo.put("img", img);
+        contentInfo.put("addr", addr);
+        contentInfo.put("cat", cat);
+        contentInfo.put("catkr", catKR);
+
+        resultMap.put(contentId, contentInfo);
+
+        return ResponseEntity.ok(resultMap);
+    }
+
+    @PostMapping("/sendPw")
+    @ResponseBody
+    public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
+
+        log.info("잘 도착했니?={}", courseInfo.get("pw") +"_"+ courseInfo.get("id"));
+
+
+        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("id"));
+
     }
 
     // 네이버 api(driving-5)

@@ -1,5 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
 
+@font-face {
+    font-family: 'GmarketSansMedium';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'JalnanGothic';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_231029@1.1/JalnanGothic.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 .result-plan {
     display: flex;
@@ -48,16 +61,16 @@
     z-index: 1;
 }
 
-.color-red {
-    background-color: red; /* travelNum이 1인 경우의 글씨 색 */
+.color-first {
+    background-color: #A6285F; /* travelNum이 1인 경우의 글씨 색 */
 }
 
-.color-green {
-    background-color: green; /* travelNum이 2인 경우의 글씨 색 */
+.color-second {
+    background-color: #227c9d; /* travelNum이 2인 경우의 글씨 색 */
 }
 
-.color-blue {
-    background-color: blue; /* travelNum이 3인 경우의 글씨 색 */
+.color-third {
+    background-color: #9C8770; /* travelNum이 3인 경우의 글씨 색 */
 }
 
 .location-num {
@@ -74,8 +87,17 @@
     padding-left: 1rem;
 }
 
-.location-info p {
+
+.location-info .title {
+    font-family: 'JalnanGothic';
+    margin: 5px 0 -18px 0;
+}
+
+.location-info .addr {
+    font-family: 'GmarketSansMedium';
     margin: 0;
+    font-size: 80%;
+    color: #808080;
 }
 
 .location-img-wrap {
@@ -99,19 +121,13 @@
     border-radius: 70%;
 }
 
-.location-addr {
-    color: gray;
-    font-size: 0.8rem;
-}
-
 .duration-time {
     background-color: white;
     color: gray;
-    font-size: 14px;
+    font-size: 80%;
     z-index: 0;
     height: 2rem;
     padding-top: 0.2rem;
-
 }
 
 .duration-time-wrap {
@@ -148,6 +164,21 @@
 .custom-link {
     color: #808080; /* 원하는 색상으로 변경 */
     text-decoration: none; /* 텍스트에 밑줄 제거 */
+    font-family: 'GmarketSansMedium';
+}
+
+.badge{
+    display: inline-block;
+    padding: 0.25em 0.5em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    background-color: #007bff;
+    color: #fff;
 }
 
 
