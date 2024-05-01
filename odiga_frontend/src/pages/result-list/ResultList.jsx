@@ -94,7 +94,7 @@ export default function ResultList({data}) {
                                                             backgroundColor, color,
                                                             fontSize: '75%', fontFamily: "GmarketSansMedium",
                                                             fontWeight: '300',
-                                                            padding: '0.25em 0.5em', borderRadius: "15%"
+                                                            padding: '0.25em 0.5em', borderRadius: "8px"
                                                         }}>{cat}</span>
                                                     </div>
                                                     <p className="title">{title}</p>
