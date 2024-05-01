@@ -2,6 +2,7 @@ package com.odiga.mytrip.resultlist.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.resultlist.service.ResultService;
 import com.odiga.mytrip.resultlist.vo.ResultVO;
 import com.odiga.mytrip.travel.service.NaverApiService;
@@ -11,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -184,6 +186,17 @@ public class ResultController {
         resultMap.put(contentId, contentInfo);
 
         return ResponseEntity.ok(resultMap);
+    }
+
+    @PostMapping("/sendPw")
+    @ResponseBody
+    public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
+
+        log.info("잘 도착했니?={}", courseInfo.get("pw") +"_"+ courseInfo.get("id"));
+
+
+        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("id"));
+
     }
 
     // 네이버 api(driving-5)

@@ -4,6 +4,7 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import {Link} from "react-router-dom";
 import {useState} from "react";
 import LocationContent from "./LocationContent.jsx";
+import KakaoSharing from "../component/kakao-sharing/KakaoSharing";
 
 export default function ResultList({data}) {
 
@@ -14,6 +15,8 @@ export default function ResultList({data}) {
         setShowModal(true);
         setContentId(id);
     };
+
+    let schedule = '';
 
 
 
@@ -59,6 +62,8 @@ export default function ResultList({data}) {
                                 const directionUrl = data[dateKey][dayKey].directionUrl;
                                 const cat = data[dateKey][dayKey].cat;
                                 const id = data[dateKey][dayKey].contentId;
+
+                                schedule = dateKey;
 
                                 // 이전 courseDay 값과 현재 courseDay 값이 다른 경우에만 Day 출력
                                 const dayOutputJSX = courseDay !== prevCourseDay ?
@@ -119,7 +124,12 @@ export default function ResultList({data}) {
         {showModal && <LocationContent show={showModal} handleClose={handleCloseModal} contentId={contentId}/>}
         <hr/>
         <div className="kakao">
-            카카오톡 공유 버튼
+            <br />
+            <p
+            style={{
+                fontFamily: 'GmarketSansMedium'
+            }}>지금 여행을 다른 사람과 공유해보세요!</p>
+            <KakaoSharing schedule={schedule} />
         </div>
         </body>
     );

@@ -35,4 +35,8 @@ public class ResultService {
     public String findCategoryKR(String category) {
         return resultDAO.findCategoryKR(category);
     }
+
+    public void saveCoursePw(String coursePw, String courseNo){
+        resultDAO.savePw(coursePw, courseNo);
+    }
 }

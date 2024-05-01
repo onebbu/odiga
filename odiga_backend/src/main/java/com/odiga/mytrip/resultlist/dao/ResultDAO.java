@@ -17,6 +17,8 @@ public interface ResultDAO {
     String findCategory(@Param("category") String category);
     String findCategoryKR(@Param("category") String category);
 
+    void savePw(@Param("coursePw") String coursePw, @Param("courseNo") String courseNo);
+
 
 
 }

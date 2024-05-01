@@ -48,4 +48,10 @@
         WHERE catcode=#{category}
     </select>
 
+    <update id="savePw" parameterType="map">
+        UPDATE resultlist
+        SET coursePW = #{coursePw}
+        WHERE courseNo = #{courseNo}
+    </update>
+
 </mapper>
