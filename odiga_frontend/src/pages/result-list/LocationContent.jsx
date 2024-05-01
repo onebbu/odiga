@@ -95,7 +95,7 @@ function LocationContent(
                         fontSize: '60%',
                         fontFamily: "GmarketSansMedium",
                         padding: '0.25em 0.5em',
-                        borderRadius: "25%",
+                        borderRadius: "8px",
                         display: "inline-block",
                         verticalAlign: "middle",
                         lineHeight: "normal",
