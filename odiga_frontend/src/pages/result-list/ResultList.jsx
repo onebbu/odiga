@@ -2,8 +2,38 @@ import * as React from 'react';
 import "./ResultList.css";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import {Link} from "react-router-dom";
+import {useState} from "react";
+import LocationContent from "./LocationContent.jsx";
 
 export default function ResultList({data}) {
+
+    const [showModal, setShowModal] = useState(false);
+    const [contentId, setContentId] = useState('');
+
+    const handleShowModal = (id) => {
+        setShowModal(true);
+        setContentId(id);
+    };
+
+
+
+    const handleCloseModal = () => setShowModal(false);
+
+    // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
+    const catColors = {
+        '액티비티': { backgroundColor: '#B4DAF2', color: 'black'},
+        '테마파크': { backgroundColor: '#B4DAF2', color: 'black'},
+        '축제': { backgroundColor: '#B4DAF2', color: 'black'},
+        '바다': { backgroundColor: '#DBDBC5', color: 'black'},
+        '자연': { backgroundColor: '#DBDBC5', color: 'black'},
+        '산': { backgroundColor: '#DBDBC5', color: 'black'},
+        '문화역사': { backgroundColor: '#F7AB89', color: 'black'},
+        '실내여행지': { backgroundColor: '#F7AB89', color: 'black'},
+        '쇼핑': { backgroundColor: '#F7AB89', color: 'black'},
+        '카페': { backgroundColor: '#F4D35E', color: 'black'},
+        '식당': { backgroundColor: '#F4D35E', color: 'black'},
+    };
+
     return (
         <body>
         {Object.keys(data).map(dateKey => (
@@ -27,20 +57,25 @@ export default function ResultList({data}) {
                                 const addr = data[dateKey][dayKey].addr;
                                 const duration = data[dateKey][dayKey].duration;
                                 const directionUrl = data[dateKey][dayKey].directionUrl;
+                                const cat = data[dateKey][dayKey].cat;
+                                const id = data[dateKey][dayKey].contentId;
 
                                 // 이전 courseDay 값과 현재 courseDay 값이 다른 경우에만 Day 출력
                                 const dayOutputJSX = courseDay !== prevCourseDay ?
                                     <h6 className="day-num">Day {courseDay}</h6> : null;
                                 prevCourseDay = courseDay; // 이전 courseDay 값을 갱신
 
+                                // 해당 카테고리의 배경색과 폰트색 가져오기
+                                const { backgroundColor, color, fontWeight } = catColors[cat] || { backgroundColor: 'gray', color: 'black', fontFamily: "GmarketSansMedium" };
+
                                 return (
                                     <div key={dayKey}>
                                         <br/>
                                         {dayOutputJSX}
-                                        <div className="location-wrap">
+                                        <div className="location-wrap" onClick={() => handleShowModal(id)}>
                                             <div className="location">
                                                 <div
-                                                    className={`location-num-wrap ${courseDay === 1 ? 'color-blue' : courseDay === 2 ? 'color-red' : 'color-green'}`}>
+                                                    className={`location-num-wrap ${courseDay === 1 ? 'color-first' : courseDay === 2 ? 'color-second' : 'color-third'}`}>
                                                     <p className="location-num">{travelNum}</p>
                                                 </div>
                                                 <div className="location-img-wrap">
@@ -49,8 +84,16 @@ export default function ResultList({data}) {
                                                     </div>
                                                 </div>
                                                 <div className="location-info">
-                                                    <p>{title}</p>
-                                                    <p className="location-addr">{addr}</p>
+                                                    <div>
+                                                        <span style={{
+                                                            backgroundColor, color,
+                                                            fontSize: '75%', fontFamily: "GmarketSansMedium",
+                                                            fontWeight: '300',
+                                                            padding: '0.25em 0.5em', borderRadius: "15%"
+                                                        }}>{cat}</span>
+                                                    </div>
+                                                    <p className="title">{title}</p>
+                                                    <p className="addr">{addr}</p>
                                                 </div>
                                             </div>
                                             {duration !== 0 && (
@@ -59,7 +102,7 @@ export default function ResultList({data}) {
                                                         <Link to={directionUrl}
                                                               target="_blank"
                                                               rel="noopener noreferrer"
-                                                        className="custom-link"><DirectionsCarIcon/>{duration} ></Link>
+                                                              className="custom-link"><DirectionsCarIcon/>{duration} ></Link>
                                                     </div>
                                                 </div>
                                             )}
@@ -73,6 +116,7 @@ export default function ResultList({data}) {
                 </div>
             </div>
         ))}
+        {showModal && <LocationContent show={showModal} handleClose={handleCloseModal} contentId={contentId}/>}
         <hr/>
         <div className="kakao">
             카카오톡 공유 버튼
