@@ -5,15 +5,15 @@ import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 
 import './MainContents.css';
-import image1 from '../../assets/images/busan.png';
-import image2 from '../../assets/images/mokupdata/합정.jpg';
-import image3 from '../../assets/images/mokupdata/강릉.jpg';
-import image4 from '../../assets/images/mokupdata/인천.jpg';
-import image5 from '../../assets/images/mokupdata/서울숲.jpg';
-import image6 from '../../assets/images/mokupdata/대구.jpg';
-import image7 from '../../assets/images/mokupdata/경복궁.jpg';
-import image8 from '../../assets/images/mokupdata/전주.jpg';
-import image9 from '../../assets/images/asdf.png';
+import image1 from '../assets/images/busan.png';
+import image2 from '../assets/images/mokupdata/합정.jpg';
+import image3 from '../assets/images/mokupdata/강릉.jpg';
+import image4 from '../assets/images/mokupdata/인천.jpg';
+import image5 from '../assets/images/mokupdata/서울숲.jpg';
+import image6 from '../assets/images/mokupdata/대구.jpg';
+import image7 from '../assets/images/mokupdata/경복궁.jpg';
+import image8 from '../assets/images/mokupdata/전주.jpg';
+import image9 from '../assets/images/asdf.png';
 
 function Maincontents() {
     // 인기 게시글 더미 데이터 
