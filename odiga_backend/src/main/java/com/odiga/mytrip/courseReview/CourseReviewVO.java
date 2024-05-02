@@ -1,8 +1,7 @@
 package com.odiga.mytrip.courseReview;
 
 import org.springframework.stereotype.Component;
-
-import oracle.sql.DATE;
+import java.sql.Date;
 
 @Component
 public class CourseReviewVO {
@@ -12,11 +11,21 @@ public class CourseReviewVO {
     private String nickname;
     private String boardTitle;
     private String boardContent;
-    private int boardGrade;
+    private double boardGrade;
     private int boardViewCount;
     private int boardLikeCount;
-    private DATE boardDate;
+    private Date boardDate;
     private Character boardYN;
+	private String mainImage;
+
+	public String getMainImage() {
+		return this.mainImage;
+	}
+
+	public void setMainImage(String mainImage) {
+		this.mainImage = mainImage;
+	}
+
 
 	public int getBoardNo() {
 		return this.boardNo;
@@ -58,11 +67,11 @@ public class CourseReviewVO {
 		this.boardContent = boardContent;
 	}
 
-	public int getBoardGrade() {
+	public double getBoardGrade() {
 		return this.boardGrade;
 	}
 
-	public void setBoardGrade(int boardGrade) {
+	public void setBoardGrade(double boardGrade) {
 		this.boardGrade = boardGrade;
 	}
 
@@ -82,11 +91,11 @@ public class CourseReviewVO {
 		this.boardLikeCount = boardLikeCount;
 	}
 
-	public DATE getBoardDate() {
+	public Date getBoardDate() {
 		return this.boardDate;
 	}
 
-	public void setBoardDate(DATE boardDate) {
+	public void setBoardDate(Date boardDate) {
 		this.boardDate = boardDate;
 	}
 
