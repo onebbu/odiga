@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+import './Banner.css';
+=======
 import './banner.css';
+>>>>>>> 1cdcb4f0f78433820000a79d2e62dae96b873d47
 
 function Banner(){
     return (

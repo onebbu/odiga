@@ -4,7 +4,7 @@ import { faFire } from "@fortawesome/free-solid-svg-icons";
 import { faUser } from "@fortawesome/free-regular-svg-icons";
 import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 
-import './maincontents.css';
+import './MainContents.css';
 import image1 from '../assets/images/busan.png';
 import image2 from '../assets/images/mokupdata/합정.jpg';
 import image3 from '../assets/images/mokupdata/강릉.jpg';
