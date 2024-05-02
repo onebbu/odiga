@@ -2,7 +2,6 @@ import React from 'react';
 import NaverMap from "./NaverMap";
 
 function NaverMapView({data}) {
-    // axios에서 다 가져오기
 
     const markerGroups = [];
 
@@ -16,16 +15,17 @@ function NaverMapView({data}) {
             for (const rawCourse in dateData) {
                 if (dateData.hasOwnProperty(rawCourse)) {
                     const courseDayArr = dateData[rawCourse];
-                    console.log(courseDayArr)
 
                     const markers = {}; // markers 객체를 각각의 반복문 내에서 생성
-                    markers.latitude = parseFloat(courseDayArr.mapY);
-                    markers.longitude = parseFloat(courseDayArr.mapX);
-                    markers.contentId = parseFloat(courseDayArr.contentId);
-                    markers.courseDay = parseFloat(courseDayArr.courseDay);
-                    markers.travelNum = parseFloat(courseDayArr.travelNum);
-                    markers.maxtravelNum = parseFloat(courseDayArr.maxtravelNum);
+                    markers.latitude = courseDayArr.mapY;
+                    markers.longitude = courseDayArr.mapX;
+                    markers.contentId = courseDayArr.contentId;
+                    markers.courseDay = courseDayArr.courseDay;
+                    markers.travelNum = courseDayArr.travelNum;
+                    markers.maxtravelNum = courseDayArr.maxTravelNum;
+                    markers.contentId = courseDayArr.contentId;
                     markerGroups.push(markers);
+                    
 
                     centerLatitude += (parseFloat(courseDayArr.mapY));
                     centerLongitude += (parseFloat(courseDayArr.mapX));
