@@ -3,6 +3,8 @@ package com.odiga.mytrip.travel.vo;
 import lombok.*;
 
 @Data
+@Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class TravelListVO {
     private String contentid;

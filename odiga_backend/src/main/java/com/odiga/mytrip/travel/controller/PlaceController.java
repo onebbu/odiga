@@ -70,11 +70,18 @@ public class PlaceController {
         return resultMap;
     }
 
-    @GetMapping("/place") // 잘못된 URL
+    @GetMapping("/place/*") // 잘못된 URL
     public String redirectToCorrectPage() {
         // "/place" 뒤에 어떠한 경로도 오지 않은 경우에는 wrongpathPage를 보여줍니다.
         // 올바른 페이지로 리디렉션
         return "redirect:/wrongpath/preference";
+    }
+
+    @GetMapping("/coursesave") // 잘못된 URL
+    public void courseListSave(@PathVariable String contentID, @PathVariable String index) {
+        // "/place" 뒤에 어떠한 경로도 오지 않은 경우에는 wrongpathPage를 보여줍니다.
+        // 올바른 페이지로 리디렉션
+        placeService.courseSave(contentID, index);
     }
 
 }

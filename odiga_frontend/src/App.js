@@ -11,6 +11,7 @@ import Main from "./pages/main/Main";
 import ResultView from "./pages/result-list/ResultView";
 import WrongPathPage from "./pages/wrongpathPage/WrongPath";
 import SearchPage from "./pages/SearchPage/SearchPage";
+import ChoosePlace from "./pages/choosePlace/choosePlacePage";
 
 function App() {
     return(
@@ -28,8 +29,7 @@ function App() {
                     <Route exact path="/coursereview/*"  element={<CourseReview />}></Route>
                     <Route exact path="/SearchPage"  element={<SearchPage />}></Route>
                     <Route exact path="/wrongpath/:nextPath"  element={<WrongPathPage />}></Route>
-                    {/* /place로 접근했을 때 /wrongpath/:nextPath로 리다이렉션합니다. */}
-                    <Route path="/place" element={<Navigate to ="/wrongpath/preference"/>}></Route>
+                    <Route exact path="/place" element={<ChoosePlace />}></Route>
                 </Route>
             </Routes>
         </BrowserRouter>

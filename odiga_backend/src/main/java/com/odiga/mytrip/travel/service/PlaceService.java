@@ -66,4 +66,8 @@ public class PlaceService {
 
         return overview;
     }
+
+    public void courseSave(String contentID, String index){
+        
+    }
 }

@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import './cPP.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
@@ -33,8 +33,6 @@ const ItemsContainer = Styled.div`
     margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
     transition: margin-top 0.3s ease-in-out;
   `;
-// 찾고자 하는 areacode
-// const targetAreacode = '6';
 
 const areaList = [
     { areacode: '1', areaname: '서울' },
@@ -62,19 +60,14 @@ const ChoosePlace = () => {
   const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
+  
   const [targetArea, setTargetArea] = useState('1');
   const [targetDura, setTargetDura] = useState('3');
   const [targetTheme, setTargetTheme] = useState(null);
+  const navigate = useNavigate();
   const location = useLocation();
-  useEffect(() => {
-      const receivedValues  = location.state;
-      console.log("선택한 값들:", receivedValues); // 선택한 값들을 콘솔에 출력
-      setTargetArea(receivedValues.region);
-      setTargetDura(receivedValues.duration);
-      setTargetTheme(receivedValues.theme);
-  }, [location]); 
-  // ^^^^^^^^^^^^^^^choosePage의 Preference들 ^^^^^^^^^^^^^^
-  // vvvvvvvvvvvv 페이지 로딩되는데 걸리는 시간 측정 vvvvvvvvvv
+  const [selectedValues, setSelectedValues] = useState(null);
+
   useEffect(() => {
     const startTime = performance.now();
 
@@ -87,13 +80,26 @@ const ChoosePlace = () => {
 
     window.addEventListener("load", handleLoad);
 
-    // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("load", handleLoad);
+
+    setSelectedValues(location.state);
+      // 선택한 값이 모두 채워져 있는지 확인
+    if (!selectedValues || !selectedValues.region || !selectedValues.duration || selectedValues.theme.length < 2) {
+      // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동
+      //navigate('/wrongpath/preference');
+    }
+    else{
+      console.log("선택한 값들:", selectedValues); // 선택한 값들을 콘솔에 출력
+      setTargetArea(selectedValues.region);
+      setTargetDura(selectedValues.duration);
+      setTargetTheme(selectedValues.theme);
+    }
+      // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+      return () => {
+        window.removeEventListener("load", handleLoad);
     };
-    
-  }, []); //빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행되도록
-  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  }, [navigate, location, selectedValues]); 
+  // ^^^^^^^^^^^^^^^choosePage의 Preference들 ^^^^^^^^^^^^^^
 
   // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
   //   if (containerRef.current) {
@@ -128,7 +134,7 @@ const ChoosePlace = () => {
         </Wrapper>
       </DndProvider>
     </Body>
-  );
+  );  
 }
 
 
