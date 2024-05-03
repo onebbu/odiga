@@ -7,6 +7,7 @@ import {useParams} from "react-router-dom";
 import axios from "axios";
 import "./LocationContent.css";
 import { red } from '@mui/material/colors';
+import PlaceIcon from '@mui/icons-material/Place';
 
 
 function LocationContent(
@@ -48,6 +49,7 @@ function LocationContent(
     const addr = data[contentId]?.addr;
     const cat = data[contentId]?.cat;
     const catkr = data[contentId]?.catkr;
+    const overview = data[contentId]?.overview;
 
     // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
     const catColors = {
@@ -108,7 +110,13 @@ function LocationContent(
                 {/*이미지, 주소 가운데 정렬 + 간격 두기*/}
                 <Image src={img} rounded style={{width:"20rem", marginBottom: '1rem'}}/>
                 <br />
-                {addr}
+                <div style={{wordBreak: "keep-all"}}>
+                    <hr />
+                    {overview}
+                </div>
+                <br />
+                <span><PlaceIcon/> 주소: {addr}</span>
+
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
