@@ -68,12 +68,14 @@ public class MemberController {
     @PostMapping("/join")
     public String join(@RequestBody JoinRequest joinRequest) {
 
-        log.info("이메일={}", joinRequest.getEmail());
 
         // 이메일 중복 여부 확인
-        if (memberService.checkLoginEmailDuplicate(joinRequest.getEmail())) {
-            log.info("이미 이메일이 존재합니다.");
+        if (memberService.checkEmailDuplicate(joinRequest.getEmail())) {
             return "EMAIL_ALREADY_EXIST";
+        }
+
+        if (memberService.checkNicknameDuplicate(joinRequest.getNickname())) {
+            return "NICKNAME_ALREADY_EXIST";
         }
 
         // 에러가 존재하지 않을 시 joinRequest 통해서 회원가입 완료

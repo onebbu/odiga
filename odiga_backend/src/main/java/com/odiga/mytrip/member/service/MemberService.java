@@ -23,14 +23,22 @@ public class MemberService {
 
     private final MemberDAO memberDAO;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    public boolean checkLoginEmailDuplicate(String email){
+    public boolean checkEmailDuplicate(String email){
 
-        if (memberDAO.existsByLoginEmail(email) == 1) {
+        if (memberDAO.existsByEmail(email) == 1) {
             return true;
         }
         return false;
     }
 
+
+    public boolean checkNicknameDuplicate(String nickname){
+
+        if (memberDAO.existsByNickname(nickname) == 1) {
+            return true;
+        }
+        return false;
+    }
 
     public void join(JoinRequest joinRequest) {
         memberDAO.save(joinRequest.toEntity());
@@ -60,7 +68,7 @@ public class MemberService {
 
     // BCryptPasswordEncoder 를 통해서 비밀번호 암호화 작업 추가한 회원가입 로직
     public void securityJoin(JoinRequest joinRequest){
-        if(memberDAO.existsByLoginEmail(joinRequest.getEmail())==1){
+        if(memberDAO.existsByEmail(joinRequest.getEmail())==1){
             return;
         }
 
