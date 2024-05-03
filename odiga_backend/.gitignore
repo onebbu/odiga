@@ -1,4 +1,3 @@
-
 HELP.md
 .gradle
 build/
@@ -18,8 +17,6 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-application-secret.properties
-
 ### IntelliJ IDEA ###
 .idea
 *.iws
@@ -38,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+application-secret.properties
+
+/target/

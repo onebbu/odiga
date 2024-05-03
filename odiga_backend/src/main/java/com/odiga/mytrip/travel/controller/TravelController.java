@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 
@@ -53,6 +55,11 @@ public class TravelController {
     public void getMethodName(@PathVariable String contentId) {
         travelService.LikePlusOne(contentId);
     }
+    @GetMapping("/imgs/{contntId}")
+    public List<String> getImgs(@PathVariable String contntId) throws IOException{
+        return travelService.img(contntId);
+    }  
+    
     
 
        

@@ -7,7 +7,7 @@ function CourseReview() {
   return (
       <Routes>
           <Route path="/"  element={<CourseReviewBoard />} />
-          <Route path="/detail"  element={<CourseReviewDetail />} />
+          <Route path="/detail/:boardNo"  element={<CourseReviewDetail />} />
       </Routes>
   );
 }
