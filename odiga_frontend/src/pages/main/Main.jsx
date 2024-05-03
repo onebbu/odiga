@@ -3,6 +3,7 @@ import Header from "../component/navbar/Header";
 import Banner from "./Banner";
 import KoreaLocations from "./KoreaLocations";
 import Maincontents from "./MainContents";
+import Footer from './Footer';
 
 function Main() {
     return (
@@ -12,6 +13,7 @@ function Main() {
             <Banner/>
             <KoreaLocations/>
             <Maincontents/>
+            <Footer/>
         </div>
 
     );
