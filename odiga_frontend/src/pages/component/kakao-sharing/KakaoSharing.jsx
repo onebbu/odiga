@@ -10,7 +10,10 @@ import * as Yup from "yup";
 const { Kakao } = window;
 
 const KakaoShareSchema = Yup.object().shape({
-    sharePw: Yup.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.').required('필수 항목입니다.')
+    sharePw: Yup.string()
+        .min(8, '비밀번호는 최소 8자 이상이어야 합니다.')
+        .max(20, '비밀번호는 최대 20자까지 허용됩니다.')
+        .required('필수 항목입니다.')
 });
 
 const KakaoSharing = () => {
