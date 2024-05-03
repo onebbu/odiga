@@ -26,6 +26,6 @@ public class ResultVO {
     private Date endDate;
     private char courseYN;
 
-    private int schedule;
+    private String courseTitle;
     
 }

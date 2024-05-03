@@ -1,6 +1,6 @@
 import * as React from 'react';
 import "./ResultList.css";
-import Header from "../tiles/Header";
+import Header from "../component/navbar/Header";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import NaverMapView from "./naver-map/NaverMapView";

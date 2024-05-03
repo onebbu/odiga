@@ -17,7 +17,11 @@
   height: 100px;
   background-size: cover;
   background-position: center;
+<<<<<<< HEAD:odiga_frontend/src/pages/component/navbar/Header.css
+  background-image: url(/src/assets/images/logo/odiga-logo-rmbg.png);
+=======
   background-image: url(../../assets/images/odiga-logo.png); 
+>>>>>>> f449ede821f1e1c00fbe4e8ca46855184c69c6a5:odiga_frontend/src/pages/tiles/Header.css
 }
 
 

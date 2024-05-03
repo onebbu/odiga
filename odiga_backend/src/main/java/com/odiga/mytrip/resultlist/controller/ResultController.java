@@ -58,14 +58,12 @@ public class ResultController {
             ResultVO current = travelList.get(i);
             TravelListVO currentTravel = travelService.TravelList(String.valueOf(current.getContentId()));
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일");
-            String currentDay = dateFormat.format(current.getStartDate()) + " ~ " + dateFormat.format(current.getEndDate());
 
-            if (!resultMap.containsKey(currentDay)) {
-                resultMap.put(currentDay, new HashMap<>());
+            if (!resultMap.containsKey(current.getCourseTitle())) {
+                resultMap.put(current.getCourseTitle(), new HashMap<>());
             }
 
-            Map<Integer, Map<String, Object>> dayMap = resultMap.get(currentDay);
+            Map<Integer, Map<String, Object>> dayMap = resultMap.get(current.getCourseTitle());
 
 
             // 다음 요소가 있는지 확인
@@ -172,7 +170,7 @@ public class ResultController {
         int likeCount = content.getLikecount() == null? 0 : Integer.parseInt(content.getLikecount());
         String img = content.getFirstimage();
         String addr = content.getAddr1();
-        log.info("cat={}", content.getCat3());
+        String overview = content.getOverview();
         String cat = resultService.findCategory(content.getCat3());
         String catKR = resultService.findCategoryKR(content.getCat3());
 
@@ -182,6 +180,7 @@ public class ResultController {
         contentInfo.put("addr", addr);
         contentInfo.put("cat", cat);
         contentInfo.put("catkr", catKR);
+        contentInfo.put("overview", overview);
 
         resultMap.put(contentId, contentInfo);
 

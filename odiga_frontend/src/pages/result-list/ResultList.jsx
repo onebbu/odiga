@@ -5,6 +5,7 @@ import {Link} from "react-router-dom";
 import {useState} from "react";
 import LocationContent from "./LocationContent.jsx";
 import KakaoSharing from "../component/kakao-sharing/KakaoSharing";
+import {Accordion, Card} from 'react-bootstrap';
 
 export default function ResultList({data}) {
 
@@ -16,25 +17,22 @@ export default function ResultList({data}) {
         setContentId(id);
     };
 
-    let schedule = '';
-
-
-
+    var courseTitle = '';
     const handleCloseModal = () => setShowModal(false);
 
     // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
     const catColors = {
-        '액티비티': { backgroundColor: '#B4DAF2', color: 'black'},
-        '테마파크': { backgroundColor: '#B4DAF2', color: 'black'},
-        '축제': { backgroundColor: '#B4DAF2', color: 'black'},
-        '바다': { backgroundColor: '#DBDBC5', color: 'black'},
-        '자연': { backgroundColor: '#DBDBC5', color: 'black'},
-        '산': { backgroundColor: '#DBDBC5', color: 'black'},
-        '문화역사': { backgroundColor: '#F7AB89', color: 'black'},
-        '실내여행지': { backgroundColor: '#F7AB89', color: 'black'},
-        '쇼핑': { backgroundColor: '#F7AB89', color: 'black'},
-        '카페': { backgroundColor: '#F4D35E', color: 'black'},
-        '식당': { backgroundColor: '#F4D35E', color: 'black'},
+        '액티비티': {backgroundColor: '#B4DAF2', color: 'black'},
+        '테마파크': {backgroundColor: '#B4DAF2', color: 'black'},
+        '축제': {backgroundColor: '#B4DAF2', color: 'black'},
+        '바다': {backgroundColor: '#DBDBC5', color: 'black'},
+        '자연': {backgroundColor: '#DBDBC5', color: 'black'},
+        '산': {backgroundColor: '#DBDBC5', color: 'black'},
+        '문화역사': {backgroundColor: '#F7AB89', color: 'black'},
+        '실내여행지': {backgroundColor: '#F7AB89', color: 'black'},
+        '쇼핑': {backgroundColor: '#F7AB89', color: 'black'},
+        '카페': {backgroundColor: '#F4D35E', color: 'black'},
+        '식당': {backgroundColor: '#F4D35E', color: 'black'},
     };
 
     return (
@@ -63,7 +61,7 @@ export default function ResultList({data}) {
                                 const cat = data[dateKey][dayKey].cat;
                                 const id = data[dateKey][dayKey].contentId;
 
-                                schedule = dateKey;
+                                courseTitle = dateKey;
 
                                 // 이전 courseDay 값과 현재 courseDay 값이 다른 경우에만 Day 출력
                                 const dayOutputJSX = courseDay !== prevCourseDay ?
@@ -71,19 +69,23 @@ export default function ResultList({data}) {
                                 prevCourseDay = courseDay; // 이전 courseDay 값을 갱신
 
                                 // 해당 카테고리의 배경색과 폰트색 가져오기
-                                const { backgroundColor, color, fontWeight } = catColors[cat] || { backgroundColor: 'gray', color: 'black', fontFamily: "GmarketSansMedium" };
+                                const {backgroundColor, color, fontWeight} = catColors[cat] || {
+                                    backgroundColor: 'gray',
+                                    color: 'black',
+                                    fontFamily: "GmarketSansMedium"
+                                };
 
                                 return (
                                     <div key={dayKey}>
                                         <br/>
                                         {dayOutputJSX}
-                                        <div className="location-wrap" onClick={() => handleShowModal(id)}>
+                                        <div className="location-wrap">
                                             <div className="location">
                                                 <div
                                                     className={`location-num-wrap ${courseDay === 1 ? 'color-first' : courseDay === 2 ? 'color-second' : 'color-third'}`}>
                                                     <p className="location-num">{travelNum}</p>
                                                 </div>
-                                                <div className="location-img-wrap">
+                                                <div className="location-img-wrap" onClick={() => handleShowModal(id)}>
                                                     <div className="location-img-div">
                                                         <img src={img} className="location-img" alt={title}/>
                                                     </div>
@@ -124,12 +126,17 @@ export default function ResultList({data}) {
         {showModal && <LocationContent show={showModal} handleClose={handleCloseModal} contentId={contentId}/>}
         <hr/>
         <div className="kakao">
-            <br />
-            <p
-            style={{
-                fontFamily: 'GmarketSansMedium'
-            }}>지금 여행을 다른 사람과 공유해보세요!</p>
-            <KakaoSharing schedule={schedule} />
+            <br/>
+            <Accordion defaultActiveKey={null}>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header
+                        style={{backgroundColor: "black"}}
+                    >지금 {courseTitle}을 다른 사람과 공유해보세요</Accordion.Header>
+                    <Accordion.Body>
+                        <KakaoSharing/>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
         </div>
         </body>
     );
