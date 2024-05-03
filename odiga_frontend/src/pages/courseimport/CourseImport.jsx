@@ -1,137 +1,224 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState  } from "react";
+import styled from "styled-components";
+import axios from "axios";
+import Carousel from "./carousel.js";
+import TextEditor from "../component/Ckeditor/TextEditor";
 
-const Container = styled.div`
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    color: #333;
+
+const Input = styled.input`
+  width: 100%;
+  padding: 5px;
+  font-size: 16px;
+  border-radius: 5px; 
+  border: 2px solid black;
+  margin-bottom: 10px;
 `;
 
-const Header = styled.header`
-    background-color: #007bff;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-`;
+function CourseImport() {
+  const [title, setTitle] = useState("");
+  const [userdata, setUserData] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [courseDayData, setCourseDayData] = useState(null);
+  const [boardContent , setBoardContent] = useState("");
+  const [MainImage, setMainImage] = useState(null);
 
-const Main = styled.main`
-    padding: 20px;
-`;
-
-const Section = styled.section`
-    position: relative;
-    margin: 30px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    max-width: 70%; 
-`;
-
-const H2 = styled.h2`
-    margin-bottom: 10px;
-`;
-
-const Tag = styled.span`
-    display: inline-block;
-    background-color: #e7f5ff;
-    color: #333;
-    padding: 5px 10px;
-    margin-right: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-`;
-
-const Textarea = styled.textarea`
-    width: 70%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    text-align: left;
-    vertical-align: top;
-`;
-
-const CourseImport = () => {
-  const [selectedCourse, setSelectedCourse] = useState('1');
-  const [reviewText, setReviewText] = useState('');
-
-  const courseImages = {
-    '1': 'https://a.cdn-hotels.com/gdcs/production75/d1444/e66988b1-f783-4e8f-a7ea-8c5eebe88436.jpg?impolicy=fcrop&w=800&h=533&q=medium',
-    '2': 'https://image.ajunews.com/content/image/2020/10/29/20201029110919207531.jpg',
-    '3': 'https://img.freepik.com/free-photo/woman-traveler-with-backpack-walking-in-row-of-yellow-ginkgo-tree-in-autumn-autumn-park-in-tokyo-japan_335224-178.jpg?size=626&ext=jpg&ga=GA1.1.1546980028.1712102400&semt=ais',
-    '4': 'https://example.com/image4.jpg'
+  const handleTitleChange = (event) => {
+    // console.log(MainImage);
+    setTitle(event.target.value);
   };
 
-  const courseTags = {
-    '1': ['태그1', '태그2'],
-    '2': ['태그3', '태그4'],
-    '3': ['태그5', '태그6'],
-    '4': ['태그7', '태그8']
+
+  const courseImport = () => {
+    axios.post("/courseimport", {
+      Title: title,
+      BoardContent: boardContent,
+      MainImage : MainImage
+    })
+      .then((response) => {
+        console.log(response, "가 전송됐습니다.");
+      })
+      .catch((error) => {
+        console.error("POST 요청이 실패했습니다:", error);
+      });
   };
 
-  const handleCourseClick = (courseNumber) => {
-    setSelectedCourse(courseNumber);
+  const fetchTravelCourse = () => {
+    axios.post("/MyCourseDisplay", {
+      nickname: "odiga",
+    })
+      .then((response) => {
+        setUserData(response.data);
+        console.log("여행 코스를 성공적으로 가져왔습니다.", response.data);
+      })
+      .catch((error) => {
+        console.error("여행 코스를 가져오는데 실패했습니다:", error);
+      });
   };
 
-  const handleReviewChange = (event) => {
-    setReviewText(event.target.value);
+  const handleclickoption = (event) => {
+    const value = event.target.value;
+    console.log(value);
+    const userCourseNO = userdata.filter((data) => data.courseno === "odiga_" + value);
+    console.log(userCourseNO);
+    setSelectedCourse(userCourseNO);
   };
+  
+  const handleDayButtonClick = (day) => {
+    const dayCourseData = selectedCourse.filter((data) => parseInt(data.courseday) === day);
+    console.log(dayCourseData);
+    setCourseDayData(dayCourseData);
+  };
+  
+  
 
-  const handleSubmitReview = () => {
-    // 여행 후기를 제출하는 로직을 여기에 추가
-    console.log('여행 후기 제출:', reviewText);
-  };
+  
 
   return (
-    <Container>
-      <Header>
-        <h1>나만의 여행 코스 작성</h1>
-      </Header>
-      <Main>
-        <Section id="course-selection">
-          <H2>여행 코스 선택</H2>
-          <div className="icon-container">
-            {Object.keys(courseImages).map(courseNumber => (
-              <React.Fragment key={courseNumber}>
-                <button
-                  className={`course-icon ${selectedCourse === courseNumber ? 'selected-icon' : ''}`}
-                  onClick={() => handleCourseClick(courseNumber)}
-                >
-                  {courseNumber}
-                </button>
-                {courseNumber !== '4' && <span className="arrow">→</span>}
-              </React.Fragment>
-            ))}
-          </div>
-          <button id="fetch-my-course">내 여행 코스 가져오기</button>
-        </Section>
+    <>
+      <header
+        style={{
+          backgroundColor: "lightblue",
+          lineHeight: "80px",
+          textAlign: "center",
+          display: "block",
+          width: "100%",
+        }}
+      >
+        헤더공간
+      </header>
 
-        <Section id="similar-destinations-placeholder">
-          <h2>여행지 상세 정보</h2>
-          <img src={courseImages[selectedCourse]} alt="여행지 이미지" id="similar-destinations" />
-          <div id="tags">
-            {courseTags[selectedCourse] && courseTags[selectedCourse].map((tag, index) => (
-              <Tag key={index}>{tag}</Tag>
-            ))}
+      <Container>
+        <section
+          style={{
+            width: "100%",
+            backgroundColor: "#f2fbff",
+            margin: "0 auto",
+          }}
+        >
+          <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
+          <div
+            style={{
+              margin: "0 auto",
+              marginBottom: "30px",
+              padding: "5px",
+              border: "2px solid black",
+              backgroundColor: "white",
+              borderRadius: "10px",
+              width: "60%",
+            }}
+            className="section-heading text-center"
+          >
+            <h4 style={{ margin: "0 auto" }}>
+              <Input
+                type="text"
+                placeholder="글 제목을 입력하세요."
+                value={title}
+                onChange={handleTitleChange}
+              />
+            </h4>
           </div>
-        </Section>
-        <Section id="course-review">
-          <H2>여행 후기 작성</H2>
-          <form>
-            <Textarea
-              id="review-text"
-              rows="5"
-              placeholder="여기에 여행 후기를 작성하세요."
-              value={reviewText}
-              onChange={handleReviewChange}
-            ></Textarea>
-          </form>
-          <button type="button" id="submit-review" onClick={handleSubmitReview}>submit</button>
-        </Section>
-      </Main>
-    </Container>
+          <Div
+            style={{
+              textAlign: "left",
+              margin: "0 auto",
+              width: "60%",
+              minHeight: "30em",
+              marginBottom: "30px",
+              padding: "30px",
+              border: "2px solid black",
+              backgroundColor: "white",
+              borderRadius: "10px",
+            }}
+          >
+            <TextEditor setData={setBoardContent} />
+
+          </Div>
+          <h4> 여행코스 정보 </h4>
+          <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
+          <select onChange={handleclickoption}>
+            {[...new Set(userdata.map((data) => data.courseno))]
+              .map((courseno) => (
+                <option key={courseno} value={courseno.split('odiga_')[1]}>
+                  {courseno}
+                </option>
+                ))}
+          </select>
+
+
+            
+          <Div
+            style={{
+              textAlign: "left",
+              width: "60%",
+              margin: "0 auto",
+              padding: "10px",
+              backgroundColor: "lightblue",
+              borderRadius: "10px",
+              marginBottom: "30px",
+            }}
+          >
+            <button className="btn btn-primary" type="button" onClick={fetchTravelCourse}>
+              내 여행 코스 가져오기
+            </button>
+            <button className="btn btn-secondary" type="button" onClick={() => handleDayButtonClick(1)}>
+              DAY1
+            </button>
+            <button className="btn btn-secondary" type="button" onClick={() => handleDayButtonClick(2)}>
+              DAY2
+            </button>
+            <button className="btn btn-secondary" type="button" onClick={() => handleDayButtonClick(3)}>
+              DAY3
+            </button>
+            <Carousel selectedCourse={courseDayData} MainImage={MainImage} setMainImage={setMainImage} />
+          </Div>
+
+          <Div
+            style={{
+              margin: "0 auto",
+              width: "60%",
+              marginBottom: "30px",
+              marginTop: "30px",
+              backgroundColor: "white",
+            }}
+          >
+            <div id="map" style={{ width: '100%', height: '400px' }}></div>
+          </Div>
+
+          <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
+          <button className="btn btn-primary" type="button" onClick={courseImport}>
+            글 작성
+          </button>
+          <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
+        </section>
+      </Container>
+
+      <footer
+        style={{
+          backgroundColor: "lightblue",
+          lineHeight: "80px",
+          textAlign: "center",
+          border: "1px",
+          borderColor: "black",
+          marginTop: "30px",
+        }}
+      >
+        푸터공간
+      </footer>
+    </>
   );
-};
+}
+
 
 export default CourseImport;
+
+const Container = styled.div`
+  text-align: center;
+  verticalAlign: "center";
+  background-color: lightblue;
+  display: block;
+`;
+
+const Div = styled.div`
+  width: 100%;
+  height: auto;
+`;

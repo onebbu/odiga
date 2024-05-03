@@ -20,4 +20,5 @@ public class TravelListVO {
     private String areacode;
     private String sigungucode;
     private String contenttypeid;
+    private String likecount;
 }
