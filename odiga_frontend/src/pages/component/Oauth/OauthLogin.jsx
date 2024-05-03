@@ -8,16 +8,6 @@ import {useEffect} from "react";
 
 function OauthLoginButton() {
 
-    useEffect(() => {
-        // 현재 URL이 localhost:8080인 경우에만 창을 닫습니다.
-        if (window.location.href === "http://localhost:8080/") {
-            // 2초 후에 현재 창을 닫습니다. (로그인 후에 충분한 시간으로 조정 가능)
-            setTimeout(() => {
-                window.close(); // 현재 창을 닫음
-            }, 500); // 2000 밀리초 = 2초
-        }
-    }, []);
-
     return(
         <div className="oauth-login">
             <p className="title">SNS로 로그인하기</p>
