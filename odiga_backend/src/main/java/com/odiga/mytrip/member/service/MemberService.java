@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
 @Service
@@ -67,4 +69,5 @@ public class MemberService {
         joinRequest.setPassword(bCryptPasswordEncoder.encode(joinRequest.getPassword()));
 
     }
+
 }

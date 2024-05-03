@@ -7,14 +7,18 @@ import com.odiga.mytrip.member.service.MemberService;
 import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.member.vo.LoginRequest;
 import com.odiga.mytrip.member.vo.Member;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -31,25 +35,28 @@ public class MemberController {
     private final MemberService memberService;
     private final JWTUtil jwtUtil;
 
-    @GetMapping(value = {"", "/"})
-    public Member home(Model model) {
+    private String token;
 
-        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-        Iterator<? extends GrantedAuthority> iter = authorities.iterator();
-        GrantedAuthority auth = iter.next();
-        String role = auth.getAuthority();
-
-        Member loginMember = memberService.getLoginMemberByEmail(email);
-
-        if (loginMember != null) {
-            model.addAttribute("nickname", loginMember.getNickname());
-        }
-        return loginMember;
-    }
+    // @GetMapping(value = {"", "/"})
+    // public Member home(Model model) {
+    //
+    //     String email = SecurityContextHolder.getContext().getAuthentication().getName();
+    //
+    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    //
+    //     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    //     Iterator<? extends GrantedAuthority> iter = authorities.iterator();
+    //     GrantedAuthority auth = iter.next();
+    //     String role = auth.getAuthority();
+    //
+    //     Member loginMember = memberService.getLoginMemberByEmail(email);
+    //
+    //     if (loginMember != null) {
+    //         model.addAttribute("nickname", loginMember.getNickname());
+    //     }
+    //     return loginMember;
+    // }
 
     @GetMapping("/join")
     public String joinPage(Model model) {
@@ -59,8 +66,7 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public String join(@RequestBody JoinRequest joinRequest,
-                       BindingResult bindingResult, Model model) {
+    public String join(@RequestBody JoinRequest joinRequest) {
 
         log.info("이메일={}", joinRequest.getEmail());
 
@@ -80,12 +86,11 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest loginRequest){
+    public String login(@RequestBody LoginRequest loginRequest) {
 
         Member member = memberService.login(loginRequest);
 
-
-        if(member==null){
+        if (member == null) {
             return "EMAIL_PASSWORD_NOT_MATCH";
         }
 
@@ -93,29 +98,45 @@ public class MemberController {
         return token;
     }
 
-    @GetMapping("/info")
-    public String memberInfo(Authentication auth, Model model) {
-
-        Member loginMember = memberService.getLoginMemberByEmail(auth.getName());
-
-        return "email : " + loginMember.getEmail() + "\n이름 : " + loginMember.getNickname() + "\nrole : " + loginMember.getRole();
-    }
-
-    // 세션 정보를 가져와서 클라이언트로 전송하는 컨트롤러 메서드
-    @GetMapping("/session-info")
-    @ResponseBody
-    public Map<String, String> getSessionInfo(HttpSession session) {
-        Map<String, String> sessionInfo = new HashMap<>();
-
-        // 세션에 저장된 정보를 가져와서 Map에 담습니다.
+    // 로그인이 성공했을 경우 정보를 넘겨주는 컨트롤러(로그인을 하지 않았을 경우 null 리턴)
+    @GetMapping("/oauth-info")
+    public Map<String, String> getOauthLoginInfo(
+            HttpSession session)// oauth 로그인 정보
+    {
+        // 세션, 토큰(헤더 정보) 체크
         SessionMember sessionMember = (SessionMember) session.getAttribute("member");
-        if (sessionMember != null) {
-            sessionInfo.put("email", sessionMember.getEmail());
-            sessionInfo.put("nickname", sessionMember.getNickname());
+
+        Map<String, String> loginInfo = new HashMap<>();
+
+        if (sessionMember == null) {
+            return null;
         }
 
-        return sessionInfo;
+        loginInfo.put("email", sessionMember.getEmail());
+        loginInfo.put("nickname", sessionMember.getNickname());
+        loginInfo.put("registrationId", (String) session.getAttribute("registrationId"));
+        loginInfo.put("role", "USER");
+
+        return loginInfo;
     }
 
+    @GetMapping("/jwt-info")
+    public Map<String, String> getJwtLoginInfo(
+            HttpServletRequest request) // 로컬 스토리지 정보(헤더에 있음)
+    {
+        Map<String, String> loginInfo = new HashMap<>();
+
+        String token = request.getHeader("Authorization");
+
+        String email = jwtUtil.getEmail(token);
+        Member loginMember = memberService.getLoginMemberByEmail(email);
+
+        loginInfo.put("email", loginMember.getEmail());
+        loginInfo.put("nickname", loginMember.getNickname());
+        loginInfo.put("registrationId", "jwt");
+        loginInfo.put("role", "USER");
+
+        return loginInfo;
+    }
 
 }
