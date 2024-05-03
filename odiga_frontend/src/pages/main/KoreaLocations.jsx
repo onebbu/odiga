@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faLightbulb } from "@fortawesome/free-solid-svg-icons";
-import "./Locations.css";
-import seoulImage from '../../assets/images/seoul.jpg';
-import busanImage from '../../assets/images/busan.png';
-import incheonImage from '../../assets/images/incheon.png';
-import daeguImage from '../../assets/images/daegu.png';
-import Image1 from '../../assets/images/경기도.png';
-import Image2 from '../../assets/images/제주도.jpg';
-import Image3 from '../../assets/images/광주.jpg';
-import Image4 from '../../assets/images/대전.jpg';
+import './Locations.css';
+import seoulImage from '../assets/images/seoul.jpg';
+import busanImage from '../assets/images/busan.png';
+import incheonImage from '../assets/images/incheon.png';
+import daeguImage from '../assets/images/daegu.png';
+import Image1 from '../assets/images/경기도.png';
+import Image2 from '../assets/images/제주도.jpg';
+import Image3 from '../assets/images/광주.jpg';
+import Image4 from '../assets/images/대전.jpg';
 
 function KoreaLocations() {
     const locations = [

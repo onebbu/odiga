@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import kakao from "../../../assets/images/icon/kakao-share-icon.png";
+// import kakao from "../../../assets/images/icon/kakao-share-icon.png";
 import axios from 'axios';
 import TextField from "@mui/material/TextField";
 import * as React from "react";
@@ -104,13 +104,13 @@ const KakaoSharing = () => {
                 }}
                 onClick={shareKakao} // 클릭 이벤트를 바로 연결
             >
-                <img
+                {/* <img
                     src={kakao}
                     style={{
                         width: "2rem",
                         marginRight: "0.5rem", // 아이콘과 텍스트 사이의 간격 조정
                     }}
-                />
+                /> */}
                 <p
                     style={{
                         margin: "0", // 기본 마진 제거
