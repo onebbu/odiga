@@ -69,7 +69,10 @@ public class SecurityConfig {
                                 .invalidateHttpSession(true) // HTTP 세션을 무효화합니다.
                                 .deleteCookies("JSESSIONID") // 쿠키를 삭제합니다.
                 )
-                .oauth2Login(Customizer.withDefaults()); // OAuth2 로그인 설정
+                .oauth2Login(oauth2 ->
+                        oauth2
+                                .defaultSuccessUrl("http://localhost:3000/", true) // 구글 로그인 성공 후 리디렉션될 URI를 설정합니다.
+                );
 
         // 세션 설정
         http

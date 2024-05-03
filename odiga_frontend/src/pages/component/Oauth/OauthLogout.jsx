@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react";
 import axios from "axios";
 
+
+
 function handleLogout() {
+
     const fetchLogout = async () => {
         try {
             // jwt 로그아웃의 경우
@@ -13,7 +16,7 @@ function handleLogout() {
             await axios.post('/auth/logout')
 
             // 로그아웃 후 로직
-            window.location.reload(true);
+            window.location.href = '/login';
         } catch (error) {
             console.error('로그아웃 실패:', error);
         }
@@ -23,6 +26,8 @@ function handleLogout() {
 }
 
 function OAuthLogout() {
+
+
     return (
         <div>
             <button onClick={handleLogout}>로그아웃</button>
