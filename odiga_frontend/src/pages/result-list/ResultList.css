@@ -83,17 +83,17 @@
     font-width: bold;
 }
 
-.location-info {
+.result-location-info {
     padding-left: 1rem;
 }
 
 
-.location-info .title {
+.result-location-info .title {
     font-family: 'JalnanGothic';
-    margin: 5px 0 -18px 0;
+    margin: 5px 0 0 0;
 }
 
-.location-info .addr {
+.result-location-info .addr {
     font-family: 'GmarketSansMedium';
     margin: 0;
     font-size: 80%;

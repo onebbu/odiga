@@ -90,7 +90,7 @@ export default function ResultList({data}) {
                                                         <img src={img} className="location-img" alt={title}/>
                                                     </div>
                                                 </div>
-                                                <div className="location-info">
+                                                <div className="result-location-info">
                                                     <div>
                                                         <span style={{
                                                             backgroundColor, color,
