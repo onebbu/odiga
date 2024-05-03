@@ -17,7 +17,11 @@
   height: 100px;
   background-size: cover;
   background-position: center;
-  background-image: url(../../assets/images/odiga-logo-rmbg.png);
+<<<<<<< HEAD:odiga_frontend/src/pages/component/navbar/Header.css
+  background-image: url(/src/assets/images/logo/odiga-logo-rmbg.png);
+=======
+  background-image: url(../../assets/images/odiga-logo.png); 
+>>>>>>> f449ede821f1e1c00fbe4e8ca46855184c69c6a5:odiga_frontend/src/pages/tiles/Header.css
 }
 
 
@@ -103,4 +107,68 @@ input:focus, button:focus, a:focus {
   height: 30px;
   background-color: #333; 
   margin: 0px 30px; 
+}
+
+
+.hamburger {
+  display: none;
+
+}
+
+.nav-wrapper {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 100px; 
+  left: 0;
+  background: white; 
+  transition: all 0.3s;
+  overflow: hidden;
+  max-height: 0; 
+}
+
+
+.nav-wrapper.open {
+  display: block;
+  max-height: 300px; 
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    background-color: white;
+    border: none;
+    font-size: 24px;
+    margin-left: 20px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .header-nav, .nav-wrapper {
+    width: 100%;
+    display: block;
+  }
+
+  .NavMenu {
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .NavMenu li {
+    padding: 10px 0; 
+    border-bottom: 1px solid #ccc; 
+  }
+
+  .NavMenu a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 15px 20px; 
+  }
+
+  .NavMenu li:last-child {
+    border-bottom: none;
+  }
 }

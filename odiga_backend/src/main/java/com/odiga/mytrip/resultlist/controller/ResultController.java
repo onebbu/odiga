@@ -2,6 +2,7 @@ package com.odiga.mytrip.resultlist.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.resultlist.service.ResultService;
 import com.odiga.mytrip.resultlist.vo.ResultVO;
 import com.odiga.mytrip.travel.service.NaverApiService;
@@ -11,8 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -20,20 +22,17 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Controller
-// @RestController
-// @RequestMapping("resultId")
 @RequiredArgsConstructor
 public class ResultController {
 
     private final ResultService resultService;
     private final TravelService travelService;
-
     private final NaverApiService naverApiService;
 
 
     // http://localhost:8080/courseId/odiga_2
     @GetMapping("/courseId/{courseNo}")
-    public ResponseEntity<Map<String, Map<String, Map<String, Object>>>> result(@PathVariable String courseNo) {
+    public ResponseEntity<Map<String, Map<Integer, Map<String, Object>>>> result(@PathVariable String courseNo) {
 
         /**
          * 프론트로 보낼 맵 설정 이중 맵
@@ -49,7 +48,7 @@ public class ResultController {
          */
 
 
-        Map<String, Map<String, Map<String, Object>>> resultMap = new HashMap<>();
+        Map<String, Map<Integer, Map<String, Object>>> resultMap = new HashMap<>();
 
 
         List<ResultVO> travelList = resultService.findById(courseNo); // 코스NO를 통해 사용자가 선택한 정보들 모두 저장됨
@@ -59,14 +58,12 @@ public class ResultController {
             ResultVO current = travelList.get(i);
             TravelListVO currentTravel = travelService.TravelList(String.valueOf(current.getContentId()));
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yy년 MM월 dd일");
-            String currentDay = dateFormat.format(current.getStartDate()) + " ~ " + dateFormat.format(current.getEndDate());
 
-            if (!resultMap.containsKey(currentDay)) {
-                resultMap.put(currentDay, new HashMap<>());
+            if (!resultMap.containsKey(current.getCourseTitle())) {
+                resultMap.put(current.getCourseTitle(), new HashMap<>());
             }
 
-            Map<String, Map<String, Object>> dayMap = resultMap.get(currentDay);
+            Map<Integer, Map<String, Object>> dayMap = resultMap.get(current.getCourseTitle());
 
 
             // 다음 요소가 있는지 확인
@@ -88,12 +85,15 @@ public class ResultController {
                 locationMap.put("mapY", currentTravel.getMapy());
                 locationMap.put("courseDay", current.getCourseDay());
                 locationMap.put("travelNum", current.getTravelNum());
-                locationMap.put("maxtravelNum", maxtravelNum);
+                locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
+                locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
                     locationMap.put("duration", 0);
+                    locationMap.put("directionUrl", "");
+
                 }
                 // 하루에 장소가 2개 이상 경우
                 if (maxtravelNum >= 2) {
@@ -102,13 +102,18 @@ public class ResultController {
                     Map<String, Object> directionResult = naverApiService.getDirection(start, goal);
                     String duration = DirectionResultParsing(directionResult);
                     locationMap.put("duration", duration);
+                    locationMap.put("directionUrl", "http://map.naver.com/index.nhn?slng="+currentTravel.getMapx()+"&slat="+currentTravel.getMapy()+"&stext="+currentTravel.getTitle()+"&elng="+nextTravel.getMapx()+"&elat="+nextTravel.getMapy()+"&pathType=0&showMap=true&etext="+nextTravel.getTitle()+"&menu=route");
+
+                //     y / lat / 위도  // x / lng / 경도
+
                 }
                 // 다음 요소가 없는 경우에는 duration을 0으로 설정
                 if (current.getTravelNum() == maxtravelNum) {
                     locationMap.put("duration", 0);
+                    locationMap.put("directionUrl", "");
                 }
 
-                dayMap.put(current.getCourseDay() + "_" + current.getTravelNum(), locationMap);
+                dayMap.put(i, locationMap);
             } else {
 
                 Map<String, Object> locationMap = new HashMap<>();
@@ -121,8 +126,10 @@ public class ResultController {
                 locationMap.put("mapY", currentTravel.getMapy());
                 locationMap.put("courseDay", current.getCourseDay());
                 locationMap.put("travelNum", current.getTravelNum());
-                locationMap.put("maxtravelNum", maxtravelNum);
+                locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
+                locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
+
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
@@ -132,13 +139,63 @@ public class ResultController {
                 if (current.getTravelNum() == maxtravelNum) {
                     locationMap.put("duration", 0);
                 }
-                dayMap.put(current.getCourseDay() + "_" + current.getTravelNum(), locationMap);
+                dayMap.put(i, locationMap);
             }
 
             // 반복 변수 증가
             i++;
         }
+
+        List<String> sortedKeys = new ArrayList<>(resultMap.keySet());
+        Collections.sort(sortedKeys);
+        Map<String, Map<Integer, Map<String, Object>>> sortedMap = new LinkedHashMap<>();
+        for (String key : sortedKeys) {
+            sortedMap.put(key, resultMap.get(key));
+        }
+
+        return ResponseEntity.ok(sortedMap);
+    }
+
+    @GetMapping("/contentId/{contentId}")
+    public ResponseEntity<Map<String, Map<String, Object>>> resultModal(@PathVariable String contentId) {
+
+
+        Map<String, Map<String, Object>> resultMap = new HashMap<>();
+
+        Map<String, Object> contentInfo = new HashMap<>();
+
+        TravelListVO content = travelService.TravelList(contentId);
+
+        String title = content.getTitle();
+        int likeCount = content.getLikecount() == null? 0 : Integer.parseInt(content.getLikecount());
+        String img = content.getFirstimage();
+        String addr = content.getAddr1();
+        String overview = content.getOverview();
+        String cat = resultService.findCategory(content.getCat3());
+        String catKR = resultService.findCategoryKR(content.getCat3());
+
+        contentInfo.put("title", title);
+        contentInfo.put("likeCount", likeCount);
+        contentInfo.put("img", img);
+        contentInfo.put("addr", addr);
+        contentInfo.put("cat", cat);
+        contentInfo.put("catkr", catKR);
+        contentInfo.put("overview", overview);
+
+        resultMap.put(contentId, contentInfo);
+
         return ResponseEntity.ok(resultMap);
+    }
+
+    @PostMapping("/sendPw")
+    @ResponseBody
+    public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
+
+        log.info("잘 도착했니?={}", courseInfo.get("pw") +"_"+ courseInfo.get("id"));
+
+
+        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("id"));
+
     }
 
     // 네이버 api(driving-5)

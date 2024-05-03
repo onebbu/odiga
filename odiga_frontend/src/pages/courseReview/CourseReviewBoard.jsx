@@ -16,22 +16,30 @@ const Place = ({
   boardYN,
   email,
   nickname,
+  mainImage,
 }) => {
   return (
-    <div className={`grid-item`}>
-      <img
-        src="https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21"
-        alt="place"
-      />
+    <div className="grid-item">
+      {mainImage ? (
+        <img src={mainImage} />
+      ) : (
+        <img
+          style={{width:"200px", display: "block" }}
+          src="https://img.icons8.com/?size=512&id=j1UxMbqzPi7n&format=png"
+          alt="Image not available"
+        />
+      )}
       {boardTitle} <P>| {nickname}</P>
       <br />
-      <Rate>{boardGrade}</Rate> <P>{boardViewCount}</P>
+      <Rate>
+        {boardGrade !== undefined && boardGrade !== null
+          ? boardGrade.toFixed(1)
+          : "평가 없음"}
+      </Rate>{" "}
+      <P>{boardViewCount}</P>
     </div>
   );
 };
-
-
-
 
 const CourseReviewBoard = () => {
   const [posts, setPosts] = useState([]); // 초기에 빈 배열로 설정
@@ -137,6 +145,7 @@ const CourseReviewBoard = () => {
                       boardYN={item.boardYN}
                       email={item.email}
                       nickname={item.nickname}
+                      mainImage={item.mainImage}
                     />
                   </StyledLink>
                 ))}

@@ -7,10 +7,8 @@
 
 .loading-wrap {
     display: flex; /* Flex 컨테이너 설정 */
-    justify-content: center; /* 가로 가운데 정렬 */
-    align-items: center; /* 세로 가운데 정렬 */
-    width: 150vh;
-    height: 75vh;
+    margin: auto;
+    margin-top: 37.5vh;
     flex-direction: column
 }
 
