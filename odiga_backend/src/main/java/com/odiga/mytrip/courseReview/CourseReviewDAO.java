@@ -14,4 +14,5 @@ public interface CourseReviewDAO {
     void commentWrite(CommentsVO commentsVO);
     void boardGrade(int boardNo);
     void likeCount(int boardNo);
+    void articleDelete(int boardNo);
 }
