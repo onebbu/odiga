@@ -1,22 +1,83 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import styles from "./static/courseReview.module.css";
-import { Link, Route, Routes } from "react-router-dom";
+import Styled from "styled-components";
+import Pagination from "./Pagination";
+import { Link } from "react-router-dom";
+import stylee from "../choosePlace/cPP.css"
 
-function CourseReviewBoard() {
+
+const Place = ({
+  boardContent,
+  boardDate,
+  boardGrade,
+  boardLikeCount,
+  boardNo,
+  boardTitle,
+  boardViewCount,
+  boardYN,
+  email,
+  nickname,
+  mainImage,
+}) => {
+  return (
+    <div className="grid-item">
+      {mainImage ? (
+        <img src={mainImage} />
+      ) : (
+        <img
+          style={{objectFit:"scale-down", display: "block" }}
+          src="https://img.icons8.com/?size=512&id=j1UxMbqzPi7n&format=png"
+        />
+      )}
+      {boardTitle} <P>| {nickname}</P>
+      <br />
+      <Rate>
+        {boardGrade !== undefined && boardGrade !== null
+          ? boardGrade.toFixed(1)
+          : "평가 없음"}
+      </Rate>{" "}
+      <P>{boardViewCount}</P>
+    </div>
+  );
+};
+
+const CourseReviewBoard = () => {
+  const [posts, setPosts] = useState([]); // 초기에 빈 배열로 설정
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(8);
+  const [currentPosts, setCurrentPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("/coursereview");
+      const fetchedPosts = response.data;
+
+      // 상태 업데이트
+      setPosts(fetchedPosts);
+
+      // currentPosts 계산 및 설정
+      const indexOfLast = currentPage * postsPerPage;
+      const indexOfFirst = indexOfLast - postsPerPage;
+      const slicedPosts = fetchedPosts.slice(indexOfFirst, indexOfLast);
+      setCurrentPosts(slicedPosts);
+    };
+
+    fetchData();
+  }, [currentPage, postsPerPage]); // currentPage와 postsPerPage가 변경될 때마다 fetchData 실행
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+
+    // 페이지 변경 시 currentPosts 업데이트
+    const indexOfLast = pageNumber * postsPerPage;
+    const indexOfFirst = indexOfLast - postsPerPage;
+    const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
+    setCurrentPosts(slicedPosts);
+  };
+
   return (
     <>
-      {/* 헤더 */}
-      <header
-        style={{
-          backgroundColor: "lightblue",
-          lineHeight: "80px",
-          textAlign: "center",
-        }}
-      >
-        헤더공간
-      </header>
-      {/* 헤더 */}
-
       {/* 메인배너 */}
       <div className={styles["main-banner"]}>
         <div>
@@ -41,8 +102,7 @@ function CourseReviewBoard() {
         style={{
           paddingLeft: "10%",
           paddingRight: "10%",
-          width: "100%",
-          backgroundColor: "#f2fbff",
+          width: "100%"
         }}
       >
         <div>
@@ -59,155 +119,73 @@ function CourseReviewBoard() {
               </div>
             </div>
             {/* 여기부터는 카드 목록 */}
-            <div className="col-lg-12">
-              <div className={styles["col-lg-12"]}>
-                {/* 각 카드 요소 */}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=83b17026-0ae3-4bce-8a07-6733c29f7752",
-                  "좋아요 3",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {renderCard(
-                  "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21",
-                  "좋아요 13",
-                  "후기 제목 쓰는 공간",
-                  "#태그자리"
-                )}
-                {/* 추가 카드 요소들도 동일한 방식으로 추가 */}
-              </div>
-              {/* 페이지 번호 컨트롤 버튼 그룹 */}
-              <div
-                className="btn-toolbar"
-                style={{
-                  width: "100%",
-                  justifyContent: "center",
-                  marginTop: "70px",
-                  marginBottom: "30px",
-                }}
-                role="toolbar"
-                aria-label="Toolbar with button groups"
-              >
-                <div
-                  className="btn-group me-2"
-                  role="group"
-                  aria-label="First group"
-                >
-                  <button type="button" className="btn btn-primary">
-                    &lt;
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    1
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    2
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    3
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    4
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    5
-                  </button>
-                  <button type="button" className="btn btn-primary">
-                    &gt;
-                  </button>
-                </div>
-              </div>
+            <div
+              style={{
+                padding: "10px",
+                display: "grid",
+                gridTemplateRows: "1fr",
+                gridTemplateColumns: "1fr 1fr 1fr 1fr",
+                gridGap: "50px",
+              }}
+            >
+              {currentPosts &&
+                currentPosts.map((item) => (
+                  <StyledLink
+                    to={`/coursereview/detail/${item.boardNo}`}
+                    key={item.boardNo}
+                  >
+                    <Place
+                      boardContent={item.boardContent}
+                      boardDate={item.boardDate}
+                      boardGrade={item.boardGrade}
+                      boardLikeCount={item.boardLikeCount}
+                      boardNo={item.boardNo}
+                      boardTitle={item.boardTitle}
+                      boardViewCount={item.boardViewCount}
+                      boardYN={item.boardYN}
+                      email={item.email}
+                      nickname={item.nickname}
+                      mainImage={item.mainImage}
+                    />
+                  </StyledLink>
+                ))}
             </div>
+            {/* 페이지네이션 */}
+            <Pagination
+              currentPage={currentPage}
+              postsPerPage={postsPerPage}
+              totalPosts={posts.length}
+              setCurrentPage={setCurrentPage}
+            ></Pagination>
           </div>
         </div>
         <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
       </section>
       <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
-      
-      <footer
-        style={{
-          backgroundColor: "lightblue",
-          lineHeight: "80px",
-          textAlign: "center",
-        }}
-      >
-        푸터공간
-      </footer>
     </>
   );
-}
+};
 
-function renderCard(imgSrc, badgeText, title, tag) {
-  return (
-    <div className="col">
-      <button type="button" className="card" style={{ margin: "10px" }}>
-        <Link
-          style={{ color: "black" }}
-          className="mypageitem"
-          to="/coursereview/detail"
-        >
-          <div
-            className="badge bg-dark text-white position-absolute"
-            style={{ top: "0.5rem", right: "1rem" }}
-          >
-            {badgeText}
-          </div>
-          <img src={imgSrc} className="card-img-top" alt="..." />
-          <div className="card-body">
-            <h5 className="card-title">{title}</h5>
-            <p className="card-text">{tag}</p>
-          </div>
-        </Link>
-      </button>
-    </div>
-  );
-}
+const Rate = Styled.div`
+  width: 45px;
+  height: 22px;
+  color: white;
+  background-color: #4978ce;
+  padding: 2px;
+  text-align: center;
+  line-height: 22px;
+  display: inline;
+`;
+
+const P = Styled.div`
+  display: inline;
+  font-size: 10px;
+  color: #909090;
+`;
+
+const StyledLink = Styled(Link)`
+  text-decoration: none;
+  color: inherit;
+`;
 
 export default CourseReviewBoard;

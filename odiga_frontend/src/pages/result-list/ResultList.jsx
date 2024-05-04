@@ -1,64 +1,144 @@
 import * as React from 'react';
 import "./ResultList.css";
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import {Link} from "react-router-dom";
+import {useState} from "react";
+import LocationContent from "./LocationContent.jsx";
+import KakaoSharing from "../component/kakao-sharing/KakaoSharing";
+import {Accordion, Card} from 'react-bootstrap';
 
+export default function ResultList({data}) {
 
-// http://localhost:3000/result-list
-export default function ResultList() {
+    const [showModal, setShowModal] = useState(false);
+    const [contentId, setContentId] = useState('');
 
+    const handleShowModal = (id) => {
+        setShowModal(true);
+        setContentId(id);
+    };
+
+    var courseTitle = '';
+    const handleCloseModal = () => setShowModal(false);
+
+    // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
+    const catColors = {
+        '액티비티': {backgroundColor: '#B4DAF2', color: 'black'},
+        '테마파크': {backgroundColor: '#B4DAF2', color: 'black'},
+        '축제': {backgroundColor: '#B4DAF2', color: 'black'},
+        '바다': {backgroundColor: '#DBDBC5', color: 'black'},
+        '자연': {backgroundColor: '#DBDBC5', color: 'black'},
+        '산': {backgroundColor: '#DBDBC5', color: 'black'},
+        '문화역사': {backgroundColor: '#F7AB89', color: 'black'},
+        '실내여행지': {backgroundColor: '#F7AB89', color: 'black'},
+        '쇼핑': {backgroundColor: '#F7AB89', color: 'black'},
+        '카페': {backgroundColor: '#F4D35E', color: 'black'},
+        '식당': {backgroundColor: '#F4D35E', color: 'black'},
+    };
 
     return (
         <body>
-        <div className="nav">
-            nav 공간
-            {/*재현님 완성 후 수정*/}
-        </div>
-        {/*바디 부분*/}
-        <div className="wrapper">
-            <div className="result-wrap">
-                {/*일정*/}
+        {Object.keys(data).map(dateKey => (
+            <div key={dateKey}>
                 <div className="result-plan">
-                    <h6>여행 일정</h6>
-                    <h6>2024.04.09~2024.04.09</h6>
+                    <h6>{dateKey}</h6>
                 </div>
+                {/*일정*/}
                 <hr/>
                 {/*여행지 결과*/}
                 <div className="result-detail">
-                    <h6>조회된 여행지</h6>
-                    <div className="location">
-                        <p className="location-num">1</p>
-                        <div className="location-img-wrap">
-                            <div className="location-img-div">
-                                <img
-                                    src="https://lh3.googleusercontent.com/p/AF1QipOEDWaZ6Iu5JSWAXkQi6Gjzv0t6bo3AmcPHV56g=s1360-w1360-h1020"
-                                    className="location-img"/>
-                            </div>
-                        </div>
-                        <div className="location-info">
-                            <p>청계천 박물관</p>
-                            <p className="location-addr">서울특별시 성동구 청계천로530</p>
-                        </div>
-                    </div>
-                </div>
-                <div className="kakao">
-                    카카오톡 공유 버튼
-                </div>
-            </div>
-            {/*지도*/}
-            <div className="result-map">
-                <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d405220.418437944!2d126.582416563409!3d37.489411020736576!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357ca3ff67128961%3A0x55a56e8ffc5bc5d!2z66mA7Yuw7Lqg7Y287IqkIOyXreyCvA!5e0!3m2!1sko!2skr!4v1712626692898!5m2!1sko!2skr"
-                    width="600" height="600" allowFullScreen="" loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"></iframe>
+                    {
+                        (() => {
+                            let prevCourseDay = null; // prevCourseDay 선언 및 초기화
 
+                            return Object.keys(data[dateKey]).map(dayKey => {
+                                const courseDay = data[dateKey][dayKey].courseDay;
+                                const travelNum = data[dateKey][dayKey].travelNum;
+                                const img = data[dateKey][dayKey].img;
+                                const title = data[dateKey][dayKey].title;
+                                const addr = data[dateKey][dayKey].addr;
+                                const duration = data[dateKey][dayKey].duration;
+                                const directionUrl = data[dateKey][dayKey].directionUrl;
+                                const cat = data[dateKey][dayKey].cat;
+                                const id = data[dateKey][dayKey].contentId;
+
+                                courseTitle = dateKey;
+
+                                // 이전 courseDay 값과 현재 courseDay 값이 다른 경우에만 Day 출력
+                                const dayOutputJSX = courseDay !== prevCourseDay ?
+                                    <h6 className="day-num">Day {courseDay}</h6> : null;
+                                prevCourseDay = courseDay; // 이전 courseDay 값을 갱신
+
+                                // 해당 카테고리의 배경색과 폰트색 가져오기
+                                const {backgroundColor, color, fontWeight} = catColors[cat] || {
+                                    backgroundColor: 'gray',
+                                    color: 'black',
+                                    fontFamily: "GmarketSansMedium"
+                                };
+
+                                return (
+                                    <div key={dayKey}>
+                                        <br/>
+                                        {dayOutputJSX}
+                                        <div className="location-wrap">
+                                            <div className="location">
+                                                <div
+                                                    className={`location-num-wrap ${courseDay === 1 ? 'color-first' : courseDay === 2 ? 'color-second' : 'color-third'}`}>
+                                                    <p className="location-num">{travelNum}</p>
+                                                </div>
+                                                <div className="location-img-wrap" onClick={() => handleShowModal(id)}>
+                                                    <div className="location-img-div">
+                                                        <img src={img} className="location-img" alt={title}/>
+                                                    </div>
+                                                </div>
+                                                <div className="result-location-info">
+                                                    <div>
+                                                        <span style={{
+                                                            backgroundColor, color,
+                                                            fontSize: '75%', fontFamily: "GmarketSansMedium",
+                                                            fontWeight: '300',
+                                                            padding: '0.25em 0.5em', borderRadius: "8px"
+                                                        }}>{cat}</span>
+                                                    </div>
+                                                    <p className="title">{title}</p>
+                                                    <p className="addr">{addr}</p>
+                                                </div>
+                                            </div>
+                                            {duration !== 0 && (
+                                                <div className="duration-time-wrap">
+                                                    <div className="duration-time">
+                                                        <Link to={directionUrl}
+                                                              target="_blank"
+                                                              rel="noopener noreferrer"
+                                                              className="custom-link"><DirectionsCarIcon/>{duration} ></Link>
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                        </div>
+                                    </div>
+                                );
+                            });
+                        })()
+                    }
+                </div>
             </div>
-        </div>
-        <div className="footer">
-            footer 공간
-            {/*재현님 완성 후 수정*/}
+        ))}
+        {showModal && <LocationContent show={showModal} handleClose={handleCloseModal} contentId={contentId}/>}
+        <hr/>
+        <div className="kakao">
+            <br/>
+            <Accordion defaultActiveKey={null}>
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header
+                        style={{backgroundColor: "black"}}
+                    >지금 {courseTitle}을 다른 사람과 공유해보세요</Accordion.Header>
+                    <Accordion.Body>
+                        <KakaoSharing/>
+                    </Accordion.Body>
+                </Accordion.Item>
+            </Accordion>
         </div>
         </body>
-    )
-        ;
-
-
+    );
 }
+
