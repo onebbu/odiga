@@ -21,7 +21,7 @@ function CourseReviewDetail() {
   const [didMount, setDidMount] = useState(false);
   const [liked, setLiked] = useState(false); // 좋아요 상태 관리
   const [likeCount, setLikeCount] = useState(0); // 좋아요 수 관리
-  const history = useNavigate();
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   useEffect(() => {
     setDidMount(true);
@@ -62,11 +62,15 @@ function CourseReviewDetail() {
   };
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`/coursereview/delete/${boardNo}`);
-      history.push("/coursereview"); // 삭제 후 목록 페이지로 이동
-    } catch (error) {
-      console.error("Error deleting the post:", error);
+    const confirmDelete = window.confirm("게시글을 삭제 하시겠습니까?");
+    if (confirmDelete) {
+      try {
+        await axios.put(`/coursereview/delete/${boardNo}`);
+        alert("게시글이 삭제 되었습니다");
+        navigate("/coursereview"); // navigate로 페이지 이동
+      } catch (error) {
+        console.error("Error deleting the post:", error);
+      }
     }
   };
 
@@ -183,8 +187,8 @@ function CourseReviewDetail() {
               marginTop: "30px",
               marginBottom: "30px",
               display: "flex",
-              justifyContent: "center", 
-              alignItems: "center", 
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <Link
@@ -194,7 +198,7 @@ function CourseReviewDetail() {
                 borderColor: "#13294b",
                 backgroundColor: "#13294b",
                 color: "#fff",
-                marginRight:"10px"
+                marginRight: "10px",
               }}
               to="/coursereview"
             >
@@ -209,7 +213,7 @@ function CourseReviewDetail() {
                 backgroundColor: "#13294b",
                 color: "#fff",
                 float: "right",
-                marginRight:"10px"
+                marginRight: "10px",
               }}
             >
               수 정

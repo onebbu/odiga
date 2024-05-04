@@ -39,5 +39,9 @@ public class CourseReviewService {
         courseReviewDAO.likeCount(boardNo);
     }
 
+    public void articleDelete(int boardNo) {
+        courseReviewDAO.articleDelete(boardNo);
+    }
+
     
 }

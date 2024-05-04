@@ -67,4 +67,10 @@
         WHERE boardNo = #{boardNo}
     </update>
 
+    <update id="articleDelete" parameterType="int">
+        UPDATE TRAVELCOURSEREVIEW
+        SET boardyn = 'N'
+        WHERE boardNo = #{boardNo}
+    </update>
+
 </mapper>
