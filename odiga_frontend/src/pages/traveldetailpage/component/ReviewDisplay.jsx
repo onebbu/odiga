@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { contentID } from "../TravelDetailPage";
+import '../TravelDetailPage.css';
 
 function ReviewDisplay() {
     const [reviews, setReviews] = useState([]);

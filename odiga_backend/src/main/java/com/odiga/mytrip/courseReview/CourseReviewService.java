@@ -1,6 +1,5 @@
 package com.odiga.mytrip.courseReview;
 
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,10 @@ public class CourseReviewService {
 
     public void likeCount(int boardNo) {
         courseReviewDAO.likeCount(boardNo);
+    }
+
+    public void articleDelete(int boardNo) {
+        courseReviewDAO.articleDelete(boardNo);
     }
 
     

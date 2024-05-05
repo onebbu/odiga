@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.odiga.mytrip.suggest.dao.SuggestDAO">
+
+    <select id="getCourseSuggestList" resultType="com.odiga.mytrip.suggest.vo.SuggestCosVO">
+    <![CDATA[
+        SELECT *
+        FROM  
+        (SELECT 
+                ROWNUM AS rnum,
+                nickname, 
+                boardtitle,
+                boardcontent,
+                boardgrade,
+                boardviewcount,
+                boardlikecount,
+                boarddate,
+                mainimage,
+                CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
+                    ELSE boardgrade * 0.3 
+                END AS weighted_rating,
+                boardviewcount * 0.3 AS weighted_view,  
+                boardlikecount * 0.1 AS weighted_like
+            FROM
+            (
+            SELECT
+                nickname,
+                boardtitle,
+                boardcontent,  
+                boardgrade,
+                boardviewcount,
+                boardlikecount,
+                boarddate,
+                mainimage
+            FROM travelcoursereview
+            ORDER BY 
+                CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
+                    ELSE boardgrade * 0.3 
+                END + boardviewcount * 0.3 + boardlikecount * 0.1 DESC
+            )
+        )
+        WHERE rnum <= 8
+        ]]>
+
+
+    </select>
+
+</mapper>
