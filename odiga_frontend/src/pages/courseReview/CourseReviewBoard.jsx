@@ -4,6 +4,8 @@ import styles from "./static/courseReview.module.css";
 import Styled from "styled-components";
 import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
+import stylee from "../choosePlace/cPP.css"
+
 
 const Place = ({
   boardContent,
@@ -24,9 +26,8 @@ const Place = ({
         <img src={mainImage} />
       ) : (
         <img
-          style={{width:"200px", display: "block" }}
+          style={{objectFit:"scale-down", display: "block" }}
           src="https://img.icons8.com/?size=512&id=j1UxMbqzPi7n&format=png"
-          alt="Image not available"
         />
       )}
       {boardTitle} <P>| {nickname}</P>
@@ -101,8 +102,7 @@ const CourseReviewBoard = () => {
         style={{
           paddingLeft: "10%",
           paddingRight: "10%",
-          width: "100%",
-          backgroundColor: "#f2fbff",
+          width: "100%"
         }}
       >
         <div>

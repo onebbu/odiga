@@ -12,6 +12,9 @@ public interface ResultDAO {
 
     List<ResultVO> selectResultList(@Param("courseNo") String courseNo);
 
+    List<ResultVO> findAllTitles(@Param("nickname") String nickname);
+
+
     int maxTravelNum(@Param("courseNo") String courseNo, @Param("courseDay")int courseDay);
 
     String findCategory(@Param("category") String category);

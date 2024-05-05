@@ -19,6 +19,7 @@
         <result property="startDate" column="startDate" />
         <result property="endDate" column="endDate" />
         <result property="courseYN" column="courseYN" />
+        <result property="courseTitle" column="courseTitle" />
     </resultMap>
 
     <select id="selectResultList" resultMap="travelResult" parameterType="String">
@@ -26,6 +27,15 @@
         select *
         from resultlist
         where courseNo=#{courseNo}
+        order by courseday, travelnum
+        ]]>
+	</select>
+
+    <select id="findAllTitles" resultMap="travelResult" parameterType="String">
+      <![CDATA[
+        select courseTitle, courseNo, contentId
+        from resultlist
+        where nickname = #{nickname}
         order by courseday, travelnum
         ]]>
 	</select>
