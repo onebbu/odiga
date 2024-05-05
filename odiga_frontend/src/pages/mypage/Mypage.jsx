@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from "react"; // React를 불러옵니다.
 import styled from "styled-components";
 import {LoginInfoContext} from "../login/LoginInfoProvider";
+import Logout from "../login/Logout";
 
 const MyPage = () => {
     const loginInfo = useContext(LoginInfoContext);
@@ -29,36 +30,37 @@ const MyPage = () => {
                     placeholder={loginInfo.nickname}
                     disabled
                 />
-                <Label>비밀번호</Label>
-                <Input
-                    style={{width: "10rem", marginBottom: "2rem"}}
-                    type="password"
-                    id="password"
-                    className="form-control"
-                    placeholder="현재 비밀번호"
-                />
-                <Label>변경할 비밀번호</Label>
-                <Input
-                    style={{width: "10rem", marginBottom: "2rem"}}
-                    type="password"
-                    id="password"
-                    className="form-control"
-                    placeholder="변경할 비밀번호"
-                />
-                <Label>변경 비밀번호 확인</Label>
-                <Input
-                    style={{width: "10rem", marginBottom: "2rem"}}
-                    type="password"
-                    id="password"
-                    className="form-control"
-                    placeholder="변경할 비밀번호"
-                />
+                {/*<Label>비밀번호</Label>*/}
+                {/*<Input*/}
+                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
+                {/*    type="password"*/}
+                {/*    id="password"*/}
+                {/*    className="form-control"*/}
+                {/*    placeholder="현재 비밀번호"*/}
+                {/*/>*/}
+                {/*<Label>변경할 비밀번호</Label>*/}
+                {/*<Input*/}
+                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
+                {/*    type="password"*/}
+                {/*    id="password"*/}
+                {/*    className="form-control"*/}
+                {/*    placeholder="변경할 비밀번호"*/}
+                {/*/>*/}
+                {/*<Label>변경 비밀번호 확인</Label>*/}
+                {/*<Input*/}
+                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
+                {/*    type="password"*/}
+                {/*    id="password"*/}
+                {/*    className="form-control"*/}
+                {/*    placeholder="변경할 비밀번호"*/}
+                {/*/>*/}
             </FormContainer>
 
             <ButtonContainer>
-                <button className="btn btn-primary" type="submit">
-                    수정
-                </button>
+                <Logout />
+                {/*<button className="btn btn-primary" type="submit">*/}
+                {/*    수정*/}
+                {/*</button>*/}
             </ButtonContainer>
         </div>
     );

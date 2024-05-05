@@ -27,7 +27,7 @@ public class ResultController {
 
 
     // http://localhost:8080/courseId/odiga_2
-    @GetMapping("/courseId/{courseNo}")
+    @GetMapping("/courseId/{nickname}/{courseNo}")
     public ResponseEntity<Map<String, Map<Integer, Map<String, Object>>>> result(@PathVariable String courseNo) {
 
         /**
@@ -214,9 +214,10 @@ public class ResultController {
             TravelListVO travelInfo = travelService.TravelList(String.valueOf(result.getContentId()));
 
             ArrayList<String> travelArray = travelArrays.getOrDefault(result.getCourseNo(), new ArrayList<>());
+            String travelLocation = String.join(" - ", travelArray);
 
             travelArray.add(travelInfo.getTitle());
-            userResults.put("content", travelArray);
+            userResults.put("content", travelLocation);
 
             // resultMap에 추가
             resultMap.put(result.getCourseNo(), userResults);
@@ -224,6 +225,12 @@ public class ResultController {
             travelArrays.put(result.getCourseNo(), travelArray);
         }
         return ResponseEntity.ok(resultMap);
+    }
+
+    @GetMapping("/findSharePw/{courseNo}")
+    public ResponseEntity<String> findSharePw(@PathVariable String courseNo) {
+        String sharePw = resultService.findSharePw(courseNo);
+        return ResponseEntity.ok(sharePw);
     }
 
     // 네이버 api(driving-5)
