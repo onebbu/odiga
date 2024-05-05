@@ -1,18 +1,21 @@
-import React from "react"; // React를 불러옵니다.
+import React, {useContext, useEffect, useState} from "react"; // React를 불러옵니다.
 import { Link, Route, Routes } from "react-router-dom";
 import styled from "styled-components";
 import "./css/mypage.css";
-
 import Myarticle from "./Myarticle";
 import Mypage from "./Mypage";
 import Mylist from "./Mylist";
 import Mycourse from "./Mycourse";
-import { responsiveFontSizes } from "@mui/material";
+import Header from "../component/navbar/Header";
+import LoginInfoProvider, {LoginInfoContext} from "../login/LoginInfoProvider";
+import Footer from '../component/footer/Footer';
+
 
 function MypageMain() {
+  const loginInfo = useContext(LoginInfoContext);
   return (
     <>
-      <Header>헤더공간</Header>
+      <Header />
 
       <Container>
         <Sub_cotainer>
@@ -41,17 +44,16 @@ function MypageMain() {
 
           {/* 메인 섹션 */}
           <Section className="thirteen wide column">
-            <Routes>
-              <Route path="/*" element={<Mypage />}></Route>
-              <Route path="/myarticle" element={<Myarticle />}></Route>
-              <Route path="/mycourse" element={<Mycourse />}></Route>
-              <Route path="/mylist" element={<Mylist />}></Route>
-            </Routes>
+              <Routes>
+                <Route path="/*" element={<Mypage />}></Route>
+                <Route path="/myarticle" element={<Myarticle />}></Route>
+                <Route path="/mycourse" element={<Mycourse />}></Route>
+                <Route path="/mylist" element={<Mylist />}></Route>
+              </Routes>
           </Section>
         </Sub_cotainer>
       </Container>
 
-      <Footer>푸터공간</Footer>
     </>
   );
 }
@@ -67,8 +69,8 @@ const Container = styled.div`
   top: 5em;
   bottom: 5em;
   display: block;
-  margin-left: auto%;
-  margin-right: auto%;
+  //margin-left: auto%;
+  //margin-right: auto%;
   width: 100%;
   overflow: auto;
 `;
@@ -102,22 +104,4 @@ const Item = styled.div`
   justify-content: center;
   width: 100%;
   margin-bottom: 20px;
-`;
-
-const Header = styled.header`
-  line-height: 5em;
-  text-align: center;
-  background-color: lightblue;
-  top: 0;
-  width: 100%;
-  position: fixed;
-`;
-
-const Footer = styled.footer`
-  line-height: 5em;
-  text-align: center;
-  background-color: lightblue;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
 `;

@@ -12,32 +12,41 @@ import ResultView from "./pages/result-list/ResultView";
 import WrongPathPage from "./pages/wrongpathPage/WrongPath";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import OAuthLoginInfo from "./pages/component/Oauth/OauthLoginInfo";
+import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 
 function App() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route>
-                    <Route exact path="/" element={<Main/>}></Route>
-                    <Route exact path="/login" element={<Login/>}></Route>
-                    <Route exact path="/sign-up" element={<SignUp/>}></Route>
-                    <Route exact path="/detail" element={<TravelDetailPage/>}></Route>
-                    <Route exact path="/result-list/:id" element={<ResultView/>}></Route>
-                    <Route exact path="/preference" element={<ChoosePreference/>}></Route>
-                    <Route exact path="/courseimport" element={<CourseImport/>}></Route>
-                    <Route exact path="/mypage/*" element={<MypageMain/>}></Route>
-                    <Route exact path="/coursereview/*" element={<CourseReview/>}></Route>
-                    <Route exact path="/SearchPage" element={<SearchPage/>}></Route>
-                    <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}></Route>
-                    {/* /place로 접근했을 때 /wrongpath/:nextPath로 리다이렉션합니다. */}
-                    <Route path="/place" element={<Navigate to="/wrongpath/preference"/>}></Route>
-                </Route>
+            <BrowserRouter>
+                <Routes>
+                    {/* 로그인 x */}
+                    <Route>
+                        <Route exact path="/" element={<Main/>}/>
+                        <Route exact path="/login" element={<Login/>}/>
+                        <Route exact path="/sign-up" element={<SignUp/>}/>
+                        <Route exact path="/detail" element={<TravelDetailPage/>}/>
+                        <Route exact path="/result-list/:id" element={<ResultView/>}/>
+                        <Route exact path="/preference" element={<ChoosePreference/>}/>
+                        <Route exact path="/courseimport" element={<CourseImport/>}/>
+
+                        <Route exact path="/coursereview/*" element={<CourseReview/>}/>
+                        <Route exact path="/SearchPage" element={<SearchPage/>}/>
+                        <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
+                        {/* /place로 접근했을 때 /wrongpath/:nextPath로 리다이렉션합니다. */}
+                        <Route path="/place" element={<Navigate to="/wrongpath/preference"/>}/>
+                    </Route>
 
 
-                <Route exact path="/login-info" element={<OAuthLoginInfo/>}></Route>
+                    {/* 로그인 o */}
+                    <Route path="/mypage/*" element={
+                        <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
+                            <MypageMain/>
+                        </LoginInfoProvider>
+                    }/>
 
-            </Routes>
-        </BrowserRouter>
+                    {/* 로그인 정보 페이지 */}
+                    <Route path="/login-info" element={<OAuthLoginInfo/>}/>
+                </Routes>
+            </BrowserRouter>
     );
 }
 
