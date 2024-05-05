@@ -21,22 +21,22 @@ function MypageMain() {
         <Sub_cotainer>
           <Aside>
             <Item>
-              <Link className="mypageitem" to="/mypage">
+              <Link className="mypageitem" to="/my-page">
                 회원정보
               </Link>
             </Item>
             <Item>
-              <Link className="mypageitem" to="/mypage/myarticle">
+              <Link className="mypageitem" to="/my-page/my-article">
                 내가 작성한 글
               </Link>
             </Item>
             <Item>
-              <Link className="mypageitem" to="/mypage/mycourse">
+              <Link className="mypageitem" to="/my-page/my-course">
                 여행코스 조회
               </Link>
             </Item>
             <Item>
-              <Link className="mypageitem" to="/mypage/mylist">
+              <Link className="mypageitem" to="/my-page/my-list">
                 여행 찜 목록
               </Link>
             </Item>
@@ -46,9 +46,9 @@ function MypageMain() {
           <Section className="thirteen wide column">
               <Routes>
                 <Route path="/*" element={<Mypage />}></Route>
-                <Route path="/myarticle" element={<Myarticle />}></Route>
-                <Route path="/mycourse" element={<Mycourse />}></Route>
-                <Route path="/mylist" element={<Mylist />}></Route>
+                <Route path="/my-article" element={<Myarticle />}></Route>
+                <Route path="/my-course" element={<Mycourse />}></Route>
+                <Route path="/my-list" element={<Mylist />}></Route>
               </Routes>
           </Section>
         </Sub_cotainer>
@@ -97,7 +97,8 @@ const Section = styled.section`
   justify-content: center;
   text-align: center;
   width: 80%;
-  padding-right: 20%;
+  padding-left: 15%;
+  padding-right: 15%;
 `;
 
 const Item = styled.div`

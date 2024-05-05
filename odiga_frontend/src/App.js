@@ -11,7 +11,6 @@ import Main from "./pages/main/Main";
 import ResultView from "./pages/result-list/ResultView";
 import WrongPathPage from "./pages/wrongpathPage/WrongPath";
 import SearchPage from "./pages/SearchPage/SearchPage";
-import OAuthLoginInfo from "./pages/component/Oauth/OauthLoginInfo";
 import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 
 function App() {
@@ -24,7 +23,7 @@ function App() {
                         <Route exact path="/login" element={<Login/>}/>
                         <Route exact path="/sign-up" element={<SignUp/>}/>
                         <Route exact path="/detail" element={<TravelDetailPage/>}/>
-                        <Route exact path="/result-list/:id" element={<ResultView/>}/>
+                        <Route exact path="/result-list/:nickname/:courseNo" element={<ResultView/>}/>
                         <Route exact path="/preference" element={<ChoosePreference/>}/>
                         <Route exact path="/courseimport" element={<CourseImport/>}/>
 
@@ -37,14 +36,12 @@ function App() {
 
 
                     {/* 로그인 o */}
-                    <Route path="/mypage/*" element={
+                    <Route path="/my-page/*" element={
                         <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
                             <MypageMain/>
                         </LoginInfoProvider>
                     }/>
 
-                    {/* 로그인 정보 페이지 */}
-                    <Route path="/login-info" element={<OAuthLoginInfo/>}/>
                 </Routes>
             </BrowserRouter>
     );
