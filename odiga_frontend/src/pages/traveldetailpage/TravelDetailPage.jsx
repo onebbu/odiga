@@ -4,7 +4,7 @@ import ReviewImportForm from './component/ReviewImportForm';
 import ReviewDisplay from "./component/ReviewDisplay";
 import Header from "../tiles/Header";
 import './TravelDetailPage.css';
-import Footer from '../main/Footer';
+import Footer from '../component/footer/Footer';
 import Slider from "react-slick";
 import './slick.css';
 import './slick-theme.css';
