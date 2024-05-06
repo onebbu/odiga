@@ -4,8 +4,7 @@ import styles from "./static/courseReview.module.css";
 import Styled from "styled-components";
 import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
-import stylee from "../choosePlace/cPP.css"
-
+import stylee from "../choosePlace/cPP.css";
 
 const Place = ({
   boardContent,
@@ -26,7 +25,7 @@ const Place = ({
         <img src={mainImage} />
       ) : (
         <img
-          style={{objectFit:"scale-down", display: "block" }}
+          style={{ objectFit: "scale-down", display: "block" }}
           src="https://img.icons8.com/?size=512&id=j1UxMbqzPi7n&format=png"
         />
       )}
@@ -55,25 +54,39 @@ const CourseReviewBoard = () => {
 
       // 상태 업데이트
       setPosts(fetchedPosts);
-
-      // currentPosts 계산 및 설정
-      const indexOfLast = currentPage * postsPerPage;
-      const indexOfFirst = indexOfLast - postsPerPage;
-      const slicedPosts = fetchedPosts.slice(indexOfFirst, indexOfLast);
-      setCurrentPosts(slicedPosts);
     };
 
     fetchData();
-  }, [currentPage, postsPerPage]); // currentPage와 postsPerPage가 변경될 때마다 fetchData 실행
+  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-
-    // 페이지 변경 시 currentPosts 업데이트
-    const indexOfLast = pageNumber * postsPerPage;
+  useEffect(() => {
+    // currentPosts 계산 및 설정
+    const indexOfLast = currentPage * postsPerPage;
     const indexOfFirst = indexOfLast - postsPerPage;
     const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
     setCurrentPosts(slicedPosts);
+  }, [posts, currentPage, postsPerPage]); // posts, currentPage, postsPerPage가 변경될 때마다 실행
+
+  const handleSortByLatest = () => {
+    const sortedPosts = [...posts].sort(
+      (a, b) => new Date(b.boardDate) - new Date(a.boardDate)
+    );
+    setPosts(sortedPosts);
+    setCurrentPage(1);
+  };
+
+  const handleSortByViews = () => {
+    const sortedPosts = [...posts].sort(
+      (a, b) => b.boardViewCount - a.boardViewCount
+    );
+    setPosts(sortedPosts);
+    setCurrentPage(1);
+  };
+
+  const handleSortByRating = () => {
+    const sortedPosts = [...posts].sort((a, b) => b.boardGrade - a.boardGrade);
+    setPosts(sortedPosts);
+    setCurrentPage(1);
   };
 
   return (
@@ -84,11 +97,11 @@ const CourseReviewBoard = () => {
           <div className={styles["cr-row"]}>
             <div className="col-lg-10 offset-lg-1">
               <div className="header-text">
-                <h2 style={{ padding: "50px" }}>
-                  <em>여행코스 </em> 후기 게시판
+                <h2 style={{ padding: "50px", fontFamily:"JalnanGothic", fontSize:"25px"}}>
+                  <em style={{fontFamily:"JalnanGothic", fontSize:"25px", color:"#00bdfe"}}>여행코스</em> 후기 게시판
                 </h2>
-                <p>
-                  즐거운 여행이 되셨나요? 이제 ODIGA 에 여러분들이 다녀온 여행
+                <p style={{fontFamily:"JalnanGothic", fontSize:"18px"}}>
+                  즐거운 여행이 되셨나요? <br></br>이제 ODIGA 에 여러분들이 다녀온 여행
                   후기를 나눠주세요 <br />
                 </p>
               </div>
@@ -96,13 +109,13 @@ const CourseReviewBoard = () => {
           </div>
         </div>
       </div>
-      {/* 메인배너 */}
 
       <section
         style={{
-          paddingLeft: "10%",
-          paddingRight: "10%",
-          width: "100%"
+          padding: "10px 10% 0 10%",
+          width: "100%",
+          fontSize:"15px",
+          backgroundColor: "#f3f4f6",
         }}
       >
         <div>
@@ -112,13 +125,28 @@ const CourseReviewBoard = () => {
                 style={{ marginTop: "30px", marginBottom: "100px" }}
                 className="section-heading text-center"
               >
-                <h4>
-                  <em style={{ color: "#00bdfe" }}>TRAVEL COURSE</em> REVIEW
+                <h4 style={{fontFamily:"JalnanGothic", fontSize:"18px"}}>
+                  <em style={{fontFamily:"JalnanGothic", fontSize:"18px", color: "#0a97cd" }}>TRAVEL COURSE</em> REVIEW
                   ARTICLES
                 </h4>
               </div>
             </div>
             {/* 여기부터는 카드 목록 */}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "10px",
+              }}
+            >
+              <div style={{paddingLeft:"10px"}}>총 <em style={{fontStyle:"normal", color: "#0a97cd"}}>{posts.length}</em> 건</div>
+              <div>
+                <button style={{border:"none", background:"none", paddingRight:"5px"}} onClick={handleSortByLatest}>최신순 |</button>
+                <button style={{border:"none", background:"none", paddingRight:"5px"}} onClick={handleSortByViews}>조회순 |</button>
+                <button style={{border:"none", background:"none", paddingRight:"10px"}} onClick={handleSortByRating}>평점순</button>
+              </div>
+            </div>
+            <hr />
             <div
               style={{
                 padding: "10px",
@@ -128,27 +156,26 @@ const CourseReviewBoard = () => {
                 gridGap: "50px",
               }}
             >
-              {currentPosts &&
-                currentPosts.map((item) => (
-                  <StyledLink
-                    to={`/coursereview/detail/${item.boardNo}`}
-                    key={item.boardNo}
-                  >
-                    <Place
-                      boardContent={item.boardContent}
-                      boardDate={item.boardDate}
-                      boardGrade={item.boardGrade}
-                      boardLikeCount={item.boardLikeCount}
-                      boardNo={item.boardNo}
-                      boardTitle={item.boardTitle}
-                      boardViewCount={item.boardViewCount}
-                      boardYN={item.boardYN}
-                      email={item.email}
-                      nickname={item.nickname}
-                      mainImage={item.mainImage}
-                    />
-                  </StyledLink>
-                ))}
+              {currentPosts.map((item) => (
+                <StyledLink
+                  to={`/coursereview/detail/${item.boardNo}`}
+                  key={item.boardNo}
+                >
+                  <Place
+                    boardContent={item.boardContent}
+                    boardDate={item.boardDate}
+                    boardGrade={item.boardGrade}
+                    boardLikeCount={item.boardLikeCount}
+                    boardNo={item.boardNo}
+                    boardTitle={item.boardTitle}
+                    boardViewCount={item.boardViewCount}
+                    boardYN={item.boardYN}
+                    email={item.email}
+                    nickname={item.nickname}
+                    mainImage={item.mainImage}
+                  />
+                </StyledLink>
+              ))}
             </div>
             {/* 페이지네이션 */}
             <Pagination
