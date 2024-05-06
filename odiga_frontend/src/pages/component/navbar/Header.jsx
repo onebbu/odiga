@@ -39,7 +39,7 @@ function Header() {
           </div>
           <div className="sub-menu-line"></div>
           <div className="login-box">
-            <a href="/login" className="login-link"><FontAwesomeIcon icon={faUser}/></a>
+            <a href="/my-page" className="login-link"><FontAwesomeIcon icon={faBurger}/></a>
           </div>
           <button className={`hamburger ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
                 <FontAwesomeIcon icon={faBurger} />

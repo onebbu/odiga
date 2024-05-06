@@ -27,7 +27,7 @@ public class ResultController {
 
 
     // http://localhost:8080/courseId/odiga_2
-    @GetMapping("/courseId/{courseNo}")
+    @GetMapping("/courseId/{nickname}/{courseNo}")
     public ResponseEntity<Map<String, Map<Integer, Map<String, Object>>>> result(@PathVariable String courseNo) {
 
         /**
@@ -98,9 +98,9 @@ public class ResultController {
                     Map<String, Object> directionResult = naverApiService.getDirection(start, goal);
                     String duration = DirectionResultParsing(directionResult);
                     locationMap.put("duration", duration);
-                    locationMap.put("directionUrl", "http://map.naver.com/index.nhn?slng=" + currentTravel.getMapx() + "&slat=" + currentTravel.getMapy() + "&stext=" + currentTravel.getTitle() + "&elng=" + nextTravel.getMapx() + "&elat=" + nextTravel.getMapy() + "&pathType=0&showMap=true&etext=" + nextTravel.getTitle() + "&menu=route");
+                    locationMap.put("directionUrl", "http://map.naver.com/index.nhn?slng="+currentTravel.getMapx()+"&slat="+currentTravel.getMapy()+"&stext="+currentTravel.getTitle()+"&elng="+nextTravel.getMapx()+"&elat="+nextTravel.getMapy()+"&pathType=0&showMap=true&etext="+nextTravel.getTitle()+"&menu=route");
 
-                    //     y / lat / 위도  // x / lng / 경도
+                //     y / lat / 위도  // x / lng / 경도
 
                 }
                 // 다음 요소가 없는 경우에는 duration을 0으로 설정
@@ -163,7 +163,7 @@ public class ResultController {
         TravelListVO content = travelService.TravelList(contentId);
 
         String title = content.getTitle();
-        int likeCount = content.getLikecount() == null ? 0 : Integer.parseInt(content.getLikecount());
+        int likeCount = content.getLikecount() == null? 0 : Integer.parseInt(content.getLikecount());
         String img = content.getFirstimage();
         String addr = content.getAddr1();
         String overview = content.getOverview();
@@ -186,7 +186,7 @@ public class ResultController {
     @PostMapping("/sendPw")
     @ResponseBody
     public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
-        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("id"));
+        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("courseNo"));
 
     }
 
@@ -214,9 +214,10 @@ public class ResultController {
             TravelListVO travelInfo = travelService.TravelList(String.valueOf(result.getContentId()));
 
             ArrayList<String> travelArray = travelArrays.getOrDefault(result.getCourseNo(), new ArrayList<>());
+            String travelLocation = String.join(" - ", travelArray);
 
             travelArray.add(travelInfo.getTitle());
-            userResults.put("content", travelArray);
+            userResults.put("content", travelLocation);
 
             // resultMap에 추가
             resultMap.put(result.getCourseNo(), userResults);
@@ -224,6 +225,12 @@ public class ResultController {
             travelArrays.put(result.getCourseNo(), travelArray);
         }
         return ResponseEntity.ok(resultMap);
+    }
+
+    @GetMapping("/findSharePw/{courseNo}")
+    public ResponseEntity<String> findSharePw(@PathVariable String courseNo) {
+        String sharePw = resultService.findSharePw(courseNo);
+        return ResponseEntity.ok(sharePw);
     }
 
     // 네이버 api(driving-5)

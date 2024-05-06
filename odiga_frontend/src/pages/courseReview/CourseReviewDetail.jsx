@@ -1,8 +1,13 @@
 import { faEye, faHeart, faStar } from "@fortawesome/free-regular-svg-icons";
+import {
+  faQuoteLeft,
+  faQuoteRight,
+  faHeart as solidHeart,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
 import "slick-carousel/slick/slick.css";
@@ -16,6 +21,7 @@ function CourseReviewDetail() {
   const [didMount, setDidMount] = useState(false);
   const [liked, setLiked] = useState(false); // 좋아요 상태 관리
   const [likeCount, setLikeCount] = useState(0); // 좋아요 수 관리
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   useEffect(() => {
     setDidMount(true);
@@ -55,13 +61,26 @@ function CourseReviewDetail() {
     }
   };
 
+  const handleDelete = async () => {
+    const confirmDelete = window.confirm("게시글을 삭제 하시겠습니까?");
+    if (confirmDelete) {
+      try {
+        await axios.put(`/coursereview/delete/${boardNo}`);
+        alert("게시글이 삭제 되었습니다");
+        navigate("/coursereview"); // navigate로 페이지 이동
+      } catch (error) {
+        console.error("Error deleting the post:", error);
+      }
+    }
+  };
+
   return (
     <>
       <Container>
         <section
           style={{
             width: "100%",
-            backgroundColor: "#f2fbff",
+            backgroundColor: "#f3f4f6",
             margin: "0 auto",
             marginBottom: "30px",
           }}
@@ -71,20 +90,16 @@ function CourseReviewDetail() {
               margin: "0 auto",
               marginBottom: "10px",
               padding: "10px",
-              width: "60%",
+              width: "100%",
             }}
             className="section-heading text-center"
           >
-            <h4 style={{ padding: "10px", margin: "0 auto" }}>
-              <br />
+            <h4 style={{fontFamily:"JalnanGothic", fontSize:"25px", padding: "10px", margin: "0 auto" }}>
               {detailsData && detailsData[0].boardTitle}{" "}
             </h4>
-            <br />
             <hr />
-            <br />
-            <h7 style={{ textAlign: "left", margin: "0 auto" }}>
-              <b>작성자 :</b> {detailsData && detailsData[0].nickname} &nbsp;
-              &nbsp; &nbsp;
+            <h7 style={{fontFamily:"JalnanGothic", fontSize:"18px", textAlign: "left", margin: "0 auto" }}>
+              <b>작성자 :</b> {detailsData && detailsData[0].nickname} &nbsp;&nbsp; &nbsp;
               <b>작성일 :</b> {detailsData && detailsData[0].boardDate} <br />{" "}
               <br />
               <FontAwesomeIcon icon={faEye} /> :{" "}
@@ -98,7 +113,6 @@ function CourseReviewDetail() {
               detailsData?.[0]?.boardGrade !== null
                 ? detailsData[0].boardGrade.toFixed(1)
                 : "평가 없음"}
-              <br />
             </h7>
             <br />
             <hr />
@@ -108,13 +122,13 @@ function CourseReviewDetail() {
             style={{
               textAlign: "left",
               margin: "0 auto",
-              width: "60%",
+              width: "95%",
               minHeight: "30em",
               marginBottom: "30px",
               padding: "30px",
-              border: "2px solid black",
+              border: "1px solid #e5e5e5",
               backgroundColor: "white",
-              borderRadius: "10px",
+              overflow: "scroll",
             }}
           >
             <div style={{ display: "flex" }}>
@@ -138,10 +152,9 @@ function CourseReviewDetail() {
           <Div
             style={{
               textAlign: "left",
-              width: "60%",
+              width: "100%",
               margin: "0 auto",
               padding: "10px",
-              backgroundColor: "lightblue",
               borderRadius: "10px",
               marginBottom: "30px",
             }}
@@ -151,10 +164,8 @@ function CourseReviewDetail() {
 
           <Div
             style={{
-              margin: "0 auto",
-              width: "60%",
-              marginTop: "30px",
-              backgroundColor: "white",
+              width: "100%",
+              margin: "30px 0 30px 0 auto",
             }}
           >
             <iframe
@@ -168,22 +179,113 @@ function CourseReviewDetail() {
             ></iframe>
           </Div>
 
-          {/* 좋아요 버튼 */}
-          <button className="btn btn-primary" onClick={handleLike} disabled={liked}>
-            {liked ? "좋아요 완료" : "좋아요"}
-          </button>
-
-          <Link
-            className="btn btn-primary"
-            style={{ color: "white", textDecoration: "none", margin: "30px" }}
-            to="/coursereview"
+          <div
+            style={{
+              margin: "0px auto",
+              width: "100%",
+              marginTop: "30px",
+              marginBottom: "30px",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            목록
-          </Link>
-        </section>
-      </Container>
+            <Link
+              className="btn btn-primary"
+              style={{
+                width: "100px",
+                borderColor: "#13294b",
+                backgroundColor: "#13294b",
+                color: "#fff",
+                marginRight: "10px",
+              }}
+              to="/coursereview"
+            >
+              목 록
+            </Link>
 
-      <Comments />
+            <button
+              className="btn btn-primary"
+              style={{
+                width: "100px",
+                borderColor: "#13294b",
+                backgroundColor: "#13294b",
+                color: "#fff",
+                float: "right",
+                marginRight: "10px",
+              }}
+            >
+              수 정
+            </button>
+
+            <button
+              className="btn btn-primary"
+              style={{
+                width: "100px",
+                borderColor: "#13294b",
+                backgroundColor: "#13294b",
+                color: "#fff",
+                margin: "0 10px 0 0",
+                float: "right",
+              }}
+              onClick={handleDelete}
+            >
+              삭 제
+            </button>
+          </div>
+          <br />
+        </section>
+        <div
+          style={{
+            margin: "50px 0 50px 0",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ flex: "1" }}>
+            <h4>
+              <FontAwesomeIcon icon={faQuoteLeft} size="2x" /> &nbsp; 해당
+              코스가 마음에 드시나요? &nbsp;
+              <FontAwesomeIcon icon={faQuoteRight} size="2x" />
+            </h4>
+            하트를 누르시면 활용하여 최적의 여행지를 추천해 드리겠습니다.
+          </div>
+          <div style={{ margin: "20px auto" }}>
+            <button
+              className="btn btn-primary"
+              onClick={handleLike}
+              disabled={liked}
+              style={{
+                background: "none",
+                border: "none",
+                padding: "0",
+                margin: "0",
+              }}
+            >
+              {liked ? (
+                <>
+                  <FontAwesomeIcon
+                    icon={solidHeart}
+                    size="4x"
+                    style={{ color: "red", marginRight: "100px" }}
+                  />
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    size="4x"
+                    style={{ color: "red", marginRight: "100px" }}
+                  />
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+
+        <Comments />
+      </Container>
     </>
   );
 }
@@ -237,7 +339,6 @@ function ItemImg(imgSrc) {
           margin: "0 auto",
           maxWidth: "100%",
           border: "0px",
-          backgroundColor: "lightblue",
         }}
       >
         <img
@@ -246,7 +347,6 @@ function ItemImg(imgSrc) {
             maxHeight: "300px",
             overflow: "hidden",
             padding: "20px",
-            backgroundColor: "lightblue",
             borderRadius: "50px",
           }}
           src={imgSrc}
@@ -263,6 +363,8 @@ const Container = styled.div`
   background-color: white;
   display: block;
   width: 100%;
+  padding: 0 20% 0 20%;
+  font-size: 15px;
 `;
 
 const Div = styled.div`

@@ -37,6 +37,10 @@ public class ResultService {
         return resultDAO.findCategory(category);
     }
 
+    public String findSharePw(String courseNo) {
+        return resultDAO.findSharePw(courseNo);
+    }
+
     public String findCategoryKR(String category) {
         return resultDAO.findCategoryKR(category);
     }

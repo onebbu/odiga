@@ -15,7 +15,7 @@ import {useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
-import GoogleLoginButton from "../component/google-login/GoogleLogin";
+import OauthLoginButton from "../component/Oauth/OauthLogin.jsx";
 
 // localhost:3000/login
 
@@ -146,7 +146,7 @@ export default function Login() {
             </ThemeProvider>
         </div>
         <div className="oauth">
-            <GoogleLoginButton/>
+            <OauthLoginButton />
         </div>
         </body>
     );

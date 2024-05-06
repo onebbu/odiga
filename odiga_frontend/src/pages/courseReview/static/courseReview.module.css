@@ -14,10 +14,7 @@
   color: white;
   width: 100%;
 }
-.cr-row em {
-  color: #00bdfe;
-  font-style: normal;
-}
+
 
 .col-lg-12 {
   display: grid;

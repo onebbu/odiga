@@ -18,6 +18,9 @@ public interface ResultDAO {
     int maxTravelNum(@Param("courseNo") String courseNo, @Param("courseDay")int courseDay);
 
     String findCategory(@Param("category") String category);
+
+    String findSharePw(@Param("courseNo") String courseNo);
+
     String findCategoryKR(@Param("category") String category);
 
     void savePw(@Param("coursePw") String coursePw, @Param("courseNo") String courseNo);
