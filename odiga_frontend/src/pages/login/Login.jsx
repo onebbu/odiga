@@ -61,7 +61,7 @@ export default function Login() {
             } else {
                 localStorage.setItem('token', result);
                 // await axios.post('/login-info', result);
-                // navigate("/login-info");
+                navigate("/");
             }
         } catch (error) {
             if (error.name === 'ValidationError') {

@@ -25,14 +25,17 @@ function handleLogout() {
     fetchLogout();
 }
 
-function OAuthLogout() {
+function Logout() {
 
 
     return (
         <div>
-            <button onClick={handleLogout}>로그아웃</button>
+            <button className="btn btn-primary" type="submit"
+                    onClick={handleLogout}>
+                로그아웃
+            </button>
         </div>
     );
 }
 
-export default OAuthLogout;
+export default Logout;

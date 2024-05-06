@@ -2,16 +2,18 @@ import axios from "axios";
 import React, { useState } from "react";
 import styled from 'styled-components';
 import { contentID } from "../TravelDetailPage";
-
+import '../TravelDetailPage.css';
 const StarRatingContainer = styled.div`
     display: inline-block;
 `;
 
 const Star = styled.span`
-    font-size: 24px;
+    font-size: 40px;
     color: ${props => props.checked ? '#ffc107' : '#e4e5e9'};
     cursor: pointer;
-`;
+`; 
+
+
 
 function StarRating({ starCount, onChange }) {
     const [rating, setRating] = useState(0);
@@ -34,9 +36,9 @@ function StarRating({ starCount, onChange }) {
             ))}
         </StarRatingContainer>
     );
-}
+} 
 
-function ReviewImportForm() {
+function ReviewImportForm() { 
     const [reviewComment, setreviewComment] = useState('');
     const [reviewGrade, setreviewGrade] = useState(0);
 
@@ -54,21 +56,22 @@ function ReviewImportForm() {
         });
     };
 
-    return (
-        <div>
-            <h2>후기와 별점 매기기</h2>
-            <StarRating starCount={5} onChange={setreviewGrade} />
-            <br />
-            <input 
-                type="text" 
+    return(
+        <div className="reviewImportForm"> 
+          <p>별점과 리뷰로 여러분의 소중한 경험을 들려주세요 !</p>
+          <div className="contourLine4"></div>
+          <StarRating starCount={5} onChange={setreviewGrade} />
+          <br />
+            <textarea className="reviewBox"                 
                 value={reviewComment} 
                 onChange={(e) => setreviewComment(e.target.value)} 
                 placeholder="리뷰를 작성해주세요" 
             />
             <br />
-            <button onClick={handleSubmit}>제출</button>
+            <button className="successButton" onClick={handleSubmit}> <h2>완료 ✔</h2> </button>
         </div>
-    );
+    )
+
 }
 
 export default ReviewImportForm;
