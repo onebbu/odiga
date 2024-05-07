@@ -69,11 +69,13 @@ function Maincontents() {
                       animate ? "" : " stop")}>
 
                   {cosData.map((cosData) => (
+                    
                     <div className="popularContentCard" >
-
+                    <a href={`coursereview/detail/${cosData.boardno}`}>                       
                       <div className="cardThumbnail">
                         <img src={cosData.mainimage} className="cardImg"/>
                       </div>
+                    </a>
                       <div className="cardInfo">
                         <div className="cardUserInfo">
                           <div className="cardUserNickname">
