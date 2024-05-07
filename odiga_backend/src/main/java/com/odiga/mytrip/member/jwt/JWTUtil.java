@@ -27,8 +27,6 @@ public class JWTUtil {
 
     // email 반환 메서드
     // 현재 role은 정상, email 뭔가 이상해서 null이 출력됨
-    // 토큰이랑 시크릿키는 동일
-    // 왜 null이 되지?
     public String getEmail(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
     }
@@ -46,7 +44,6 @@ public class JWTUtil {
 
     // 토큰 생성 메서드
     public String createJwt(String email, String role, Long expiredMs) {
-
         return Jwts.builder()
                 .claim("email", email)
                 .claim("role", role)

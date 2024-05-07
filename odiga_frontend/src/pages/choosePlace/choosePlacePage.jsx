@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState , useRef, useEffect } from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -7,11 +7,13 @@ import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import './cPP.css';
-import ListPlace from './Place';
-import DropContainer from "./DropContainer";
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-
+import { useLocation, useNavigate } from "react-router-dom";
+import ListPlace from './Place';
+import DropContainer from "./DropContainer";
+import Drawer from './Drawer';
+import axios from "axios";
 
 // http://localhost:3000/place
 
@@ -21,36 +23,154 @@ const Body= Styled.div`
     background: #f3f4f6; /* 미미한 회색 */
 `;
 const Wrapper=Styled.div` display: flex; min-height: 100vh; `;
-const AccordionWrap=Styled.div`width:20%; height: 100%;position:fixed;`;
-const Section=Styled.div`width: 75%; margin-left:20%; display: flex; flex-direction: column; width:80%; padding: 16px;`;
+const AccordionWrap=Styled.div`width:20%; height: 100%; position:fixed;`;
+const Section=Styled.div` position: relative; border: 1px solid #ccc; width: 75%; gap: 20px;
+    margin-left:20%; display: flex; flex-direction: column; width:80%; padding: 16px;`;
+const OpenButton = Styled.button`position: fixed; top: 0px; right: 100px; width: 200px; height: 60px;
+    background-color: #549C9B; /* Green */ border: none; border-radius: 0 0 10px 10px; cursor: pointer; outline: none;
+    transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
+    &:hover {  background-color: #417977; /* Darker green on hover */ } `;
+const ItemsContainer = Styled.div`
+    margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
+    transition: margin-top 0.3s ease-in-out;
+  `;
 
-function ChoosePlace() {
-  // let [items, setItems] = useState(data);
-    return(
-        <Body>
-          <DndProvider backend={HTML5Backend}>
-            <Wrapper>
-                <CustomizedAccordions/>
-                <Section>
-                    <div className="item">
-                        <p> 여행지를 드래그하여 채워보세요! </p>
-                        <h2>서울시의 꼭! 가봐야 할 여행지 </h2>
-                    </div>
-                    <div className="item">
-                        인기순 | 가나다순 | 별점순
-                    </div>
-                    <DndProvider backend={HTML5Backend}><ListPlace /></DndProvider>
-                    <button type="button" className="button" id="load">
-                      <span className="button__text">Add Item</span>
-                      <span className="button__icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" viewBox="0 0 24 24" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" stroke="currentColor" height="24" fill="none" className="svg"><line y2="19" y1="5" x2="12" x1="12"></line><line y2="12" y1="12" x2="19" x1="5"></line></svg></span>
-                  </button>
-                </Section>
-            </Wrapper>
-            </DndProvider>
-        </Body>
-    );
+const areaList = [
+    { areacode: '1', areaname: '서울' },
+    { areacode: '2', areaname: '인천' },
+    { areacode: '3', areaname: '대전' },
+    { areacode: '4', areaname: '대구' },
+    { areacode: '5', areaname: '광주' },
+    { areacode: '6', areaname: '부산' },
+    { areacode: '7', areaname: '울산' },
+    { areacode: '8', areaname: '세종특별자치시' },
+    { areacode: '31', areaname: '경기도' },
+    { areacode: '32', areaname: '강원도' },
+    { areacode: '33', areaname: '충청북도' },
+    { areacode: '34', areaname: '충청남도' },
+    { areacode: '35', areaname: '경상북도' },
+    { areacode: '36', areaname: '경상남도' },
+    { areacode: '37', areaname: '전라북도' },
+    { areacode: '38', areaname: '전라남도' },
+    { areacode: '39', areaname: '제주도' },
+];
+
+const ChoosePlace = () => {
+
+  const containerRef = useRef(null);
+  const [containerHeight, setContainerHeight] = useState(0);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
+  
+  const [targetArea, setTargetArea] = useState('1');
+  const [targetDura, setTargetDura] = useState('3');
+  const [targetTheme, setTargetTheme] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [selectedValues, setSelectedValues] = useState(null);
+
+  useEffect(() => {
+    const startTime = performance.now();
+
+    // 페이지가 완전히 로드된 후 시간 측정 종료 및 출력
+    const handleLoad = () => {
+      const endTime = performance.now();
+      const totalTime = endTime - startTime;
+      console.log("페이지 로딩 시간:", totalTime, "밀리초");
+    };
+
+    window.addEventListener("load", handleLoad);
+
+
+    setSelectedValues(location.state);
+      // 선택한 값이 모두 채워져 있는지 확인
+    if (!selectedValues || !selectedValues.region || !selectedValues.duration || selectedValues.theme.length < 2) {
+      // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동
+      //navigate('/wrongpath/preference');
+    }
+    else{
+      console.log("선택한 값들:", selectedValues); // 선택한 값들을 콘솔에 출력
+      setTargetArea(selectedValues.region);
+      setTargetDura(selectedValues.duration);
+      setTargetTheme(selectedValues.theme);
+    }
+      // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+      return () => {
+        window.removeEventListener("load", handleLoad);
+    };
+
+  }, [navigate, location, selectedValues]); 
+  // ^^^^^^^^^^^^^^^choosePage의 Preference들 ^^^^^^^^^^^^^^
+
+  // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
+  //   if (containerRef.current) {
+  //     const height = containerRef.current.clientHeight;
+  //     console.log('isDrawerOpen:', isDrawerOpen);
+  //     console.log('containerHeight:', containerHeight);
+  //     setContainerHeight(height);
+  //   }
+  // }, [isDrawerOpen, containerHeight]);
+  // const ItemsContainer = Styled.div`
+  //   margin-top: ${(props) => props.isDrawerOpen ? `${props.containerHeight}px` : '0'};
+  //   transition: margin-top 0.3s ease-in-out;
+  // `;
+
+  const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
+
+  return(
+    <Body>
+      <DndProvider backend={HTML5Backend}>
+      <Wrapper>
+        <CustomizedAccordions duration={targetDura} />
+            <Section>  
+              <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
+              <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
+              <ItemsWrapper isDrawerOpen={isDrawerOpen} 
+                            containerHeight={containerHeight} 
+                            targetAreacode={targetArea}
+                            targetTheme={targetTheme}/>
+            </Section>
+        </Wrapper>
+      </DndProvider>
+    </Body>
+  );  
 }
 
+
+const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode, targetTheme}) => {
+  const [order, setOrder] = useState('title'); //order defalt = 'title'
+  // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
+  const foundArea = areaList.find(area => area.areacode === targetAreacode);
+  const foundAreaName = foundArea ? foundArea.areaname : '없음';
+
+  const Orderbtn = ({name, orderID }) => {
+    return (
+      <div  onClick={()=>setOrder(orderID)} style={{cursor:"pointer", display:"inline", padding:'7px'}}>
+        {name}
+      </ div>
+    )
+  }; 
+
+  return(<>
+    <ItemsContainer isDrawerOpen={isDrawerOpen} containerHeight={containerHeight}>
+      <div className="item">
+          <p> 여행지를 드래그하여 채워보세요! </p>
+          <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
+      </div>
+      {targetTheme}
+      <div className="item"> <span> 
+                <Orderbtn name={'조회순'} orderID={'travelviewcount'}/>|
+                <Orderbtn name={'가나다순'} orderID={'title'}/>|
+                <Orderbtn name={'별점순'} orderID={'likecount'}/> </span>    </div>
+      <div className="item">
+        <ListPlace areacode={targetAreacode} order={order}/>
+      </div>
+    </ItemsContainer>
+  
+  </>)
+}
 
 {/* 왼쪽 메뉴 --------------------------------------------------- */}
 const Accordion = styled((props) => (
@@ -81,46 +201,113 @@ const AccordionSummary = styled((props) => (
     },
 }));
   
-const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+const AccordionDetails = styled(MuiAccordionDetails)(() => ({
     paddingTop: '20px',
     borderTop: '1px solid rgba(0, 0, 0, .125)',
     minHeight: '450px'
 }));
-  
-function CustomizedAccordions() {
-    const [expanded, setExpanded] = React.useState('panel1');
-  
-    const handleChange = (panel) => (event, newExpanded) => {
-      setExpanded(newExpanded ? panel : false);
-    };
-  
+
+const scheduleData = [
+  { id: 1, title: 'DAY 1', duration: ['당일여행', '1박2일', '2박3일'] },
+  { id: 2, title: 'DAY 2', duration: ['1박2일', '2박3일'] },
+  { id: 3, title: 'DAY 3', duration: ['2박3일'] },
+];
+
+const Position = Styled.div`
+  position: relative;
+`;
+
+function CustomizedAccordions({duration}) {
+  const [expanded, setExpanded] = useState('');
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [savedData, setSavedData] = useState([]);
+
+  const handleChange = (panel) => (newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+
+  useEffect(() => {
+    if (buttonClicked) {
+      console.log("저장된 데이터:", savedData);
+      setButtonClicked(false);
+    }
+  }, [buttonClicked]);
+
+  const handleSaveData = (dataList, scheduleID) => {
+    if (buttonClicked) {
+      // DropContainer 컴포넌트로부터 전달된 데이터를 처리하는 로직을 작성합니다.
+      console.log("dataList", dataList);
+      console.log("Schedule ID:", scheduleID);
+      // 리스트를 순회하면서 각 요소에서 필요한 정보를 추출하여 상태를 업데이트
+      const updatedData = dataList.map((data,index) => ({
+        courseDay: scheduleID,
+        travelNum: index+1,
+        contentId: data.id,
+        name : data.name,
+        address: data.region
+      }));
+
+      console.log("업데이트 데이터???????????????",updatedData);
+      // 업데이트된 데이터를 상태에 설정
+      // 중복되지 않은 id를 가진 요소만 상태에 추가
+      // Add only unique data to the state
+      updatedData.forEach(data => {
+        // Check if contentId already exists in the state
+        if (!savedData.some(item => item.contentId === data.contentId)) {
+          // If not, add it to the state
+          setSavedData(prevData => [...prevData, data]);
+        }
+      });
+
+      // 예를 들어, 이 데이터를 서버로 전송하는 등의 작업을 수행할 수 있습니다.
+      // sendDataToServer(data);
+    }
+  };
+
+  const sendDataToServer = () => {
+    // 서버로 데이터를 전송하는 로직을 작성합니다.
+    // 예를 들어, axios를 사용하여 POST 요청을 보낼 수 있습니다.
+    setButtonClicked(true);
+    console.log("전송될 데이터: ", savedData);
+
+    axios.post('/place/saveData', savedData)
+      .then((response) => {
+        // 성공적으로 전송되었을 때의 처리
+        console.log(savedData);
+        console.log('데이터를 성공적으로 전송했습니다.');
+      })
+      .catch((error) => {
+        // 전송 중 오류가 발생했을 때의 처리
+        console.log(savedData);
+        console.error('데이터 전송 중 오류 발생:', error);
+        alert('데이터 전송 중 오류가 발생했습니다.');
+      });
+  };
+
     return (
+      <Position>
       <AccordionWrap>
-        <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
-          <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-            <Typography> DAY 1 </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <DropContainer />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
-          <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
-            <Typography> DAY 2 </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <DropContainer />
-          </AccordionDetails>
-        </Accordion>
-        <Accordion expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
-          <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
-            <Typography> DAY 3 </Typography>
-          </AccordionSummary>
-          <AccordionDetails>
-            <DropContainer />
-          </AccordionDetails>
-        </Accordion>
+        {scheduleData.map(schedule => {
+            if (duration && schedule.duration.includes(duration)) {
+              return (
+                <Accordion key={schedule.id} expanded={expanded === `panel${schedule.id}`} onChange={handleChange(`panel${schedule.id}`)}>
+                  <AccordionSummary aria-controls={`panel${schedule.id}d-content`} id={`panel${schedule.id}d-header`}>
+                    <Typography>{schedule.title}</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                      <DropContainer onSaveData={(data) => handleSaveData(data, schedule.id)}/>
+                  </AccordionDetails>
+                </Accordion>
+              );
+            } else {
+              return null;
+            }
+          })
+        }
+        <button className="buttondesign save" onClick={sendDataToServer}>저장하기</button>
       </AccordionWrap>
+      
+      </Position>
     );
 }
 

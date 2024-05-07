@@ -1,8 +1,8 @@
 
 .MainBanner {
     width: 100%;
-    height: 400px;
-    padding-top: 110px; 
+    height: 450px;
+    padding-top: 60px; 
  }
 
  .BannerContent {
@@ -52,6 +52,6 @@
      border-radius: 20px; 
      background-size: cover;
      background-position: center;
-     background-image: url('../../assets/images/south-korea.jpg');
+     background-image: url('../../assets/images/south-korea.jpg'); 
      
  }

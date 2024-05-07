@@ -8,5 +8,6 @@
 
     @Mapper
     public interface CourseDAO {
-        List<CourseVO> getResultList(String nickname);   
+        List<CourseVO> getResultList(String nickname);
+        void saveCourseData(String boardTitle , String boardContent , String mainimage);   
     }

@@ -1,58 +1,30 @@
 import React, { useState ,  useEffect } from "react";
 import axios from 'axios';
-import styled from 'styled-components';
 import ReviewImportForm from './component/ReviewImportForm';
 import ReviewDisplay from "./component/ReviewDisplay";
+import Header from "../tiles/Header";
+import './TravelDetailPage.css';
+import Footer from '../component/footer/Footer';
+import Slider from "react-slick";
+import './slick.css';
+import './slick-theme.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from 'react-router-dom';
 
-const Container = styled.body`
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    color: #333;
-`;
 
-const Header = styled.header`
-    background-color: #007bff;
-    color: #fff;
-    padding: 20px;
-    text-align: center;
-`;
 
-const Main = styled.main`
-    padding: 20px;
-`;
 
-const Section = styled.section`
-    position: relative;
-    margin: 30px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    max-width: 70%; 
-`;
-
-const H2 = styled.h2`
-    margin-bottom: 10px;
-`;
-
-const Tag = styled.span`
-    display: inline-block;
-    background-color: #e7f5ff;
-    color: #333;
-    padding: 5px 10px;
-    margin-right: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-`;
 
 //현재는 임의로 설정 추후 수정요망
-export const contentID = 2370995;
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
+    const [imgs , setImgs] = useState(null);
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     // let mountCount = 1
+    const { contentID } = useParams();
     
     useEffect(() => {
 
@@ -77,8 +49,20 @@ function TravelDetailPage() {
           .catch(error => {
             console.error('Error fetching data:', error);
           });
-      }
+        }
     }, [didMount]);
+    useEffect(()=> {
+        
+            axios.get(`/imgs/${contentID}`)
+            .then(response => {
+                setImgs((response.data));
+              })
+              .catch(error => {
+                console.error('Error fetching data:', error);
+              });
+        
+    },[didMount])
+    
     
     useEffect(() => {
         if (data) {
@@ -88,7 +72,7 @@ function TravelDetailPage() {
             script.onload = () => {
                 const mapOptions = {
                     center: new window.naver.maps.LatLng(data.mapy, data.mapx),
-                    zoom: 80
+                    zoom: 17
                 };
                 
                 const map = new window.naver.maps.Map('map', mapOptions);
@@ -103,7 +87,7 @@ function TravelDetailPage() {
                 const contentString = `
                     <div>
                         <h2>${data.title}</h2>
-                        <p>${data.addr1}</p>
+                        <p>${data.addr1}</p>                        
                         <img src=${data && data.firstimage} style="max-width: 200px;"></img>
                     </div>
                 `;
@@ -123,92 +107,117 @@ function TravelDetailPage() {
         }
     }, [data]);
 
+    //Slick 라이브러리 사용
+    const settings = {
+      dots: true,
+      infinite: true,
+      speed: 500,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+      arrows: false, 
+    };
+
+
     
+   return (
+         <div className="inner">
+            <Header/>
+             <div className="main">
+               <section className="travelTitle" id="travel-name">                    
+                  <h2 id="name-placeholder">{data && data.title}</h2>
+                  <p id="name-placeholder">{data && data.addr1}</p>
+                </section>
 
-
-
-
-
-
-    return (
-        <Container>
-            <Header>
-                <h1>여행지 상세 정보</h1>
-            </Header>
-
-            <Main>
-                <LikeButton likes={likes} setLikes={setLikes} data={data}/>
-                <Section id="travel-name">
-                    <H2>여행지 이름</H2>
-                    <p id="name-placeholder">{data && data.title}</p>
-                </Section>
-
-                <Section id="map-location">
-                    <H2>지도 위치</H2>
-                    <div id="map" style={{ width: '100%', height: '400px' }}></div>
-                </Section>
-
-                <Section id="detail-info">
-                    <H2>상세 정보</H2>
+                <section className="detailInfo" id="detail-info">
+                  <div className="InfoAndLikeBox">
+                    <h2>상세 정보</h2>
+                    <LikeButton likes={likes} setLikes={setLikes} data={data}/>
+                  </div>                    
+                    <div className="contourLine3"></div>
                     <p id="detail-placeholder">{data && data.overview && data.overview.replace(/<br\s*\/?>/ig, '')}</p>
-                </Section>
-
-                <Section id="tag-list">
-                    <H2>태그 목록</H2>
-                    <div id="tag-list-placeholder">
-                        <Tag>#벛꽃</Tag>
-                        <Tag>#축제</Tag>
-                        <Tag>#가고싶다</Tag>
+                </section>
+                <section className="mapLocation" id="map-location">   
+                    <div id="map" style={{ width: '100%', height: '500px' }}></div>
+                </section>
+                <section className="tagList" id="tag-list">
+                    <div className="tagItem"id="tag-list-placeholder">
+                      <div className="tagItemBox"> <p>#벛꽃</p> </div>
+                      <div className="tagItemBox"> <p>#축제</p> </div>
+                      <div className="tagItemBox"> <p>#가고싶다</p> </div>                       
                     </div>
-                </Section>
+                </section>
+                <section className="slider" id="similar-destinations">
+                     <p>사진을 움직여 둘러보세요!</p>
+                     <Slider {...settings} id="similar-destinations-placeholder" >
+                       {data && data.firstimage && (
+                         <div>
+                          <img src={data.firstimage} alt="비슷한 여행지 사진 1" className="sliderImg" />
+                         </div>
+                       )}
+                       {imgs && imgs.length > 0 && (
+                        <div >
+                         <img src={imgs[0]} alt="비슷한 여행지 사진 2" className="sliderImg"/>
+                        </div>
+                       )}
+                       {imgs && imgs.length > 1 && (
+                        <div >
+                         <img src={imgs[1]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                        </div>
+                       )}
+                     </Slider>
+                </section>
 
-                <Section id="similar-destinations">
-                    <H2>비슷한 여행지 추천 목록</H2>
-                    <div id="similar-destinations-placeholder">
-                        <img src={data && data.firstimage} alt="비슷한 여행지 사진 1" />
-                        <img src="https://image.ajunews.com/content/image/2020/10/29/20201029110919207531.jpg" alt="비슷한 여행지 사진 2" />
-                        <img src="https://img.freepik.com/free-photo/woman-traveler-with-backpack-walking-in-row-of-yellow-ginkgo-tree-in-autumn-autumn-park-in-tokyo-japan_335224-178.jpg?size=626&ext=jpg&ga=GA1.1.1546980028.1712102400&semt=ais" alt="비슷한 여행지 사진 3" />
-                    </div>
-                </Section>
-
-                <Section id="reviews">
+                <section id="reviews">
                     <ReviewImportForm/>
-                </Section>
-
-                <Section id="review-display">
+                </section>
+                
+                {/* <section id="review-display">
                     <ReviewDisplay/>
-                </Section>
-            </Main>
-        </Container>
-    );
+                </section> */}
+
+
+
+             </div>
+            <Footer/>
+         </div>
+
+
+
+
+   )
+
 }
+
 
 function LikeButton({data}) {
-    const sendLikeRequest = () => {
-        // axios를 사용하여 GET 요청 보내기
-        axios.get(`/travelLike/${contentID}`)
-            .then(response => {
-                console.log("좋아요누름");
-            })
-            .catch(error => {
-                console.error('There was a problem with the request:', error);
-            });
-    };
-    return (
-        <Section id="action-bar">
-            <div id="count-container">
-                {/* <img src="view-icon.png" alt="icon" /> */}
-                <span id="view-count">조회수: {data && (data.travelviewcount || 0)}</span>
-                {/* <img src="like-icon.png" alt="icon" /> */}
-                <span id="like-count">좋아요: {data && (data.likecount || 0)}</span>
-            </div>
-            <button id="like-button" onClick={sendLikeRequest}>
-                좋아요
-            </button>
-        </Section>
-           
-    );
+  const { contentID } = useParams();
+  const sendLikeRequest = () => {
+      // axios를 사용하여 GET 요청 보내기
+      axios.get(`/travelLike/${contentID}`)
+          .then(response => {
+              console.log("좋아요누름");
+          })
+          .catch(error => {
+              console.error('There was a problem with the request:', error);
+          });
+  };
+  return (
+      <section className="actionBar" id="action-bar">
+          <div className="countContainer"id="count-container">
+              {/* <img src="view-icon.png" alt="icon" /> */}
+              <span id="view-count">👀 {data && (data.travelviewcount || 0)}</span>
+              {/* <img src="like-icon.png" alt="icon" /> */}
+              <span id="like-count">
+                 <button className="Likebutton" id="like-button" onClick={sendLikeRequest}>
+                  <FontAwesomeIcon icon={faHeart} />  
+                 </button> {data && (data.likecount || 0)}
+              </span>
+          </div>
+         
+      </section>
+         
+  );
 }
 
-export default TravelDetailPage;
 
+export default TravelDetailPage;

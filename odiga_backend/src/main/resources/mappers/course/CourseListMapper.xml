@@ -2,26 +2,75 @@
 <!DOCTYPE mapper
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.odiga.mytrip.course.dao.CourseDAO">
+<mapper namespace="com.odiga.mytrip.courseReview.CourseReviewDAO">
 
-    <!-- 리뷰 리스트 가져오기 -->
-    <select id="getResultList" parameterType ="String" resultMap="courseResultMap">
-        SELECT *
-        FROM RESULTLIST
-        WHERE nickname = #{nickname}
+    <!-- 여행지 정보 가져오기 -->
+    <select id="AllCourseReviews" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
+        select *
+        from travelcoursereview
+        WHERE boardyn = 'Y'
+        order by boardno desc
     </select>
 
-    <resultMap id="courseResultMap" type="com.odiga.mytrip.course.vo.CourseVO">
-        <result property="courseno" column="COURSENO"/>
-        <result property="travelnum" column="TRAVELNUM"/>
-        <result property="contentid" column="CONTENTID"/>
-        <result property="email" column="EMAIL"/>
-        <result property="nickname" column="NICKNAME"/>
-        <result property="startdate" column="STARTDATE"/>
-        <result property="enddate" column="ENDDATE"/>
-        <result property="courseyn" column="COURSEYN"/>
-        <result property="courseday" column="COURSEDAY"/>
-    </resultMap>
+    <select id="detailPage" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
+        SELECT *
+        FROM travelcoursereview
+        WHERE boardNo = #{boardNo}
+    </select>
+
+    <update id="viewCount" parameterType="int">
+        update travelcoursereview
+        set boardviewcount = boardviewcount + 1
+        WHERE boardNo = #{boardNo}
+    </update>
+
+    <select id="comments" parameterType="com.odiga.mytrip.courseReview.CommentsVO">
+        select *
+        from comments
+        where boardNo = #{boardNo}
+        order by commentId desc
+    </select>
+
+    <insert id="commentWrite" parameterType="com.odiga.mytrip.courseReview.CommentsVO">
+        INSERT INTO comments (
+            commentId, 
+            boardNo, 
+            commenterName, 
+            commentContent, 
+            commentDate, 
+            email, 
+            starRating
+        ) VALUES (
+            comment_id_seq.NEXTVAL,            
+            #{boardNo},             
+            '테스트 유저',                  
+            #{commentContent},       
+            SYSTIMESTAMP,
+            'aaaa@aaa.com',
+            #{starRating}
+        )
+    </insert>
+    
+    <update id="boardGrade" parameterType="int">
+        UPDATE TRAVELCOURSEREVIEW
+        SET BOARDGRADE = (
+            SELECT ROUND(COALESCE(AVG(starRating), 0), 1)
+            FROM comments
+            WHERE boardNo = #{boardNo}
+        )
+        WHERE boardNo = #{boardNo}
+    </update>
+
+    <update id="likeCount" parameterType="int">
+        UPDATE TRAVELCOURSEREVIEW
+        SET BOARDLIKECOUNT = BOARDLIKECOUNT+1
+        WHERE boardNo = #{boardNo}
+    </update>
+
+    <update id="articleDelete" parameterType="int">
+        UPDATE TRAVELCOURSEREVIEW
+        SET boardyn = 'N'
+        WHERE boardNo = #{boardNo}
+    </update>
 
 </mapper>
-

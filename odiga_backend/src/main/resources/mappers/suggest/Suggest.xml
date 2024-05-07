@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.odiga.mytrip.suggest.dao.SuggestDAO">
+
+    <select id="getCourseSuggestList" resultType="com.odiga.mytrip.suggest.vo.SuggestCosVO">
+    <![CDATA[
+        SELECT *
+        FROM  
+        (SELECT 
+                ROWNUM AS rnum,
+                boardno,
+                nickname, 
+                boardtitle,
+                boardcontent,
+                boardgrade,
+                boardviewcount,
+                boardlikecount,
+                boarddate,
+                mainimage,
+                CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
+                    ELSE boardgrade * 0.3 
+                END AS weighted_rating,
+                boardviewcount * 0.03 AS weighted_view,  
+                boardlikecount * 0.1 AS weighted_like
+            FROM
+            (
+            SELECT
+                boardno,
+                nickname,
+                boardtitle,
+                boardcontent,  
+                boardgrade,
+                boardviewcount,
+                boardlikecount,
+                boarddate,
+                mainimage
+            FROM travelcoursereview
+            ORDER BY 
+                CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
+                    ELSE boardgrade * 0.3 
+                END + boardviewcount * 0.03 + boardlikecount * 0.1 DESC
+            )
+        )
+        WHERE rnum <= 8
+        ]]>
+
+
+    </select>
+    <select id="getTravelSuggestList" resultType="com.odiga.mytrip.suggest.vo.SuggestTraVO">
+        SELECT * FROM  
+        (
+            SELECT 
+                ROWNUM AS rnum,
+                subq.* 
+            FROM  
+            (
+                SELECT 
+                    t.contentid,
+                    t.title,
+                    t.addr1,
+                    t.FIRSTIMAGE,
+                    t.TRAVELVIEWCOUNT,
+                    COALESCE(t.LIKECOUNT,0) AS likecount, 
+                    ROUND(r.avg_reviewgrade, 2) AS avg_reviewgrade,
+                    ROUND(
+                        COALESCE(t.TRAVELVIEWCOUNT, 0) * 0.3 + 
+                        COALESCE(t.LIKECOUNT, 0) * 0.5 + 
+                        COALESCE(r.avg_reviewgrade, 0) * 0.5, 2
+                    ) AS weighted_score
+                FROM travellist t 
+                LEFT JOIN (
+                    SELECT contentid, AVG(REVIEWGRADE) AS avg_reviewgrade
+                    FROM travelreview
+                    GROUP BY contentid
+                ) r ON t.contentid = r.contentid
+                ORDER BY weighted_score DESC
+            ) subq  
+        )
+    <![CDATA[ WHERE rnum <= 10]]>
+    </select>
+
+    
+
+
+
+
+</mapper>

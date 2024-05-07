@@ -1,76 +1,72 @@
-import React from "react"; // React를 불러옵니다.
+import React, {useContext, useEffect, useState} from "react"; // React를 불러옵니다.
 import styled from "styled-components";
+import {LoginInfoContext} from "../login/LoginInfoProvider";
+import Logout from "../login/Logout";
 
-function Mypage() {
-  return (
-    <>
-      <Title>회원 정보 내역</Title>
-      <div className="ui hidden divider" />
-      <FormContainer>
-        <Label>아이디</Label>
-        <Input
-          type="text"
-          id="email"
-          className="form-control"
-          placeholder="abc@gmail.com"
-          disabled
-        />
-      </FormContainer>
+const MyPage = () => {
+    const loginInfo = useContext(LoginInfoContext);
 
-      <FormContainer>
-        <Label>닉네임</Label>
-        <Input
-          style={{ width: "20%" }}
-          type="text"
-          id="nickname"
-          className="form-control"
-          placeholder="닉네임"
-        />
-      </FormContainer>
+    return (
+        <div
+            style={{marginTop: "4rem"}}>
+            <Title>회원 정보 조회</Title>
+            <div className="ui hidden divider"/>
+            <FormContainer>
+                <Label>아이디</Label>
+                <Input
+                    type="text"
+                    id="email"
+                    className="form-control"
+                    placeholder={loginInfo.email}
+                    style={{width: "10rem", marginBottom: "2rem"}}
+                    disabled
+                />
+                <Label>닉네임</Label>
+                <Input
+                    style={{width: "10rem", marginBottom: "2rem"}}
+                    type="text"
+                    id="nickname"
+                    className="form-control"
+                    placeholder={loginInfo.nickname}
+                    disabled
+                />
+                {/*<Label>비밀번호</Label>*/}
+                {/*<Input*/}
+                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
+                {/*    type="password"*/}
+                {/*    id="password"*/}
+                {/*    className="form-control"*/}
+                {/*    placeholder="현재 비밀번호"*/}
+                {/*/>*/}
+                {/*<Label>변경할 비밀번호</Label>*/}
+                {/*<Input*/}
+                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
+                {/*    type="password"*/}
+                {/*    id="password"*/}
+                {/*    className="form-control"*/}
+                {/*    placeholder="변경할 비밀번호"*/}
+                {/*/>*/}
+                {/*<Label>변경 비밀번호 확인</Label>*/}
+                {/*<Input*/}
+                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
+                {/*    type="password"*/}
+                {/*    id="password"*/}
+                {/*    className="form-control"*/}
+                {/*    placeholder="변경할 비밀번호"*/}
+                {/*/>*/}
+            </FormContainer>
 
-      <FormContainer>
-        <Label>비밀번호</Label>
-        <Input
-          style={{ width: "25%" }}
-          type="password"
-          id="password"
-          className="form-control"
-          placeholder="현재 비밀번호"
-        />
-      </FormContainer>
-
-      <FormContainer>
-        <Label>변경할 비밀번호</Label>
-        <Input
-          style={{ width: "25%" }}
-          type="password"
-          id="password"
-          className="form-control"
-          placeholder="변경할 비밀번호"
-        />
-      </FormContainer>
-
-      <FormContainer>
-        <Label>변경 비밀번호 확인</Label>
-        <Input
-          style={{ width: "25%" }}
-          type="password"
-          id="password"
-          className="form-control"
-          placeholder="변경할 비밀번호"
-        />
-      </FormContainer>
-
-      <ButtonContainer>
-        <button className="btn btn-primary" type="submit">
-          수정
-        </button>
-      </ButtonContainer>
-    </>
-  );
+            <ButtonContainer>
+                <Logout />
+                {/*<button className="btn btn-primary" type="submit">*/}
+                {/*    수정*/}
+                {/*</button>*/}
+            </ButtonContainer>
+        </div>
+    );
 }
 
-export default Mypage;
+export default MyPage;
 
 const Title = styled.h4`
   text-align: center;
