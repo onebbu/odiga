@@ -14,14 +14,16 @@ function Maincontents() {
     const onStop = () => setAnimate(false);
     const onRun = () => setAnimate(true);
     const [cosData , setCosData] = useState([]);
+    const [traData, setTraData] = useState([]);
 
 
-    // 코스 추천 8개
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const result = await axios.get('/CourseSuggest');
-          setCosData(result.data);
+          const Cosresult = await axios.get('/CourseSuggest');
+          const Traresult = await axios.get('/TravelSuggest');
+          setCosData(Cosresult.data);
+          setTraData(Traresult.data);
           console.log(cosData);
         } catch (error) {
           // 에러 처리
@@ -39,69 +41,6 @@ function Maincontents() {
       return strippedContent;
     };
    
-    //찜 많은 게시글 더미 데이터
-    const [places, setPlaces] = useState([
-      {
-          imageUrl: "https://via.placeholder.com/150",
-          name: "장소 1",
-          address: "주소 1",
-          likes: 10
-      },
-      {
-          imageUrl: "https://via.placeholder.com/150",
-          name: "장소 2",
-          address: "주소 2",
-          likes: 20
-      },
-      {
-          imageUrl: "https://via.placeholder.com/150",
-          name: "장소 3",
-          address: "주소 3",
-          likes: 30
-      },
-      {
-        imageUrl: "https://via.placeholder.com/150",
-        name: "장소 4",
-        address: "주소 4",
-        likes: 20
-     },
-     {
-      imageUrl: "https://via.placeholder.com/150",
-      name: "장소 5",
-      address: "주소 5",
-      likes: 20
-     },
-     {
-      imageUrl: "https://via.placeholder.com/150",
-      name: "장소 6",
-      address: "주소 6",
-      likes: 20
-     },
-     {
-      imageUrl: "https://via.placeholder.com/150",
-      name: "장소 7",
-      address: "주소 7",
-      likes: 20
-     },
-     {
-      imageUrl: "https://via.placeholder.com/150",
-      name: "장소 8",
-      address: "주소 8",
-      likes: 20
-     },
-     {
-      imageUrl: "https://via.placeholder.com/150",
-      name: "장소 9",
-      address: "주소 9",
-      likes: 20
-     },
-     {
-      imageUrl: "https://via.placeholder.com/150",
-      name: "장소 10",
-      address: "주소 10",
-      likes: 20
-     },
-  ]);
 
 
     
@@ -129,32 +68,32 @@ function Maincontents() {
                     <div className={"original".concat(
                       animate ? "" : " stop")}>
 
-                  {cosData.map((cos) => (
+                  {cosData.map((cosData) => (
                     <div className="popularContentCard" >
 
                       <div className="cardThumbnail">
-                        <img src={cos.mainimage} className="cardImg"/>
+                        <img src={cosData.mainimage} className="cardImg"/>
                       </div>
                       <div className="cardInfo">
                         <div className="cardUserInfo">
                           <div className="cardUserNickname">
                             <i className="nickNameIcon"><FontAwesomeIcon icon={faUser} /></i>
-                            <span>{cos.nickname}</span>                            
+                            <span>{cosData.nickname}</span>                            
                             </div>                          
                           <div className="cardDate">
                             <i className="nickNameIcon"><FontAwesomeIcon icon={faCalendar} /></i>
-                            <span>{cos.boarddate.split(' ')[0]}</span>
+                            <span>{cosData.boarddate.split(' ')[0]}</span>
                           </div>
                         </div>
                         <div className="cardTitle">
                           <div className="cardUserTitle">
-                            <h3>{cos.boardtitle}</h3>
+                            <h3>{cosData.boardtitle}</h3>
                           </div>
                           <div className="cardUserDescription">
-                            <p>{stripHtmlAndEntities(cos.boardcontent)}</p>
+                            <p>{stripHtmlAndEntities(cosData.boardcontent)}</p>
                           </div>
                         </div>
-                        <div className="cardCategory"><p>#</p>{cos.category}</div> 
+                        <div className="cardCategory"><p>#</p>{cosData.category}</div> 
                       </div>
                    </div>
                        ))} 
@@ -205,20 +144,20 @@ function Maincontents() {
 
              <div className="recommendMainContentInner">
               <div className="recommendMainContentContainer">
-               {places.map((place, index) => (
+               {traData.map((traData, index) => (
                 <div key={index} className="recommendMainContent">
-                    <a href="#">
+                    <a href={`/detail/${traData.contentid}`}> 
                         <div>
-                            <img src={place.imageUrl} className="recommendMainContentImg"/>
+                            <img src={traData.firstimage} className="recommendMainContentImg"/>
                             <div className="likeCount">
                                 <i className="heartIcon">♡ </i>
-                                <span>{place.likes}</span>
+                                <span>{traData.likecount}</span>
                             </div>
                         </div>
                         <div className="recommendMainContentInfo">
                             <div className="1">
-                                <h3>{place.name}</h3>
-                                <p>{place.address}</p>
+                                <h3>{traData.title}</h3>
+                                <p>{traData.addr1}</p>
                             </div>                          
                         </div>
                     </a>

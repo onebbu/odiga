@@ -9,6 +9,7 @@ public class SuggestTraVO {
     private String title;
     private String addr1;
     private String firstimage;
+    private String travelviewcount;
     private String likecount;
     
 }

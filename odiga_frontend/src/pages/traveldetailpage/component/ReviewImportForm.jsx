@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import styled from 'styled-components';
-import { contentID } from "../TravelDetailPage";
+import { useParams } from 'react-router-dom';
 import '../TravelDetailPage.css';
 const StarRatingContainer = styled.div`
     display: inline-block;
@@ -41,6 +41,7 @@ function StarRating({ starCount, onChange }) {
 function ReviewImportForm() { 
     const [reviewComment, setreviewComment] = useState('');
     const [reviewGrade, setreviewGrade] = useState(0);
+    const { contentID } = useParams();
 
     const handleSubmit = () => {
         axios.post('/reviewImport',{
