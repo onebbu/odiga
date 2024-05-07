@@ -54,16 +54,7 @@ const LoginInfoProvider = ({ children }) => {
     // LoginInfoContext.Provider를 사용하여 컨텍스트 값을 제공
     return (
         <LoginInfoContext.Provider value={loginInfo}>
-            {loginInfo ? (
-                // loginInfo가 존재하는 경우
-                children
-            ) : (
-                // loginInfo가 없는 경우
-                <div>
-                    {alert("로그인 정보를 찾을 수 없습니다.")}
-                    {navigate("/login")}
-                </div>
-            )}
+            {children}
         </LoginInfoContext.Provider>
     );
 };
