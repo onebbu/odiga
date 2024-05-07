@@ -5,6 +5,8 @@ import Styled from "styled-components";
 import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
 import stylee from "../choosePlace/cPP.css";
+import Footer from '../component/footer/Footer';
+import Header from '../tiles/Header';
 
 const Place = ({
   boardContent,
@@ -91,6 +93,8 @@ const CourseReviewBoard = () => {
 
   return (
     <>
+    <Header />
+
       {/* 메인배너 */}
       <div className={styles["main-banner"]}>
         <div>
@@ -98,11 +102,10 @@ const CourseReviewBoard = () => {
             <div className="col-lg-10 offset-lg-1">
               <div className="header-text">
                 <h2 style={{ padding: "50px", fontFamily:"JalnanGothic", fontSize:"25px"}}>
-                  <em style={{fontFamily:"JalnanGothic", fontSize:"25px", color:"#00bdfe"}}>여행코스</em> 후기 게시판
+                  <em style={{fontStyle:"normal", fontFamily:"JalnanGothic", fontSize:"25px", color:"#00bdfe"}}>여행코스</em> 후기 게시판
                 </h2>
-                <p style={{fontFamily:"JalnanGothic", fontSize:"18px"}}>
-                  즐거운 여행이 되셨나요? <br></br>이제 ODIGA 에 여러분들이 다녀온 여행
-                  후기를 나눠주세요 <br />
+                <p style={{fontSize:"15px"}}>
+                  즐거운 여행이 되셨나요? 이제 ODIGA 에 여러분들이 다녀온 여행 후기를 나눠주세요 <br />
                 </p>
               </div>
             </div>
@@ -146,7 +149,7 @@ const CourseReviewBoard = () => {
                 <button style={{border:"none", background:"none", paddingRight:"10px"}} onClick={handleSortByRating}>평점순</button>
               </div>
             </div>
-            <hr />
+            <hr style={{margin:"10px"}} />
             <div
               style={{
                 padding: "10px",
@@ -177,6 +180,7 @@ const CourseReviewBoard = () => {
                 </StyledLink>
               ))}
             </div>
+            <div style={{visibility:"hidden", minHeight:"50px"}}/>
             {/* 페이지네이션 */}
             <Pagination
               currentPage={currentPage}
@@ -186,9 +190,8 @@ const CourseReviewBoard = () => {
             ></Pagination>
           </div>
         </div>
-        <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
       </section>
-      <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
+      <Footer />
     </>
   );
 };

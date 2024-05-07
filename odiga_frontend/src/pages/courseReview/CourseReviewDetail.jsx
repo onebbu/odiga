@@ -14,6 +14,8 @@ import "slick-carousel/slick/slick.css";
 import styled from "styled-components";
 import Comments from "./Comments";
 import "./static/slider.css";
+import Footer from '../component/footer/Footer';
+import Header from '../tiles/Header';
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -76,6 +78,7 @@ function CourseReviewDetail() {
 
   return (
     <>
+    <Header />
       <Container>
         <section
           style={{
@@ -286,6 +289,7 @@ function CourseReviewDetail() {
 
         <Comments />
       </Container>
+      <Footer />
     </>
   );
 }
@@ -363,7 +367,7 @@ const Container = styled.div`
   background-color: white;
   display: block;
   width: 100%;
-  padding: 0 20% 0 20%;
+  padding: 100px 20% 0 20%;
   font-size: 15px;
 `;
 
