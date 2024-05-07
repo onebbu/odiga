@@ -17,7 +17,8 @@ const KakaoShareSchema = Yup.object().shape({
 });
 
 const KakaoSharing = () => {
-    const {id} = useParams();
+    let {nickname, courseNo} = useParams();
+
     const jsKey = process.env.REACT_APP_KAKAO_SHARE_JS_API_KEY
 
     const [sharePw, setSharePw] = useState('');
@@ -39,7 +40,7 @@ const KakaoSharing = () => {
     const shareKakao = async () => {
         try {
             await KakaoShareSchema.validate({sharePw}, {abortEarly: false}); // 유효성 검사 수행
-            const response = await axios.post('/sendPw', {pw: sharePw, id});
+            const response = await axios.post('/sendPw', {pw: sharePw, courseNo});
             console.log(response.data); // 성공 시 응답 확인
 
             // Kakao로 공유하기
@@ -47,14 +48,14 @@ const KakaoSharing = () => {
                 objectType: 'text',
                 text: `여행 비밀번호는 ${sharePw}입니다. \n여행 일정 보러가기 버튼을 누른 후 비밀번호를 입력해주세요!`,
                 link: {
-                    mobileWebUrl: `http://localhost:3000/result-list/${id}`,
-                    webUrl: `http://localhost:3000/result-list/${id}`,
+                    mobileWebUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
+                    webUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
                 },
                 buttons: [
                     {
                         title: '여행 일정 보러 가기',
                         link: {
-                            webUrl: `http://localhost:3000/result-list/${id}`,
+                            webUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
                         },
                     },
                 ],
