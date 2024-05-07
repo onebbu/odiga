@@ -61,7 +61,7 @@ function KoreaLocations() {
                 <button className="ArrowButton" onClick={handlePrev}><FontAwesomeIcon icon={faArrowLeft} /></button>
                 {visibleLocations.map((location, index) => (
                     <div className="NavLocations" key={index}>
-                        <a href="#">
+                        <a href="/SearchPage">
                             <div className="NavLocationImg">
                                 <img alt={location.name} src={location.image} />
                             </div>
