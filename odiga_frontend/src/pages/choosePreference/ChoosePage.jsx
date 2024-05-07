@@ -137,7 +137,7 @@ function ButtonList ({List, OneCheck, onSelect}) {
         copy[idx] = !isSelected[idx];
         copy.forEach(el => { if (el) cnt += 1; });
         if (cnt > 4) {
-            alert('이미 4개를 선택하셨습니다. 다른 여행지를 선택하고 싶으시면 선택한 여행지를 해제 후, 선택해주세요');
+            alert('이미 4개를 선택하셨습니다. 다른 테마를 선택하고 싶으시면 선택한 여행테마를 해제 후, 선택해주세요');
             copy[idx] = isSelected[idx];
         }
         setIsSelected(copy);

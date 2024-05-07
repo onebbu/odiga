@@ -68,6 +68,6 @@ public class PlaceService {
     }
 
     public void courseSave(String contentID, String index){
-        
+        placeDAO.courseSave(contentID, index);
     }
 }

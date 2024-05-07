@@ -13,6 +13,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
+import axios from "axios";
 
 // http://localhost:3000/place
 
@@ -218,13 +219,70 @@ const Position = Styled.div`
 
 function CustomizedAccordions({duration}) {
   const [expanded, setExpanded] = useState('');
+  const [buttonClicked, setButtonClicked] = useState(false);
+  const [savedData, setSavedData] = useState([]);
+
   const handleChange = (panel) => (newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
-  const sendData = () => {
-    // 여기에 정보를 전송하는 코드를 작성합니다.
-    alert('정보를 전송합니다.');
-  }
+
+  useEffect(() => {
+    if (buttonClicked) {
+      console.log("저장된 데이터:", savedData);
+      setButtonClicked(false);
+    }
+  }, [buttonClicked]);
+
+  const handleSaveData = (dataList, scheduleID) => {
+    if (buttonClicked) {
+      // DropContainer 컴포넌트로부터 전달된 데이터를 처리하는 로직을 작성합니다.
+      console.log("dataList", dataList);
+      console.log("Schedule ID:", scheduleID);
+      // 리스트를 순회하면서 각 요소에서 필요한 정보를 추출하여 상태를 업데이트
+      const updatedData = dataList.map((data,index) => ({
+        courseDay: scheduleID,
+        travelNum: index+1,
+        contentId: data.id,
+        name : data.name,
+        address: data.region
+      }));
+
+      console.log("업데이트 데이터???????????????",updatedData);
+      // 업데이트된 데이터를 상태에 설정
+      // 중복되지 않은 id를 가진 요소만 상태에 추가
+      // Add only unique data to the state
+      updatedData.forEach(data => {
+        // Check if contentId already exists in the state
+        if (!savedData.some(item => item.contentId === data.contentId)) {
+          // If not, add it to the state
+          setSavedData(prevData => [...prevData, data]);
+        }
+      });
+
+      // 예를 들어, 이 데이터를 서버로 전송하는 등의 작업을 수행할 수 있습니다.
+      // sendDataToServer(data);
+    }
+  };
+
+  const sendDataToServer = () => {
+    // 서버로 데이터를 전송하는 로직을 작성합니다.
+    // 예를 들어, axios를 사용하여 POST 요청을 보낼 수 있습니다.
+    setButtonClicked(true);
+    console.log("전송될 데이터: ", savedData);
+
+    axios.post('/place/saveData', savedData)
+      .then((response) => {
+        // 성공적으로 전송되었을 때의 처리
+        console.log(savedData);
+        console.log('데이터를 성공적으로 전송했습니다.');
+      })
+      .catch((error) => {
+        // 전송 중 오류가 발생했을 때의 처리
+        console.log(savedData);
+        console.error('데이터 전송 중 오류 발생:', error);
+        alert('데이터 전송 중 오류가 발생했습니다.');
+      });
+  };
 
     return (
       <Position>
@@ -237,7 +295,7 @@ function CustomizedAccordions({duration}) {
                     <Typography>{schedule.title}</Typography>
                   </AccordionSummary>
                   <AccordionDetails>
-                      <DropContainer />
+                      <DropContainer onSaveData={(data) => handleSaveData(data, schedule.id)}/>
                   </AccordionDetails>
                 </Accordion>
               );
@@ -246,7 +304,7 @@ function CustomizedAccordions({duration}) {
             }
           })
         }
-        <button className="buttondesign save" onClick={sendData}>저장하기</button>
+        <button className="buttondesign save" onClick={sendDataToServer}>저장하기</button>
       </AccordionWrap>
       
       </Position>
