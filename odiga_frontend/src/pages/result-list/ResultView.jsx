@@ -1,7 +1,7 @@
 import * as React from 'react';
 import "./ResultList.css";
 import Header from "../component/navbar/Header";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import NaverMapView from "./naver-map/NaverMapView";
 import ResultList from "./ResultList";
@@ -32,6 +32,7 @@ export default function ResultView() {
     const [sharePw, setSharePw] = useState(''); // sharePw 변수를 상태로 관리
     const [enteredPW, setEnteredPW] = useState('');
     let {nickname, courseNo} = useParams();
+    const prevEnteredPassword = useRef(null);
 
     const navigate = useNavigate();
 
@@ -55,31 +56,30 @@ export default function ResultView() {
             }
         }
 
+
         findPw();
     }, []);
+
 
     // url파라미터의 닉네임과 로그인된 닉네임이 같을 경우 로직 x
     useEffect(() => {
         if (loginInfo.nickname === nickname) {
-
         }
-        // 페이지가 처음 로딩될 때 alert 창을 띄워 공유 비밀번호를 입력받음
-        if (sharePw && loginInfo.nickname != nickname) {
-            alert(sharePw);
-            const enteredPassword = prompt('공유 비밀번호를 입력해주세요');
-            setEnteredPW(enteredPassword); // 입력한 비밀번호를 상태에 저장
 
-            // 비밀번호 확인 로직
-            if (sharePw === enteredPassword) { // 비밀번호가 올바른 경우
+        if (sharePw && loginInfo.nickname !== nickname && prevEnteredPassword.current !== sharePw) {
+            const enteredPassword = prompt('공유 비밀번호를 입력해주세요');
+            setEnteredPW(enteredPassword);
+            prevEnteredPassword.current = sharePw;
+
+            if (sharePw === enteredPassword) {
                 alert('올바른 비밀번호 입니다!');
                 // 여기에 페이지 이동 로직 등 추가
-            } else { // 비밀번호가 잘못된 경우
+            } else {
                 alert('비밀번호가 잘못되었습니다! 다시 입력해주세요');
-                navigate('/');  // 홈화면으로 이동
+                navigate('/');
             }
         }
-    }, [nickname, loginInfo]);
-
+    }, [nickname, loginInfo, sharePw, setEnteredPW]);
 
     useEffect(() => {
         async function fetchData() {
@@ -108,22 +108,24 @@ export default function ResultView() {
 
     return (
         <>
-            <Header/>
-            <div className="wrapper">
-                {loading ? (
-                    <div className="loading-wrap">
-                        <div className="loading">
-                            <Spinner animation="border" style={{width: '3rem', height: '3rem'}}/>
+            <div>
+                <Header/>
+                <div className="wrapper">
+                    {loading ? (
+                        <div className="loading-wrap">
+                            <div className="loading">
+                                <Spinner animation="border" style={{width: '3rem', height: '3rem'}}/>
+                            </div>
+                            <br/>
+                            <h2>Loading...</h2>
                         </div>
-                        <br/>
-                        <h2>Loading...</h2>
-                    </div>
-                ) : (
-                    <>
-                        <div className="result-wrap"><ResultList data={data}/></div>
-                        <div className="result-map"><NaverMapView data={data}/></div>
-                    </>
-                )}
+                    ) : (
+                        <>
+                            <div className="result-wrap"><ResultList data={data}/></div>
+                            <div className="result-map"><NaverMapView data={data}/></div>
+                        </>
+                    )}
+                </div>
             </div>
         </>
     );

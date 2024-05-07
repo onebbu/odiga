@@ -10,13 +10,13 @@ import './slick.css';
 import './slick-theme.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from 'react-router-dom';
 
 
 
 
 
 //현재는 임의로 설정 추후 수정요망
-export const contentID = 2852232;
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
@@ -24,6 +24,7 @@ function TravelDetailPage() {
     const [imgs , setImgs] = useState(null);
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     // let mountCount = 1
+    const { contentID } = useParams();
     
     useEffect(() => {
 
@@ -71,7 +72,7 @@ function TravelDetailPage() {
             script.onload = () => {
                 const mapOptions = {
                     center: new window.naver.maps.LatLng(data.mapy, data.mapx),
-                    zoom: 80
+                    zoom: 17
                 };
                 
                 const map = new window.naver.maps.Map('map', mapOptions);
@@ -189,6 +190,7 @@ function TravelDetailPage() {
 
 
 function LikeButton({data}) {
+  const { contentID } = useParams();
   const sendLikeRequest = () => {
       // axios를 사용하여 GET 요청 보내기
       axios.get(`/travelLike/${contentID}`)
