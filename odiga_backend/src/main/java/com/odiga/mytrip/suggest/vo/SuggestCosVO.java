@@ -5,6 +5,7 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 public class SuggestCosVO {
+    private String boardno;
     private String nickname;
     private String boardtitle;
     private String boardcontent;

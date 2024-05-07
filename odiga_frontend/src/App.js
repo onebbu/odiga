@@ -22,7 +22,7 @@ function App() {
                         <Route exact path="/" element={<Main/>}/>
                         <Route exact path="/login" element={<Login/>}/>
                         <Route exact path="/sign-up" element={<SignUp/>}/>
-                        <Route exact path="/detail" element={<TravelDetailPage/>}/>
+                        <Route path="/detail/:contentID" element={<TravelDetailPage />} />
                         <Route exact path="/preference" element={<ChoosePreference/>}/>
                         <Route exact path="/courseimport" element={<CourseImport/>}/>
                         <Route exact path="/coursereview/*" element={<CourseReview/>}/>
