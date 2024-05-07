@@ -156,13 +156,14 @@ function Maincontents() {
                                 <span>{traData.likecount}</span>
                             </div>
                         </div>
+                        </a>
                         <div className="recommendMainContentInfo">
                             <div className="1">
                                 <h3>{traData.title}</h3>
                                 <p>{traData.addr1}</p>
                             </div>                          
                         </div>
-                    </a>
+                    
                 </div>
                 ))}
 
