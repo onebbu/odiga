@@ -8,4 +8,5 @@ import java.util.Map;
 public interface PlaceDAO {
     List<TravelListVO> getPlaceList(String areacode, String displayCount, String order);
     Map<String, Object> getPlaceRate(String contentID);
+    void courseSave(String contentID, String index);
 }

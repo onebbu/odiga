@@ -33,7 +33,7 @@ function WrongPathPage() {
             {/* Link 컴포넌트를 사용하여 버튼 클릭 시 다른 페이지로 이동합니다. */}
             <P>돌아갈 페이지: {PathName.map(item => (nextPath === item.nextPath ? item.pathName : null))}</P>
             <Link to={`/${nextPath}`}>
-                <Buttondesign className="buttondesign"> 돌아가기 </Buttondesign>
+                <Buttondesign> 돌아가기 </Buttondesign>
             </Link>
         </Wrapper>
     )
