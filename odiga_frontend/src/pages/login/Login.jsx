@@ -60,8 +60,7 @@ export default function Login() {
                 // window.location.href = "/login";
             } else {
                 localStorage.setItem('token', result);
-                // await axios.post('/login-info', result);
-                // navigate("/login-info");
+                navigate("/");
             }
         } catch (error) {
             if (error.name === 'ValidationError') {

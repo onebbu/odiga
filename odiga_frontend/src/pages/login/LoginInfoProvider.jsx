@@ -1,9 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import OAuthLogout from "./OauthLogout";
+import {useNavigate} from "react-router-dom";
 
-function OAuthLoginInfo() {
+export const LoginInfoContext = createContext(); // createContext를 사용하여 컨텍스트를 생성
+
+const LoginInfoProvider = ({ children }) => {
     const [loginInfo, setLoginInfo] = useState({});
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         // 헤더에서 토큰 정보 가져오기
@@ -44,24 +48,24 @@ function OAuthLoginInfo() {
         fetchLoginInfo();
     }, []); // 빈 배열을 전달하여 한 번만 호출되도록 설정합니다.
 
-    return (
-        <div>
-            {loginInfo.email ? (
-                <div>
-                    <div>
-                        <h2>Login Info</h2>
-                        <p>Email: {loginInfo.email}</p>
-                        <p>Nickname: {loginInfo.nickname}</p>
-                    </div>
-                    <div>
-                        <OAuthLogout/>
-                    </div>
-                </div>
-            ) : (
-                <p>로그인이 필요합니다.</p>
-            )}
-        </div>
-    );
-}
 
-export default OAuthLoginInfo;
+    console.log(loginInfo);
+
+    // LoginInfoContext.Provider를 사용하여 컨텍스트 값을 제공
+    return (
+        <LoginInfoContext.Provider value={loginInfo}>
+            {loginInfo ? (
+                // loginInfo가 존재하는 경우
+                children
+            ) : (
+                // loginInfo가 없는 경우
+                <div>
+                    {alert("로그인 정보를 찾을 수 없습니다.")}
+                    {navigate("/login")}
+                </div>
+            )}
+        </LoginInfoContext.Provider>
+    );
+};
+
+export default LoginInfoProvider;

@@ -14,6 +14,8 @@ import "slick-carousel/slick/slick.css";
 import styled from "styled-components";
 import Comments from "./Comments";
 import "./static/slider.css";
+import Footer from '../component/footer/Footer';
+import Header from '../tiles/Header';
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -76,6 +78,7 @@ function CourseReviewDetail() {
 
   return (
     <>
+    <Header />
       <Container>
         <section
           style={{
@@ -94,13 +97,12 @@ function CourseReviewDetail() {
             }}
             className="section-heading text-center"
           >
-            <h4 style={{ padding: "10px", margin: "0 auto" }}>
+            <h4 style={{fontFamily:"JalnanGothic", fontSize:"25px", padding: "10px", margin: "0 auto" }}>
               {detailsData && detailsData[0].boardTitle}{" "}
             </h4>
             <hr />
-            <h7 style={{ textAlign: "left", margin: "0 auto" }}>
-              <b>작성자 :</b> {detailsData && detailsData[0].nickname} &nbsp;
-              &nbsp; &nbsp;
+            <h7 style={{fontFamily:"JalnanGothic", fontSize:"18px", textAlign: "left", margin: "0 auto" }}>
+              <b>작성자 :</b> {detailsData && detailsData[0].nickname} &nbsp;&nbsp; &nbsp;
               <b>작성일 :</b> {detailsData && detailsData[0].boardDate} <br />{" "}
               <br />
               <FontAwesomeIcon icon={faEye} /> :{" "}
@@ -287,6 +289,7 @@ function CourseReviewDetail() {
 
         <Comments />
       </Container>
+      <Footer />
     </>
   );
 }
@@ -364,7 +367,8 @@ const Container = styled.div`
   background-color: white;
   display: block;
   width: 100%;
-  padding: 0 20% 0 20%;
+  padding: 100px 20% 0 20%;
+  font-size: 15px;
 `;
 
 const Div = styled.div`

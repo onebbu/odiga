@@ -27,5 +27,6 @@ public class ResultVO {
     private char courseYN;
 
     private String courseTitle;
-    
+    private String coursePw;
+
 }

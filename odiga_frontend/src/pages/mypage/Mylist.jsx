@@ -13,6 +13,7 @@ function Mylist() {
 export default Mylist;
 
 const Title = styled.h4`
+  margin-top: 4rem;
   text-align: center;
   width: 100%;
   margin-bottom: 4rem;

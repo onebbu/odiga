@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-// import kakao from "../../../assets/images/icon/kakao-share-icon.png";
+import {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
+import kakao from "../../../assets/images/icon/kakao-share-icon.png";
 import axios from 'axios';
 import TextField from "@mui/material/TextField";
 import * as React from "react";
 import * as Yup from "yup";
 
 // kakao 기능 동작을 위해 넣어준다.
-const { Kakao } = window;
+const {Kakao} = window;
 
 const KakaoShareSchema = Yup.object().shape({
     sharePw: Yup.string()
@@ -17,7 +17,8 @@ const KakaoShareSchema = Yup.object().shape({
 });
 
 const KakaoSharing = () => {
-    const { id } = useParams();
+    let {nickname, courseNo} = useParams();
+
     const jsKey = process.env.REACT_APP_KAKAO_SHARE_JS_API_KEY
 
     const [sharePw, setSharePw] = useState('');
@@ -38,8 +39,8 @@ const KakaoSharing = () => {
 
     const shareKakao = async () => {
         try {
-            await KakaoShareSchema.validate({ sharePw }, { abortEarly: false }); // 유효성 검사 수행
-            const response = await axios.post('/sendPw', { pw: sharePw, id });
+            await KakaoShareSchema.validate({sharePw}, {abortEarly: false}); // 유효성 검사 수행
+            const response = await axios.post('/sendPw', {pw: sharePw, courseNo});
             console.log(response.data); // 성공 시 응답 확인
 
             // Kakao로 공유하기
@@ -47,14 +48,14 @@ const KakaoSharing = () => {
                 objectType: 'text',
                 text: `여행 비밀번호는 ${sharePw}입니다. \n여행 일정 보러가기 버튼을 누른 후 비밀번호를 입력해주세요!`,
                 link: {
-                    mobileWebUrl: `http://localhost:3000/result-list/${id}`,
-                    webUrl: `http://localhost:3000/result-list/${id}`,
+                    mobileWebUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
+                    webUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
                 },
                 buttons: [
                     {
                         title: '여행 일정 보러 가기',
                         link: {
-                            webUrl: `http://localhost:3000/result-list/${id}`,
+                            webUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
                         },
                     },
                 ],
@@ -85,11 +86,11 @@ const KakaoSharing = () => {
                 autoComplete="sharePw"
                 value={sharePw}
                 onChange={handleSharePwChange}
-                style={{ fontFamily: 'GmarketSansMedium' }}
+                style={{fontFamily: 'GmarketSansMedium'}}
                 error={Boolean(errors.sharePw)}
                 helperText={errors.sharePw ? errors.sharePw : ""}
             />
-            <div style={{ marginTop: "1rem" }}></div>
+            <div style={{marginTop: "1rem"}}></div>
             <div
                 style={{
                     display: "flex",
@@ -104,13 +105,13 @@ const KakaoSharing = () => {
                 }}
                 onClick={shareKakao} // 클릭 이벤트를 바로 연결
             >
-                {/* <img
+                <img
                     src={kakao}
                     style={{
                         width: "2rem",
                         marginRight: "0.5rem", // 아이콘과 텍스트 사이의 간격 조정
                     }}
-                /> */}
+                />
                 <p
                     style={{
                         margin: "0", // 기본 마진 제거
