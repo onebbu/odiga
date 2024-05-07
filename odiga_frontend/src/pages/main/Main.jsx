@@ -1,8 +1,9 @@
 import * as React from 'react';
-import Header from "../tiles/Header";
+import Header from "../component/navbar/Header";
 import Banner from "./Banner";
 import KoreaLocations from "./KoreaLocations";
 import Maincontents from "./MainContents";
+import Footer from '../component/footer/Footer';
 
 function Main() {
     return (
@@ -12,6 +13,7 @@ function Main() {
             <Banner/>
             <KoreaLocations/>
             <Maincontents/>
+            <Footer/>
         </div>
 
     );

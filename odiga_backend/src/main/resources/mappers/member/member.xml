@@ -13,12 +13,21 @@
         FROM member
         WHERE LOGIN_ID = #{loginId}-->
 
-    <select id="existsByLoginEmail" resultType="int" parameterType="String">
+    <select id="existsByEmail" resultType="int" parameterType="String">
         SELECT CASE
         WHEN EXISTS(SELECT email FROM member WHERE email = #{email})
         THEN 1
         ELSE 0
         END AS email
+        FROM dual
+    </select>
+
+    <select id="existsByNickname" resultType="int" parameterType="String">
+        SELECT CASE
+                   WHEN EXISTS(SELECT email FROM member WHERE nickname = #{nickname})
+                       THEN 1
+                   ELSE 0
+                   END AS nickname
         FROM dual
     </select>
 

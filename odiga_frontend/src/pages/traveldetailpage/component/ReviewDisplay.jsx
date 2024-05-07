@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { contentID } from "../TravelDetailPage";
+import { useParams } from 'react-router-dom';
+import '../TravelDetailPage.css';
 
 function ReviewDisplay() {
     const [reviews, setReviews] = useState([]);
+    const { contentID } = useParams();
 
     useEffect(() => {
         fetchReviews();

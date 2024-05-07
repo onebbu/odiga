@@ -1,14 +1,9 @@
-@font-face {
-  font-family: 'NanumSquareNeo-Variable';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/NanumSquareNeo-Variable.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
+
 
 
 .mainContentsComp {
    width: 100%;
-   height: 1800px;
+   height: 1700px;
    background: black;
    margin-top: 50px;
    display: flex;
@@ -20,7 +15,7 @@
 
 
 .mainContentsInner {
-   padding: 10px;
+   
    width: 100%;
    height: 100%;
    background: white;
@@ -32,28 +27,32 @@
 
 .popularContent {
     width: 100%;
-    height: 50%;
+    height: 700px;
     background-color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* overflow: hidden; */
 }
 
-.topRatedTourContent {
-    width: 100%;
-    height: 50%;
-    background-color: aquamarine;
-
+.popularContentTittleInner{
+   width: 100%;
+   height: 80px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   
 }
-
 
 .popularContentTittle {
     display: flex;
     align-items: center;
+    justify-content: center;
     width: 300px;
     height: 50px;
     font-size: 20px;
-    padding-right: 1450px;
+    padding-left: 30px;
+    margin-top: 10px;
 }
 
 .popularContentTittle i {
@@ -82,90 +81,253 @@
     z-index: 10;
     width: max-content; 
     box-shadow: 0px 2px 5px rgba(0,0,0,0.2); 
-  }
+  } 
   
 
-.popularContentGrid {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: 380px 380px 380px 380px;
-    grid-template-rows: 380px ;
-    gap: 50px;
+  @keyframes slider1 {
+    0% {
+      transform: translateX(0%);
+    }
+    50% {
+      transform: translateX(-100%);
+    }
+    50.1% {
+      transform: translateX(100%);
+    }
+    100% {
+      transform: translateX(0%);
+    }
+  }
+  
+  @keyframes slider2 {
+    0% {
+      transform: translateX(0%);
+    }
+    100% {
+      transform: translateX(-200%);
+    }
+  }
+
+
+ .popularContentSliderInner {
+      width: 100%;
+      height: 525px;
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: nowrap;
+      overflow: hidden;
+      padding-top: 10px;
+ }
+
+ .original {
+  width: 3300px;
+  display: flex;
+  animation: 100s linear infinite normal none running slider1;
+}
+.clone {
+ width: 3300px;
+ display: flex;
+ animation: 100s linear infinite slider2;
+}
+
+
+ .popularContentCard{
+     width: 400px;
+     height: 500px;
+     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5); 
+     border-radius: 10px;
+     margin: 5px;
+     flex-shrink: 0;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+ }
+
+ .popularContentCard:hover {
+  transform: translateY(-10px); 
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+}
+
+ .stop {
+  animation-play-state: paused;
+}
+
+
+.cardThumbnail {
+    width: 100%;
+    height: 60%;
+    border-radius: 10px;
+}
+
+.cardInfo {
+  width: 100%;
+  height: 40%;
+}
+
+
+.cardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+  /* transition: transform 0.3s ease; */
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.cardUserInfo {
+   width: 100%;
+   height: 30%;
+   font-size: 15px;
+   display: flex;
+   align-items: center;
+   margin-left: 5px;
+   border-radius: 10px;
+   
+}
+
+.cardUserNickname {
+  width: 160px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+.nickNameIcon {
+    margin-right: 5px;
+}
+
+.cardDate {
+  width: 130px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 15px;
+}
+
+.cardTitle {
+  margin: 5px;
+  width: 360px;
+  height: 50%;
+  font-size: 12px;
+}
+
+.cardUserTitle {
+  width: 300px;
+  height: 35px;
+  padding-left: 5px;
+  overflow: hidden; 
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* 텍스트 초과시 말줄임표 문제 해결해야함  */
+.cardUserDescription {
+  width: 100%;
+  height: 65px;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cardCategory {
+  color: #007bff; 
+  margin-top: 10px;
+  margin-left: 10px;
+  font-size: 13px;
+  display: flex;
+}
+
+
+.contourLine {
+  width: 85%;
+  height: 2px;
+  background-color: #ccc; 
+  margin: 20px 0px; 
+  margin-left: 100px;
 } 
 
+.recommendContentInner {
+  width: 100%;
+  height: 1000px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
 
-.card {
-    width: 380px;
-    height: 350px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: visible;
-    position: relative;
-    transition: box-shadow 0.3s ease;
-    background: #fff;
-    font-family: 'NanumSquareNeo-Variable';
-  }
-  
-  .thumbnail {
-    position: relative;
-    height: 60%; 
-    /* overflow: hidden; */
-    border-radius: 8px;
-  }
-  
-  .card-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover; 
-    transition: transform 0.3s ease;
-    border-radius: 8px;
-  }
-  
-  .card-info {
-    padding: 15px 12px 12px 12px;
-  }
-  
-  .user-info {
-   
-    font-size: 0.8rem;
-    color: #666;
-  }
-  
-  .title {
-    margin-top: 15px;
-    font-size: 1rem;
-    line-height: 1.2;
-    height: 2.4em; 
-     overflow: hidden; 
-    /*
-    text-overflow: ellipsis;
-    white-space: nowrap;*/
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical; 
-  }
-  
-  .description {
-    margin-top: 10px;
-    margin-bottom: 13px;
-    color: #666;
-    font-size: 13px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  
-  .category {
-    font-size: 0.8rem;
-    color: #007bff; 
-    margin-top: 4px;
-  }
-  
 
-.card:hover .card-image {
-    transform: translateY(-5px) scale(1.05); 
-    z-index: 10; 
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5); 
-  }
+.recommendContentTitleInner{
+   width: 100%;
+   height: 15%;
+   display: flex;
+   align-items: center;
+   background: white;
+}
+
+.recommendContentTitle{
+   width: 500px;
+   height: 50px;
+   margin-left: 190px;
+   font-size: 20px;
+}
+
+
+.recommendMainContentInner {
+   width: 100%;
+   height: 85%;
+  display: flex;
+  justify-content: center;
+  
+}
+
 
  
+.recommendMainContentContainer {
+  width: 1500px;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 300px);
+  grid-template-rows: 300px;
+  grid-gap: 30px;
+
+}
+
+.recommendMainContentInner a {
+  color: black;
+}
+
+.recommendMainContentImg {
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+  object-fit: cover;
+  
+}
+
+.recommendMainContent {
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  position: relative;
+}
+
+.recommendMainContentInfo {
+  width: 100%;
+  height: 50px;
+  display: flex;
+}
+
+.likeCount {
+  position: absolute;
+  top: 10px; 
+  right: 10px; 
+  display: none; 
+  color: #EEE;
+   
+
+}
+
+.recommendMainContent:hover .likeCount {
+  display: block; 
+}
