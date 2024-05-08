@@ -40,5 +40,10 @@
         SET LIKECOUNT = COALESCE(LIKECOUNT, 0) + 1
         WHERE contentId = #{contentId}
     </update>
+    <select id="cattranskr" resultType="com.odiga.mytrip.travel.vo.TravelCatKorVO">
+        SELECT CAT1, CAT2, CAT3, CAT1KR, CAT2KR, CAT3KR 
+        FROM TOURRISMSERVICE
+        WHERE cat1 = #{cat1} and cat2 = #{cat2} and cat3 = #{cat3}
+    </select>
 
 </mapper>

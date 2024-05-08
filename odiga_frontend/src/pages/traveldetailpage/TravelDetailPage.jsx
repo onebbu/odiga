@@ -140,11 +140,27 @@ function TravelDetailPage() {
                     <div id="map" style={{ width: '100%', height: '500px' }}></div>
                 </section>
                 <section className="tagList" id="tag-list">
-                    <div className="tagItem"id="tag-list-placeholder">
-                      <div className="tagItemBox"> <p>#벛꽃</p> </div>
-                      <div className="tagItemBox"> <p>#축제</p> </div>
-                      <div className="tagItemBox"> <p>#가고싶다</p> </div>                       
-                    </div>
+                  <div className="tagItem" id="tag-list-placeholder">
+                    {data && (
+                      <>
+                        {data.cat1 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat1}</p>
+                          </div>
+                        )}
+                        {data.cat2 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat2}</p>
+                          </div>
+                        )}
+                        {data.cat3 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat3}</p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </section>
                 <section className="slider" id="similar-destinations">
                      <p>사진을 움직여 둘러보세요!</p>
