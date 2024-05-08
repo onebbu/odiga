@@ -1,0 +1,20 @@
+.oauth-login{
+    padding-top: 2rem;
+}
+
+.oauth-login p {
+    text-align: center;
+}
+
+.login-button {
+    margin-top: 1rem;
+    display: flex;
+    width: 15rem;
+    height: 7rem;
+    justify-content: space-between;
+}
+
+.login-button img{
+    width: 4rem;
+    height: 4rem;
+}

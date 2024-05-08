@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 @Service
 public class CourseReviewService {
@@ -17,8 +16,32 @@ public class CourseReviewService {
     }
 
     public List<CourseReviewVO> detailPage(int boardNo) {
-        System.out.println(boardNo + " 컨트롤러 실행되었음@@@@");
         return courseReviewDAO.detailPage(boardNo);
     }
+
+    public void viewCount(int boardNo) {
+        courseReviewDAO.viewCount(boardNo);
+    }
+
+    public List<CommentsVO> comments(int boardNo) {
+        return courseReviewDAO.comments(boardNo);
+    }
+
+    public void commentWrite(CommentsVO commentsVO) {
+        courseReviewDAO.commentWrite(commentsVO);
+    }
+
+    public void boardGrade(int boardNo) {
+        courseReviewDAO.boardGrade(boardNo);
+    }
+
+    public void likeCount(int boardNo) {
+        courseReviewDAO.likeCount(boardNo);
+    }
+
+    public void articleDelete(int boardNo) {
+        courseReviewDAO.articleDelete(boardNo);
+    }
+
     
 }

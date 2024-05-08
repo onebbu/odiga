@@ -1,15 +1,14 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDrop } from 'react-dnd'; // 오른쪽에서 왼쪽으로 drop만 하면 됨.
 import update from 'immutability-helper';
 import './cPP.css';
 import { Box } from './Box.js';
 
 // 왼쪽에 Drop할 Container 구현.
-const DropContainer = () => {
+const DropContainer = ({ onSaveData  }) => { //onSaveData 를 props로 받음
   const [boxes, setBoxes] = useState([]);
-
-  const handleDrop = 
-    (item) => {
+  
+  const handleDrop = (item) => {
       const existingBox = boxes.find((box) => box.id === item.id);
       if (existingBox) {
         alert('같은 장소가 이미 존재합니다!');
@@ -20,7 +19,6 @@ const DropContainer = () => {
         alert('하루에 5개의 일정까지 가능합니다.');
         return;
       }
-
       setBoxes((prevBoxes) => [...prevBoxes, item]);
     };
 
@@ -54,7 +52,11 @@ const DropContainer = () => {
       }),
     )
     boxes.forEach(console.log)
-  }, [])
+  }, [boxes])  //[] => [boxes]
+
+  useEffect(() => {
+    onSaveData(boxes); // onSaveData 이벤트 핸들러 호출 전에 상태 업데이트
+  }, [boxes, onSaveData]);
 
   const renderBoxes = () => {
     return boxes.map((box, index) => (

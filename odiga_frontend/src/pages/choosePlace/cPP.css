@@ -10,8 +10,7 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
 .item {padding-bottom: 10px;}
 .item p{color:#909090; font-family: 'JalnanGothic'; }
 .item h2{font-family: 'JalnanGothic';}
-.item span {font-size: 18px; position: absolute; right: 10px;}
-
+.item span {font-size: 18px; position: absolute; right: 10px; }
 .buttondesign {
     background-color: #549C9B;  color: white;  border: none;  padding: 8px 15px;
   font-size: 15px;
@@ -23,6 +22,11 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
 }
 * {
     font-family: 'GmarketSansMedium';
+}
+.save{
+    position:absolute; 
+    bottom: 15px;
+    right: 15px;
 }
 
 /*Drawer.js*/

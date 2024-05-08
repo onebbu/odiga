@@ -116,6 +116,7 @@ function Myarticle() {
 export default Myarticle;
 
 const Title = styled.h4`
+  margin-top: 4rem;
   text-align: center;
   width: 100%;
   margin-bottom: 1rem;

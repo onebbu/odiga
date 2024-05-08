@@ -21,8 +21,8 @@ const defaultTheme = createTheme();
 
 const SignUpSchema = Yup.object().shape({
     email: Yup.string().email('유효하지 않은 이메일 주소입니다.').required('필수 항목입니다.'),
-    nickname: Yup.string().required('필수 항목입니다.'),
-    password: Yup.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.').required('필수 항목입니다.'),
+    nickname: Yup.string().max(8, '닉네임은 최대 8자까지 허용됩니다.').required('필수 항목입니다.'),
+    password: Yup.string().min(8, '비밀번호는 최소 8자 이상이어야 합니다.').max(20, '비밀번호는 최대 20자까지 허용됩니다.').required('필수 항목입니다.'),
     passwordCheck: Yup.string().oneOf([Yup.ref('password'), null], '비밀번호가 일치해야 합니다.').required('필수 항목입니다.')
 });
 
@@ -60,9 +60,11 @@ export default function SignUp() {
 
             if (result === "EMAIL_ALREADY_EXIST") {
                 alert("이미 이메일이 존재합니다.");
-                // window.location.href = "/sign-up";
+            } else if(result === "NICKNAME_ALREADY_EXIST") {
+                alert("이미 닉네임이 존재합니다.");
             } else if(result === "SIGN_UP_SUCCESS") {
                 navigate('/');
+                alert("회원가입이 성공했습니다.");
             }
         } catch (error) {
             if (error.name === 'ValidationError') {

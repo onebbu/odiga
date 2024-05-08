@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faArrowRight, faLightbulb } from "@fortawesome/free-solid-svg-icons";
-import './Locations.css';
+import "./Locations.css";
 import seoulImage from '../../assets/images/seoul.jpg';
 import busanImage from '../../assets/images/busan.png';
 import incheonImage from '../../assets/images/incheon.png';
@@ -61,7 +61,7 @@ function KoreaLocations() {
                 <button className="ArrowButton" onClick={handlePrev}><FontAwesomeIcon icon={faArrowLeft} /></button>
                 {visibleLocations.map((location, index) => (
                     <div className="NavLocations" key={index}>
-                        <a href="#">
+                        <a href="/SearchPage">
                             <div className="NavLocationImg">
                                 <img alt={location.name} src={location.image} />
                             </div>

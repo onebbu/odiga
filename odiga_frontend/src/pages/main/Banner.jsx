@@ -1,5 +1,6 @@
 import './Banner.css';
 
+
 function Banner(){
     return (
         <section className="MainBanner">
