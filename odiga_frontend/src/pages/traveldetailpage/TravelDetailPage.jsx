@@ -177,7 +177,7 @@ function TravelDetailPage() {
                 </section>
                 
                 <section className="tagList" id="tag-list">
-                <div className="tagItem" id="tag-list-placeholder">
+                  <div className="tagItem" id="tag-list-placeholder">
                     {data && (
                       <>
                         {data.cat1 && (
