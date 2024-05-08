@@ -10,13 +10,8 @@ import './slick.css';
 import './slick-theme.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
-
-
-
-
-
-//현재는 임의로 설정 추후 수정요망
 
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
@@ -24,7 +19,22 @@ function TravelDetailPage() {
     const [imgs , setImgs] = useState(null);
     const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
     // let mountCount = 1
+    const [liked, setLiked] = useState(false);
+    const [views, setViews] = useState(0);
+    const navigate = useNavigate();
+    const [tags, setTags] = useState([]);
     const { contentID } = useParams();
+
+    useEffect(() => {
+      axios.get(`/detail/${contentID}`)
+        .then(response => {
+          setData(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error);
+        });
+    }, [contentID]);
+  
     
     useEffect(() => {
 
@@ -51,6 +61,7 @@ function TravelDetailPage() {
           });
         }
     }, [didMount]);
+
     useEffect(()=> {
         
             axios.get(`/imgs/${contentID}`)
@@ -72,7 +83,7 @@ function TravelDetailPage() {
             script.onload = () => {
                 const mapOptions = {
                     center: new window.naver.maps.LatLng(data.mapy, data.mapx),
-                    zoom: 17
+                    zoom: 80
                 };
                 
                 const map = new window.naver.maps.Map('map', mapOptions);
@@ -110,15 +121,36 @@ function TravelDetailPage() {
     //Slick 라이브러리 사용
     const settings = {
       dots: true,
-      infinite: true,
+      infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
       arrows: false, 
     };
 
+    useEffect(() => {
+      axios.get(`/detail/${contentID}`)
+          .then(response => {
+              setData(response.data);
+              setLikes(response.data.likecount || 0);
+              setViews(response.data.viewcount || 0);
+          })
+          .catch(error => {
+              console.error('Error fetching data:', error);
+          });
+  }, []);
 
-    
+  //tag API 호출
+//   useEffect(() => {
+//     axios.get(`/tags/${contentID}`)
+//         .then(response => {
+//             setTags(response.data); // API에서 반환된 태그 데이터를 상태에 저장
+//         })
+//         .catch(error => {
+//             console.error('Error fetching tags:', error);
+//         });
+// }, []);
+
    return (
          <div className="inner">
             <Header/>
@@ -131,14 +163,19 @@ function TravelDetailPage() {
                 <section className="detailInfo" id="detail-info">
                   <div className="InfoAndLikeBox">
                     <h2>상세 정보</h2>
-                    <LikeButton likes={likes} setLikes={setLikes} data={data}/>
+                    <div>
+                    <span id="view-count">👀 {data && (data.travelviewcount || 0)}</span>
+                    <span style={{marginLeft: '20px'}}><FontAwesomeIcon icon={faHeart} /> {likes}</span>
+                    </div>
                   </div>                    
                     <div className="contourLine3"></div>
                     <p id="detail-placeholder">{data && data.overview && data.overview.replace(/<br\s*\/?>/ig, '')}</p>
                 </section>
+
                 <section className="mapLocation" id="map-location">   
                     <div id="map" style={{ width: '100%', height: '500px' }}></div>
                 </section>
+                
                 <section className="tagList" id="tag-list">
                   <div className="tagItem" id="tag-list-placeholder">
                     {data && (
@@ -162,11 +199,21 @@ function TravelDetailPage() {
                     )}
                   </div>
                 </section>
+                {/* Tag 엔드포인트 완료되면 */}
+                {/* <section className="tagList" id="tag-list">
+                   <div className="tagItem" id="tag-list-placeholder">
+                       {tags.map(tag => (
+                      <div className="tagItemBox" key={tag}>
+                        <p>#{tag}</p>
+                        </div>
+                      ))}
+                   </div>
+                </section> */}
                 <section className="slider" id="similar-destinations">
                      <p>사진을 움직여 둘러보세요!</p>
                      <Slider {...settings} id="similar-destinations-placeholder" >
                        {data && data.firstimage && (
-                         <div>
+                         <div className="sliderImgBox">
                           <img src={data.firstimage} alt="비슷한 여행지 사진 1" className="sliderImg" />
                          </div>
                        )}
@@ -180,60 +227,38 @@ function TravelDetailPage() {
                          <img src={imgs[1]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
                         </div>
                        )}
+                        {imgs && imgs.length > 2 && (
+                        <div >
+                         <img src={imgs[2]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                        </div>
+                       )}
+                        {imgs && imgs.length > 3 && (
+                        <div >
+                         <img src={imgs[3]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                        </div>
+                       )}
+                        {imgs && imgs.length > 4 && (
+                        <div >
+                         <img src={imgs[4]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                        </div>
+                       )}
+                        {imgs && imgs.length > 5 && (
+                        <div >
+                         <img src={imgs[5]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                        </div>
+                       )}
                      </Slider>
-                </section>
+                </section>       
 
-                <section id="reviews">
-                    <ReviewImportForm/>
-                </section>
-                
-                {/* <section id="review-display">
+                <section id="review-display">
                     <ReviewDisplay/>
-                </section> */}
-
-
+                </section>
 
              </div>
             <Footer/>
          </div>
-
-
-
-
    )
 
 }
-
-
-function LikeButton({data}) {
-  const { contentID } = useParams();
-  const sendLikeRequest = () => {
-      // axios를 사용하여 GET 요청 보내기
-      axios.get(`/travelLike/${contentID}`)
-          .then(response => {
-              console.log("좋아요누름");
-          })
-          .catch(error => {
-              console.error('There was a problem with the request:', error);
-          });
-  };
-  return (
-      <section className="actionBar" id="action-bar">
-          <div className="countContainer"id="count-container">
-              {/* <img src="view-icon.png" alt="icon" /> */}
-              <span id="view-count">👀 {data && (data.travelviewcount || 0)}</span>
-              {/* <img src="like-icon.png" alt="icon" /> */}
-              <span id="like-count">
-                 <button className="Likebutton" id="like-button" onClick={sendLikeRequest}>
-                  <FontAwesomeIcon icon={faHeart} />  
-                 </button> {data && (data.likecount || 0)}
-              </span>
-          </div>
-         
-      </section>
-         
-  );
-}
-
 
 export default TravelDetailPage;
