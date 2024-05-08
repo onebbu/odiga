@@ -121,7 +121,7 @@ function TravelDetailPage() {
     //Slick 라이브러리 사용
     const settings = {
       dots: true,
-      infinite: true,
+      infinite: false,
       speed: 500,
       slidesToShow: 1,
       slidesToScroll: 1,
@@ -177,11 +177,27 @@ function TravelDetailPage() {
                 </section>
                 
                 <section className="tagList" id="tag-list">
-                    <div className="tagItem"id="tag-list-placeholder">
-                      <div className="tagItemBox"> <p>#벛꽃</p> </div>
-                      <div className="tagItemBox"> <p>#축제</p> </div>
-                      <div className="tagItemBox"> <p>#가고싶다</p> </div>                       
-                    </div>
+                <div className="tagItem" id="tag-list-placeholder">
+                    {data && (
+                      <>
+                        {data.cat1 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat1}</p>
+                          </div>
+                        )}
+                        {data.cat2 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat2}</p>
+                          </div>
+                        )}
+                        {data.cat3 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat3}</p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </section>
                 {/* Tag 엔드포인트 완료되면 */}
                 {/* <section className="tagList" id="tag-list">

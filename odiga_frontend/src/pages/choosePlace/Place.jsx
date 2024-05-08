@@ -39,10 +39,10 @@ const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
 
     return(
         <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}> 
-        {/* taveldetailpage 링크 설정 / 이재현 */}
-            <a href={`/detail/${id}`}>
+        {/* traveldetailpage 링크 */}
+        <a href={`/detail/${id}`}> 
             <img src={pic} />
-            </a>
+        </a>
             {name} <P> <br/>{region}</P><br/>
             <Rate>{avgrate}</Rate> <P>/{cntrate}개</P>
         </div>
