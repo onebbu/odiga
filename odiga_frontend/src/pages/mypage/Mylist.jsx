@@ -1,13 +1,18 @@
-import React from "react"; // React를 불러옵니다.
+import React, {useContext, useEffect, useState} from "react"; // React를 불러옵니다.
 import styled from "styled-components";
+import axios from "axios";
+import {LoginInfoContext} from "../login/LoginInfoProvider";
 
 function Mylist() {
-  return (
-    <div>
-      <Title>회원님의 여행 찜 목록</Title>
 
-    </div>
-  );
+
+
+    return (
+        <div>
+            <Title>회원님의 여행 찜 목록</Title>
+
+        </div>
+    );
 }
 
 export default Mylist;

@@ -21,7 +21,7 @@ function Mycourse() {
                     const response = await axios.get(`/mypage/mycourse/` + loginInfo.nickname);
                     setCourseInfo(response.data);
                 } catch (error) {
-                    // 에러 처리
+                    console.error('코스 가져오기 실패:', error);
                 }
             };
 
