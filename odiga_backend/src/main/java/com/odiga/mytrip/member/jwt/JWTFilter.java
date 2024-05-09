@@ -17,7 +17,6 @@ import java.io.IOException;
 
 // 스프링 시큐리티 filter chain 요청에 담긴 JWT를 검증하기 위한 커스텀 필터
 
-@Slf4j
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -33,7 +32,6 @@ public class JWTFilter extends OncePerRequestFilter {
         // Authorization 헤더가 비어있거나 "Bearer " 로 시작하지 않은 경우
         if(authorization == null || !authorization.startsWith("Bearer ")){
 
-            log.info("Authorization 헤더 검증:token null");
             // 토큰이 유효하지 않으므로 request와 response를 다음 필터로 넘겨줌
             filterChain.doFilter(request, response);
 
@@ -47,7 +45,6 @@ public class JWTFilter extends OncePerRequestFilter {
         // token 소멸 시간 검증
         // 유효기간이 만료한 경우
         if(jwtUtil.isExpired(token)){
-            log.info("token expired");
             filterChain.doFilter(request, response);
 
             // 메서드 종료
