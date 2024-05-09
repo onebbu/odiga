@@ -36,7 +36,7 @@
                 boardlikecount,
                 boarddate,
                 mainimage
-            FROM travelcoursereview
+            FROM coursereview
             ORDER BY 
                 CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
                     ELSE boardgrade * 0.3 

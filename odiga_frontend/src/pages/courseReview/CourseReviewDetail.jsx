@@ -15,7 +15,7 @@ import styled from "styled-components";
 import Comments from "./Comments";
 import "./static/slider.css";
 import Footer from '../component/footer/Footer';
-import Header from '../tiles/Header';
+import Header from "../component/navbar/Header";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();

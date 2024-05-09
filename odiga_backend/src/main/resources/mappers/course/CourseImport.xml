@@ -11,15 +11,15 @@
             r.COURSEDAY, 
             r.TRAVELNUM, 
             r.CONTENTID, 
-            r.NICKNAME, 
-            r.EMAIL,  
+            r.NICKNAME,  
             r.COURSEYN,
             r.COURSETITLE,
             t.FIRSTIMAGE,
             t.title,
             t.mapx,
             t.mapy,
-            t.addr1
+            t.addr1,
+            t.areacode
         FROM 
             RESULTLIST r
         JOIN 
@@ -28,7 +28,7 @@
             r.nickname = #{nickname}
     </select>
     <insert id="saveCourseData" parameterType="String">
-        INSERT INTO TRAVELCOURSEREVIEW
+        INSERT INTO COURSEREVIEW
         (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , TAGS)
         VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
     </insert>
@@ -40,12 +40,12 @@
         <result property="travelnum" column="TRAVELNUM"/>
         <result property="contentid" column="CONTENTID"/>
         <result property="nickname" column="NICKNAME"/>
-        <result property="email" column="EMAIL"/>
         <result property="courseyn" column="COURSEYN"/>
         <result property="firstimage" column="FIRSTIMAGE"/>
         <result property="title" column="TITLE"/>
         <result property="mapx" column="MAPX"/>
         <result property="mapy" column="MAPY"/>
+        <result property="areacode" column="AREACODE"/>
     </resultMap>
 
 </mapper>
