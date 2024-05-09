@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
+import com.odiga.mytrip.travel.vo.TravelCatKorVO;
 
 @Mapper
 public interface TravelDAO {
@@ -14,5 +15,6 @@ public interface TravelDAO {
     void importReviewData(ReviewDataVO reviewData);
     List<ReviewDataVO> getReviewList(String contentId);
     void Like(String contentId);
+    TravelCatKorVO cattranskr(String cat1 , String cat2 , String cat3);
 }
 
