@@ -19,5 +19,6 @@ public class CourseVO {
     private String mapx;
     private String mapy;
     private String addr1;
+    private String areacode;
       
 }

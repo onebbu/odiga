@@ -19,7 +19,8 @@
             t.title,
             t.mapx,
             t.mapy,
-            t.addr1
+            t.addr1,
+            t.areacode
         FROM 
             RESULTLIST r
         JOIN 
@@ -46,6 +47,7 @@
         <result property="title" column="TITLE"/>
         <result property="mapx" column="MAPX"/>
         <result property="mapy" column="MAPY"/>
+        <result property="areacode" column="AREACODE"/>
     </resultMap>
 
 </mapper>
