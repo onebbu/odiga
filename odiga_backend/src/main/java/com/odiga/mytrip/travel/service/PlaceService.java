@@ -70,4 +70,12 @@ public class PlaceService {
     public void courseSave(String contentID, String index){
         placeDAO.courseSave(contentID, index);
     }
+
+    public void SaveResult(Map<String, Object> result){
+        placeDAO.SaveResultList(result);
+    }
+
+    public int getMaxNum(String nickname){
+        return placeDAO.getMaxNum(nickname);
+    }
 }
