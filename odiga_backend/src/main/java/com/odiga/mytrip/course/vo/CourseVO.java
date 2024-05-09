@@ -11,7 +11,6 @@ public class CourseVO {
     private int travelnum;
     private int contentid;
     private String nickname;
-    private String email;
     private String courseyn;
     private String coursetitle;
     private String firstimage;
