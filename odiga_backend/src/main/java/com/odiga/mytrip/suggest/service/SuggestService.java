@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.odiga.mytrip.suggest.dao.SuggestDAO;
 import com.odiga.mytrip.suggest.vo.SuggestCosVO;
+import com.odiga.mytrip.suggest.vo.SuggestTraVO;
 
 @Service
 public class SuggestService {
@@ -16,5 +17,8 @@ public class SuggestService {
 
     public List<SuggestCosVO> getSuggestCosList() {
         return suggestDAO.getCourseSuggestList();
+    }
+    public List<SuggestTraVO> getSuggestTraList(){
+        return suggestDAO.getTravelSuggestList();
     }
 }

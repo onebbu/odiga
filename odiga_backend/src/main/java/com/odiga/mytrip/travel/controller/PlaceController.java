@@ -5,11 +5,15 @@ import com.odiga.mytrip.travel.service.PlaceService;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.*;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 @RestController
 public class PlaceController {
@@ -70,11 +74,31 @@ public class PlaceController {
         return resultMap;
     }
 
-    @GetMapping("/place") // 잘못된 URL
+    @GetMapping("/place/*") // 잘못된 URL
     public String redirectToCorrectPage() {
         // "/place" 뒤에 어떠한 경로도 오지 않은 경우에는 wrongpathPage를 보여줍니다.
         // 올바른 페이지로 리디렉션
         return "redirect:/wrongpath/preference";
     }
 
+    @PostMapping("/coursesave") // 잘못된 URL
+    public void courseListSave(@PathVariable String contentID, @PathVariable String Day, @PathVariable String index) {
+        Map<String, Object> course = new HashMap<String, Object>();
+        // 데이터 저장하기!
+		course.put("contentid", "siri");
+		course.put("Day", 13);
+		course.put("index", "학생");
+        
+
+        //placeService.courseSave(contentID, index);
+    }
+    @PostMapping("/place/saveData")
+    public String postMethodName(@RequestBody String entity) {
+        
+        System.out.println("백엔드 받았습니다. " + entity);
+        return entity;
+    }
+    
+
 }
+ 
