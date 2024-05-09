@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from 'react-router-dom';
+import { contentID } from "../TravelDetailPage";
 import '../TravelDetailPage.css';
+import ReviewImportForm from './ReviewImportForm'; 
+import { useParams } from 'react-router-dom';
 
 function ReviewDisplay() {
-    const [reviews, setReviews] = useState([]);
     const { contentID } = useParams();
+    const [reviews, setReviews] = useState([]);
 
     useEffect(() => {
         fetchReviews();
@@ -20,14 +22,39 @@ function ReviewDisplay() {
         }
     };
 
+    const handleNewReview = () => {
+        fetchReviews();  // 새 리뷰가 추가될 때마다 리뷰 목록 새로고침
+    };
+
+
+    const renderStars = (rating) => {
+        let stars = [];
+        for (let i = 0; i < 5; i++) {
+            stars.push(
+                <span key={i} style={{ color: i < rating ? '#ffc107' : '#e4e5e9' }}>&#9733;</span>
+            );
+        }
+        return stars;
+    };
+
     return (
-        <section id="review-display">
-            <h2>리뷰</h2>
+        <section id="review-display" className="reviewDisplay">
+             <ReviewImportForm onReviewSubmitted={handleNewReview} />
+             
+             <h4> Comment ! </h4>
+             <div className="contourLine6"></div>
             <div id="review-display-placeholder">
                 {reviews.map((review, index) => (
-                    <div key={index}>
-                        <h3>닉네임 : {review.nickname}</h3>
-                        <p>리뷰내용 : {review.reviewcomment}</p>
+                    <div key={index} className="reviewItem">
+                        
+                        <div className="reviewComment">
+                        <p className="commentContent">{review.reviewcomment}</p>
+                        </div>
+                        <div className="commentInfo">
+                            <div className="commentDetail">{review.nickname}  &nbsp;|</div>
+                            <div className="commentDetail">{renderStars(review.reviewgrade)}  &nbsp;|</div>
+                            <div className="commentDetail">{review.reviewdate}</div>
+                        </div> 
                     </div>
                 ))}
             </div>
