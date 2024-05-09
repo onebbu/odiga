@@ -6,7 +6,7 @@ import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
 import stylee from "../choosePlace/cPP.css";
 import Footer from '../component/footer/Footer';
-import Header from '../tiles/Header';
+import Header from "../component/navbar/Header";
 
 const Place = ({
   boardContent,
