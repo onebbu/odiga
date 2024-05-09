@@ -1,4 +1,4 @@
-import React, {useState , useEffect } from "react";
+import React, {useState , useRef, useEffect } from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -171,7 +171,7 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme}) => {
   </>)
 }
 
-//* 왼쪽 메뉴 --------------------------------------------------- *//
+{/* 왼쪽 메뉴 --------------------------------------------------- */}
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
   ))(({ theme }) => ({

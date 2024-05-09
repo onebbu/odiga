@@ -55,7 +55,7 @@ function ListPlace({areacode, order}) {
     const [displayCount, setDisplayCount] = useState(8);
     
     const handleShowMore = () => {
-        setDisplayCount(displayCount + 8);
+        setDisplayCount((prevCount) => prevCount + 8);
     };
     
     const fetchList = () => {
@@ -63,20 +63,22 @@ function ListPlace({areacode, order}) {
           // 백엔드 API 호출
         axios.get(`/place/${areacode}/${displayCount}/${order}`)
             .then((response) => {
-              console.log('Data received:', response.data);
-              setDataList(response.data); // 데이터를 상태에 저장
+                    console.log('Data received:', response.data);
+                    setDataList((prevDataList) => {
+                        return prevDataList ? [...prevDataList, ...response.data] : response.data;
+                    });
               setIsLoading(false);
             })
             .catch((error) => {
               console.error('Error fetching data:', error);
-              setIsLoading(true);
+              setIsLoading(false);
         });
         
     };
     
     useEffect(() => {
         fetchList();
-    }, [areacode, displayCount, order]);
+    }, [areacode, order, displayCount]);
 
     return (
         <div>
@@ -88,8 +90,9 @@ function ListPlace({areacode, order}) {
                     gridTemplateColumns: "1fr 1fr 1fr 1fr",
                     gridGap: "30px",
                 }}>
-                    {dataList && dataList.map(
-                        (data) => ( <Place key={data.contentid} id={data.contentid} pic={data.firstimage} name={data.title} region={data.addr1}/> ))}
+                    {dataList && dataList.map((data) => ( 
+                        <Place key={data.contentid} id={data.contentid} pic={data.firstimage} name={data.title} region={data.addr1}/>
+                    ))}
                 </div>
             )}
             {displayCount < 100 && ( // 100개 이상은 안보여줌.

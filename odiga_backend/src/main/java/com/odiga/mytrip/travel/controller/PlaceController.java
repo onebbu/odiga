@@ -1,18 +1,25 @@
 package com.odiga.mytrip.travel.controller;
-import com.odiga.mytrip.travel.vo.TravelListVO;
-import com.odiga.mytrip.travel.service.PlaceService;
-
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.odiga.mytrip.travel.service.PlaceService;
+import com.odiga.mytrip.travel.vo.TravelListVO;
+
 
 
 @RestController
@@ -32,10 +39,6 @@ public class PlaceController {
             // order 파라미터를 검증하여 유효한 정렬 기준으로 변환
             String orderByClause = validateAndTransformOrder(order);
             List<TravelListVO> placeList = placeService.placeList(areacode, displayCount, orderByClause);
-            System.out.println(areacode+" "+displayCount+" "+orderByClause);
-             // 로그 추가
-            logger.info("Place list 성공적으로 불러옴. Area code: " + areacode + ", Display count: " + displayCount + ", Order: " + orderByClause);
-            System.out.println(logger);
             return placeList;
         } catch (Exception e) {
             // 예외 발생 시 로그 추가 및 예외 다시 던지기
@@ -92,13 +95,42 @@ public class PlaceController {
 
         //placeService.courseSave(contentID, index);
     }
-    @PostMapping("/place/saveData")
-    public String postMethodName(@RequestBody String entity) {
+
+    @PostMapping("/place/savedata/{title}")
+    public void postMethodName(@RequestBody String entities, @PathVariable("title") String title) throws ParseException {
+        // reader를 Object로 parse
+        JSONParser parser = new JSONParser();
+        JSONArray jsonArr = (JSONArray)parser.parse(entities);
         
-        System.out.println("백엔드 받았습니다. " + entity);
-        return entity;
+        String nickname = "gyugyu"; /////////////////////////////////////////////여기 닉네임 변경해주셔야함. 아직 로그인 세션 구현 안해서그럼.
+        int maxNum = placeService.getMaxNum(nickname) + 1;
+        // jsonArr에서 하나씩 JSONObject로 cast해서 사용
+        if (jsonArr.size() > 0){
+            for(int i=0; i< jsonArr.size(); i++){   
+                Map<String, Object> resultMap = new HashMap<>();
+                JSONObject jsonObj = (JSONObject)jsonArr.get(i);
+                
+                String COURSENO = nickname+"_"+String.valueOf(maxNum);
+                String coursepw = "password";
+                String COURSEDAY = String.valueOf(jsonObj.get("courseDay"));
+                String TRAVELNUM = String.valueOf(jsonObj.get("travelNum"));
+                String RESULTID = COURSENO+"_"+COURSEDAY+"_"+TRAVELNUM;
+                resultMap.put("RESULTID", RESULTID);
+                resultMap.put("COURSENO", COURSENO);
+                resultMap.put("COURSEDAY", COURSEDAY);
+                resultMap.put("TRAVELNUM", TRAVELNUM);
+                resultMap.put("CONTENTID", String.valueOf(jsonObj.get("contentId")));
+                resultMap.put("NICKNAME", nickname);
+                resultMap.put("COURSEPW", coursepw);
+                resultMap.put("title", title);
+
+                placeService.SaveResult(resultMap);
+
+            }
+        }
+
+        
     }
     
-
 }
  
