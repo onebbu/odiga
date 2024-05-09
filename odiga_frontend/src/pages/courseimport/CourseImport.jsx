@@ -4,7 +4,9 @@ import axios from "axios";
 import Carousel from "./carousel.js";
 import TextEditor from "../component/Ckeditor/TextEditor";
 import HashtagInput from "./HashtagInput.js";
-
+import Header from "../component/navbar/Header";
+import Footer from '../component/footer/Footer';
+import './styles.css';
 
 const Input = styled.input`
   width: 100%;
@@ -82,18 +84,8 @@ function CourseImport() {
 
   return (
     <>
-      <header
-        style={{
-          backgroundColor: "lightblue",
-          lineHeight: "80px",
-          textAlign: "center",
-          display: "block",
-          width: "100%",
-        }}
-      >
-        헤더공간
-      </header>
-
+      <Header/>
+       
       <Container>
         <section
           style={{
@@ -207,18 +199,7 @@ function CourseImport() {
         </section>
       </Container>
 
-      <footer
-        style={{
-          backgroundColor: "lightblue",
-          lineHeight: "80px",
-          textAlign: "center",
-          border: "1px",
-          borderColor: "black",
-          marginTop: "30px",
-        }}
-      >
-        푸터공간
-      </footer>
+       <Footer/>
     </>
   );
 }

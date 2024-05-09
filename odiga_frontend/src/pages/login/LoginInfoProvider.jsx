@@ -1,10 +1,10 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, {createContext, useState, useEffect} from 'react';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
 
 export const LoginInfoContext = createContext(); // createContext를 사용하여 컨텍스트를 생성
 
-const LoginInfoProvider = ({ children }) => {
+const LoginInfoProvider = ({children}) => {
     const [loginInfo, setLoginInfo] = useState({});
 
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ const LoginInfoProvider = ({ children }) => {
                     data = response.data;
                     setLoginInfo(data);
                     console.log(data);
-                } else{
+                } else {
                     console.log("jwt 로그인")
                     response = await axios.get('/auth/jwt-info', config);
                     data = response.data;
@@ -49,7 +49,7 @@ const LoginInfoProvider = ({ children }) => {
     }, []); // 빈 배열을 전달하여 한 번만 호출되도록 설정합니다.
 
 
-    console.log(loginInfo);
+    console.log("LoginInfoContext", loginInfo);
 
     // LoginInfoContext.Provider를 사용하여 컨텍스트 값을 제공
     return (
