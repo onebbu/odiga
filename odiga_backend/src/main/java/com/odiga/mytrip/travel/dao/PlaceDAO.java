@@ -9,4 +9,6 @@ public interface PlaceDAO {
     List<TravelListVO> getPlaceList(String areacode, String displayCount, String order);
     Map<String, Object> getPlaceRate(String contentID);
     void courseSave(String contentID, String index);
+    void SaveResultList(Map<String, Object> result);
+    int getMaxNum(String nickname);
 }
