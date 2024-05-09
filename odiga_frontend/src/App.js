@@ -13,6 +13,7 @@ import WrongPathPage from "./pages/wrongpathPage/WrongPath";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import ChoosePlace from "./pages/choosePlace/choosePlacePage";
 import LoginInfoProvider from "./pages/login/LoginInfoProvider";
+import PlaceList from "./pages/placeList/placeList";
 
 function App() {
     return (
@@ -30,6 +31,7 @@ function App() {
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
                     <Route exact path="/place" element={<ChoosePlace/>}></Route>
+                    <Route exact path="/place/show" element={<PlaceList/>}></Route>
                 </Route>
 
 
