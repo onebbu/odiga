@@ -53,9 +53,9 @@ function Header() {
                 <nav className="header-nav">
                     <ul className="NavMenu">
                         <li><a href="/">홈</a></li>
-                        <li><a href="/"> 여행코스 생성</a></li>
+                        <li><a href="/preference"> 여행코스 생성</a></li>
                         <li><a href="/"> 여행코스 조회</a></li>
-                        <li><a href="/preference">여행지 조회</a></li>
+                        <li><a href="/">여행지 조회</a></li>
                     </ul>
                 </nav>
         <div className="header-actions">
