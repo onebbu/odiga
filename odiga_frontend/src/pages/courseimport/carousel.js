@@ -6,7 +6,7 @@ import { useState } from "react";
 
 
 
-function Carousel({selectedCourse, MainImage, setMainImage }) {
+function Carousel({selectedCourse, MainImage, setMainImage , userdata }) {
 
     const settings = {
       dots: true,
@@ -60,7 +60,7 @@ function Carousel({selectedCourse, MainImage, setMainImage }) {
         script.onload = () => {
           const mapOptions = {
             center: new window.naver.maps.LatLng(mapy,mapx),
-            zoom: 80
+            zoom: 17
           };
           
           const map = new window.naver.maps.Map('map', mapOptions);
