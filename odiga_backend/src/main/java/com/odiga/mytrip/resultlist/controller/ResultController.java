@@ -2,7 +2,6 @@ package com.odiga.mytrip.resultlist.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.resultlist.service.ResultService;
 import com.odiga.mytrip.resultlist.vo.ResultVO;
 import com.odiga.mytrip.travel.service.NaverApiService;
@@ -12,11 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -31,7 +27,7 @@ public class ResultController {
 
 
     // http://localhost:8080/courseId/odiga_2
-    @GetMapping("/courseId/{courseNo}")
+    @GetMapping("/courseId/{nickname}/{courseNo}")
     public ResponseEntity<Map<String, Map<Integer, Map<String, Object>>>> result(@PathVariable String courseNo) {
 
         /**
@@ -190,12 +186,51 @@ public class ResultController {
     @PostMapping("/sendPw")
     @ResponseBody
     public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
+        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("courseNo"));
 
-        log.info("잘 도착했니?={}", courseInfo.get("pw") +"_"+ courseInfo.get("id"));
+    }
 
+    // 아이디를 받아서 전체 결과 목록을 전달
+    // 보내줄꺼, 닉넴에 대한 제목, 여행지?
+    // 닉네임 / index: 여행지(여러개), courseID: 코스 아이디, courseTitle: 여행 제목
+    @GetMapping("/mypage/mycourse/{nickname}")
+    @ResponseBody
+    public ResponseEntity<Map<String, Map<String, Object>>> findResultList(@PathVariable String nickname) {
+        Map<String, Map<String, Object>> resultMap = new HashMap<>();
+        Map<String, ArrayList<String>> travelArrays = new HashMap<>(); // 각 courseNo에 대한 travelArray를 관리하기 위한 맵
 
-        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("id"));
+        List<ResultVO> allResults = resultService.findAllResultTitles(nickname);
+        Iterator<ResultVO> rsIter = allResults.iterator();
 
+        while (rsIter.hasNext()) {
+            ResultVO result = rsIter.next();
+
+            // 새로운 userResults 맵 생성
+            Map<String, Object> userResults = new HashMap<>();
+
+            // userResults에 데이터 추가
+            userResults.put("title", result.getCourseTitle());
+
+            TravelListVO travelInfo = travelService.TravelList(String.valueOf(result.getContentId()));
+
+            ArrayList<String> travelArray = travelArrays.getOrDefault(result.getCourseNo(), new ArrayList<>());
+            String travelLocation = String.join(" - ", travelArray);
+
+            travelArray.add(travelInfo.getTitle());
+            userResults.put("content", travelLocation);
+
+            // resultMap에 추가
+            resultMap.put(result.getCourseNo(), userResults);
+
+            travelArrays.put(result.getCourseNo(), travelArray);
+        }
+        return ResponseEntity.ok(resultMap);
+    }
+
+    @GetMapping("/findSharePw/{courseNo}")
+    public ResponseEntity<String> findSharePw(@PathVariable String courseNo) {
+        String sharePw = resultService.findSharePw(courseNo);
+        return ResponseEntity.ok(sharePw);
     }
 
     // 네이버 api(driving-5)

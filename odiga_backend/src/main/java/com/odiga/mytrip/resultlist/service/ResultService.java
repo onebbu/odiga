@@ -24,12 +24,21 @@ public class ResultService {
         return resultDAO.selectResultList(courseNo);
     }
 
+    public List<ResultVO> findAllResultTitles(String nickname){
+        // map으로 가져와서 순서대로 출력
+        return resultDAO.findAllTitles(nickname);
+    }
+
     public int findMaxTravelNum(String courseNo, int courseDay){
         return resultDAO.maxTravelNum(courseNo, courseDay);
     }
 
     public String findCategory(String category) {
         return resultDAO.findCategory(category);
+    }
+
+    public String findSharePw(String courseNo) {
+        return resultDAO.findSharePw(courseNo);
     }
 
     public String findCategoryKR(String category) {

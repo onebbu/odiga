@@ -19,7 +19,7 @@
             SELECT contentid, title, addr1, firstimage, cat3, areacode
             FROM travellist
             WHERE AREACODE = #{areacode}
-            ORDER BY title
+            ORDER BY ${order}
         ) WHERE ROWNUM <![CDATA[<= ]]> #{displayCount}
     </select>
 

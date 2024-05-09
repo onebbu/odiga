@@ -55,6 +55,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         Member member = saveOrUpdateAndGet(attributes);
 
         httpSession.setAttribute("member", new SessionMember(member));
+        httpSession.setAttribute("registrationId", registrationId);
 
         log.info("세션 정보={}", httpSession.getAttribute(member.getEmail()));
 

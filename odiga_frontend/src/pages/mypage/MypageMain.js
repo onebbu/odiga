@@ -1,59 +1,69 @@
-import React from "react"; // React를 불러옵니다.
-import { Link, Route, Routes } from "react-router-dom";
+import React, {useContext, useEffect} from "react";
+import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import "./css/mypage.css";
-
 import Myarticle from "./Myarticle";
 import Mypage from "./Mypage";
 import Mylist from "./Mylist";
 import Mycourse from "./Mycourse";
-import { responsiveFontSizes } from "@mui/material";
+import Header from "../component/navbar/Header";
+import {LoginInfoContext} from "../login/LoginInfoProvider";
+
+// http://localhost:3000/my-page
 
 function MypageMain() {
-  return (
-    <>
-      <Header>헤더공간</Header>
+    const loginInfo = useContext(LoginInfoContext);
+    const navigate = useNavigate();
 
-      <Container>
-        <Sub_cotainer>
-          <Aside>
-            <Item>
-              <Link className="mypageitem" to="/mypage">
-                회원정보
-              </Link>
-            </Item>
-            <Item>
-              <Link className="mypageitem" to="/mypage/myarticle">
-                내가 작성한 글
-              </Link>
-            </Item>
-            <Item>
-              <Link className="mypageitem" to="/mypage/mycourse">
-                여행코스 조회
-              </Link>
-            </Item>
-            <Item>
-              <Link className="mypageitem" to="/mypage/mylist">
-                여행 찜 목록
-              </Link>
-            </Item>
-          </Aside>
+    useEffect(() => {
+        if (!loginInfo) {
+            alert("로그인 정보를 찾을 수 없습니다.")
+            navigate("/login")
+        }
+    }, [loginInfo]);
 
-          {/* 메인 섹션 */}
-          <Section className="thirteen wide column">
-            <Routes>
-              <Route path="/*" element={<Mypage />}></Route>
-              <Route path="/myarticle" element={<Myarticle />}></Route>
-              <Route path="/mycourse" element={<Mycourse />}></Route>
-              <Route path="/mylist" element={<Mylist />}></Route>
-            </Routes>
-          </Section>
-        </Sub_cotainer>
-      </Container>
+    return (
+        <>
+            <Header/>
+            <Container>
+                <Sub_cotainer>
+                    <Aside>
+                        <Item>
+                            <Link className="mypageitem" to="/my-page">
+                                회원정보
+                            </Link>
+                        </Item>
+                        <Item>
+                            <Link className="mypageitem" to="/my-page/my-article">
+                                내가 작성한 글
+                            </Link>
+                        </Item>
+                        <Item>
+                            <Link className="mypageitem" to="/my-page/my-course">
+                                여행코스 조회
+                            </Link>
+                        </Item>
+                        <Item>
+                            <Link className="mypageitem" to="/my-page/my-list">
+                                여행 찜 목록
+                            </Link>
+                        </Item>
+                    </Aside>
 
-      <Footer>푸터공간</Footer>
-    </>
-  );
+                    {/* 메인 섹션 */}
+                    <Section className="thirteen wide column">
+                        <Routes>
+                            <Route path="/*" element={<Mypage/>}></Route>
+                            <Route path="/my-article" element={<Myarticle/>}></Route>
+                            <Route path="/my-course" element={<Mycourse/>}></Route>
+                            <Route path="/my-list" element={<Mylist/>}></Route>
+                        </Routes>
+                    </Section>
+                </Sub_cotainer>
+            </Container>
+        </>
+    )
+        ;
 }
 
 export default MypageMain;
@@ -67,8 +77,6 @@ const Container = styled.div`
   top: 5em;
   bottom: 5em;
   display: block;
-  margin-left: auto%;
-  margin-right: auto%;
   width: 100%;
   overflow: auto;
 `;
@@ -95,29 +103,12 @@ const Section = styled.section`
   justify-content: center;
   text-align: center;
   width: 80%;
-  padding-right: 20%;
+  padding-left: 15%;
+  padding-right: 15%;
 `;
 
 const Item = styled.div`
   justify-content: center;
   width: 100%;
   margin-bottom: 20px;
-`;
-
-const Header = styled.header`
-  line-height: 5em;
-  text-align: center;
-  background-color: lightblue;
-  top: 0;
-  width: 100%;
-  position: fixed;
-`;
-
-const Footer = styled.footer`
-  line-height: 5em;
-  text-align: center;
-  background-color: lightblue;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
 `;

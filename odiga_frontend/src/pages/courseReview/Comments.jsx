@@ -16,7 +16,7 @@ function Comments() {
 
   const handleSubmit = async () => {
     if (comment.length > 100) {
-        alert("댓글은 50자 이하로 작성해주세요.");
+        alert("댓글은 100 byte 이하로 작성해주세요.");
         return; // 글쓰기 중단
       }
 
@@ -72,7 +72,8 @@ function Comments() {
       <div
         style={{
           margin: "0 auto",
-          width: "60%",
+          marginBottom: "30px",
+          width: "100%",
           border: "1px solid #e5e5e5",
           padding: "14px",
           backgroundColor: "#f7f7f7",
@@ -80,7 +81,7 @@ function Comments() {
         }}
       >
         <textarea
-          placeholder="소중한 댓글을 100자 이내로 남겨주세요"
+          placeholder="소중한 댓글을 100 byte 이내로 남겨주세요"
           style={{
             margin: "0 auto",
             padding: "15px 20px",
@@ -112,7 +113,6 @@ function Comments() {
         </Container>
       </div>
 
-      {/* 댓글 목록 출력 */}
       {allComments.map((item) => (
         <Reviews key={item.commentId}>
           <div
@@ -121,6 +121,7 @@ function Comments() {
               paddingRight: "23px",
               fontSize: "16px",
               color: "black",
+              textAlign:"left"
             }}
           >
             <CommentContent>{item.commentContent}</CommentContent>
@@ -199,7 +200,7 @@ const Button = styled.button`
 `;
 
 const Reviews = styled.div`
-  width: 60%;
+  width: 100%;
   margin: 0 auto;
   padding: 20px 10px;
   border-bottom: 1px solid #e6e6e6;

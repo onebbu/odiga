@@ -1,0 +1,195 @@
+a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, body, center, canvas, caption, cite, code, command, datalist, dd, del, details, dfn, dl, div, dt, em, embed, fieldset, figcaption, figure, font, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, input, select, textarea, button, kbd, keygen, label, legend, li, meter, nav, menu, object, ol, output, p, pre, progress, q, s, samp, section, small, span, source, strike, strong, sub, sup, table, tbody, tfoot, thead, th, tr, colgroup, col, tdvideo, tt, u, ul, var {
+    margin: 0 ;
+    padding: 0; 
+  }
+.inner {
+    width: 100%;
+    height: 100%;
+  }
+.main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.travelTitle {
+      margin-top: 100px;
+      width: 100%;
+      height: 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 24px;
+}
+.travelTitle p {
+    color: #bbb;
+    font-size: 15px;
+}
+.InfoAndLikeBox{
+    display: flex;
+    justify-content: space-between;
+}
+.actionBar{
+    display: flex;
+}
+.countContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.mapLocation {
+   width: 100%;
+   padding-left: 110px;
+   padding-right: 110px;
+}
+.detailInfo {
+    width: 100%;
+    padding-left: 110px;
+    padding-right: 110px;
+    margin-bottom: 50px;
+}
+.contourLine3 {
+    margin: 20px 0px;
+    width: 100%;
+    height: 2px;
+    background-color: #ccc; 
+} 
+.contourLine4 {
+    margin: 20px 0px;
+    width: 600px;
+    height: 2px;
+    background-color: #ccc; 
+} 
+.contourLine5 {
+    margin: 0px 30px;
+    width: 2px;
+    height: 50px;
+    background-color: #ccc; 
+}
+.starBox {
+    display: flex;
+}
+.tagList {
+    width: 100%;
+    margin-top: 10px;
+    padding-left: 110px;
+    padding-right: 110px;
+    display: flex;
+}
+.tagItem {
+    width: 100%;
+    display: flex;
+}
+.tagItemBox {
+    width: auto;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color:cornflowerblue;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.tagItemBox p {
+    margin-left: 8px;
+    margin-right: 8px;
+    color:white;
+    margin-bottom: 0px;
+ }
+ .slider{
+   margin-top: 30px;
+   width: 100%;
+   padding-left: 110px;
+   padding-right: 110px;
+ } 
+ .slider p {
+    font-size: 24px;
+ }
+ .sliderImg {
+    width: 100%;      
+    height: 600px;      
+    object-fit: cover; 
+    border-radius: 15px;
+ }
+ .sliderImgBox {
+    width: 100%;      
+    height: 600px;
+    border-radius: 15px;
+
+ }
+
+ .reviewImportForm {
+   margin-top: 100px;
+   width: 1300px;
+   height: 500px;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+ }
+ .reviewImportForm p {
+    color: darkslategray;
+    font-size: 24px;
+ }
+ .reviewBox {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 500px;
+    height: 200px;
+    border: 2px solid black; 
+    border-radius: 10px;
+    resize: none; 
+    padding: 10px; 
+    box-sizing: border-box;
+ }
+ .LikeButton {
+    background: none; 
+    border: none; 
+    box-shadow: none;
+    padding-left:8px; 
+    font-size: 24px; 
+    cursor: pointer; 
+ }
+ .successButton {
+    background: none; 
+    border: none; 
+    box-shadow: none;
+    font-size: 16px; 
+    cursor: pointer; 
+ } 
+ .successButton p {
+    font-size: 24px;
+ }
+ .contourLine6 {
+    margin: 20px 0px 50px 0px;
+    width: 1300px;
+    height: 2px;
+    background-color: #ccc;
+ }
+ .reviewItem {
+   width: 1300px;
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 40px;
+   margin-top: 10px;
+   background-color: #eee;
+   border-radius: 10px;
+ }
+ .reviewComment {
+    padding: 15px;
+ }
+ .commentInfo {
+    display: flex;
+    margin-left: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+ }
+ .commentDetail {
+    margin: 5px 5px;
+ }

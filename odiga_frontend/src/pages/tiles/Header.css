@@ -1,0 +1,170 @@
+.app-header {
+  width: 100%;
+  height: 100px;
+  background-color: white;
+  padding: 5px;
+  position: fixed;
+ 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100; 
+}
+
+
+.header-logo {
+  width: 100px; 
+  height: 100px;
+  background-size: cover;
+  background-position: center;
+  background-image: url(../../assets/images/logo/odiga-logo-rmbg.png);
+}
+
+
+.header-nav {
+  display: flex;
+  align-items: center;
+}
+
+.NavMenu {
+  display: flex;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.NavMenu li {
+  margin: 0 30px; 
+}
+
+.NavMenu a {
+  text-decoration: none;
+  color: #333;
+  font-size: 18px;
+}
+
+.Header .NavMenu a:hover {
+  font-weight: bold; 
+}
+
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 50px;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  margin-right: 20px; 
+}
+
+.search-input {
+  width: 300px;
+  height: 40px; 
+  border: none;
+  border-bottom: 1px solid #333; 
+  background-color: transparent;
+  font-size: 16px; 
+  text-align: left; 
+}
+
+.search-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer; 
+  font-size: 20px;
+}
+
+
+.login-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-link {
+  background-color: transparent;
+  font-size: 20px;
+  color: #333; 
+  display: flex;
+}
+
+
+input:focus, button:focus, a:focus {
+  outline: none;
+}
+
+
+.sub-menu-line {
+  width: 2px;
+  height: 30px;
+  background-color: #333; 
+  margin: 0px 30px; 
+}
+
+
+.hamburger {
+  display: none;
+
+}
+
+.nav-wrapper {
+  display: none;
+  position: absolute;
+  width: 100%;
+  top: 100px; 
+  left: 0;
+  background: white; 
+  transition: all 0.3s;
+  overflow: hidden;
+  max-height: 0; 
+}
+
+
+.nav-wrapper.open {
+  display: block;
+  max-height: 300px; 
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+    background-color: white;
+    border: none;
+    font-size: 24px;
+    margin-left: 20px;
+    cursor: pointer;
+    color: #333;
+  }
+
+  .header-nav, .nav-wrapper {
+    width: 100%;
+    display: block;
+  }
+
+  .NavMenu {
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .NavMenu li {
+    padding: 10px 0; 
+    border-bottom: 1px solid #ccc; 
+  }
+
+  .NavMenu a {
+    display: block;
+    text-decoration: none;
+    color: #333;
+    padding: 15px 20px; 
+  }
+
+  .NavMenu li:last-child {
+    border-bottom: none;
+  }
+}
