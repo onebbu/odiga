@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odiga.mytrip.travel.dao.TravelDAO;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
+import com.odiga.mytrip.travel.vo.TravelCatKorVO;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 
 import java.io.BufferedReader;
@@ -141,6 +142,8 @@ public class TravelService {
     public void LikePlusOne(String contentId){
         travelDAO.Like(contentId);
     }
-
+    public TravelCatKorVO Catkr(String cat1 , String cat2 , String cat3){
+        return travelDAO.cattranskr(cat1, cat2, cat3);
+    }
     
 }

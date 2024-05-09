@@ -3,6 +3,7 @@ import styled from "styled-components";
 import axios from "axios";
 import Carousel from "./carousel.js";
 import TextEditor from "../component/Ckeditor/TextEditor";
+import HashtagInput from "./HashtagInput.js";
 
 
 const Input = styled.input`
@@ -21,6 +22,7 @@ function CourseImport() {
   const [courseDayData, setCourseDayData] = useState(null);
   const [boardContent , setBoardContent] = useState("");
   const [MainImage, setMainImage] = useState(null);
+  const [tags, setTags] = useState(null);
 
   const handleTitleChange = (event) => {
     // console.log(MainImage);
@@ -32,7 +34,8 @@ function CourseImport() {
     axios.post("/courseimport", {
       Title: title,
       BoardContent: boardContent,
-      MainImage : MainImage
+      MainImage : MainImage ,
+      Tags : tags
     })
       .then((response) => {
         console.log(response, "가 전송됐습니다.");
@@ -57,7 +60,6 @@ function CourseImport() {
 
   const handleclickoption = (event) => {
     const value = event.target.value;
-    console.log(value);
     const userCourseNO = userdata.filter((data) => data.courseno === "odiga_" + value);
     console.log(userCourseNO);
     setSelectedCourse(userCourseNO);
@@ -67,6 +69,11 @@ function CourseImport() {
     const dayCourseData = selectedCourse.filter((data) => parseInt(data.courseday) === day);
     console.log(dayCourseData);
     setCourseDayData(dayCourseData);
+  };
+
+  const handleTagsChange = (newTags) => {
+    console.log(newTags);
+    setTags(newTags);
   };
   
   
@@ -131,17 +138,25 @@ function CourseImport() {
             }}
           >
             <TextEditor setData={setBoardContent} />
-
+            
           </Div>
+
+          {/* 해쉬태그 입력칸 */}
+          <HashtagInput onTagsChange={handleTagsChange} />
+
+
           <h4> 여행코스 정보 </h4>
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
           <select onChange={handleclickoption}>
             {[...new Set(userdata.map((data) => data.courseno))]
-              .map((courseno) => (
-                <option key={courseno} value={courseno.split('odiga_')[1]}>
-                  {courseno}
-                </option>
-                ))}
+              .map((courseno) => {
+                const courseTitle = userdata.find((data) => data.courseno === courseno).coursetitle;
+                return (
+                  <option key={courseno} value={courseno.split('odiga_')[1]}>
+                    {courseTitle}
+                  </option>
+                );
+              })}
           </select>
 
 

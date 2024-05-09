@@ -2,6 +2,7 @@ package com.odiga.mytrip.travel.controller;
 
 import com.odiga.mytrip.travel.service.TravelService;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
+import com.odiga.mytrip.travel.vo.TravelCatKorVO;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 
 import java.io.IOException;
@@ -33,6 +34,11 @@ public class TravelController {
             String newOverview = travelService.fetchOverviewData(contentId);
             travelInfo.setOverview(newOverview);
         }
+        TravelCatKorVO catkr = travelService.Catkr(travelInfo.getCat1(), travelInfo.getCat2(), travelInfo.getCat3());
+        travelInfo.setCat1(catkr.getCat1kr());
+        travelInfo.setCat2(catkr.getCat2kr());
+        travelInfo.setCat3(catkr.getCat3kr());
+        System.out.println(travelInfo);
         return travelInfo;
     }
     @PostMapping("/reviewImport")
