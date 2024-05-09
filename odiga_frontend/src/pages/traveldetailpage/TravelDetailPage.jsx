@@ -2,7 +2,7 @@ import React, { useState ,  useEffect } from "react";
 import axios from 'axios';
 import ReviewImportForm from './component/ReviewImportForm';
 import ReviewDisplay from "./component/ReviewDisplay";
-import Header from "../tiles/Header";
+import Header from "../component/navbar/Header";
 import './TravelDetailPage.css';
 import Footer from '../component/footer/Footer';
 import Slider from "react-slick";
