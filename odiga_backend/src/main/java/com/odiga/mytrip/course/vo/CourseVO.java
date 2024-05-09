@@ -1,6 +1,5 @@
 package com.odiga.mytrip.course.vo;
 
-import java.sql.Date;
 
 import lombok.*;
 
@@ -13,9 +12,8 @@ public class CourseVO {
     private int contentid;
     private String nickname;
     private String email;
-    private Date startdate;
-    private Date enddate;
     private String courseyn;
+    private String coursetitle;
     private String firstimage;
     private String title;
     private String mapx;

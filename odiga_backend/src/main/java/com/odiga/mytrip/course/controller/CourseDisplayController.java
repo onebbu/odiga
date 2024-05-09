@@ -1,11 +1,11 @@
 package com.odiga.mytrip.course.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.odiga.mytrip.course.service.CourseService;
 import com.odiga.mytrip.course.vo.CourseVO;
 
@@ -35,11 +35,17 @@ public class CourseDisplayController {
         String boardTitle = courseRequest.get("Title");
         String boardContent = courseRequest.get("BoardContent");
         String mainimage = courseRequest.get("MainImage");
+        String tags = courseRequest.get("Tags");
+
+
+
+        
         System.out.println("메인이미지: "+ mainimage);
-        courseService.saveCourse(boardTitle,boardContent,mainimage);
+        courseService.saveCourse(boardTitle,boardContent,mainimage,tags);
         System.out.println("courseimport컨트롤러 실행");
         System.out.println("제목: " + boardTitle);
         System.out.println("내용: " + boardContent);
+        System.out.println("태그: " + tags);
         return "코스 정보가 성공적으로 저장되었습니다.";
     }
 

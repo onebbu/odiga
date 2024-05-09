@@ -12,10 +12,9 @@
             r.TRAVELNUM, 
             r.CONTENTID, 
             r.NICKNAME, 
-            r.EMAIL, 
-            r.STARTDATE, 
-            r.ENDDATE, 
+            r.EMAIL,  
             r.COURSEYN,
+            r.COURSETITLE,
             t.FIRSTIMAGE,
             t.title,
             t.mapx,
@@ -30,8 +29,8 @@
     </select>
     <insert id="saveCourseData" parameterType="String">
         INSERT INTO TRAVELCOURSEREVIEW
-        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN)
-        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y')
+        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , TAGS)
+        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
     </insert>
 
 
@@ -42,8 +41,6 @@
         <result property="contentid" column="CONTENTID"/>
         <result property="nickname" column="NICKNAME"/>
         <result property="email" column="EMAIL"/>
-        <result property="startdate" column="STARTDATE"/>
-        <result property="enddate" column="ENDDATE"/>
         <result property="courseyn" column="COURSEYN"/>
         <result property="firstimage" column="FIRSTIMAGE"/>
         <result property="title" column="TITLE"/>

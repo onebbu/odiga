@@ -9,5 +9,5 @@
     @Mapper
     public interface CourseDAO {
         List<CourseVO> getResultList(String nickname);
-        void saveCourseData(String boardTitle , String boardContent , String mainimage);   
+        void saveCourseData(String boardTitle , String boardContent , String mainimage ,String tags);   
     }
