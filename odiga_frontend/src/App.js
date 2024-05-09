@@ -31,7 +31,7 @@ function App() {
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
                     <Route exact path="/place" element={<ChoosePlace/>}></Route>
-                    <Route exact path="/placelist" element={<PlaceList/>}></Route>
+                    <Route exact path="/place/show" element={<PlaceList/>}></Route>
                 </Route>
 
 

@@ -1,18 +1,20 @@
 import React, {useState , useEffect } from "react";
 import Styled from "styled-components";
 import './PL.css';
+import Header from "../component/navbar/Header";
+import Footer from '../component/footer/Footer';
 import { useLocation, useNavigate } from "react-router-dom";
 import ListPlace from '../choosePlace/Place';
 
-// http://localhost:3000/placelist
+// http://localhost:3000/place/show
 
 const Body= Styled.div`
     margin: 0;
     padding: 0;
     background: #f3f4f6; /* 미미한 회색 */
 `;
-const Wrapper=Styled.div` display: flex; min-height: 100vh; `;
-const Section=Styled.div` position: relative; border: 1px solid #ccc; width: 100%; gap: 20px;
+const Wrapper=Styled.div` display: flex; min-height: 100vh; padding-top:100px;`;
+const Section=Styled.div` position: relative; width: 100%; gap: 20px;
    display: flex; flex-direction: column; padding: 16px;`;
 const ItemsContainer = Styled.div`
     margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
@@ -80,11 +82,13 @@ const PlaceList = () => {
 
   return(
     <Body>
+      <Header />
       <Wrapper>
             <Section>  
               <ItemsWrapper targetAreacode={targetArea} />
             </Section>
         </Wrapper>
+        <Footer />
     </Body>
   );  
 }
@@ -107,7 +111,7 @@ const ItemsWrapper = ({ targetAreacode }) => {
   return(<>
     <ItemsContainer>
       <div className="item">
-          <p> 여행지를 드래그하여 채워보세요! </p>
+          <p> 너 오디가 ! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
       <div className="item"> <span> 
