@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useState} from "react"; // React를 불러옵니다.
-import { Link, Route, Routes } from "react-router-dom";
+import React, {useContext, useEffect} from "react";
+import {Link, Route, Routes, useNavigate} from "react-router-dom";
 import styled from "styled-components";
 import "./css/mypage.css";
 import Myarticle from "./Myarticle";
@@ -7,55 +7,63 @@ import Mypage from "./Mypage";
 import Mylist from "./Mylist";
 import Mycourse from "./Mycourse";
 import Header from "../component/navbar/Header";
-import LoginInfoProvider, {LoginInfoContext} from "../login/LoginInfoProvider";
-import Footer from '../component/footer/Footer';
+import {LoginInfoContext} from "../login/LoginInfoProvider";
 
+// http://localhost:3000/my-page
 
 function MypageMain() {
   const loginInfo = useContext(LoginInfoContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loginInfo) {
+      alert("로그인 정보를 찾을 수 없습니다.")
+      navigate("/login")
+    }
+  }, [loginInfo]);
+
   return (
-    <>
-      <Header />
+      <>
+        <Header/>
+        <Container>
+          <Sub_cotainer>
+            <Aside>
+              <Item>
+                <Link className="mypageitem" to="/my-page">
+                  회원정보
+                </Link>
+              </Item>
+              <Item>
+                <Link className="mypageitem" to="/my-page/my-article">
+                  내가 작성한 글
+                </Link>
+              </Item>
+              <Item>
+                <Link className="mypageitem" to="/my-page/my-course">
+                  여행코스 조회
+                </Link>
+              </Item>
+              <Item>
+                <Link className="mypageitem" to="/my-page/my-list">
+                  여행 찜 목록
+                </Link>
+              </Item>
+            </Aside>
 
-      <Container>
-        <Sub_cotainer>
-          <Aside>
-            <Item>
-              <Link className="mypageitem" to="/my-page">
-                회원정보
-              </Link>
-            </Item>
-            <Item>
-              <Link className="mypageitem" to="/my-page/my-article">
-                내가 작성한 글
-              </Link>
-            </Item>
-            <Item>
-              <Link className="mypageitem" to="/my-page/my-course">
-                여행코스 조회
-              </Link>
-            </Item>
-            <Item>
-              <Link className="mypageitem" to="/my-page/my-list">
-                여행 찜 목록
-              </Link>
-            </Item>
-          </Aside>
-
-          {/* 메인 섹션 */}
-          <Section className="thirteen wide column">
+            {/* 메인 섹션 */}
+            <Section className="thirteen wide column">
               <Routes>
-                <Route path="/*" element={<Mypage />}></Route>
-                <Route path="/my-article" element={<Myarticle />}></Route>
-                <Route path="/my-course" element={<Mycourse />}></Route>
-                <Route path="/my-list" element={<Mylist />}></Route>
+                <Route path="/*" element={<Mypage/>}></Route>
+                <Route path="/my-article" element={<Myarticle/>}></Route>
+                <Route path="/my-course" element={<Mycourse/>}></Route>
+                <Route path="/my-list" element={<Mylist/>}></Route>
               </Routes>
-          </Section>
-        </Sub_cotainer>
-      </Container>
-
-    </>
-  );
+            </Section>
+          </Sub_cotainer>
+        </Container>
+      </>
+  )
+      ;
 }
 
 export default MypageMain;
@@ -69,8 +77,6 @@ const Container = styled.div`
   top: 5em;
   bottom: 5em;
   display: block;
-  //margin-left: auto%;
-  //margin-right: auto%;
   width: 100%;
   overflow: auto;
 `;

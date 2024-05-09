@@ -1,16 +1,21 @@
 import * as React from 'react';
 import "./ResultList.css";
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import {Link} from "react-router-dom";
-import {useState} from "react";
+import {Link, useParams} from "react-router-dom";
+import {useContext, useState} from "react";
 import LocationContent from "./LocationContent.jsx";
 import KakaoSharing from "../component/kakao-sharing/KakaoSharing";
 import {Accordion, Card} from 'react-bootstrap';
+import {LoginInfoContext} from "../login/LoginInfoProvider";
 
 export default function ResultList({data}) {
 
     const [showModal, setShowModal] = useState(false);
     const [contentId, setContentId] = useState('');
+
+    const loginInfo = useContext(LoginInfoContext);
+    let {nickname, courseNo} = useParams();
+
 
     const handleShowModal = (id) => {
         setShowModal(true);
@@ -125,19 +130,21 @@ export default function ResultList({data}) {
         ))}
         {showModal && <LocationContent show={showModal} handleClose={handleCloseModal} contentId={contentId}/>}
         <hr/>
-        <div className="kakao">
-            <br/>
-            <Accordion defaultActiveKey={null}>
-                <Accordion.Item eventKey="0">
-                    <Accordion.Header
-                        style={{backgroundColor: "black"}}
-                    >지금 {courseTitle}을 다른 사람과 공유해보세요</Accordion.Header>
-                    <Accordion.Body>
-                        <KakaoSharing/>
-                    </Accordion.Body>
-                </Accordion.Item>
-            </Accordion>
-        </div>
+        {loginInfo.nickname === nickname ? (
+            <div className="kakao">
+                <br/>
+                <Accordion defaultActiveKey={null}>
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header style={{backgroundColor: "black"}}>
+                            지금 {courseTitle}을 다른 사람과 공유해보세요
+                        </Accordion.Header>
+                        <Accordion.Body>
+                            <KakaoSharing/>
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
+            </div>
+        ) : null}
         </body>
     );
 }

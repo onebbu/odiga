@@ -1,78 +1,102 @@
 import * as React from 'react';
 import "./ResultList.css";
 import Header from "../component/navbar/Header";
-import {useEffect, useState} from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import NaverMapView from "./naver-map/NaverMapView";
 import ResultList from "./ResultList";
 import "./ResultView.css"
 import Spinner from 'react-bootstrap/Spinner';
-import {useParams} from "react-router-dom";
-
-/**
- * 접근 경로 설정
- * 1. 카톡 비밀번호 입력 시 접근
- *      카톡 비밀번호 백에서 가져와야함 => 성공
- *      비밀번호가 비어있을 경우 아예 사용자만 접근 가능
- * 2. 미팅을 생성한 사용자 일 경우 인증 과정 없이 접근
- */
-
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function ResultView() {
     const [data, setData] = useState([null]);
+    const [loginInfo, setLoginInfo] = useState({});
     const [loading, setLoading] = useState(true);
-    const [sharePw, setSharePw] = useState(''); // sharePw 변수를 상태로 관리
-    const [enteredPW, setEnteredPW] = useState('');
-    let { nickname, courseNo } = useParams();
-
+    const [sharePw, setSharePw] = useState('');
+    const { nickname, courseNo } = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         async function fetchData() {
             try {
                 const result = await axios.get(`/courseId/${nickname}/${courseNo}`);
-                const newData = result.data; // 새로운 데이터로 업데이트할 변수
-                setData(newData); // 데이터 업데이트
-
-                const response = await axios.get(`/findSharePw/${courseNo}`);
-                const newSharePw = response.data;
-                setSharePw(newSharePw);
-
-
+                const newData = result.data;
+                setData(newData);
+                // 데이터를 가져온 후에 공유 비밀번호 설정
+                Object.values(newData).forEach(item => {
+                    setSharePw(item[0].sharePw);
+                });
             } catch (error) {
                 console.error("Error fetching data:", error);
             } finally {
-                setLoading(false); // 데이터 로딩 완료 후 로딩 상태 변경
+                setLoading(false);
             }
         }
 
         fetchData();
 
-        // cleanup 함수에서 completed 변수 제거
         return () => {
-            setData([]); // 컴포넌트가 unmount될 때 data 초기화
-            setSharePw(''); // 컴포넌트가 unmount될 때 sharePw 초기화
+            setData([]);
+            setSharePw('');
         };
 
-    }, []);
+    }, [nickname, courseNo]);
 
     useEffect(() => {
-        // 페이지가 처음 로딩될 때 alert 창을 띄워 비밀번호를 입력받음
-        const enteredPassword = prompt('Please enter the password to access the page:');
-        setEnteredPW(enteredPassword); // 입력한 비밀번호를 상태에 저장
-        handleAccessAttempt(enteredPassword); // 비밀번호 확인 함수 호출
-    }, []); // 빈 의존성 배열로 설정하여 한 번만 실행
-
-    // 비밀번호 확인 핸들러
-    const handleAccessAttempt = (enteredPassword) => {
-        // 사용자가 입력한 비밀번호와 저장된 비밀번호 비교
-        if (sharePw === enteredPassword) { // 비밀번호가 올바른 경우
-            alert('Welcome! You have access to the page.');
-            // 여기에 페이지 이동 로직 등 추가
-        } else { // 비밀번호가 잘못된 경우
-            alert('Incorrect password. Please try again.');
-            // 이전 페이지로 이동
+        async function fetchLoginInfo() {
+            try {
+                const token = localStorage.getItem('token');
+                const config = {
+                    headers: {
+                        'Authorization': `${token}`
+                    }
+                };
+                let response;
+                if (token === null) {
+                    console.log("oauth 로그인");
+                    response = await axios.get('/auth/oauth-info');
+                } else {
+                    console.log("jwt 로그인");
+                    response = await axios.get('/auth/jwt-info', config);
+                }
+                const data = response.data;
+                // loginInfo 상태 업데이트
+                setLoginInfo(data);
+            } catch (error) {
+                console.error('Failed to fetch login info:', error);
+            }
         }
-    };
+
+        fetchLoginInfo();
+    }, [nickname]);
+
+    useEffect(() => {
+        // 로그인하지 않았을 경우
+        if (!loginInfo && sharePw) {
+            const enteredPassword = prompt('공유 비밀번호를 입력해주세요');
+            if (sharePw === enteredPassword) {
+                alert('올바른 비밀번호입니다!');
+                // 페이지 이동 로직 추가
+            } else {
+                alert('비밀번호가 잘못되었습니다! 다시 입력해주세요');
+                navigate('/');
+            }
+        }
+
+        // loginInfo가 존재하고 해당하는 사용자의 닉네임과 nickname이 다른 경우
+        if (Object.keys(loginInfo).length > 0 && loginInfo.nickname !== nickname && sharePw) {
+            // 공유 비밀번호 확인 로직 실행
+            const enteredPassword = prompt('공유 비밀번호를 입력해주세요');
+            if (sharePw === enteredPassword) {
+                alert('올바른 비밀번호입니다!');
+                // 페이지 이동 로직 추가
+            } else {
+                alert('비밀번호가 잘못되었습니다! 다시 입력해주세요');
+                navigate('/');
+            }
+        }
+    }, [loginInfo, nickname, sharePw, navigate]);
 
     return (
         <>
@@ -81,9 +105,9 @@ export default function ResultView() {
                 {loading ? (
                     <div className="loading-wrap">
                         <div className="loading">
-                            <Spinner animation="border" style={{width: '3rem', height:'3rem'}}/>
+                            <Spinner animation="border" style={{width: '3rem', height: '3rem'}}/>
                         </div>
-                        <br />
+                        <br/>
                         <h2>Loading...</h2>
                     </div>
                 ) : (

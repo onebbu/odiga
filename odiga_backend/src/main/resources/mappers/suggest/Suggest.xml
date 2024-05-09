@@ -10,6 +10,7 @@
         FROM  
         (SELECT 
                 ROWNUM AS rnum,
+                boardno,
                 nickname, 
                 boardtitle,
                 boardcontent,
@@ -21,11 +22,12 @@
                 CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
                     ELSE boardgrade * 0.3 
                 END AS weighted_rating,
-                boardviewcount * 0.3 AS weighted_view,  
+                boardviewcount * 0.03 AS weighted_view,  
                 boardlikecount * 0.1 AS weighted_like
             FROM
             (
             SELECT
+                boardno,
                 nickname,
                 boardtitle,
                 boardcontent,  
@@ -34,11 +36,11 @@
                 boardlikecount,
                 boarddate,
                 mainimage
-            FROM travelcoursereview
+            FROM coursereview
             ORDER BY 
                 CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
                     ELSE boardgrade * 0.3 
-                END + boardviewcount * 0.3 + boardlikecount * 0.1 DESC
+                END + boardviewcount * 0.03 + boardlikecount * 0.1 DESC
             )
         )
         WHERE rnum <= 8
@@ -46,5 +48,42 @@
 
 
     </select>
+    <select id="getTravelSuggestList" resultType="com.odiga.mytrip.suggest.vo.SuggestTraVO">
+        SELECT * FROM  
+        (
+            SELECT 
+                ROWNUM AS rnum,
+                subq.* 
+            FROM  
+            (
+                SELECT 
+                    t.contentid,
+                    t.title,
+                    t.addr1,
+                    t.FIRSTIMAGE,
+                    t.TRAVELVIEWCOUNT,
+                    COALESCE(t.LIKECOUNT,0) AS likecount, 
+                    ROUND(r.avg_reviewgrade, 2) AS avg_reviewgrade,
+                    ROUND(
+                        COALESCE(t.TRAVELVIEWCOUNT, 0) * 0.3 + 
+                        COALESCE(t.LIKECOUNT, 0) * 0.5 + 
+                        COALESCE(r.avg_reviewgrade, 0) * 0.5, 2
+                    ) AS weighted_score
+                FROM travellist t 
+                LEFT JOIN (
+                    SELECT contentid, AVG(REVIEWGRADE) AS avg_reviewgrade
+                    FROM travelreview
+                    GROUP BY contentid
+                ) r ON t.contentid = r.contentid
+                ORDER BY weighted_score DESC
+            ) subq  
+        )
+    <![CDATA[ WHERE rnum <= 10]]>
+    </select>
+
+    
+
+
+
 
 </mapper>

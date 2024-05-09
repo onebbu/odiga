@@ -1,9 +1,12 @@
-import React, { useState  } from "react";
+import React, { useEffect, useState  } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import Carousel from "./carousel.js";
 import TextEditor from "../component/Ckeditor/TextEditor";
+import HashtagInput from "./HashtagInput.js";
 
+//닉네임 설정
+const nickname ="gyugyu"
 
 const Input = styled.input`
   width: 100%;
@@ -21,18 +24,26 @@ function CourseImport() {
   const [courseDayData, setCourseDayData] = useState(null);
   const [boardContent , setBoardContent] = useState("");
   const [MainImage, setMainImage] = useState(null);
+  const [tags, setTags] = useState(null);
+  const [areacode, setAreacode] = useState("");
 
   const handleTitleChange = (event) => {
     // console.log(MainImage);
     setTitle(event.target.value);
   };
 
+  useEffect(() => {
+    fetchTravelCourse();
+  } , []);
 
+  
   const courseImport = () => {
     axios.post("/courseimport", {
       Title: title,
       BoardContent: boardContent,
-      MainImage : MainImage
+      MainImage : MainImage ,
+      Tags : tags ,
+      areacode : areacode
     })
       .then((response) => {
         console.log(response, "가 전송됐습니다.");
@@ -44,22 +55,24 @@ function CourseImport() {
 
   const fetchTravelCourse = () => {
     axios.post("/MyCourseDisplay", {
-      nickname: "odiga",
+      nickname: nickname,
     })
       .then((response) => {
         setUserData(response.data);
         console.log("여행 코스를 성공적으로 가져왔습니다.", response.data);
+        if (response.data.length > 0) {
+          setAreacode(response.data[0].areacode);
+          handleclickoption(response.data[0].courseno);
+        }
       })
       .catch((error) => {
         console.error("여행 코스를 가져오는데 실패했습니다:", error);
       });
+      
   };
 
-  const handleclickoption = (event) => {
-    const value = event.target.value;
-    console.log(value);
-    const userCourseNO = userdata.filter((data) => data.courseno === "odiga_" + value);
-    console.log(userCourseNO);
+  const handleclickoption = (courseno) => {
+    const userCourseNO = userdata.filter((data) => data.courseno === courseno);
     setSelectedCourse(userCourseNO);
   };
   
@@ -67,6 +80,11 @@ function CourseImport() {
     const dayCourseData = selectedCourse.filter((data) => parseInt(data.courseday) === day);
     console.log(dayCourseData);
     setCourseDayData(dayCourseData);
+  };
+
+  const handleTagsChange = (newTags) => {
+    console.log(newTags);
+    setTags(newTags);
   };
   
   
@@ -131,17 +149,25 @@ function CourseImport() {
             }}
           >
             <TextEditor setData={setBoardContent} />
-
+            
           </Div>
+
+          {/* 해쉬태그 입력칸 */}
+          <HashtagInput onTagsChange={handleTagsChange} />
+
+
           <h4> 여행코스 정보 </h4>
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
-          <select onChange={handleclickoption}>
+          <select onChange={(event) => handleclickoption(event.target.value)}>
             {[...new Set(userdata.map((data) => data.courseno))]
-              .map((courseno) => (
-                <option key={courseno} value={courseno.split('odiga_')[1]}>
-                  {courseno}
-                </option>
-                ))}
+              .map((courseno) => {
+                const courseTitle = userdata.find((data) => data.courseno === courseno).coursetitle;
+                return (
+                  <option key={courseno} value={courseno}>
+                    {courseTitle}
+                  </option>
+                );
+              })}
           </select>
 
 
@@ -169,7 +195,7 @@ function CourseImport() {
             <button className="btn btn-secondary" type="button" onClick={() => handleDayButtonClick(3)}>
               DAY3
             </button>
-            <Carousel selectedCourse={courseDayData} MainImage={MainImage} setMainImage={setMainImage} />
+            <Carousel selectedCourse={courseDayData} MainImage={MainImage} setMainImage={setMainImage} userdata = {userdata}/>
           </Div>
 
           <Div
