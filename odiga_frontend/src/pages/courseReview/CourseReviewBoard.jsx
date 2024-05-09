@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useContext, useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./static/courseReview.module.css";
 import Styled from "styled-components";
@@ -6,8 +6,7 @@ import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
 import stylee from "../choosePlace/cPP.css";
 import Footer from "../component/footer/Footer";
-import Header from "../tiles/Header";
-import carousel from "./Carousel";
+import Header from "../component/navbar/Header";
 import KoreaMap from "./Map";
 
 
@@ -174,7 +173,6 @@ const CourseReviewBoard = () => {
                   </em>{" "}
                   REVIEW ARTICLES
                 </h4>
-                <LinkButton to={`/courseimport`}>글쓰기</LinkButton>
               </div>
             </div>
             {/* 여기부터는 카드 목록 */}
@@ -292,20 +290,6 @@ const P = Styled.div`
 const StyledLink = Styled(Link)`
   text-decoration: none;
   color: inherit;
-`;
-
-const LinkButton = Styled(Link)`
-  background: #13294b;
-  color: #fff;
-  font-size: 15px;
-  width: 73px;
-  height: 40px;
-  line-height: 40px;
-  text-align: center;
-  margin: 10px;
-  vertical-align: middle;
-  text-decoration: none;
-  float: right;
 `;
 
 export default CourseReviewBoard;

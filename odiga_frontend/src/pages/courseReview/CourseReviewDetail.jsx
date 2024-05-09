@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,8 +14,9 @@ import "slick-carousel/slick/slick.css";
 import styled from "styled-components";
 import Comments from "./Comments";
 import "./static/slider.css";
-import Footer from '../component/footer/Footer';
-import Header from '../tiles/Header';
+import Footer from "../component/footer/Footer";
+import Header from "../tiles/Header";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -24,7 +25,9 @@ function CourseReviewDetail() {
   const [liked, setLiked] = useState(false); // 좋아요 상태 관리
   const [likeCount, setLikeCount] = useState(0); // 좋아요 수 관리
   const navigate = useNavigate(); // useNavigate 훅 사용
+  const loginInfo = useContext(LoginInfoContext);
 
+  console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
     setDidMount(true);
     return () => {};
@@ -78,7 +81,7 @@ function CourseReviewDetail() {
 
   return (
     <>
-    <Header />
+      <Header />
       <Container>
         <section
           style={{
@@ -97,12 +100,27 @@ function CourseReviewDetail() {
             }}
             className="section-heading text-center"
           >
-            <h4 style={{fontFamily:"JalnanGothic", fontSize:"25px", padding: "10px", margin: "0 auto" }}>
+            <h4
+              style={{
+                fontFamily: "JalnanGothic",
+                fontSize: "25px",
+                padding: "10px",
+                margin: "0 auto",
+              }}
+            >
               {detailsData && detailsData[0].boardTitle}{" "}
             </h4>
             <hr />
-            <h7 style={{fontFamily:"JalnanGothic", fontSize:"18px", textAlign: "left", margin: "0 auto" }}>
-              <b>작성자 :</b> {detailsData && detailsData[0].nickname} &nbsp;&nbsp; &nbsp;
+            <h7
+              style={{
+                fontFamily: "JalnanGothic",
+                fontSize: "18px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              <b>작성자 :</b> {detailsData && detailsData[0].nickname}{" "}
+              &nbsp;&nbsp; &nbsp;
               <b>작성일 :</b> {detailsData && detailsData[0].boardDate} <br />{" "}
               <br />
               <FontAwesomeIcon icon={faEye} /> :{" "}
@@ -207,34 +225,38 @@ function CourseReviewDetail() {
               목 록
             </Link>
 
-            <button
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-                float: "right",
-                marginRight: "10px",
-              }}
-            >
-              수 정
-            </button>
+            {detailsData && detailsData[0] && loginInfo && loginInfo.email === detailsData[0].email && (
+              <>
+                <button
+                  className="btn btn-primary"
+                  style={{
+                    width: "100px",
+                    borderColor: "#13294b",
+                    backgroundColor: "#13294b",
+                    color: "#fff",
+                    float: "right",
+                    marginRight: "10px",
+                  }}
+                >
+                  수 정
+                </button>
 
-            <button
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-                margin: "0 10px 0 0",
-                float: "right",
-              }}
-              onClick={handleDelete}
-            >
-              삭 제
-            </button>
+                <button
+                  className="btn btn-primary"
+                  style={{
+                    width: "100px",
+                    borderColor: "#13294b",
+                    backgroundColor: "#13294b",
+                    color: "#fff",
+                    margin: "0 10px 0 0",
+                    float: "right",
+                  }}
+                  onClick={handleDelete}
+                >
+                  삭 제
+                </button>
+              </>
+            )}
           </div>
           <br />
         </section>

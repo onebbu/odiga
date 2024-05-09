@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
 
 function Comments() {
   const [comment, setComment] = useState("");
@@ -9,16 +10,25 @@ function Comments() {
   const [allComments, setAllComments] = useState([]);
   const [responseError, setResponseError] = useState("");
   const { boardNo } = useParams();
+  const loginInfo = useContext(LoginInfoContext);
 
   const handleRatingChange = (value) => {
     setRating(value);
   };
 
   const handleSubmit = async () => {
+    if (!loginInfo) {
+      // 로그인되어 있지 않은 경우
+      alert(
+        "댓글을 작성하려면 로그인이 필요합니다. 로그인 후 다시 시도해주세요."
+      );
+      return;
+    }
+
     if (comment.length > 100) {
-        alert("댓글은 100 byte 이하로 작성해주세요.");
-        return; // 글쓰기 중단
-      }
+      alert("댓글은 100 byte 이하로 작성해주세요.");
+      return; // 글쓰기 중단
+    }
 
     try {
       const response = await axios.post(
@@ -121,7 +131,7 @@ function Comments() {
               paddingRight: "23px",
               fontSize: "16px",
               color: "black",
-              textAlign:"left"
+              textAlign: "left",
             }}
           >
             <CommentContent>{item.commentContent}</CommentContent>
