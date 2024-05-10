@@ -31,6 +31,7 @@ function TravelDetailPage() {
         axios.get(`/detail/${contentID}`)
             .then(response => {
                 setData(response.data);
+                console.log(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -153,6 +154,7 @@ function TravelDetailPage() {
 //         });
 // }, []);
 
+
     return (
         <div className="inner">
             <Header/>
@@ -165,9 +167,9 @@ function TravelDetailPage() {
                 <section className="detailInfo" id="detail-info">
                     <div className="InfoAndLikeBox">
                         <h2>상세 정보</h2>
-                        <div>
+                        <div className="likeview">
                             <span id="view-count">👀 {data && (data.travelviewcount || 0)}</span>
-                            <span style={{marginLeft: '20px'}}><FontAwesomeIcon icon={faHeart} /> {likes}</span>
+                            <span style={{marginLeft: '20px'}}><FontAwesomeIcon icon={faHeart} /> {likes}</span>               
                         </div>
                     </div>
                     <div className="contourLine3"></div>
