@@ -18,4 +18,5 @@ public interface CourseReviewDAO {
     void likeCancel(int boardNo);
 
     List<CourseReviewVO> getMemberArticles(String nickname);
+    void commentDel(CommentsVO commentsVO);
 }

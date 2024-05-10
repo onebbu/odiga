@@ -50,6 +50,11 @@
             #{starRating}
         )
     </insert>
+
+    <delete id="commentDel" parameterType="com.odiga.mytrip.courseReview.CommentsVO">
+        DELETE FROM comments
+        WHERE commentId = #{commentId}
+    </delete>
     
     <update id="boardGrade" parameterType="int">
         UPDATE COURSEREVIEW

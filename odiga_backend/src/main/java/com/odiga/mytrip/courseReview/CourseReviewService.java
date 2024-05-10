@@ -52,5 +52,9 @@ public class CourseReviewService {
         return courseReviewDAO.getMemberArticles(nickname);
     }
 
+    public void commentDel(CommentsVO commentsVO) {
+        courseReviewDAO.commentDel(commentsVO);
+    }
+
     
 }

@@ -42,7 +42,7 @@ function CourseReviewDetail() {
         setLikeCount(boardLikeCount);
 
         // 로컬 스토리지에서 좋아요 상태 확인
-        const storedLikedStatus = localStorage.getItem(`liked_${boardNo}`);
+        const storedLikedStatus = localStorage.getItem(`liked_${boardNo}_${loginInfo.email}`);
         if (storedLikedStatus === "true") {
           setLiked(true);
         }
@@ -63,13 +63,13 @@ function CourseReviewDetail() {
           await axios.post(`/coursereview/like/${boardNo}`);
           setLikeCount((prevCount) => prevCount + 1);
           setLiked(true);
-          localStorage.setItem(`liked_${boardNo}`, "true");
+          localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "true");
           alert("좋아요를 눌렀습니다.")
         } else {
           await axios.post(`/coursereview/likeCancel/${boardNo}`);
           setLikeCount((prevCount) => prevCount - 1);
           setLiked(false);
-          localStorage.setItem(`liked_${boardNo}`, "false");
+          localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "false");
           alert("좋아요를 취소하였습니다.")
         }
       } catch (error) {

@@ -19,9 +19,7 @@ function Comments() {
   const handleSubmit = async () => {
     if (!loginInfo) {
       // 로그인되어 있지 않은 경우
-      alert(
-        "로그인 후 다시 시도해주세요."
-      );
+      alert("로그인 후 다시 시도해주세요.");
       return;
     }
 
@@ -37,11 +35,11 @@ function Comments() {
           boardNo: boardNo,
           commentContent: comment,
           starRating: rating,
-          email:loginInfo.email,
-          commenterName:loginInfo.nickname
+          email: loginInfo.email,
+          commenterName: loginInfo.nickname,
         }
       );
-      
+
       console.log("댓글이 성공적으로 등록되었습니다.");
       fetchComments(); // 댓글 목록을 다시 불러옵니다.
       setComment(""); // 댓글 입력 필드 초기화
@@ -75,10 +73,26 @@ function Comments() {
     }
   };
 
+  const handleDeleteClick = async (commentId) => {
+    const confirmDelete = window.confirm("댓글을 삭제하시겠습니까?");
+    if (confirmDelete) {
+      await commentDel(commentId);
+    }
+  };
+
+  const commentDel = async (commentId) => {
+    try {
+      await axios.post(`/coursereview/commentDel`, { commentId: commentId });
+      console.log("댓글이 성공적으로 삭제되었습니다.");
+      fetchComments(); // 댓글 목록을 다시 불러옵니다.
+    } catch (error) {
+      console.error("댓글 삭제 중 오류 발생:", error);
+    }
+  };
+
   useEffect(() => {
     fetchComments();
   }, []);
-
 
   return (
     <>
@@ -175,6 +189,25 @@ function Comments() {
             >
               <StarRating starCount={item.starRating} />
             </div>
+            {loginInfo && loginInfo.email === item.email && (
+              <>
+                <button
+                  style={{
+                    width: "100px",
+                    height: "40px",
+                    color: "black",
+                    border: "1px solid #B7B5C4",
+                    backgroundColor: "white",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                  }}
+                  onClick={handleDeleteClick.bind(this, item.commentId)}
+                >
+                  삭제
+                </button>
+              </>
+            )}
           </div>
         </Reviews>
       ))}

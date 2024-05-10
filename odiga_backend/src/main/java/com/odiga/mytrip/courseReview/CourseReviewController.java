@@ -42,6 +42,11 @@ public class CourseReviewController {
         courseReviewService.boardGrade(boardNo);
     }
 
+    @PostMapping("/coursereview/commentDel")
+    public void commentDel(@RequestBody CommentsVO commentsVO) {
+        courseReviewService.commentDel(commentsVO);
+    }
+
     @PostMapping("/coursereview/like/{boardNo}")
     public void likeCount(@PathVariable int boardNo) {
         courseReviewService.likeCount(boardNo);
