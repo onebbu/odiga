@@ -4,6 +4,7 @@ import com.odiga.mytrip.travel.service.TravelService;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
 import com.odiga.mytrip.travel.vo.TravelCatKorVO;
 import com.odiga.mytrip.travel.vo.TravelListVO;
+import com.odiga.mytrip.travel.vo.WishVO;
 
 import java.io.IOException;
 import java.util.List;
@@ -57,14 +58,31 @@ public class TravelController {
     public List<ReviewDataVO> reviewInfo(@PathVariable String contentId) {
         return travelService.ReviewList(contentId);
     }
-    @GetMapping("/travelLike/{contentId}")
-    public void getMethodName(@PathVariable String contentId) {
-        travelService.LikePlusOne(contentId);
+    @PostMapping("/travelLike")
+    public void likeAndWish(@RequestBody WishVO request) {
+        travelService.LikePlusOne(request.getContentid());
+        travelService.wish(request.getContentid(), request.getEmail(), request.getNickname());
+    }
+    @PostMapping("/WishDelete")
+    public void Wishremov(@RequestBody WishVO request) {
+        travelService.WishDelete(request.getContentid(), request.getEmail(), request.getNickname());
     }
     @GetMapping("/imgs/{contntId}")
     public List<String> getImgs(@PathVariable String contntId) throws IOException{
         return travelService.img(contntId);
-    }  
+    }
+    @PostMapping("/ReviewUpdate")
+    public void reviewInfoUpdate(
+        @RequestParam("reviewno") String reviewno, 
+        @RequestParam("reviewcomment") String reviewcomment) {  
+            travelService.ReviewUpdate(reviewno , reviewcomment); 
+    }
+    @PostMapping("/ReviewDelete")
+    public void postMethodName(@PathVariable String reviewno) {
+        travelService.ReviewDelete(reviewno);
+    }
+    
+      
     
     
 
