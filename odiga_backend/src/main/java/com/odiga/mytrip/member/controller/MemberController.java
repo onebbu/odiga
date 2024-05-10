@@ -129,8 +129,9 @@ public class MemberController {
         Map<String, String> loginInfo = new HashMap<>();
 
         String token = request.getHeader("Authorization");
+        String cleanedToken = token.replace("Bearer ", "");
 
-        String email = jwtUtil.getEmail(token);
+        String email = jwtUtil.getEmail(cleanedToken);
         Member loginMember = memberService.getLoginMemberByEmail(email);
 
         loginInfo.put("email", loginMember.getEmail());
