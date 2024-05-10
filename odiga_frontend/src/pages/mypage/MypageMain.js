@@ -9,8 +9,6 @@ import Mycourse from "./Mycourse";
 import Header from "../component/navbar/Header";
 import {LoginInfoContext} from "../login/LoginInfoProvider";
 
-// http://localhost:3000/my-page
-
 function MypageMain() {
   const loginInfo = useContext(LoginInfoContext);
   const navigate = useNavigate();
@@ -84,17 +82,17 @@ const Container = styled.div`
 const Sub_cotainer = styled.div`
   display: block;
   padding: 1%;
-  margin-left: 10%;
-  margin-right: 10%;
   height: 100%;
+  width: 100%;
 `;
 
 const Aside = styled.aside`
-  width: 20%;
   height: 100%;
   margin: auto;
+  width: 20%;
   vertical-align: top;
-  padding-top: 100px;
+  padding-top: 15rem;
+  padding-left: 5rem;
   display: inline-block;
 `;
 
@@ -102,9 +100,9 @@ const Section = styled.section`
   display: inline-block;
   justify-content: center;
   text-align: center;
+  padding-left: 5rem;
+  padding-right: 5rem;
   width: 80%;
-  padding-left: 15%;
-  padding-right: 15%;
 `;
 
 const Item = styled.div`

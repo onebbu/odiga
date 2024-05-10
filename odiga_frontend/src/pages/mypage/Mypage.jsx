@@ -7,9 +7,9 @@ const MyPage = () => {
     const loginInfo = useContext(LoginInfoContext);
 
     return (
-        <div
-            style={{marginTop: "4rem"}}>
+        <div style={{width: "50rem", margin: "auto"}}>
             <Title>회원 정보 조회</Title>
+            <hr style={{marginBottom: "4rem"}}/>
             <div className="ui hidden divider"/>
             <FormContainer>
                 <Label>아이디</Label>
@@ -68,10 +68,10 @@ const MyPage = () => {
 
 export default MyPage;
 
-const Title = styled.h4`
+const Title = styled.h3`
+  margin-top: 4rem;
   text-align: center;
   width: 100%;
-  margin-bottom: 4rem;
 `;
 
 const FormContainer = styled.div`
