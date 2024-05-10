@@ -1,4 +1,4 @@
-import React, {useState , useRef, useEffect } from "react";
+import React, {useState , useEffect, useContext } from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -10,6 +10,7 @@ import './cPP.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useLocation, useNavigate } from "react-router-dom";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
@@ -57,8 +58,10 @@ const areaList = [
 
 const ChoosePlace = () => {
 
-  const containerRef = useRef(null);
-  const [containerHeight, setContainerHeight] = useState(0);
+
+  const loginInfo = useContext(LoginInfoContext);
+  //const containerRef = useRef(null);
+  //const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
   
@@ -123,14 +126,14 @@ const ChoosePlace = () => {
     <Body>
       <DndProvider backend={HTML5Backend}>
       <Wrapper>
-        <CustomizedAccordions duration={targetDura} />
+        <CustomizedAccordions duration={targetDura} loginInfo={loginInfo} />
             <Section>  
               <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
-              <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} ref={containerRef}/>
+              <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} />
               <ItemsWrapper isDrawerOpen={isDrawerOpen} 
-                            containerHeight={containerHeight} 
                             targetAreacode={targetArea}
-                            targetTheme={targetTheme}/>
+                            targetTheme={targetTheme}
+                            loginInfo={loginInfo}/>
             </Section>
         </Wrapper>
       </DndProvider>
@@ -139,7 +142,7 @@ const ChoosePlace = () => {
 }
 
 
-const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode, targetTheme}) => {
+const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) => {
   const [order, setOrder] = useState('title'); //order defalt = 'title'
   // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
   const foundArea = areaList.find(area => area.areacode === targetAreacode);
@@ -154,9 +157,9 @@ const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode, targetThe
   }; 
 
   return(<>
-    <ItemsContainer isDrawerOpen={isDrawerOpen} containerHeight={containerHeight}>
+    <ItemsContainer isDrawerOpen={isDrawerOpen} >
       <div className="item">
-          <p> 여행지를 드래그하여 채워보세요! </p>
+          <p> {loginInfo.nickname} 님 ! 여행지를 드래그하여 채워보세요! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
       {targetTheme}
@@ -172,7 +175,7 @@ const ItemsWrapper = ({ isDrawerOpen, containerHeight, targetAreacode, targetThe
   </>)
 }
 
-{/* 왼쪽 메뉴 --------------------------------------------------- */}
+//* 왼쪽 메뉴 --------------------------------------------------- *//
 const Accordion = styled((props) => (
     <MuiAccordion disableGutters elevation={0} square {...props} />
   ))(({ theme }) => ({
@@ -217,21 +220,15 @@ const Position = Styled.div`
   position: relative;
 `;
 
-function CustomizedAccordions({duration}) {
+function CustomizedAccordions({duration , loginInfo}) {
   const [expanded, setExpanded] = useState('');
-  const [buttonClicked, setButtonClicked] = useState(false);
+  const [buttonClicked, setButtonClicked] = useState(true);
   const [savedData, setSavedData] = useState([]);
+  const navigate = useNavigate();
 
   const handleChange = (panel) => (newExpanded) => {
     setExpanded(newExpanded ? panel : false);
   };
-
-  useEffect(() => {
-    if (buttonClicked) {
-      console.log("저장된 데이터:", savedData);
-      setButtonClicked(false);
-    }
-  }, [buttonClicked]);
 
   const handleSaveData = (dataList, scheduleID) => {
     if (buttonClicked) {
@@ -239,12 +236,13 @@ function CustomizedAccordions({duration}) {
       console.log("dataList", dataList);
       console.log("Schedule ID:", scheduleID);
       // 리스트를 순회하면서 각 요소에서 필요한 정보를 추출하여 상태를 업데이트
-      const updatedData = dataList.map((data,index) => ({
+      const updatedData = dataList.map((data) => ({
         courseDay: scheduleID,
-        travelNum: index+1,
-        contentId: data.id,
+        travelNum : data.travelNum,
+        contentId : data.contentId,
         name : data.name,
-        address: data.region
+        address : data.address,
+        nickname : loginInfo.nickname
       }));
 
       console.log("업데이트 데이터???????????????",updatedData);
@@ -252,29 +250,68 @@ function CustomizedAccordions({duration}) {
       // 중복되지 않은 id를 가진 요소만 상태에 추가
       // Add only unique data to the state
       updatedData.forEach(data => {
-        // Check if contentId already exists in the state
         if (!savedData.some(item => item.contentId === data.contentId)) {
-          // If not, add it to the state
           setSavedData(prevData => [...prevData, data]);
         }
       });
-
-      // 예를 들어, 이 데이터를 서버로 전송하는 등의 작업을 수행할 수 있습니다.
-      // sendDataToServer(data);
     }
   };
 
-  const sendDataToServer = () => {
+  const handleClick = () => {
+    setButtonClicked(true); //button 이 click 되었으니
+     // savedData의 유효성을 검사합니다.
+      const isValid = validateSavedData(savedData);
+
+      if (isValid) {
+        // 저장된 데이터가 유효한 경우, 서버로 데이터를 전송합니다.
+        // 사용자로부터 'title' 입력 받기
+        const title = prompt("원하는 [코스 이름]을 작성하세요:");
+        const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
+        if (isConfirmed) {
+          sendDataToServer(savedData, title);
+        } else {
+          alert("취소되었습니다.");
+        }
+      } else {
+        // 저장된 데이터가 유효하지 않은 경우, 알림을 표시합니다.
+        alert("아직 채워지지 않은 날짜가 있습니다. 최소 1개 이상 모두 채워주세요..");
+      }
+  }
+
+  const validateSavedData = (data) => {
+    let isValidCourseDay;
+    const courseDayValues = data.map(dt => dt.courseDay);
+  
+    if (duration === "당일여행") {
+      isValidCourseDay = courseDayValues.includes(1);
+    } else if (duration === "1박2일") {
+      isValidCourseDay = courseDayValues.includes(1) && courseDayValues.includes(2);
+    } else if (duration === "2박3일") {
+      isValidCourseDay = courseDayValues.includes(1) && courseDayValues.includes(2) && courseDayValues.includes(3);
+    } else {
+      isValidCourseDay = false;
+    }
+    
+    // 여기서 추가적인 유효성 검사를 수행할 수 있습니다.
+  
+    // 모든 유효성 검사를 통과하면 true를 반환합니다.
+    return isValidCourseDay;
+  };
+
+  const sendDataToServer = (savedData, title) => {
     // 서버로 데이터를 전송하는 로직을 작성합니다.
     // 예를 들어, axios를 사용하여 POST 요청을 보낼 수 있습니다.
-    setButtonClicked(true);
+    
     console.log("전송될 데이터: ", savedData);
-
-    axios.post('/place/saveData', savedData)
+    console.log("title: ",title);
+    axios.post(`/place/savedata/${title}`, savedData)
       .then((response) => {
         // 성공적으로 전송되었을 때의 처리
         console.log(savedData);
-        console.log('데이터를 성공적으로 전송했습니다.');
+        console.log('데이터를 성공적으로 전송했습니다.' + response.data +"   ");
+        alert('저장하였습니다.' );
+        
+        navigate(`/result-list/${loginInfo.nickname}/${response.data}`);
       })
       .catch((error) => {
         // 전송 중 오류가 발생했을 때의 처리
@@ -304,7 +341,7 @@ function CustomizedAccordions({duration}) {
             }
           })
         }
-        <button className="buttondesign save" onClick={sendDataToServer}>저장하기</button>
+        <button className="buttondesign save" onClick={handleClick}>저장하기</button>
       </AccordionWrap>
       
       </Position>

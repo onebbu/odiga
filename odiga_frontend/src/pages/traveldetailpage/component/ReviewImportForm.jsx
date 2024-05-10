@@ -120,23 +120,36 @@ function ReviewImportForm({ onReviewSubmitted }) {
 
     return(
         <div className="reviewImportForm"> 
-          <p>별점과 리뷰로 여러분의 소중한 경험을 들려주세요 !</p>
-          <div className="contourLine4"></div>
-          <div className="starBox">
-          <StarRating starCount={5} onChange={setReviewGrade} />
-          <div className="contourLine5"></div>
-          <button onClick={handleLike} className="LikeButton">
-                <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
-            </button>
-         </div>
-          <br />
-            <textarea className="reviewBox"                 
+            <p>별점과 리뷰로 여러분의 소중한 경험을 들려주세요 !</p>
+            <div className="contourLine4"></div>
+            <section className="starBox">
+            <StarRating starCount={5} onChange={setReviewGrade} />
+            {/* <div className="contourLine5"></div>
+            <button onClick={handleLike} className="LikeButton">
+                  <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
+              </button> */}
+           </section>
+           <section className="reviewsuccessBox">
+              <div>
+              <textarea className="reviewBox"                 
                 value={reviewComment} 
                 onChange={handleInputChange} 
                 placeholder="리뷰를 작성해주세요 (100byte 이하)" 
-            />
-            <br />
-            <button className="successButton" onClick={handleSubmit}> <h2>완료 ✔</h2> </button>
+                
+              /> 
+              </div>
+              <div className="successButtonBox">
+              <button className="successButton" onClick={handleSubmit}> <h2>완료 ✔</h2> </button> 
+              </div>
+          </section>
+          <section className="likeinner">
+            <div className="likeTitle"> <h4> 다시 보고 싶다면 ? </h4> </div>
+            <div>
+            <button onClick={handleLike} className="LikeButton">
+                <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'} style={{marginLeft : '10px'}}/>
+            </button>
+            </div>
+          </section>
         </div>
     )
 

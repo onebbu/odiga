@@ -18,6 +18,10 @@ public class CourseReviewVO {
     private Character boardYN;
 	private String mainImage;
 
+	private String tags;
+
+
+
 	public String getMainImage() {
 		return this.mainImage;
 	}
@@ -105,6 +109,14 @@ public class CourseReviewVO {
 
 	public void setBoardYN(Character boardYN) {
 		this.boardYN = boardYN;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
 	}
 
 
