@@ -1,4 +1,4 @@
-import React, {useState , useEffect } from "react";
+import React, {useState , useEffect, useContext } from "react";
 import Styled from "styled-components";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
@@ -10,6 +10,7 @@ import './cPP.css';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useLocation, useNavigate } from "react-router-dom";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
@@ -57,6 +58,8 @@ const areaList = [
 
 const ChoosePlace = () => {
 
+
+  const loginInfo = useContext(LoginInfoContext);
   //const containerRef = useRef(null);
   //const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -123,13 +126,14 @@ const ChoosePlace = () => {
     <Body>
       <DndProvider backend={HTML5Backend}>
       <Wrapper>
-        <CustomizedAccordions duration={targetDura} />
+        <CustomizedAccordions duration={targetDura} loginInfo={loginInfo} />
             <Section>  
               <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
               <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} />
               <ItemsWrapper isDrawerOpen={isDrawerOpen} 
                             targetAreacode={targetArea}
-                            targetTheme={targetTheme}/>
+                            targetTheme={targetTheme}
+                            loginInfo={loginInfo}/>
             </Section>
         </Wrapper>
       </DndProvider>
@@ -138,7 +142,7 @@ const ChoosePlace = () => {
 }
 
 
-const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme}) => {
+const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) => {
   const [order, setOrder] = useState('title'); //order defalt = 'title'
   // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
   const foundArea = areaList.find(area => area.areacode === targetAreacode);
@@ -155,7 +159,7 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme}) => {
   return(<>
     <ItemsContainer isDrawerOpen={isDrawerOpen} >
       <div className="item">
-          <p> 여행지를 드래그하여 채워보세요! </p>
+          <p> {loginInfo.nickname} 님 ! 여행지를 드래그하여 채워보세요! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
       {targetTheme}
@@ -216,10 +220,11 @@ const Position = Styled.div`
   position: relative;
 `;
 
-function CustomizedAccordions({duration}) {
+function CustomizedAccordions({duration , loginInfo}) {
   const [expanded, setExpanded] = useState('');
   const [buttonClicked, setButtonClicked] = useState(true);
   const [savedData, setSavedData] = useState([]);
+  const navigate = useNavigate();
 
   const handleChange = (panel) => (newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -236,7 +241,8 @@ function CustomizedAccordions({duration}) {
         travelNum : data.travelNum,
         contentId : data.contentId,
         name : data.name,
-        address : data.address
+        address : data.address,
+        nickname : loginInfo.nickname
       }));
 
       console.log("업데이트 데이터???????????????",updatedData);
@@ -262,7 +268,6 @@ function CustomizedAccordions({duration}) {
         const title = prompt("원하는 [코스 이름]을 작성하세요:");
         const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
         if (isConfirmed) {
-          alert("저장되었습니다.");
           sendDataToServer(savedData, title);
         } else {
           alert("취소되었습니다.");
@@ -303,8 +308,10 @@ function CustomizedAccordions({duration}) {
       .then((response) => {
         // 성공적으로 전송되었을 때의 처리
         console.log(savedData);
-        console.log('데이터를 성공적으로 전송했습니다.');
-        alert('저장 후 reasult-list 페이지 연결해야함. 저장은 성공했습니다. DB를 확인해주세요');
+        console.log('데이터를 성공적으로 전송했습니다.' + response.data +"   ");
+        alert('저장하였습니다.' );
+        
+        navigate(`/result-list/${loginInfo.nickname}/${response.data}`);
       })
       .catch((error) => {
         // 전송 중 오류가 발생했을 때의 처리

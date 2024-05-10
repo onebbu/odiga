@@ -52,7 +52,7 @@ function App() {
                     <Route exact path="/coursereview/*" element={<CourseReview/>}/>
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
-                    <Route exact path="/place" element={<ChoosePlace/>}></Route>
+                    
                     <Route exact path="/place/show" element={<PlaceList/>}></Route>
                 </Route>
 
@@ -79,6 +79,11 @@ function App() {
                         <ResultView/>
                     </LoginInfoProvider>
                 }/>
+                <Route exact path="/place" element={
+                    <LoginInfoProvider>
+                        <ChoosePlace/>
+                    </LoginInfoProvider>
+                }></Route>
 
             </Routes>
         </BrowserRouter>
