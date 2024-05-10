@@ -1,6 +1,5 @@
-import React, { useState ,  useEffect } from "react";
+import React, { useState ,  useEffect , useContext} from "react";
 import axios from 'axios';
-import ReviewImportForm from './component/ReviewImportForm';
 import ReviewDisplay from "./component/ReviewDisplay";
 import Header from "../component/navbar/Header";
 import './TravelDetailPage.css';
@@ -13,6 +12,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
+
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
@@ -24,8 +24,10 @@ function TravelDetailPage() {
     const navigate = useNavigate();
     const [tags, setTags] = useState([]);
     const { contentID } = useParams();
+     
 
     useEffect(() => {
+
         axios.get(`/detail/${contentID}`)
             .then(response => {
                 setData(response.data);

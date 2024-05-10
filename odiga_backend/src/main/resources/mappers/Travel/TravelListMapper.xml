@@ -54,10 +54,13 @@
         DELETE FROM COURSEREVIEW
         WHERE boardNo = #{boardno}
     </delete>
-    <insert id="wishPlus" parameterType="String">
+    <insert id="wishPlus" parameterType="com.odiga.mytrip.travel.vo.WishVO">
         INSERT INTO WISHLIST
-        (WISHLISTNO, CONTENTID, EMAIL, NICKNAME,)
-         VALUES (WISHNO_SEQ.NEXTVAL, #{contentid} , #{email} , #{nickname})
+        (WISHLISTNO, CONTENTID, EMAIL, NICKNAME)
+        VALUES (WISHNO_SEQ.NEXTVAL, #{contentid} , #{email} , #{nickname})
     </insert>
-
+    <delete id="wishDelete" parameterType="com.odiga.mytrip.travel.vo.WishVO">
+        DELETE FROM WISHLIST
+        WHERE CONTENTID = #{contentid} AND EMAIL =#{email} and NICKNAME = #{nickname}
+    </delete>
 </mapper>

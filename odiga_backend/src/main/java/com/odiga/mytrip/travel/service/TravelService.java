@@ -139,8 +139,8 @@ public class TravelService {
         return travelDAO.getReviewList(contentId);
     }
 
-    public void LikePlusOne(String contentId){
-        travelDAO.Like(contentId);
+    public void LikePlusOne(String contentid){
+        travelDAO.Like(contentid);
     }
     public TravelCatKorVO Catkr(String cat1 , String cat2 , String cat3){
         return travelDAO.cattranskr(cat1, cat2, cat3);
@@ -156,6 +156,10 @@ public class TravelService {
     @Transactional
     public void wish(String contentid , String email , String nickname){
         travelDAO.wishPlus(contentid, email, nickname);
+    }
+    @Transactional
+    public void WishDelete(String contentid , String email , String nickname){
+        travelDAO.wishDelete(contentid, email, nickname);
     }
     
 }

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { contentID } from "../TravelDetailPage";
 import '../TravelDetailPage.css';
 import ReviewImportForm from './ReviewImportForm'; 
 import { useParams } from 'react-router-dom';
