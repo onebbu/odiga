@@ -84,33 +84,21 @@ public class PlaceController {
         return "redirect:/wrongpath/preference";
     }
 
-    @PostMapping("/coursesave") // 잘못된 URL
-    public void courseListSave(@PathVariable String contentID, @PathVariable String Day, @PathVariable String index) {
-        Map<String, Object> course = new HashMap<String, Object>();
-        // 데이터 저장하기!
-		course.put("contentid", "siri");
-		course.put("Day", 13);
-		course.put("index", "학생");
-        
-
-        //placeService.courseSave(contentID, index);
-    }
-
     @PostMapping("/place/savedata/{title}")
-    public void postMethodName(@RequestBody String entities, @PathVariable("title") String title) throws ParseException {
+    public String postMethodName(@RequestBody String entities, @PathVariable("title") String title) throws ParseException {
         // reader를 Object로 parse
         JSONParser parser = new JSONParser();
         JSONArray jsonArr = (JSONArray)parser.parse(entities);
         
-        String nickname = "gyugyu"; /////////////////////////////////////////////여기 닉네임 변경해주셔야함. 아직 로그인 세션 구현 안해서그럼.
+        //String nickname = "gyugyu"; /////////////////////////////////////////////여기 닉네임 변경해주셔야함. 아직 로그인 세션 구현 안해서그럼.
+        String nickname = String.valueOf(((JSONObject)jsonArr.get(0)).get("nickname"));
         int maxNum = placeService.getMaxNum(nickname) + 1;
+        String COURSENO = nickname+"_"+String.valueOf(maxNum);
         // jsonArr에서 하나씩 JSONObject로 cast해서 사용
         if (jsonArr.size() > 0){
             for(int i=0; i< jsonArr.size(); i++){   
                 Map<String, Object> resultMap = new HashMap<>();
                 JSONObject jsonObj = (JSONObject)jsonArr.get(i);
-                
-                String COURSENO = nickname+"_"+String.valueOf(maxNum);
                 String coursepw = "password";
                 String COURSEDAY = String.valueOf(jsonObj.get("courseDay"));
                 String TRAVELNUM = String.valueOf(jsonObj.get("travelNum"));
@@ -123,13 +111,11 @@ public class PlaceController {
                 resultMap.put("NICKNAME", nickname);
                 resultMap.put("COURSEPW", coursepw);
                 resultMap.put("title", title);
-
                 placeService.SaveResult(resultMap);
-
             }
         }
 
-        
+        return COURSENO;
     }
     
 }
