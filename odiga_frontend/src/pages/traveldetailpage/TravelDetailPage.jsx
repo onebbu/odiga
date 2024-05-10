@@ -31,6 +31,7 @@ function TravelDetailPage() {
         axios.get(`/detail/${contentID}`)
             .then(response => {
                 setData(response.data);
+                console.log(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
