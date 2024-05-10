@@ -23,4 +23,5 @@ public class TravelListVO {
     private String sigungucode;
     private String contenttypeid;
     private String likecount;
+    private String AVERAGE_GRADE;
 }

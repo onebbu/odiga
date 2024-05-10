@@ -105,6 +105,46 @@ function ReviewImportForm({ onReviewSubmitted }) {
             alert("리뷰 제출 중 오류가 발생했습니다.");
         });
     };
+    
+    
+    // 찜 추가 / 삭제 기능~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~백엔드 엔드포인트 확인해보셔야 함
+
+    // const handleLikeToggle = async () => {
+    //     if (!localStorage.getItem('token')) {
+    //         alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+    //         navigate('/login');
+    //         return;
+    //     }
+    //     try {
+    //         if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
+    //             const response = await axios.delete(`/travelUnlike`, {
+    //                 data: { contentid: contentID, email: loginInfo.email }
+    //             });
+    //             if (response.status === 200) {
+    //                 setLiked(false);
+    //                 setLikes(prev => prev - 1);
+    //             }
+    //         } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
+    //             const response = await axios.post(`/travelLike`, {
+    //                 contentid: contentID,
+    //                 email: loginInfo.email,
+    //                 nickname: loginInfo.nickname
+    //             });
+    //             if (response.status === 200) {
+    //                 setLiked(true);
+    //                 setLikes(prev => prev + 1);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         console.error('Like toggle request failed:', error);
+    //     }
+    // };
+
+
+
+
+
+
 
     //찜 관련 (엔드포인트 임의 지정 travelLike)
     const handleLike = async () => {
@@ -128,23 +168,36 @@ function ReviewImportForm({ onReviewSubmitted }) {
 
     return(
         <div className="reviewImportForm"> 
-          <p>별점과 리뷰로 여러분의 소중한 경험을 들려주세요 !</p>
-          <div className="contourLine4"></div>
-          <div className="starBox">
-          <StarRating starCount={5} onChange={setReviewGrade} />
-          <div className="contourLine5"></div>
-          <button onClick={handleLike} className="LikeButton">
-                <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
-            </button>
-         </div>
-          <br />
-            <textarea className="reviewBox"                 
+            <p>별점과 리뷰로 여러분의 소중한 경험을 들려주세요 !</p>
+            <div className="contourLine4"></div>
+            <section className="starBox">
+            <StarRating starCount={5} onChange={setReviewGrade} />
+            {/* <div className="contourLine5"></div>
+            <button onClick={handleLike} className="LikeButton">
+                  <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
+              </button> */}
+           </section>
+           <section className="reviewsuccessBox">
+              <div>
+              <textarea className="reviewBox"                 
                 value={reviewComment} 
                 onChange={handleInputChange} 
                 placeholder="리뷰를 작성해주세요 (100byte 이하)" 
-            />
-            <br />
-            <button className="successButton" onClick={handleSubmit}> <h2>완료 ✔</h2> </button>
+                
+              /> 
+              </div>
+              <div className="successButtonBox">
+              <button className="successButton" onClick={handleSubmit}> <h2>완료 ✔</h2> </button> 
+              </div>
+          </section>
+          <section className="likeinner">
+            <div className="likeTitle"> <h4> 다시 보고 싶다면 ? </h4> </div>
+            <div>
+            <button onClick={handleLike} className="LikeButton">
+                <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'} style={{marginLeft : '10px'}}/>
+            </button>
+            </div>
+          </section>
         </div>
     )
 

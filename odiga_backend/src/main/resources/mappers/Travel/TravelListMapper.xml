@@ -10,6 +10,11 @@
         FROM TravelList
         WHERE contentId = #{contentId}
     </select>
+    <select id="travelGradeAvg" resultType="String">
+        SELECT AVG(REVIEWGRADE) AS AVERAGE_GRADE
+        FROM TRAVELREVIEW
+        WHERE CONTENTID = #{contentId}
+    </select>
     <!-- 페이지 방문후 뷰카운트 1증가 -->
     <select id="countPlusOne" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
         UPDATE TravelList

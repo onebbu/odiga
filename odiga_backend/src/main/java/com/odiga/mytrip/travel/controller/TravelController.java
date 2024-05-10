@@ -39,7 +39,7 @@ public class TravelController {
         travelInfo.setCat1(catkr.getCat1kr());
         travelInfo.setCat2(catkr.getCat2kr());
         travelInfo.setCat3(catkr.getCat3kr());
-        System.out.println(travelInfo);
+        travelInfo.setAVERAGE_GRADE(travelService.TravelGradeAvg(contentId));
         return travelInfo;
     }
     @PostMapping("/reviewImport")
@@ -81,6 +81,7 @@ public class TravelController {
     public void postMethodName(@PathVariable String reviewno) {
         travelService.ReviewDelete(reviewno);
     }
+    
     
       
     
