@@ -47,5 +47,10 @@ public class CourseReviewService {
         courseReviewDAO.articleDelete(boardNo);
     }
 
+    // 마이페이지에서 코스 리뷰 가져오기
+    public List<CourseReviewVO> getMemberArticles(String nickname) {
+        return courseReviewDAO.getMemberArticles(nickname);
+    }
+
     
 }

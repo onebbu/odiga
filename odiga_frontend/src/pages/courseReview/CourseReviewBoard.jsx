@@ -5,10 +5,8 @@ import Styled from "styled-components";
 import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
 import stylee from "../choosePlace/cPP.css";
-import Footer from "../component/footer/Footer";
+import Footer from '../component/footer/Footer';
 import Header from "../component/navbar/Header";
-import KoreaMap from "./Map";
-
 
 const Place = ({
   boardContent,

@@ -51,12 +51,19 @@ const DropContainer = ({ onSaveData  }) => { //onSaveData 를 props로 받음
         ],
       }),
     )
-    boxes.forEach(console.log)
   }, [boxes])  //[] => [boxes]
 
   useEffect(() => {
-    onSaveData(boxes); // onSaveData 이벤트 핸들러 호출 전에 상태 업데이트
-  }, [boxes, onSaveData]);
+
+    const updatedData = boxes.map((data,index) => ({
+      travelNum: index +1,
+      contentId: data.id,
+      name : data.name,
+      address: data.region
+    }));
+
+    onSaveData(updatedData); // onSaveData 이벤트 핸들러 호출 전에 상태 업데이트
+  }, [boxes]);
 
   const renderBoxes = () => {
     return boxes.map((box, index) => (

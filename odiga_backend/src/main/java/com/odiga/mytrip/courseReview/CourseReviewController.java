@@ -1,6 +1,8 @@
 package com.odiga.mytrip.courseReview;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -54,5 +56,19 @@ public class CourseReviewController {
     public void articleDelete(@PathVariable int boardNo) {
         System.out.println("삭제요청");
         courseReviewService.articleDelete(boardNo);
+    }
+
+    // 마이페이지 작성 글 가져오기
+    @GetMapping("/my-page/my-article/{nickname}")
+    public Map<Integer, Object> getArticleList(@PathVariable String nickname) {
+        Map<Integer, Object> articleList = new HashMap<>();
+        List<CourseReviewVO> memberArticles = courseReviewService.getMemberArticles(nickname);
+        int i = 0;
+        for (CourseReviewVO review : memberArticles) {
+            articleList.put(i, review);
+            i++;
+        }
+
+        return articleList;
     }
 }

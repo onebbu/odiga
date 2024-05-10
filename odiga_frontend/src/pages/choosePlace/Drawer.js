@@ -99,26 +99,11 @@ const DrawerContainer = styled.div`
 const DrawerContent = styled.div`
   padding: 20px;
 `;
-const steamGames = [
-    'Counter-Strike: Global Offensive',
-    'Dota 2',
-    'Team Fortress 2',
-    'PUBG',
-    'Among Us',
-    'Rocket League',
-    'Apex Legends',
-    'Fortnite',
-  ];
 
-const Drawer = ({ isOpen, onClose, ref }) => {
+const Drawer = ({ isOpen, onClose }) => {
   return (
-    <DrawerContainer isopen={isOpen} ref={ref}>
+    <DrawerContainer isopen={isOpen}>
       <DrawerContent>
-        {/* <ul>
-            {steamGames.map((game, index) => (
-                <li key={index}>{game}</li>
-            ))}
-        </ul> */}
         <div className="drawer">
           {places.map(item => ( <Place key={item.id} id={item.id} pic={item.pic} name={item.name} region={item.region}/> ))}
         </div>
