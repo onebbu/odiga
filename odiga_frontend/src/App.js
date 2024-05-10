@@ -17,7 +17,7 @@ import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 import PlaceList from "./pages/placeList/placeList";
 
 function App() {
-    
+
     // 페이지 이동시 로그인 정보 삭제 => 추후 수정
     // useEffect(() => {
     //     const handleUnload = () => {
@@ -46,13 +46,13 @@ function App() {
                 {/* 로그인 x */}
                 <Route>
                     <Route exact path="/" element={<Main/>}/>
-                    <Route path="/detail/:contentID" element={<TravelDetailPage/>}/>
+                    {/*<Route path="/detail/:contentID" element={<TravelDetailPage/>}/>*/}
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
                     <Route exact path="/courseimport" element={<CourseImport/>}/>
                     <Route exact path="/coursereview/*" element={<CourseReview/>}/>
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
-                    
+
                     <Route exact path="/place/show" element={<PlaceList/>}></Route>
                 </Route>
 
@@ -71,6 +71,11 @@ function App() {
                 <Route path="/sign-up" element={
                     <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
                         <SignUp/>
+                    </LoginInfoProvider>
+                }/>
+                <Route path="/detail/:contentID" element={
+                    <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
+                        <TravelDetailPage/>
                     </LoginInfoProvider>
                 }/>
                 {/* 로그인 o / 로그인 x / 코스 생성자 3가지 경우의 수 // LoginInfoProvider 지우기 X*/}

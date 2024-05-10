@@ -5,6 +5,7 @@ import axios from "axios";
 import Table from 'react-bootstrap/Table';
 import {Link} from "react-router-dom";
 import Accordion from 'react-bootstrap/Accordion';
+import Badge from "react-bootstrap/Badge";
 
 function Mycourse() {
 
@@ -33,8 +34,9 @@ function Mycourse() {
     console.log(courseInfo);
 
     return (
-        <div>
+        <div style={{width: "50rem", margin: "auto"}}>
             <Title>{loginInfo.nickname}님의 여행코스</Title>
+            <hr style={{marginBottom: "4rem"}}/>
             {courseInfo && (
                 <Accordion>
                     {Object.keys(courseInfo).map((courseKey, index) => {
@@ -47,7 +49,7 @@ function Mycourse() {
                                     </Accordion.Header>
                                     <Accordion.Body>
 
-                                        <p>여행 경로</p>
+                                        <h5>여행 경로</h5>
                                         <span>{courseInfo[courseKey].content}</span>
                                     </Accordion.Body>
                                 </Accordion.Item>
@@ -62,9 +64,9 @@ function Mycourse() {
 
 export default Mycourse;
 
-const Title = styled.h4`
+const Title = styled.h3`
   margin-top: 4rem;
   text-align: center;
   width: 100%;
-  margin-bottom: 4rem;
 `;
+

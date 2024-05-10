@@ -14,7 +14,11 @@ public interface TravelDAO {
     void fetchOverview(String contentid , String overview);
     void importReviewData(ReviewDataVO reviewData);
     List<ReviewDataVO> getReviewList(String contentId);
-    void Like(String contentId);
+    void Like(String contentid);
     TravelCatKorVO cattranskr(String cat1 , String cat2 , String cat3);
+    void reviewUpdate(String reviewno , String reviewcomment);
+    void reviewDelete(String reviewno);
+    void wishPlus(String contentid , String email , String nickname);
+    void wishDelete(String contentid , String email , String nickname);
 }
 
