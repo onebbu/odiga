@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState  , useContext} from "react";
 import styled from 'styled-components';
 import { contentId } from "../TravelDetailPage";
 import '../TravelDetailPage.css';
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from 'react-router-dom';
+import {LoginInfoContext} from "../../login/LoginInfoProvider";
 const StarRatingContainer = styled.div`
     display: inline-block;
 `;
@@ -48,7 +49,8 @@ function ReviewImportForm({ onReviewSubmitted }) {
     const [reviewdate, setReviewdate] = useState();
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(0);
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
+    const loginInfo = useContext(LoginInfoContext); 
     
     // 리뷰 글자 수 제한 
     const handleInputChange = (e) => {
@@ -87,7 +89,9 @@ function ReviewImportForm({ onReviewSubmitted }) {
             contentid : contentID ,
             reviewcomment : reviewComment ,
             reviewgrade : reviewGrade,
-            reviewdate : reviewdate
+            reviewdate : reviewdate , 
+            email : loginInfo.email ,
+            nickname : loginInfo.nickname
         })
         .then(response => {
             console.log(response.data);
@@ -110,7 +114,11 @@ function ReviewImportForm({ onReviewSubmitted }) {
             return;
         }
         try {
-            const response = await axios.post(`/travelLike/${contentID}`);
+            const response = await axios.post(`/travelLike` ,{
+                contentid : contentID , 
+                email : loginInfo.email , 
+                nickname : loginInfo.nickname
+            });
             setLiked(true);
             setLikes(prev => prev + 1);
         } catch (error) {

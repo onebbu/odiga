@@ -58,13 +58,29 @@ public class TravelController {
         return travelService.ReviewList(contentId);
     }
     @GetMapping("/travelLike/{contentId}")
-    public void getMethodName(@PathVariable String contentId) {
-        travelService.LikePlusOne(contentId);
+    public void getMethodName(
+        @RequestParam("contentId") String contentId, 
+        @RequestParam("email") String email,
+        @RequestParam("nickname") String nickname) {
+            travelService.LikePlusOne(contentId);
+            travelService.wish(contentId, email, nickname);
     }
     @GetMapping("/imgs/{contntId}")
     public List<String> getImgs(@PathVariable String contntId) throws IOException{
         return travelService.img(contntId);
-    }  
+    }
+    @PostMapping("/ReviewUpdate")
+    public void reviewInfoUpdate(
+        @RequestParam("reviewno") String reviewno, 
+        @RequestParam("reviewcomment") String reviewcomment) {  
+            travelService.ReviewUpdate(reviewno , reviewcomment); 
+    }
+    @PostMapping("/ReviewDelete")
+    public void postMethodName(@PathVariable String reviewno) {
+        travelService.ReviewDelete(reviewno);
+    }
+    
+      
     
     
 
