@@ -161,5 +161,8 @@ public class TravelService {
     public void WishDelete(String contentid , String email , String nickname){
         travelDAO.wishDelete(contentid, email, nickname);
     }
+    public String TravelGradeAvg(String contentid){
+        return travelDAO.travelGradeAvg(contentid);
+    }
     
 }

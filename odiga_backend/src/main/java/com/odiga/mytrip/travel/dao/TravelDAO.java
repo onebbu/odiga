@@ -20,5 +20,6 @@ public interface TravelDAO {
     void reviewDelete(String reviewno);
     void wishPlus(String contentid , String email , String nickname);
     void wishDelete(String contentid , String email , String nickname);
+    String travelGradeAvg(String contentId);
 }
 
