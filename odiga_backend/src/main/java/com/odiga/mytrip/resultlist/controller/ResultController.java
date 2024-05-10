@@ -228,10 +228,17 @@ public class ResultController {
         return ResponseEntity.ok(resultMap);
     }
 
-    @GetMapping("/findSharePw/{courseNo}")
-    public ResponseEntity<String> findSharePw(@PathVariable String courseNo) {
-        String sharePw = resultService.findSharePw(courseNo);
-        return ResponseEntity.ok(sharePw);
+    @PostMapping("/sendPw")
+    @ResponseBody
+    public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
+        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("courseNo"));
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public void deleteCourse(@RequestBody Map<String, String> courseNo) {
+        resultService.deleteTravelResult(courseNo.get("courseKey"));
+        log.info("여행 삭제 완료");
     }
 
     // 네이버 api(driving-5)

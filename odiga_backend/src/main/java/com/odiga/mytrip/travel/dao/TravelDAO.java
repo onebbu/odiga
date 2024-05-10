@@ -2,6 +2,7 @@ package com.odiga.mytrip.travel.dao;
 
 import java.util.List;
 
+import com.odiga.mytrip.travel.vo.WishVO;
 import org.apache.ibatis.annotations.Mapper;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 import com.odiga.mytrip.travel.vo.ReviewDataVO;
@@ -21,5 +22,5 @@ public interface TravelDAO {
     void wishPlus(String contentid , String email , String nickname);
     void wishDelete(String contentid , String email , String nickname);
     String travelGradeAvg(String contentId);
+    List<WishVO> selectAllWish(String nickname);
 }
-
