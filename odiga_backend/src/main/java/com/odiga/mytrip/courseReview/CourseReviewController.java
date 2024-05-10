@@ -44,6 +44,11 @@ public class CourseReviewController {
     public void likeCount(@PathVariable int boardNo) {
         courseReviewService.likeCount(boardNo);
     }
+
+    @PostMapping("/coursereview/likeCancel/{boardNo}")
+    public void likeCancel(@PathVariable int boardNo) {
+        courseReviewService.likeCancel(boardNo);
+    }
     
     @PutMapping("/coursereview/delete/{boardNo}")
     public void articleDelete(@PathVariable int boardNo) {

@@ -15,7 +15,7 @@ import styled from "styled-components";
 import Comments from "./Comments";
 import "./static/slider.css";
 import Footer from "../component/footer/Footer";
-import Header from "../tiles/Header";
+import Header from "../component/navbar/Header";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
 
 function CourseReviewDetail() {
@@ -34,35 +34,51 @@ function CourseReviewDetail() {
   }, []);
 
   useEffect(() => {
-    if (didMount) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(`/coursereview/detail/${boardNo}`);
-          const { boardLikeCount } = response.data[0];
-          setDetailsData(response.data);
-          setLikeCount(boardLikeCount);
-          console.log("조회수 증가");
-        } catch (error) {
-          console.error("Error fetching details:", error);
-        }
-      };
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/coursereview/detail/${boardNo}`);
+        const { boardLikeCount } = response.data[0];
+        setDetailsData(response.data);
+        setLikeCount(boardLikeCount);
 
+        // 로컬 스토리지에서 좋아요 상태 확인
+        const storedLikedStatus = localStorage.getItem(`liked_${boardNo}`);
+        if (storedLikedStatus === "true") {
+          setLiked(true);
+        }
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      }
+    };
+
+    if (didMount) {
       fetchData();
-      return () => {
-        setDidMount(false);
-      };
     }
   }, [didMount, boardNo]);
 
   const handleLike = async () => {
-    if (!liked) {
+    if (loginInfo) {
       try {
-        await axios.post(`/coursereview/like/${boardNo}`);
-        setLikeCount((prevCount) => prevCount + 1);
-        setLiked(true);
+        if (!liked) {
+          await axios.post(`/coursereview/like/${boardNo}`);
+          setLikeCount((prevCount) => prevCount + 1);
+          setLiked(true);
+          localStorage.setItem(`liked_${boardNo}`, "true");
+          alert("좋아요를 눌렀습니다.")
+        } else {
+          await axios.post(`/coursereview/likeCancel/${boardNo}`);
+          setLikeCount((prevCount) => prevCount - 1);
+          setLiked(false);
+          localStorage.setItem(`liked_${boardNo}`, "false");
+          alert("좋아요를 취소하였습니다.")
+        }
       } catch (error) {
-        console.error("Error liking the post:", error);
+        console.error("게시물 좋아요 중 오류 발생:", error);
       }
+    } else {
+      // 로그인되지 않은 경우, 로그인 알림 표시
+      alert("로그인 후 다시 시도해주세요.");
+      // 로그인 페이지로 이동하거나 다른 처리를 수행할 수 있음
     }
   };
 
@@ -225,38 +241,41 @@ function CourseReviewDetail() {
               목 록
             </Link>
 
-            {detailsData && detailsData[0] && loginInfo && loginInfo.email === detailsData[0].email && (
-              <>
-                <button
-                  className="btn btn-primary"
-                  style={{
-                    width: "100px",
-                    borderColor: "#13294b",
-                    backgroundColor: "#13294b",
-                    color: "#fff",
-                    float: "right",
-                    marginRight: "10px",
-                  }}
-                >
-                  수 정
-                </button>
+            {detailsData &&
+              detailsData[0] &&
+              loginInfo &&
+              loginInfo.email === detailsData[0].email && (
+                <>
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      width: "100px",
+                      borderColor: "#13294b",
+                      backgroundColor: "#13294b",
+                      color: "#fff",
+                      float: "right",
+                      marginRight: "10px",
+                    }}
+                  >
+                    수 정
+                  </button>
 
-                <button
-                  className="btn btn-primary"
-                  style={{
-                    width: "100px",
-                    borderColor: "#13294b",
-                    backgroundColor: "#13294b",
-                    color: "#fff",
-                    margin: "0 10px 0 0",
-                    float: "right",
-                  }}
-                  onClick={handleDelete}
-                >
-                  삭 제
-                </button>
-              </>
-            )}
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      width: "100px",
+                      borderColor: "#13294b",
+                      backgroundColor: "#13294b",
+                      color: "#fff",
+                      margin: "0 10px 0 0",
+                      float: "right",
+                    }}
+                    onClick={handleDelete}
+                  >
+                    삭 제
+                  </button>
+                </>
+              )}
           </div>
           <br />
         </section>
@@ -280,7 +299,6 @@ function CourseReviewDetail() {
             <button
               className="btn btn-primary"
               onClick={handleLike}
-              disabled={liked}
               style={{
                 background: "none",
                 border: "none",

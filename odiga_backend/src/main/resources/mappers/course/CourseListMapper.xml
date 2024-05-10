@@ -7,19 +7,19 @@
     <!-- 여행지 정보 가져오기 -->
     <select id="AllCourseReviews" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
         select *
-        from travelcoursereview
+        from COURSEREVIEW
         WHERE boardyn = 'Y'
         order by boardno desc
     </select>
 
     <select id="detailPage" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
         SELECT *
-        FROM travelcoursereview
+        FROM COURSEREVIEW
         WHERE boardNo = #{boardNo}
     </select>
 
     <update id="viewCount" parameterType="int">
-        update travelcoursereview
+        update COURSEREVIEW
         set boardviewcount = boardviewcount + 1
         WHERE boardNo = #{boardNo}
     </update>
@@ -43,16 +43,16 @@
         ) VALUES (
             comment_id_seq.NEXTVAL,            
             #{boardNo},             
-            '테스트 유저',                  
+            #{commenterName},                  
             #{commentContent},       
             SYSTIMESTAMP,
-            'aaaa@aaa.com',
+            #{email},
             #{starRating}
         )
     </insert>
     
     <update id="boardGrade" parameterType="int">
-        UPDATE TRAVELCOURSEREVIEW
+        UPDATE COURSEREVIEW
         SET BOARDGRADE = (
             SELECT ROUND(COALESCE(AVG(starRating), 0), 1)
             FROM comments
@@ -62,13 +62,19 @@
     </update>
 
     <update id="likeCount" parameterType="int">
-        UPDATE TRAVELCOURSEREVIEW
+        UPDATE COURSEREVIEW
         SET BOARDLIKECOUNT = BOARDLIKECOUNT+1
         WHERE boardNo = #{boardNo}
     </update>
 
+    <update id="likeCancel" parameterType="int">
+        UPDATE COURSEREVIEW
+        SET BOARDLIKECOUNT = BOARDLIKECOUNT-1
+        WHERE boardNo = #{boardNo}
+    </update>
+
     <update id="articleDelete" parameterType="int">
-        UPDATE TRAVELCOURSEREVIEW
+        UPDATE COURSEREVIEW
         SET boardyn = 'N'
         WHERE boardNo = #{boardNo}
     </update>

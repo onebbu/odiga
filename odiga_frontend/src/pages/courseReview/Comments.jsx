@@ -20,7 +20,7 @@ function Comments() {
     if (!loginInfo) {
       // 로그인되어 있지 않은 경우
       alert(
-        "댓글을 작성하려면 로그인이 필요합니다. 로그인 후 다시 시도해주세요."
+        "로그인 후 다시 시도해주세요."
       );
       return;
     }
@@ -37,9 +37,11 @@ function Comments() {
           boardNo: boardNo,
           commentContent: comment,
           starRating: rating,
+          email:loginInfo.email,
+          commenterName:loginInfo.nickname
         }
       );
-
+      
       console.log("댓글이 성공적으로 등록되었습니다.");
       fetchComments(); // 댓글 목록을 다시 불러옵니다.
       setComment(""); // 댓글 입력 필드 초기화
@@ -76,6 +78,7 @@ function Comments() {
   useEffect(() => {
     fetchComments();
   }, []);
+
 
   return (
     <>
