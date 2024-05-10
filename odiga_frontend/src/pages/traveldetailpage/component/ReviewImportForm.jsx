@@ -6,6 +6,11 @@ import '../TravelDetailPage.css';
 import { useNavigate } from "react-router-dom"; 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { contentId } from "../TravelDetailPage";
+import '../TravelDetailPage.css';
+import { useNavigate } from "react-router-dom"; 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from 'react-router-dom';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
 const StarRatingContainer = styled.div`
@@ -42,6 +47,7 @@ function StarRating({ starCount, onChange }) {
     );
 } 
 
+function ReviewImportForm({ onReviewSubmitted }) { 
 function ReviewImportForm({ onReviewSubmitted }) { 
     const { contentID } = useParams();
     const [reviewComment, setReviewComment] = useState('');
@@ -85,6 +91,12 @@ function ReviewImportForm({ onReviewSubmitted }) {
             return;
         }
 
+        if (!isUserLoggedIn()) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate('/login'); 
+            return;
+        }
+
         axios.post('/reviewImport',{
             contentid : contentID ,
             reviewcomment : reviewComment ,
@@ -99,8 +111,16 @@ function ReviewImportForm({ onReviewSubmitted }) {
             setReviewComment('');
             setReviewGrade(0);
             onReviewSubmitted(); 
+        .then(response => {
+            console.log(response.data);
+            alert("리뷰가 성공적으로 제출되었습니다!");
+            setReviewComment('');
+            setReviewGrade(0);
+            onReviewSubmitted(); 
         })
         .catch(error => {
+            console.error('에러 :', error); 
+            alert("리뷰 제출 중 오류가 발생했습니다.");
             console.error('에러 :', error); 
             alert("리뷰 제출 중 오류가 발생했습니다.");
         });
@@ -137,9 +157,18 @@ function ReviewImportForm({ onReviewSubmitted }) {
                 <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
             </button>
          </div>
+          <div className="starBox">
+          <StarRating starCount={5} onChange={setReviewGrade} />
+          <div className="contourLine5"></div>
+          <button onClick={handleLike} className="LikeButton">
+                <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
+            </button>
+         </div>
           <br />
             <textarea className="reviewBox"                 
                 value={reviewComment} 
+                onChange={handleInputChange} 
+                placeholder="리뷰를 작성해주세요 (100byte 이하)" 
                 onChange={handleInputChange} 
                 placeholder="리뷰를 작성해주세요 (100byte 이하)" 
             />
