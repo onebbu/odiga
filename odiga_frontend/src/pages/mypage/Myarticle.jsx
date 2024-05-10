@@ -30,43 +30,55 @@ function Myarticle() {
         }
     }, [loginInfo]); // loginInfo가 변경될 때마다 실행
 
+    console.log(articleList);
+
     return (
         <div style={{width: "50rem", margin: "auto"}}>
             <Title>{loginInfo.nickname}님이 작성한 글</Title>
             <hr/>
-            <GridContainer style={{marginBottom: "100px"}}>
-                {articleList && Object.keys(articleList).map(articleKey => (
-                    <Link to="#"
-                          style={{
-                              textDecoration: "none", /* 링크의 밑줄 제거 */
-                              color: "inherit"
-                          }}
-                    >
-                        <CardContainer key={articleKey}>
-                            <Card.Img variant="top"
-                                      src={articleList[articleKey].mainImage ? articleList[articleKey].mainImage : odigaLogo}/>
-                            <LikeBadge bg="dark">
-                                <FavoriteBorderIcon
-                                    sx={{fontSize: 15}}
-                                /> {articleList[articleKey].boardLikeCount}
-                            </LikeBadge>
-                            <Card.Body>
-                                <Card.Title>
-                                    {articleList[articleKey].boardTitle}
-                                </Card.Title>
-                                <Card.Text>
-                                    <StackContainer direction="horizontal" gap={2}>
-                                        {articleList[articleKey]?.tags && articleList[articleKey].tags.split(" ").map((word, index) => (
-                                            <HashBadge bg="" key={index}>{word}</HashBadge>
-                                        ))}
-                                    </StackContainer>
-                                </Card.Text>
-                            </Card.Body>
-                        </CardContainer>
-                    </Link>
-                ))}
-            </GridContainer>
+            {articleList ? (
+                <>
+                    <GridContainer style={{marginBottom: "100px"}}>
+                        {articleList && Object.keys(articleList).map(articleKey => (
+                            <Link to={"/detail/" + articleList[articleKey].
+                                boardNo}
+                                  style={{
+                                      textDecoration: "none", /* 링크의 밑줄 제거 */
+                                      color: "inherit"
+                                  }}
+                            >
+                                <CardContainer key={articleKey}>
+                                    <Card.Img variant="top"
+                                              src={articleList[articleKey].mainImage ? articleList[articleKey].mainImage : odigaLogo}/>
+                                    <LikeBadge bg="dark">
+                                        <FavoriteBorderIcon
+                                            sx={{fontSize: 15}}
+                                        /> {articleList[articleKey].boardLikeCount}
+                                    </LikeBadge>
+                                    <Card.Body>
+                                        <Card.Title>
+                                            {articleList[articleKey].boardTitle}
+                                        </Card.Title>
+                                        <Card.Text>
+                                            <StackContainer direction="horizontal" gap={2}>
+                                                {articleList[articleKey]?.tags && articleList[articleKey].tags.split(" ").map((word, index) => (
+                                                    <HashBadge bg="" key={index}>{word}</HashBadge>
+                                                ))}
+                                            </StackContainer>
+                                        </Card.Text>
+                                    </Card.Body>
+                                </CardContainer>
+                            </Link>
+                        ))}
+                    </GridContainer>
+                </>
+            ) :(
+                <>
+                    <Message>코스 정보가 없습니다.</Message>
+                </>
+            )}
         </div>
+
     )
         ;
 }
@@ -107,8 +119,14 @@ const LikeBadge = styled(Badge)`
   right: 0.3rem;
 `;
 
-
 const HashBadge = styled(Badge)`
   font-size: 0.6rem;
   background-color: #A9A9A9;
 `;
+
+const Message = styled.div`
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.2rem;
+`;
+

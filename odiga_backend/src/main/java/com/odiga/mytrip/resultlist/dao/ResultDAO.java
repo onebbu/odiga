@@ -25,6 +25,8 @@ public interface ResultDAO {
 
     void savePw(@Param("coursePw") String coursePw, @Param("courseNo") String courseNo);
 
+    void deleteTravelResult(@Param("courseNo") String courseNo);
+
 
 
 }
