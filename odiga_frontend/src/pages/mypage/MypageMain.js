@@ -4,7 +4,7 @@ import styled from "styled-components";
 import "./css/mypage.css";
 import Myarticle from "./Myarticle";
 import Mypage from "./Mypage";
-import Mylist from "./Mylist";
+import MyLikeList from "./MyLikeList";
 import Mycourse from "./Mycourse";
 import Header from "../component/navbar/Header";
 import {LoginInfoContext} from "../login/LoginInfoProvider";
@@ -28,22 +28,22 @@ function MypageMain() {
             <Aside>
               <Item>
                 <Link className="mypageitem" to="/my-page">
-                  회원정보
+                  회원 정보
                 </Link>
               </Item>
               <Item>
                 <Link className="mypageitem" to="/my-page/my-article">
-                  내가 작성한 글
+                  작성한 글
                 </Link>
               </Item>
               <Item>
                 <Link className="mypageitem" to="/my-page/my-course">
-                  여행코스 조회
+                  여행 코스
                 </Link>
               </Item>
               <Item>
-                <Link className="mypageitem" to="/my-page/my-list">
-                  여행 찜 목록
+                <Link className="mypageitem" to="/my-page/my-like-list">
+                  여행지 좋아요
                 </Link>
               </Item>
             </Aside>
@@ -54,7 +54,7 @@ function MypageMain() {
                 <Route path="/*" element={<Mypage/>}></Route>
                 <Route path="/my-article" element={<Myarticle/>}></Route>
                 <Route path="/my-course" element={<Mycourse/>}></Route>
-                <Route path="/my-list" element={<Mylist/>}></Route>
+                <Route path="/my-like-list" element={<MyLikeList/>}></Route>
               </Routes>
             </Section>
           </Sub_cotainer>

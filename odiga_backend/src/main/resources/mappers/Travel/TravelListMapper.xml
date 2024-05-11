@@ -80,4 +80,9 @@
         DELETE FROM WISHLIST
         WHERE CONTENTID = #{contentid} AND EMAIL =#{email} and NICKNAME = #{nickname}
     </delete>
+
+    <select id="selectAllWish" parameterType="String" resultType="com.odiga.mytrip.travel.vo.WishVO">
+        select * from wishlist
+        where NICKNAME = #{nickname}
+    </select>
 </mapper>
