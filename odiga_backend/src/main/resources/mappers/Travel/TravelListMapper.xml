@@ -11,10 +11,22 @@
         WHERE contentId = #{contentId}
     </select>
     <select id="travelGradeAvg" resultType="String">
-        SELECT AVG(REVIEWGRADE) AS AVERAGE_GRADE
+        SELECT ROUND(AVG(REVIEWGRADE), 1) AS AVERAGE_GRADE
         FROM TRAVELREVIEW
         WHERE CONTENTID = #{contentId}
     </select>
+    <select id="wishUserInfo" resultType="int">
+        SELECT COALESCE(COUNT(*), 0)
+        FROM TRAVELREVIEW
+        WHERE CONTENTID = COALESCE(#{contentid}, 0)
+        <if test="email != null">
+            AND EMAIL = #{email}
+        </if>
+        <if test="email == null">
+            AND EMAIL IS NULL
+        </if>
+    </select>
+
     <!-- 페이지 방문후 뷰카운트 1증가 -->
     <select id="countPlusOne" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
         UPDATE TravelList
@@ -50,14 +62,14 @@
         FROM TOURRISMSERVICE
         WHERE cat1 = #{cat1} and cat2 = #{cat2} and cat3 = #{cat3}
     </select>
-    <update id="reviewUpdate" parameterType="String">
-        UPDATE COURSEREVIEW
-        SET (reviewcomment , REVIEWDATE) = (#{reviewcomment} , SYSDATE)
-        WHERE boardNo = #{boardno}
+    <update id="reviewUpdate" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
+        UPDATE TRAVELREVIEW
+        SET reviewcomment = #{reviewcomment}, REVIEWDATE = SYSDATE
+        WHERE reviewno = #{reviewno}
     </update>
     <delete id="reviewDelete" parameterType="String">
-        DELETE FROM COURSEREVIEW
-        WHERE boardNo = #{boardno}
+        DELETE FROM TRAVELREVIEW
+        WHERE reviewno = #{reviewno}
     </delete>
     <insert id="wishPlus" parameterType="com.odiga.mytrip.travel.vo.WishVO">
         INSERT INTO WISHLIST

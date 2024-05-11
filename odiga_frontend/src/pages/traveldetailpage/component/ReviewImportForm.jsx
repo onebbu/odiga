@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from 'react-router-dom';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
+
+
 const StarRatingContainer = styled.div`
     display: inline-block;
 `;
@@ -109,36 +111,36 @@ function ReviewImportForm({ onReviewSubmitted }) {
     
     // 찜 추가 / 삭제 기능~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~백엔드 엔드포인트 확인해보셔야 함
 
-    // const handleLikeToggle = async () => {
-    //     if (!localStorage.getItem('token')) {
-    //         alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-    //         navigate('/login');
-    //         return;
-    //     }
-    //     try {
-    //         if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
-    //             const response = await axios.delete(`/travelUnlike`, {
-    //                 data: { contentid: contentID, email: loginInfo.email }
-    //             });
-    //             if (response.status === 200) {
-    //                 setLiked(false);
-    //                 setLikes(prev => prev - 1);
-    //             }
-    //         } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
-    //             const response = await axios.post(`/travelLike`, {
-    //                 contentid: contentID,
-    //                 email: loginInfo.email,
-    //                 nickname: loginInfo.nickname
-    //             });
-    //             if (response.status === 200) {
-    //                 setLiked(true);
-    //                 setLikes(prev => prev + 1);
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error('Like toggle request failed:', error);
-    //     }
-    // };
+    const handleLikeToggle = async () => {
+        if (!localStorage.getItem('token')) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate('/login');
+            return;
+        }
+        try {
+            if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
+                const response = await axios.delete(`/travelUnlike`, {
+                    data: { contentid: contentID, email: loginInfo.email }
+                });
+                if (response.status === 200) {
+                    setLiked(false);
+                    setLikes(prev => prev - 1);
+                }
+            } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
+                const response = await axios.post(`/travelLike`, {
+                    contentid: contentID,
+                    email: loginInfo.email,
+                    nickname: loginInfo.nickname
+                });
+                if (response.status === 200) {
+                    setLiked(true);
+                    setLikes(prev => prev + 1);
+                }
+            }
+        } catch (error) {
+            console.error('Like toggle request failed:', error);
+        }
+    };
 
 
 

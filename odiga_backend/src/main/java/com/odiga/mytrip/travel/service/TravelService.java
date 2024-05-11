@@ -146,7 +146,7 @@ public class TravelService {
         return travelDAO.cattranskr(cat1, cat2, cat3);
     }
     @Transactional
-    public void ReviewUpdate(String reviewno , String reviewcomment){
+    public void ReviewUpdate(int reviewno , String reviewcomment){
         travelDAO.reviewUpdate(reviewno , reviewcomment);
     }
     @Transactional
@@ -164,5 +164,13 @@ public class TravelService {
     public String TravelGradeAvg(String contentid){
         return travelDAO.travelGradeAvg(contentid);
     }
+    public boolean WishUserInfo(Integer contentid, String email) {
+        if (contentid != null && travelDAO.wishUserInfo(contentid, email) == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     
 }

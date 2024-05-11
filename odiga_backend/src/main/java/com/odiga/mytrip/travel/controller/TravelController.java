@@ -8,6 +8,7 @@ import com.odiga.mytrip.travel.vo.WishVO;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,6 +64,21 @@ public class TravelController {
         travelService.LikePlusOne(request.getContentid());
         travelService.wish(request.getContentid(), request.getEmail(), request.getNickname());
     }
+    @GetMapping("/WishInfo")
+    public int WishUserInfo(
+        @RequestParam(value = "contentid", required = false) Optional<Integer> contentid,
+        @RequestParam(value = "email", required = false) String email) {
+        if (contentid.isPresent()) {
+            if (travelService.WishUserInfo(contentid.get(), email)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return 3;
+        }
+    }
+
     @PostMapping("/WishDelete")
     public void Wishremov(@RequestBody WishVO request) {
         travelService.WishDelete(request.getContentid(), request.getEmail(), request.getNickname());
@@ -72,13 +88,13 @@ public class TravelController {
         return travelService.img(contntId);
     }
     @PostMapping("/ReviewUpdate")
-    public void reviewInfoUpdate(
-        @RequestParam("reviewno") String reviewno, 
-        @RequestParam("reviewcomment") String reviewcomment) {  
-            travelService.ReviewUpdate(reviewno , reviewcomment); 
+    public void reviewInfoUpdate(@RequestBody ReviewDataVO request) {
+        System.out.println(request);  
+        travelService.ReviewUpdate(request.getReviewno(), request.getReviewcomment()); 
     }
-    @PostMapping("/ReviewDelete")
+    @PostMapping("/ReviewDelete/{reviewno}")
     public void postMethodName(@PathVariable String reviewno) {
+        System.out.println(reviewno);
         travelService.ReviewDelete(reviewno);
     }
     
