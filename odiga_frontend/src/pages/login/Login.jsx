@@ -11,11 +11,12 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import "./Login.css";
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
 import OauthLoginButton from "../component/Oauth/OauthLogin.jsx";
+import {LoginInfoContext} from "./LoginInfoProvider";
 
 // localhost:3000/login
 
@@ -27,6 +28,7 @@ const LoginSchema = Yup.object().shape({
 });
 
 export default function Login() {
+    const loginInfo = useContext(LoginInfoContext);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -36,6 +38,18 @@ export default function Login() {
     const [errors, setErrors] = useState({}); // 에러 상태 추가
 
     const navigate = useNavigate();
+
+    console.log("로그인 정보", Object.keys(loginInfo).length);
+
+    useEffect(() => {
+        // 로그인 상태 정보가 없을 경우 아무 동작 안함
+        if(Object.keys(loginInfo).length == 0) return;
+        // 로그인 한 상태일 경우 메인 페이지로 리다이렉트
+        if (Object.keys(loginInfo).length != 0) {
+            alert("이미 로그인된 상태입니다.");
+            navigate('/');
+        }
+    }, [loginInfo]);
 
     const handleChange = (e) => {
         const {name, value} = e.target;

@@ -29,4 +29,19 @@
         FROM TRAVELREVIEW
         WHERE contentid = #{contentID}
     </select>
+
+    <!-- 여행지 코스 저장 -->
+    <insert id="SaveResultList" parameterType="java.util.Map">
+        Insert into resultlist
+        (RESULTID, COURSENO, COURSEDAY, TRAVELNUM, CONTENTID, NICKNAME, courseyn, WRITEYN, COURSEPW, COURSETITLE)
+        VALUES (#{RESULTID}, #{COURSENO}, #{COURSEDAY}, #{TRAVELNUM}, #{CONTENTID},
+                #{NICKNAME}, 'y', 'n', #{COURSEPW}, #{title})
+    </insert>
+
+    <select id="getMaxNum" parameterType="String">
+        SELECT NVL(TO_NUMBER(MAX(SUBSTR(COURSENO, INSTR(COURSENO, '_', -1) +1))), 0) AS MAX_NUMBER
+        FROM resultlist
+        WHERE COURSENO LIKE #{nickname} || '_%'
+    </select>
+
 </mapper>

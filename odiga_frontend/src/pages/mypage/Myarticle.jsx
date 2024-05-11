@@ -1,129 +1,114 @@
-import React from "react"; // React를 불러옵니다.
+import React, {useContext, useEffect, useState} from "react"; // React를 불러옵니다.
 import styled from "styled-components";
+import {LoginInfoContext} from "../login/LoginInfoProvider";
+import axios from "axios";
+import odigaLogo from "../../assets/images/logo/odiga-logo.png"
+import Card from 'react-bootstrap/Card';
+import Badge from 'react-bootstrap/Badge';
+import {Link} from "react-router-dom";
+import Stack from 'react-bootstrap/Stack';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 function Myarticle() {
-  return (
-    <>
-      <Title>회원님이 작성한 글 목록</Title>
 
-      <GridContainer style={{marginBottom: "100px"}}>
-        <div class="col">
-          <button type="button" class="card" style={{margin: "1rem"}}>
-            <div class="badge bg-dark text-white position-absolute" style={{top: "0.5rem", right: "1rem"}}>
-              좋아요 3
-            </div>
-            <img
-              src="https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=83b17026-0ae3-4bce-8a07-6733c29f7752"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">제목 쓰는 공간</h5>
-              <p class="card-text">#태그자리</p>
-            </div>
-          </button>
-        </div>
+    const loginInfo = useContext(LoginInfoContext);
+    const [articleList, setArticleList] = useState();
 
-        <div class="col">
-          <button type="button" class="card" style={{margin: "1rem"}}>
-            <div class="badge bg-dark text-white position-absolute" style={{top: "0.5rem", right: "1rem"}}>
-              좋아요 3
-            </div>
-            <img
-              src="https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=83b17026-0ae3-4bce-8a07-6733c29f7752"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">제목 쓰는 공간</h5>
-              <p class="card-text">#태그자리</p>
-            </div>
-          </button>
-        </div>
 
-        <div class="col">
-          <button type="button" class="card" style={{margin: "1rem"}}>
-            <div class="badge bg-dark text-white position-absolute" style={{top: "0.5rem", right: "1rem"}}>
-              좋아요 3
-            </div>
-            <img
-              src="https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=83b17026-0ae3-4bce-8a07-6733c29f7752"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">제목 쓰는 공간</h5>
-              <p class="card-text">#태그자리</p>
-            </div>
-          </button>
-        </div>
+    useEffect(() => {
+        if (loginInfo) {
+            const fetchData = async () => {
+                try {
+                    const response = await axios.get(`/my-page/my-article/` + loginInfo.nickname);
+                    setArticleList(response.data);
+                } catch (error) {
+                    console.error('사용자 게시글 가져오기 실패:', error);
+                }
+            };
 
-        <div class="col">
-          <button type="button" class="card" style={{margin: "1rem"}}>
-            <div class="badge bg-dark text-white position-absolute" style={{top: "0.5rem", right: "1rem"}}>
-              좋아요 3
-            </div>
-            <img
-              src="https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=83b17026-0ae3-4bce-8a07-6733c29f7752"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">제목 쓰는 공간</h5>
-              <p class="card-text">#태그자리</p>
-            </div>
-          </button>
-        </div>
+            fetchData(); // 함수 호출
+        }
+    }, [loginInfo]); // loginInfo가 변경될 때마다 실행
 
-        <div class="col">
-          <button type="button" class="card" style={{margin: "1rem"}}>
-            <div class="badge bg-dark text-white position-absolute" style={{top: "0.5rem", right: "1rem"}}>
-              좋아요 3
-            </div>
-            <img
-              src="https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=83b17026-0ae3-4bce-8a07-6733c29f7752"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">제목 쓰는 공간</h5>
-              <p class="card-text">#태그자리</p>
-            </div>
-          </button>
+    return (
+        <div style={{width: "50rem", margin: "auto"}}>
+            <Title>{loginInfo.nickname}님이 작성한 글</Title>
+            <hr/>
+            <GridContainer style={{marginBottom: "100px"}}>
+                {articleList && Object.keys(articleList).map(articleKey => (
+                    <Link to="#"
+                          style={{
+                              textDecoration: "none", /* 링크의 밑줄 제거 */
+                              color: "inherit"
+                          }}
+                    >
+                        <CardContainer key={articleKey}>
+                            <Card.Img variant="top"
+                                      src={articleList[articleKey].mainImage ? articleList[articleKey].mainImage : odigaLogo}/>
+                            <LikeBadge bg="dark">
+                                <FavoriteBorderIcon
+                                    sx={{fontSize: 15}}
+                                /> {articleList[articleKey].boardLikeCount}
+                            </LikeBadge>
+                            <Card.Body>
+                                <Card.Title>
+                                    {articleList[articleKey].boardTitle}
+                                </Card.Title>
+                                <Card.Text>
+                                    <StackContainer direction="horizontal" gap={2}>
+                                        {articleList[articleKey]?.tags && articleList[articleKey].tags.split(" ").map((word, index) => (
+                                            <HashBadge bg="" key={index}>{word}</HashBadge>
+                                        ))}
+                                    </StackContainer>
+                                </Card.Text>
+                            </Card.Body>
+                        </CardContainer>
+                    </Link>
+                ))}
+            </GridContainer>
         </div>
-
-        <div class="col">
-          <button type="button" class="card" style={{margin: "1rem"}}>
-            <div class="badge bg-dark text-white position-absolute" style={{top: "0.5rem", right: "1rem"}}>
-              좋아요 3
-            </div>
-            <img
-              src="https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=83b17026-0ae3-4bce-8a07-6733c29f7752"
-              class="card-img-top"
-              alt="..."
-            />
-            <div class="card-body">
-              <h5 class="card-title">제목 쓰는 공간</h5>
-              <p class="card-text">#태그자리</p>
-            </div>
-          </button>
-        </div>
-      </GridContainer>
-    </>
-  );
+    )
+        ;
 }
 
 export default Myarticle;
 
-const Title = styled.h4`
+const Title = styled.h3`
   margin-top: 4rem;
   text-align: center;
   width: 100%;
-  margin-bottom: 1rem;
 `;
 
 const GridContainer = styled.div`
+  margin-top: 4rem;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+`;
+
+const CardContainer = styled(Card)`
+  position: relative;
+  width: 16rem;
+  height: 23rem;
+`;
+
+const StackContainer = styled(Stack)`
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+`;
+
+const LikeBadge = styled(Badge)`
+  font-size: 0.7rem; // 뱃지의 크기를 조절합니다.
+  width: 3.5rem;
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+`;
+
+
+const HashBadge = styled(Badge)`
+  font-size: 0.6rem;
+  background-color: #A9A9A9;
 `;

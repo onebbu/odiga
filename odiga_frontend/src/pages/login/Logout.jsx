@@ -31,6 +31,9 @@ function Logout() {
     return (
         <div>
             <button className="btn btn-primary" type="submit"
+                    style={{
+                        backgroundColor: "#548A99"
+                    }}
                     onClick={handleLogout}>
                 로그아웃
             </button>
