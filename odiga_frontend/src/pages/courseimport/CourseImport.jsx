@@ -31,8 +31,8 @@ function CourseImport() {
   
   const handleTitleChange = (event) => {
     const areaName = getAreaName(areacode);
-    const userInput = event.target.value.replace(`[${areaName}] `, ""); // 사용자 입력에서 지역명 제거
-    setTitle(`[${areaName}] ${userInput}`); // 지역명을 다시 추가하여 상태 업데이트
+    const userInput = event.target.value.replace(`[${areaName}] `, ""); 
+    setTitle(`[${areaName}] ${userInput}`); 
   };
 
   useEffect(() => {
@@ -121,7 +121,17 @@ function CourseImport() {
                 onChange={handleTitleChange}
               />
             </section>
-         
+            {/* style={{
+              textAlign: "left",
+              margin: "0 auto",
+              width: "60%",
+              minHeight: "30em",
+              marginBottom: "30px",
+              padding: "30px",
+              border: "2px solid black",
+              backgroundColor: "white",
+              borderRadius: "10px",
+            }} */}
            <section className="couseImportTextBox">
             <div>
             <TextEditor setData={setBoardContent} />
