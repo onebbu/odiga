@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.odiga.mytrip.travel.vo.WishVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,7 @@ public class TravelService {
     public TravelListVO TravelList(String contentId) {
         return travelDAO.getTravelInfo(contentId);
     }
-    
+
     @Transactional
     public void updateViewCount(String contentId) {
         travelDAO.countPlusOne(contentId);
@@ -68,13 +69,13 @@ public class TravelService {
             urlConnection.disconnect();
         }
 
-        
+
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode rootNode = objectMapper.readTree(overviewResult.toString());
         String overview = rootNode.path("response").path("body").path("items").path("item").get(0).path("overview").asText();
 
         System.out.println("overview :" + overview);
-        
+
         travelDAO.fetchOverview(contentId, overview);
 
         return overview;
@@ -161,8 +162,14 @@ public class TravelService {
     public void WishDelete(String contentid , String email , String nickname){
         travelDAO.wishDelete(contentid, email, nickname);
     }
+
     public String TravelGradeAvg(String contentid){
         return travelDAO.travelGradeAvg(contentid);
     }
-    
+
+    @Transactional
+    public List<WishVO> selectAllWish(String nickname){
+        return travelDAO.selectAllWish(nickname);
+    }
+
 }

@@ -7,7 +7,10 @@ import com.odiga.mytrip.travel.vo.TravelListVO;
 import com.odiga.mytrip.travel.vo.WishVO;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-
-
-
 
 
 @RestController
@@ -48,7 +48,7 @@ public class TravelController {
             // ReviewDataVO 객체를 DAO로 전달하여 데이터베이스에 저장하거나 다른 작업 수행
             travelService.importReviewData(reviewData);
             System.out.println(reviewData);
-            return "Success"; 
+            return "Success";
         } catch (Exception e) {
             e.printStackTrace();
             return "Error"; // 예외 처리
@@ -73,19 +73,41 @@ public class TravelController {
     }
     @PostMapping("/ReviewUpdate")
     public void reviewInfoUpdate(
-        @RequestParam("reviewno") String reviewno, 
-        @RequestParam("reviewcomment") String reviewcomment) {  
-            travelService.ReviewUpdate(reviewno , reviewcomment); 
+            @RequestParam("reviewno") String reviewno,
+            @RequestParam("reviewcomment") String reviewcomment) {
+        travelService.ReviewUpdate(reviewno , reviewcomment);
     }
     @PostMapping("/ReviewDelete")
     public void postMethodName(@PathVariable String reviewno) {
         travelService.ReviewDelete(reviewno);
     }
-    
-    
-      
-    
-    
 
-       
+    // 닉네임으로 가지고 와야함
+    @GetMapping("/mypage/mylike/{nickname}")
+    public Map<Integer, Map<String, Object>> getWishlist(@PathVariable String nickname) {
+        // 아이디에 맞는 wishlist 가져오기
+        List<WishVO> userWishList = travelService.selectAllWish(nickname);
+        Map<Integer, Map<String, Object>> userWishMap = new HashMap<>();
+
+        int i = 0;
+        Iterator<WishVO> wishIter = userWishList.iterator();
+        while (wishIter.hasNext()) {
+            WishVO userWish = wishIter.next();
+            TravelListVO travelInfo = travelService.TravelList(String.valueOf(userWish.getContentid()));
+            Map<String, Object> wishMap = new HashMap<>();
+            wishMap.put("contentId", String.valueOf(userWish.getContentid()));
+            wishMap.put("title", travelInfo.getTitle());
+            wishMap.put("addr", travelInfo.getAddr1());
+            wishMap.put("img", travelInfo.getFirstimage());
+            wishMap.put("cat", travelInfo.getCat3());
+            userWishMap.put(i, wishMap);
+            i++;
+        }
+
+
+        return userWishMap;
+    }
+
+
 }
+
