@@ -13,6 +13,7 @@ function ReviewDisplay(props) {
     const loginInfo = useContext(LoginInfoContext);
     const { travelInfo } = props;
 
+
     useEffect(() => {
         fetchReviews();
         console.log(reviews);
@@ -50,7 +51,8 @@ function ReviewDisplay(props) {
     //리뷰 수정 / 삭제 기능 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~변수명, 엔드포인트 확인 필요~~~~
 
     const startEditing = (review) => {
-        setEditingId(review.id);
+        console.log(review);
+        setEditingId(review.reviewno);
         setEditedContent(review.reviewcomment);
     };
 
@@ -106,15 +108,17 @@ function ReviewDisplay(props) {
                 <div key={index} className="reviewItem">
                     {loginInfo.email === review.email ? (
                         <>
-                            {review.id === editingId ? (
+                            {review.reviewno === editingId ? (
                                 <>
                                     <textarea
                                         value={editedContent}
                                         onChange={(e) => setEditedContent(e.target.value)}
-                                        className="editTextArea"
+                                        className="commentDetail"
                                     />
+                                <div className="commentInfo">
                                     <button onClick={() => submitEdit(review.reviewno)}>확인</button>
                                     <button onClick={cancelEditing}>취소</button>
+                                </div>
                                 </>
                             ) : (
                                 <>

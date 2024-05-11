@@ -17,7 +17,7 @@
     </select>
     <select id="wishUserInfo" resultType="int">
         SELECT COALESCE(COUNT(*), 0)
-        FROM TRAVELREVIEW
+        FROM WISHLIST
         WHERE CONTENTID = COALESCE(#{contentid}, 0)
         <if test="email != null">
             AND EMAIL = #{email}

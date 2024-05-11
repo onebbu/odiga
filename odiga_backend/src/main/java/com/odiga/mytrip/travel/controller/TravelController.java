@@ -77,6 +77,7 @@ public class TravelController {
         } else {
             return 3;
         }
+        
     }
 
     @PostMapping("/WishDelete")

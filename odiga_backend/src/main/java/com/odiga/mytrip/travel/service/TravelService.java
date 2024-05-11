@@ -173,8 +173,10 @@ public class TravelService {
             return false;
         }
     }
+    @Transactional
+    public List<WishVO> selectAllWish(String nickname){
+        return travelDAO.selectAllWish(nickname);
+    }
     
     
-}
-
 }
