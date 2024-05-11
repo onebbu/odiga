@@ -255,7 +255,7 @@ function TravelDetailPage() {
                 </section>
 
                 <section id="review-display">
-                    <ReviewDisplay/>
+                    <ReviewDisplay travelInfo= {data}/>
                 </section>
 
             </div>
