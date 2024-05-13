@@ -17,6 +17,7 @@ import java.io.IOException;
 
 // 스프링 시큐리티 filter chain 요청에 담긴 JWT를 검증하기 위한 커스텀 필터
 
+@Slf4j
 @RequiredArgsConstructor
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -42,12 +43,12 @@ public class JWTFilter extends OncePerRequestFilter {
         // Authorization에서 Bearer 접두사 제거
         String token = authorization.split(" ")[1];
 
+
         // token 소멸 시간 검증
         // 유효기간이 만료한 경우
         if(jwtUtil.isExpired(token)){
-            filterChain.doFilter(request, response);
-
-            // 메서드 종료
+            log.info("token expired");
+            // 메서드 종료 => 재로그인 방식
             return;
         }
 
