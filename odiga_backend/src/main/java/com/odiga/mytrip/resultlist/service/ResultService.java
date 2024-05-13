@@ -48,4 +48,8 @@ public class ResultService {
     public void saveCoursePw(String coursePw, String courseNo){
         resultDAO.savePw(coursePw, courseNo);
     }
+
+    public void deleteTravelResult(String courseNo){
+        resultDAO.deleteTravelResult(courseNo);
+    }
 }

@@ -5,6 +5,7 @@ import axios from "axios";
 import Table from 'react-bootstrap/Table';
 import {Link} from "react-router-dom";
 import Accordion from 'react-bootstrap/Accordion';
+import Badge from "react-bootstrap/Badge";
 
 function Mycourse() {
 
@@ -21,7 +22,7 @@ function Mycourse() {
                     const response = await axios.get(`/mypage/mycourse/` + loginInfo.nickname);
                     setCourseInfo(response.data);
                 } catch (error) {
-                    // 에러 처리
+                    console.error('코스 가져오기 실패:', error);
                 }
             };
 
@@ -29,32 +30,48 @@ function Mycourse() {
         }
     }, [loginInfo]); // loginInfo가 변경될 때마다 실행
 
-
-    console.log(courseInfo);
+    const handleSubmit = async (courseKey) => {
+        try {
+            const response = await axios.post(`/delete`, {courseKey});
+            window.location.reload();
+        } catch (error) {
+            console.error('삭제 실패:', error);
+        }
+    };
 
     return (
-        <div>
+        <div style={{width: "50rem", margin: "auto"}}>
             <Title>{loginInfo.nickname}님의 여행코스</Title>
-            {courseInfo && (
-                <Accordion>
-                    {Object.keys(courseInfo).map((courseKey, index) => {
-                        console.log(courseInfo)
+            <hr style={{marginBottom: "4rem"}}/>
+            {courseInfo ? (
+                <>
+                    <Accordion>
+                        {Object.keys(courseInfo).map((courseKey, index) => {
+                                console.log(courseInfo)
 
-                            return (
-                                <Accordion.Item key={courseKey} eventKey={index}>
-                                    <Accordion.Header>
-                                        <span>{courseInfo[courseKey].title}으로 <Link to={`/result-list/${courseKey}`}> 이동하기</Link></span>
-                                    </Accordion.Header>
-                                    <Accordion.Body>
-
-                                        <p>여행 경로</p>
-                                        <span>{courseInfo[courseKey].content}</span>
-                                    </Accordion.Body>
-                                </Accordion.Item>
-                            )
-                        }
-                    )}
-                </Accordion>
+                                return (
+                                    <Accordion.Item key={courseKey} eventKey={index}>
+                                        <Accordion.Header style={{width: "49rem"}}>
+                                            <div style={{width: "40rem", justifyContent: "space-between", display: "flex"}}>
+                                            <span>{courseInfo[courseKey].title}으로 <Link
+                                                to={`/result-list/${loginInfo.nickname}/${courseKey}`}> 이동하기</Link></span>
+                                                <span><Link onClick={() => handleSubmit(courseKey)}>삭제하기</Link></span>
+                                            </div>
+                                        </Accordion.Header>
+                                        <Accordion.Body>
+                                            <h5>여행 경로</h5>
+                                            <span>{courseInfo[courseKey].content}</span>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                )
+                            }
+                        )}
+                    </Accordion>
+                </>
+            ) : (
+                <>
+                    <Message>코스 정보가 없습니다.</Message>
+                </>
             )}
         </div>
     );
@@ -62,9 +79,14 @@ function Mycourse() {
 
 export default Mycourse;
 
-const Title = styled.h4`
+const Title = styled.h3`
   margin-top: 4rem;
   text-align: center;
   width: 100%;
-  margin-bottom: 4rem;
+`;
+
+const Message = styled.div`
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.2rem;
 `;
