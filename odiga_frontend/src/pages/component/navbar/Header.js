@@ -37,7 +37,7 @@ function Header() {
             const token = localStorage.getItem('token');
              setIsLoggedIn(!!token); 
            }, []);
-       
+
       const handleLoginClick = () => {
        if (isLoggedIn) {
         navigate('/my-page/*'); 
