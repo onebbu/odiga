@@ -18,27 +18,6 @@ import PlaceList from "./pages/placeList/placeList";
 
 function App() {
 
-    // 페이지 이동시 로그인 정보 삭제 => 추후 수정
-    // useEffect(() => {
-    //     const handleUnload = () => {
-    //         localStorage.clear();
-    //
-    //         // 쿠키 삭제 (참고용으로 작성한 것이며, 실제로는 브라우저에서 쿠키를 삭제하는 방법이 다를 수 있습니다)
-    //         document.cookie.split(";").forEach((c) => {
-    //             document.cookie = c
-    //                 .replace(/^ +/, "")
-    //                 .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-    //         });
-    //     };
-    //
-    //     window.addEventListener('unload', handleUnload);
-    //
-    //     return () => {
-    //         window.removeEventListener('unload', handleUnload);
-    //     };
-    // }, []);
-
-
     return (
         <BrowserRouter>
             {/*<Header />*/}
