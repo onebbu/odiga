@@ -61,7 +61,6 @@ public class TravelController {
     }
     @PostMapping("/travelLike")
     public void likeAndWish(@RequestBody WishVO request) {
-        travelService.LikePlusOne(request.getContentid());
         travelService.wish(request.getContentid(), request.getEmail(), request.getNickname());
     }
     @GetMapping("/WishInfo")
