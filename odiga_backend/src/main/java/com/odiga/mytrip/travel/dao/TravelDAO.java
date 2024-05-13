@@ -15,7 +15,6 @@ public interface TravelDAO {
     void fetchOverview(String contentid , String overview);
     void importReviewData(ReviewDataVO reviewData);
     List<ReviewDataVO> getReviewList(String contentId);
-    void Like(String contentid);
     TravelCatKorVO cattranskr(String cat1 , String cat2 , String cat3);
     void reviewUpdate(int reviewno , String reviewcomment);
     void reviewDelete(String reviewno);

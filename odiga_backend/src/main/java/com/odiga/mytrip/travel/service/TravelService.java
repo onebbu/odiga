@@ -139,10 +139,6 @@ public class TravelService {
     public List<ReviewDataVO> ReviewList(String contentId) {
         return travelDAO.getReviewList(contentId);
     }
-
-    public void LikePlusOne(String contentid){
-        travelDAO.Like(contentid);
-    }
     public TravelCatKorVO Catkr(String cat1 , String cat2 , String cat3){
         return travelDAO.cattranskr(cat1, cat2, cat3);
     }

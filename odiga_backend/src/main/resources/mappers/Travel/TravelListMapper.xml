@@ -6,9 +6,14 @@
 
     <!-- 여행지 정보 가져오기 -->
     <select id="getTravelInfo" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
-        SELECT *
-        FROM TravelList
-        WHERE contentId = #{contentId}
+        SELECT TL.*, NVL(WC.WISHLIST_COUNT, 0) AS WISHLIST_COUNT
+        FROM TravelList TL
+        LEFT JOIN (
+            SELECT CONTENTID, COUNT(*) AS WISHLIST_COUNT
+            FROM WISHLIST
+            GROUP BY CONTENTID
+        ) WC ON TL.CONTENTID = WC.CONTENTID
+        WHERE TL.CONTENTID = #{contentid}
     </select>
     <select id="travelGradeAvg" resultType="String">
         SELECT ROUND(AVG(REVIEWGRADE), 1) AS AVERAGE_GRADE
@@ -51,12 +56,7 @@
         FROM TRAVELREVIEW
         WHERE contentId = #{contentId}
     </select>
-    <!-- 좋아요 수 1 증가 -->
-    <update id="Like" parameterType="string">
-        UPDATE TravelList
-        SET LIKECOUNT = COALESCE(LIKECOUNT, 0) + 1
-        WHERE contentId = #{contentId}
-    </update>
+    
     <select id="cattranskr" resultType="com.odiga.mytrip.travel.vo.TravelCatKorVO">
         SELECT CAT1, CAT2, CAT3, CAT1KR, CAT2KR, CAT3KR 
         FROM TOURRISMSERVICE
