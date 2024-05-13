@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from './SideBar';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 function SearchPage() {
   const [searchText, setSearchText] = useState('');
-  const [selectedAreaCode, setSelectedAreaCode] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [currentPage, setCurrentPage] = useState(0);
+  const [selectedAreaCode, setSelectedAreaCode] = useState('1');
+  const [searchResults, setSearchResults] = useState([1]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [resultCount, setResultCount] = useState(0);
-  const [catList, setCatList] = useState([1]); 
+  const [catList, setCatList] = useState([]); 
   const [catCode , setCatCode] = useState(null);
+  const [courseResults, setCourseResults] = useState([]);
 
 
   useEffect(() => {
@@ -48,8 +51,12 @@ function SearchPage() {
       console.error('카테고리를 불러오는 중 에러 발생:', error);
     }
   };
+  // 여행코스 결과를 가져오는 함수 (예시)
+  const fetchCourseResults = async () => {
+    // 여행코스 결과를 가져오는 로직 구현
+  };
 
-  // 함수: 검색 결과 요청
+  // 함수: 여행지 검색 결과 요청
   const fetchSearchResults = async (page) => {
     try {
       const response = await axios.get('/search', {
@@ -113,7 +120,6 @@ function SearchPage() {
       <div className="search-form">
         {/* 시군구 옵션 */}
         <select value={selectedAreaCode} onChange={handleAreaChange}>
-          <option value="">전체</option>
           <option value="1">서울</option>
           <option value="2">인천</option>
           <option value="3">대전</option>
@@ -145,7 +151,13 @@ function SearchPage() {
         {/* 검색 버튼 */}
         <button onClick={handleSearch}>검색</button>
       </div>
+      <Tabs>
+        <TabList>
+          <Tab>여행지</Tab>
+          <Tab>여행코스</Tab>
+        </TabList>
 
+      <TabPanel>
       {/* 검색 결과 표시 */}
       <div className="search-results">
         {/* 검색 결과 목록 */}
@@ -156,6 +168,22 @@ function SearchPage() {
         ) : (
           <p>검색 결과가 없습니다.</p>
         )}
+      </div>
+      </TabPanel>
+
+        <TabPanel>
+          <div className="course-results">
+            {/* 여행코스 결과를 보여주는 로직 */}
+            {courseResults.length > 0 ? (
+              courseResults.map((result, index) => (
+                <div key={index}>{result.title}</div>
+              ))
+            ) : (
+              <p>여행코스 결과가 없습니다.</p>
+            )}
+          </div>
+        </TabPanel>
+        </Tabs>
 
         {/* 페이지네이션 */}
         <div className="pagination">
@@ -168,7 +196,6 @@ function SearchPage() {
         <div>
           총 {resultCount}개의 결과
         </div>
-      </div>
     </div>
   );
 }
