@@ -1,5 +1,6 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
+import {BrowserRouter as Router} from 'react-router-dom';
 import Login from "./pages/login/Login";
 import SignUp from "./pages/sign-up/SignUp";
 import TravelDetailPage from "./pages/traveldetailpage/TravelDetailPage";
@@ -13,23 +14,25 @@ import WrongPathPage from "./pages/wrongpathPage/WrongPath";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import ChoosePlace from "./pages/choosePlace/choosePlacePage";
 import LoginInfoProvider from "./pages/login/LoginInfoProvider";
+import PlaceList from "./pages/placeList/placeList";
 
 function App() {
+
     return (
         <BrowserRouter>
+            {/*<Header />*/}
             <Routes>
                 {/* 로그인 x */}
                 <Route>
                     <Route exact path="/" element={<Main/>}/>
-                    <Route exact path="/login" element={<Login/>}/>
-                    <Route exact path="/sign-up" element={<SignUp/>}/>
-                    <Route path="/detail/:contentID" element={<TravelDetailPage/>}/>
+                    {/*<Route path="/detail/:contentID" element={<TravelDetailPage/>}/>*/}
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
                     <Route exact path="/courseimport" element={<CourseImport/>}/>
                     <Route exact path="/coursereview/*" element={<CourseReview/>}/>
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
-                    <Route exact path="/place" element={<ChoosePlace/>}></Route>
+
+                    <Route exact path="/place/show" element={<PlaceList/>}></Route>
                 </Route>
 
 
@@ -39,11 +42,32 @@ function App() {
                         <MypageMain/>
                     </LoginInfoProvider>
                 }/>
+                <Route path="/login" element={
+                    <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
+                        <Login/>
+                    </LoginInfoProvider>
+                }/>
+                <Route path="/sign-up" element={
+                    <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
+                        <SignUp/>
+                    </LoginInfoProvider>
+                }/>
+                <Route path="/detail/:contentID" element={
+                    <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
+                        <TravelDetailPage/>
+                    </LoginInfoProvider>
+                }/>
+                {/* 로그인 o / 로그인 x / 코스 생성자 3가지 경우의 수 // LoginInfoProvider 지우기 X*/}
                 <Route path="/result-list/:nickname/:courseNo" element={
                     <LoginInfoProvider>
                         <ResultView/>
                     </LoginInfoProvider>
                 }/>
+                <Route exact path="/place" element={
+                    <LoginInfoProvider>
+                        <ChoosePlace/>
+                    </LoginInfoProvider>
+                }></Route>
 
             </Routes>
         </BrowserRouter>

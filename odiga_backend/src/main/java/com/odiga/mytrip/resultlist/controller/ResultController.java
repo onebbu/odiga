@@ -73,6 +73,8 @@ public class ResultController {
 
                 // 위도+경도 저장하는 코드
                 int maxtravelNum = resultService.findMaxTravelNum(courseNo, current.getCourseDay());
+                String sharePw = resultService.findSharePw(courseNo);
+
 
                 locationMap.put("title", currentTravel.getTitle());
                 locationMap.put("addr", currentTravel.getAddr1());
@@ -84,6 +86,7 @@ public class ResultController {
                 locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
                 locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
+                locationMap.put("sharePw", sharePw);
 
                 // 하루에 장소가 1개일 경우
                 if (maxtravelNum == 1) {
@@ -115,6 +118,9 @@ public class ResultController {
                 Map<String, Object> locationMap = new HashMap<>();
                 int maxtravelNum = resultService.findMaxTravelNum(courseNo, current.getCourseDay());
 
+                String sharePw = resultService.findSharePw(courseNo);
+
+
                 locationMap.put("title", currentTravel.getTitle());
                 locationMap.put("addr", currentTravel.getAddr1());
                 locationMap.put("img", currentTravel.getFirstimage());
@@ -125,6 +131,7 @@ public class ResultController {
                 locationMap.put("maxTravelNum", maxtravelNum);
                 locationMap.put("contentId", current.getContentId());
                 locationMap.put("cat", resultService.findCategory(currentTravel.getCat3()));
+                locationMap.put("sharePw", sharePw);
 
 
                 // 하루에 장소가 1개일 경우
@@ -163,12 +170,13 @@ public class ResultController {
         TravelListVO content = travelService.TravelList(contentId);
 
         String title = content.getTitle();
-        int likeCount = content.getLikecount() == null? 0 : Integer.parseInt(content.getLikecount());
+        int likeCount = content.getWishlist_count() == null? 0 : Integer.parseInt(content.getWishlist_count());
         String img = content.getFirstimage();
         String addr = content.getAddr1();
         String overview = content.getOverview();
         String cat = resultService.findCategory(content.getCat3());
         String catKR = resultService.findCategoryKR(content.getCat3());
+
 
         contentInfo.put("title", title);
         contentInfo.put("likeCount", likeCount);
@@ -181,13 +189,6 @@ public class ResultController {
         resultMap.put(contentId, contentInfo);
 
         return ResponseEntity.ok(resultMap);
-    }
-
-    @PostMapping("/sendPw")
-    @ResponseBody
-    public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
-        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("courseNo"));
-
     }
 
     // 아이디를 받아서 전체 결과 목록을 전달
@@ -227,10 +228,17 @@ public class ResultController {
         return ResponseEntity.ok(resultMap);
     }
 
-    @GetMapping("/findSharePw/{courseNo}")
-    public ResponseEntity<String> findSharePw(@PathVariable String courseNo) {
-        String sharePw = resultService.findSharePw(courseNo);
-        return ResponseEntity.ok(sharePw);
+    @PostMapping("/sendPw")
+    @ResponseBody
+    public void saveCoursePw(@RequestBody Map<String, String> courseInfo) {
+        resultService.saveCoursePw(courseInfo.get("pw"), courseInfo.get("courseNo"));
+    }
+
+    @PostMapping("/delete")
+    @ResponseBody
+    public void deleteCourse(@RequestBody Map<String, String> courseNo) {
+        resultService.deleteTravelResult(courseNo.get("courseKey"));
+        log.info("여행 삭제 완료");
     }
 
     // 네이버 api(driving-5)

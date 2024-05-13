@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import styled from "styled-components";
 import './CP.css';
 import date1 from './img/date_1.png'; import date2 from './img/date_2.png'; import date3 from './img/date_3.png';
@@ -17,6 +17,7 @@ const Container=styled.div`
 `;
 
 function ChoosePreference() {
+
     const navigate = useNavigate();
     const [selectedValues, setSelectedValues] = useState({
         region : null,

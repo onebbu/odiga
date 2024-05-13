@@ -1,11 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Styled from "styled-components";
-import {useDrag} from 'react-dnd';
 import axios from "axios";
-import './cPP.css';
-
-//const region_url = `https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json`;
-
+import './PL.css';
 
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
@@ -27,18 +23,8 @@ const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
 
     }, [id]);
 
-    const[{ isDragging },drag] = useDrag({
-        type: 'placeitem',
-        item: { id, name, region },
-        collect: (monitor) => ({
-            isDragging: monitor.isDragging(),
-        }),
-    });
-
-    const opacity = isDragging ? 0 : 1;
-
     return(
-        <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}> 
+        <div key={id} ref={drag}> 
         {/* traveldetailpage 링크 */}
         <a href={`/detail/${id}`}> 
             <img src={pic} />
