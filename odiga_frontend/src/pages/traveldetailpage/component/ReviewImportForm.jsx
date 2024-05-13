@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState  , useContext} from "react";
+import React, { useState  , useContext , useEffect} from "react";
 import styled from 'styled-components';
 import '../TravelDetailPage.css';
 import { useNavigate } from "react-router-dom"; 
@@ -7,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useParams } from 'react-router-dom';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
+
+
 const StarRatingContainer = styled.div`
     display: inline-block;
 `;
@@ -109,36 +111,38 @@ function ReviewImportForm({ onReviewSubmitted }) {
     
     // 찜 추가 / 삭제 기능~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~백엔드 엔드포인트 확인해보셔야 함
 
-    // const handleLikeToggle = async () => {
-    //     if (!localStorage.getItem('token')) {
-    //         alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-    //         navigate('/login');
-    //         return;
-    //     }
-    //     try {
-    //         if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
-    //             const response = await axios.delete(`/travelUnlike`, {
-    //                 data: { contentid: contentID, email: loginInfo.email }
-    //             });
-    //             if (response.status === 200) {
-    //                 setLiked(false);
-    //                 setLikes(prev => prev - 1);
-    //             }
-    //         } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
-    //             const response = await axios.post(`/travelLike`, {
-    //                 contentid: contentID,
-    //                 email: loginInfo.email,
-    //                 nickname: loginInfo.nickname
-    //             });
-    //             if (response.status === 200) {
-    //                 setLiked(true);
-    //                 setLikes(prev => prev + 1);
-    //             }
-    //         }
-    //     } catch (error) {
-    //         console.error('Like toggle request failed:', error);
-    //     }
-    // };
+    const handleLikeToggle = async () => {
+        if (!localStorage.getItem('token')) {
+            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            navigate('/login');
+            return;
+        }
+        try {
+            if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
+                const response = await axios.post(`/WishDelete`, {
+                    contentid: contentID, 
+                    email: loginInfo.email,
+                    nickname: loginInfo.nickname
+                });
+                if (response.status === 200) {
+                    setLiked(false);
+                    setLikes(prev => prev - 1);
+                }
+            } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
+                const response = await axios.post(`/travelLike`, {
+                    contentid: contentID,
+                    email: loginInfo.email,
+                    nickname: loginInfo.nickname
+                });
+                if (response.status === 200) {
+                    setLiked(true);
+                    setLikes(prev => prev + 1);
+                }
+            }
+        } catch (error) {
+            console.error('Like toggle request failed:', error);
+        }
+    };
 
 
 
@@ -147,24 +151,26 @@ function ReviewImportForm({ onReviewSubmitted }) {
 
 
     //찜 관련 (엔드포인트 임의 지정 travelLike)
-    const handleLike = async () => {
-        if (!localStorage.getItem('token')) {
-            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            navigate('/login');
-            return;
-        }
-        try {
-            axios.post(`/travelLike` ,{
-                contentid : contentID , 
-                email : loginInfo.email , 
-                nickname : loginInfo.nickname
-            });
-            setLiked(true);
-            setLikes(prev => prev + 1);
-        } catch (error) {
-            console.error('Like request failed:', error);
-        }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // 서버에서 좋아요 상태를 가져오는 요청
+                const response = await axios.get(`/WishInfo?contentid=${contentID}&email=${loginInfo.email}`);
+                if (response.data === 1) {
+                    setLiked(true); // 서버에서 받아온 값이 1이면 liked를 true로 업데이트
+                } else {
+                    // 서버에서 받아온 값이 0이나 3이면 liked를 false로 업데이트 
+                    setLiked(false);
+                }
+                
+            } catch (error) {
+                console.error('Failed to fetch like status:', error);
+            }
+        };
+    
+        fetchData();
+    }, [contentID,loginInfo.email]);
+    
 
     return(
         <div className="reviewImportForm"> 
@@ -193,7 +199,7 @@ function ReviewImportForm({ onReviewSubmitted }) {
           <section className="likeinner">
             <div className="likeTitle"> <h4> 다시 보고 싶다면 ? </h4> </div>
             <div>
-            <button onClick={handleLike} className="LikeButton">
+            <button onClick={handleLikeToggle} className="LikeButton">
                 <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'} style={{marginLeft : '10px'}}/>
             </button>
             </div>

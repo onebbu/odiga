@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import './couseImport.css';
+import styled from 'styled-components';
 
 function HashtagInput({ onTagsChange }) {
   const [hashtags, setHashtags] = useState([]);
@@ -9,19 +11,27 @@ function HashtagInput({ onTagsChange }) {
   };
 
   const handleInputKeyDown = (event) => {
-    if (event.key === 'Enter' ) {
+    if (event.key === 'Enter') {
       event.preventDefault();
-      addHashtag();
+      if (hashtags.length >= 10) {
+        alert('태그는 10개까지만 가능합니다 !');
+      } else {
+        addHashtag();
+      }
     }
   };
 
   const addHashtag = () => {
     if (inputValue.trim() !== '') {
-      const newHashtag = `#${inputValue.trim()}`;
-      setHashtags([...hashtags, newHashtag]);
+      const newHashtag = `# ${inputValue.trim()} `;
+      const updatedTags = [...hashtags, newHashtag];
+      if (updatedTags.length > 10) {
+        alert('태그는 10개까지만 가능합니다!');
+        return;
+      }
+      setHashtags(updatedTags);
       setInputValue('');
-      // 태그가 변경되었음을 통짜 String으로 상위 컴포넌트로 전달
-      onTagsChange([...hashtags, newHashtag].join(' '));
+      onTagsChange(updatedTags.join(' '));
     }
   };
 
@@ -33,21 +43,25 @@ function HashtagInput({ onTagsChange }) {
   };
 
   return (
-    <div>
-      <div>
+    <div className="hashTagBox">
+      <div className="hashTagInner">
         {hashtags.map((tag, index) => (
-          <span key={index} onClick={() => removeHashtag(index)}>
+          <span className="tagClass" key={index} onClick={() => removeHashtag(index)}>
             {tag}
           </span>
         ))}
       </div>
+
+      <div className="hashtagInputInner">
       <input
+        className="hashtagInput"
         type="text"
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleInputKeyDown}
-        placeholder="Add hashtags..."
+        placeholder="태그를 추가해보세요!"
       />
+      </div>
     </div>
   );
 }

@@ -4,9 +4,10 @@ import axios from "axios";
 import Carousel from "./carousel.js";
 import TextEditor from "../component/Ckeditor/TextEditor";
 import HashtagInput from "./HashtagInput.js";
-
-//닉네임 설정
-const nickname ="gyugyu"
+import Header from "../component/navbar/Header";
+import Footer from '../component/footer/Footer';
+import './styles.css';
+import './couseImport.css';
 
 const Input = styled.input`
   width: 100%;
@@ -26,16 +27,26 @@ function CourseImport() {
   const [MainImage, setMainImage] = useState(null);
   const [tags, setTags] = useState(null);
   const [areacode, setAreacode] = useState("");
-
+  const [nickName, setNickname] = useState("odiga");
+  
   const handleTitleChange = (event) => {
-    // console.log(MainImage);
-    setTitle(event.target.value);
+    const areaName = getAreaName(areacode);
+    const userInput = event.target.value.replace(`[${areaName}] `, ""); 
+    setTitle(`[${areaName}] ${userInput}`); 
   };
 
   useEffect(() => {
     fetchTravelCourse();
   } , []);
+  
+  const areaCodeToName = {
+    '35': '경상북도',
+   //아레아코드 어떻게 ?..
+  };
 
+  const getAreaName = (code) => {
+    return areaCodeToName[code] || "지역코드 없음"; 
+  };
   
   const courseImport = () => {
     axios.post("/courseimport", {
@@ -43,7 +54,8 @@ function CourseImport() {
       BoardContent: boardContent,
       MainImage : MainImage ,
       Tags : tags ,
-      areacode : areacode
+      areacode : areacode,
+      nickName : nickName
     })
       .then((response) => {
         console.log(response, "가 전송됐습니다.");
@@ -90,53 +102,26 @@ function CourseImport() {
   
 
   
-
+  const nickname ="gyugyu"
   return (
     <>
-      <header
-        style={{
-          backgroundColor: "lightblue",
-          lineHeight: "80px",
-          textAlign: "center",
-          display: "block",
-          width: "100%",
-        }}
-      >
-        헤더공간
-      </header>
-
-      <Container>
-        <section
-          style={{
-            width: "100%",
-            backgroundColor: "#f2fbff",
-            margin: "0 auto",
-          }}
-        >
-          <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
-          <div
-            style={{
-              margin: "0 auto",
-              marginBottom: "30px",
-              padding: "5px",
-              border: "2px solid black",
-              backgroundColor: "white",
-              borderRadius: "10px",
-              width: "60%",
-            }}
-            className="section-heading text-center"
-          >
-            <h4 style={{ margin: "0 auto" }}>
-              <Input
+        <Header/>
+        <section className="couseImportContainer">
+           
+           <section className="couseImportTop">
+            <h3> {nickname}님의 여행기를 공유해주세요 :)</h3>
+           </section>
+            
+            <section className="couseImportTitleInner"> 
+              <input
+                className="couseImportTitleBox"
                 type="text"
-                placeholder="글 제목을 입력하세요."
+                placeholder={`[${getAreaName(areacode)}] 제목을 입력하세요.`}
                 value={title}
                 onChange={handleTitleChange}
               />
-            </h4>
-          </div>
-          <Div
-            style={{
+            </section>
+            {/* style={{
               textAlign: "left",
               margin: "0 auto",
               width: "60%",
@@ -146,15 +131,16 @@ function CourseImport() {
               border: "2px solid black",
               backgroundColor: "white",
               borderRadius: "10px",
-            }}
-          >
+            }} */}
+           <section className="couseImportTextBox">
+            <div>
             <TextEditor setData={setBoardContent} />
-            
-          </Div>
-
-          {/* 해쉬태그 입력칸 */}
+            </div>
+           </section>
+         
+          <section className="couseImportHashTagBox">
           <HashtagInput onTagsChange={handleTagsChange} />
-
+          </section>
 
           <h4> 여행코스 정보 </h4>
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
@@ -216,20 +202,9 @@ function CourseImport() {
           </button>
           <div style={{ visibility: "hidden" }}> 보이지 않는 공간 </div>
         </section>
-      </Container>
+      
 
-      <footer
-        style={{
-          backgroundColor: "lightblue",
-          lineHeight: "80px",
-          textAlign: "center",
-          border: "1px",
-          borderColor: "black",
-          marginTop: "30px",
-        }}
-      >
-        푸터공간
-      </footer>
+       <Footer/>
     </>
   );
 }

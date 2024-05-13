@@ -1,0 +1,97 @@
+.couseImportContainer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+ .couseImportTitleInner{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    
+}
+
+.couseImportTop {
+    margin-top: 140px;
+    margin-bottom: 20px;
+}
+
+.couseImportTop h3 {
+    font-weight: bold;
+}
+
+.couseImportTitleBox{
+    width: 60%;
+    height: auto;
+    border: 2px solid black; 
+    border-radius: 10px;
+    resize: none; 
+    padding: 10px; 
+    box-sizing: border-box;
+}
+
+
+.couseImportTextBox {
+    text-align: left;
+    display: flex;
+    
+    width: 60%;
+    min-height: 30em;
+    margin-bottom: 30px;
+    padding: 30px;
+    border: 2px solid black;
+    border-radius: 10px;
+    
+}
+
+.couseImportHashTagBox {
+    width: 100%;
+    height: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hashTagBox {
+    width: 60%;
+    height: 100%;
+    
+}
+.hashTagInner {
+    width: 100%;
+    height: 60px;
+    margin-top: 10px;
+ }
+ .tagClass {
+    width: auto;
+    padding: 5px;
+    border-radius: 10px;
+    background-color:aliceblue;
+    margin: 0px 10px;
+}
+
+.hashtagInputInner{
+    width: 100%;
+    height: 60px;
+}
+
+
+.hashtagInput {
+    width: 200px;
+    height: 40px;
+    padding: 5px;
+    border: 2px solid dodgerblue; 
+    border-radius: 10px;
+    margin-top: 10px;
+    text-align: center;
+    
+}
+
+
+
