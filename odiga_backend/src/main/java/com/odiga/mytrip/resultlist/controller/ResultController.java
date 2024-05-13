@@ -170,7 +170,7 @@ public class ResultController {
         TravelListVO content = travelService.TravelList(contentId);
 
         String title = content.getTitle();
-        int likeCount = content.getLikecount() == null? 0 : Integer.parseInt(content.getLikecount());
+        int likeCount = content.getWishlist_count() == null? 0 : Integer.parseInt(content.getWishlist_count());
         String img = content.getFirstimage();
         String addr = content.getAddr1();
         String overview = content.getOverview();
