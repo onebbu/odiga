@@ -39,6 +39,10 @@ public class CourseReviewService {
         courseReviewDAO.likeCount(boardNo);
     }
 
+    public void likeCancel(int boardNo) {
+        courseReviewDAO.likeCancel(boardNo);
+    }
+
     public void articleDelete(int boardNo) {
         courseReviewDAO.articleDelete(boardNo);
     }
@@ -46,6 +50,14 @@ public class CourseReviewService {
     // 마이페이지에서 코스 리뷰 가져오기
     public List<CourseReviewVO> getMemberArticles(String nickname) {
         return courseReviewDAO.getMemberArticles(nickname);
+    }
+
+    public void commentDel(CommentsVO commentsVO) {
+        courseReviewDAO.commentDel(commentsVO);
+    }
+
+    public List<CourseReviewVO> courseReviewSearch(String search) {
+        return courseReviewDAO.courseReviewSearch(search);
     }
 
     
