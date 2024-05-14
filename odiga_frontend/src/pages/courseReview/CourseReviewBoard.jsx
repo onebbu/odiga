@@ -259,6 +259,7 @@ const CourseReviewBoard = () => {
                     email={item.email}
                     nickname={item.nickname}
                     mainImage={item.mainImage}
+                    courseNo={item.courseNo}
                   />
                 </StyledLink>
               ))}

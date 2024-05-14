@@ -7,16 +7,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+import { Link, useParams, useNavigate, Await } from "react-router-dom";
 import styled from "styled-components";
 import Comments from "./Comments";
-import "./static/slider.css";
 import Footer from "../component/footer/Footer";
 import Header from "../component/navbar/Header";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
+import CourseReviewCourse from "./CourseReviewCourse";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -40,7 +37,6 @@ function CourseReviewDetail() {
         const { boardLikeCount } = response.data[0];
         setDetailsData(response.data);
         setLikeCount(boardLikeCount);
-
         // 로컬 스토리지에서 좋아요 상태 확인
         const storedLikedStatus = localStorage.getItem(
           `liked_${boardNo}_${loginInfo.email}`
@@ -130,8 +126,7 @@ function CourseReviewDetail() {
             <hr />
             <h7
               style={{
-                fontFamily: "JalnanGothic",
-                fontSize: "18px",
+                fontSize: "15px",
                 textAlign: "left",
                 margin: "0 auto",
               }}
@@ -173,8 +168,8 @@ function CourseReviewDetail() {
           <Div
             style={{
               textAlign: "left",
-              margin: "0 auto",
-              width: "95%",
+              margin: "10px auto",
+              width: "98%",
               minHeight: "30em",
               marginBottom: "30px",
               padding: "30px",
@@ -199,37 +194,15 @@ function CourseReviewDetail() {
               </div>
             </div>
           </Div>
-
-          <h4> 여행코스 정보 </h4>
-          <Div
+          <h7
             style={{
-              textAlign: "left",
-              width: "100%",
-              margin: "0 auto",
-              padding: "10px",
-              borderRadius: "10px",
-              marginBottom: "30px",
+              fontFamily: "JalnanGothic",
+              fontSize: "18px",
             }}
           >
-            {carousel()}
-          </Div>
-
-          <Div
-            style={{
-              width: "100%",
-              margin: "30px 0 30px 0 auto",
-            }}
-          >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6215.7725807321685!2d126.69860724487357!3d37.78789857262643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357c8b8a0a9d3671%3A0xd2b2c34c16b1778c!2z7Zek7J2066asIOyYiOyIoOuniOydhA!5e0!3m2!1sko!2skr!4v1713327112832!5m2!1sko!2skr"
-              style={{
-                width: "100%",
-                height: "200px",
-                textAlign: "left",
-                display: "inline-block",
-              }}
-            ></iframe>
-          </Div>
+            여행코스 정보
+          </h7>
+          <CourseReviewCourse detailsData={detailsData} />
 
           <div
             style={{
@@ -249,7 +222,6 @@ function CourseReviewDetail() {
                 borderColor: "#13294b",
                 backgroundColor: "#13294b",
                 color: "#fff",
-                marginRight: "10px",
               }}
               to="/coursereview"
             >
@@ -269,7 +241,7 @@ function CourseReviewDetail() {
                       backgroundColor: "#13294b",
                       color: "#fff",
                       float: "right",
-                      marginRight: "10px",
+                      marginR: "0 10px 0 10px",
                     }}
                   >
                     수 정
@@ -345,72 +317,6 @@ function CourseReviewDetail() {
         <Comments />
       </Container>
       <Footer />
-    </>
-  );
-}
-
-function carousel() {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    rows: 1,
-  };
-  return (
-    <div style={{ top: "50%", textAlign: "center" }}>
-      <Slider {...settings}>
-        <div>
-          {ItemImg()}
-          {ItemTitle("여행지1")}
-        </div>
-        <div>
-          {ItemImg(
-            "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21"
-          )}
-          {ItemTitle("여행지2")}
-        </div>
-        <div>
-          {ItemImg(
-            "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21"
-          )}
-          {ItemTitle("여행지3")}
-        </div>
-      </Slider>
-    </div>
-  );
-}
-
-function ItemTitle(Title) {
-  return (
-    <>
-      <h4>{Title}</h4>
-    </>
-  );
-}
-
-function ItemImg(imgSrc) {
-  return (
-    <>
-      <button
-        style={{
-          margin: "0 auto",
-          maxWidth: "100%",
-          border: "0px",
-        }}
-      >
-        <img
-          style={{
-            maxWidth: "100%",
-            maxHeight: "300px",
-            overflow: "hidden",
-            padding: "20px",
-            borderRadius: "50px",
-          }}
-          src={imgSrc}
-        />
-      </button>
     </>
   );
 }
