@@ -27,7 +27,7 @@
       <![CDATA[
         select *
         from resultlist
-        where courseNo=#{courseNo}
+        where courseNo=#{courseNo} and courseyn = 'Y'
         order by courseday, travelnum
         ]]>
 	</select>
@@ -36,7 +36,7 @@
       <![CDATA[
         select courseTitle, courseNo, contentId
         from resultlist
-        where nickname = #{nickname}
+        where nickname = #{nickname} and courseyn = 'Y'
         order by courseday, travelnum
         ]]>
 	</select>
@@ -69,6 +69,12 @@
     <update id="savePw" parameterType="map">
         UPDATE resultlist
         SET coursePW = #{coursePw}
+        WHERE courseNo = #{courseNo}
+    </update>
+
+    <update id="deleteTravelResult" parameterType="String">
+        UPDATE resultlist
+        SET courseYN = 'N'
         WHERE courseNo = #{courseNo}
     </update>
 

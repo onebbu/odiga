@@ -135,7 +135,7 @@ function TravelDetailPage() {
         axios.get(`/detail/${contentID}`)
             .then(response => {
                 setData(response.data);
-                setLikes(response.data.likecount || 0);
+                setLikes(response.data.wishlist_count || 0);
                 setViews(response.data.viewcount || 0);
             })
             .catch(error => {
@@ -255,7 +255,7 @@ function TravelDetailPage() {
                 </section>
 
                 <section id="review-display">
-                    <ReviewDisplay/>
+                    <ReviewDisplay travelInfo= {data}/>
                 </section>
 
             </div>

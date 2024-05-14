@@ -153,7 +153,7 @@ function Maincontents() {
                             <img src={traData.firstimage} className="recommendMainContentImg"/>
                             <div className="likeCount">
                                 <i className="heartIcon">♡ </i>
-                                <span>{traData.likecount}</span>
+                                <span>{traData.wishlist_count}</span>
                             </div>
                         </div>
                         </a>
