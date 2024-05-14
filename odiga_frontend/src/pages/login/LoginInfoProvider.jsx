@@ -11,7 +11,7 @@ const LoginInfoProvider = ({children}) => {
 
     useEffect(() => {
         // 헤더에서 토큰 정보 가져오기
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         const config = {
             headers: {
                 'Authorization': `${token}`
@@ -47,9 +47,6 @@ const LoginInfoProvider = ({children}) => {
         // 컴포넌트가 마운트될 때 한 번 호출합니다.
         fetchLoginInfo();
     }, []); // 빈 배열을 전달하여 한 번만 호출되도록 설정합니다.
-
-
-    console.log("LoginInfoContext", loginInfo);
 
     // LoginInfoContext.Provider를 사용하여 컨텍스트 값을 제공
     return (

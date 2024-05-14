@@ -73,8 +73,12 @@ export default function Login() {
                 alert("이메일 또는 비밀번호가 일치하지 않습니다!");
                 // window.location.href = "/login";
             } else {
-                localStorage.setItem('token', result);
-                navigate("/");
+                sessionStorage.setItem('token', result);
+                setTimeout(() => {
+                    sessionStorage.removeItem('token');
+                }, 60*60*1000); // 1시간 후
+
+                navigate('/');
             }
         } catch (error) {
             if (error.name === 'ValidationError') {
