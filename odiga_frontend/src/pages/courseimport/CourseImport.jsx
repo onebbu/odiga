@@ -1,7 +1,7 @@
 import React, { useEffect, useState  } from "react";
 import styled from "styled-components";
 import axios from "axios";
-import Carousel from "./carousel.js";
+import Carousel from "./carousel";
 import TextEditor from "../component/Ckeditor/TextEditor";
 import HashtagInput from "./HashtagInput.js";
 import Header from "../component/navbar/Header";
@@ -223,3 +223,4 @@ const Div = styled.div`
   width: 100%;
   height: auto;
 `;
+

@@ -6,7 +6,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick-theme.css";
@@ -14,8 +14,9 @@ import "slick-carousel/slick/slick.css";
 import styled from "styled-components";
 import Comments from "./Comments";
 import "./static/slider.css";
-import Footer from '../component/footer/Footer';
+import Footer from "../component/footer/Footer";
 import Header from "../component/navbar/Header";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -24,42 +25,62 @@ function CourseReviewDetail() {
   const [liked, setLiked] = useState(false); // 좋아요 상태 관리
   const [likeCount, setLikeCount] = useState(0); // 좋아요 수 관리
   const navigate = useNavigate(); // useNavigate 훅 사용
+  const loginInfo = useContext(LoginInfoContext);
 
+  console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
     setDidMount(true);
     return () => {};
   }, []);
 
   useEffect(() => {
-    if (didMount) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(`/coursereview/detail/${boardNo}`);
-          const { boardLikeCount } = response.data[0];
-          setDetailsData(response.data);
-          setLikeCount(boardLikeCount);
-          console.log("조회수 증가");
-        } catch (error) {
-          console.error("Error fetching details:", error);
-        }
-      };
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/coursereview/detail/${boardNo}`);
+        const { boardLikeCount } = response.data[0];
+        setDetailsData(response.data);
+        setLikeCount(boardLikeCount);
 
+        // 로컬 스토리지에서 좋아요 상태 확인
+        const storedLikedStatus = localStorage.getItem(
+          `liked_${boardNo}_${loginInfo.email}`
+        );
+        if (storedLikedStatus === "true") {
+          setLiked(true);
+        }
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      }
+    };
+
+    if (didMount) {
       fetchData();
-      return () => {
-        setDidMount(false);
-      };
     }
   }, [didMount, boardNo]);
 
   const handleLike = async () => {
-    if (!liked) {
+    if (loginInfo) {
       try {
-        await axios.post(`/coursereview/like/${boardNo}`);
-        setLikeCount((prevCount) => prevCount + 1);
-        setLiked(true);
+        if (!liked) {
+          await axios.post(`/coursereview/like/${boardNo}`);
+          setLikeCount((prevCount) => prevCount + 1);
+          setLiked(true);
+          localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "true");
+          alert("좋아요를 눌렀습니다.");
+        } else {
+          await axios.post(`/coursereview/likeCancel/${boardNo}`);
+          setLikeCount((prevCount) => prevCount - 1);
+          setLiked(false);
+          localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "false");
+          alert("좋아요를 취소하였습니다.");
+        }
       } catch (error) {
-        console.error("Error liking the post:", error);
+        console.error("게시물 좋아요 중 오류 발생:", error);
       }
+    } else {
+      // 로그인되지 않은 경우, 로그인 알림 표시
+      alert("로그인 후 다시 시도해주세요.");
+      // 로그인 페이지로 이동하거나 다른 처리를 수행할 수 있음
     }
   };
 
@@ -78,7 +99,7 @@ function CourseReviewDetail() {
 
   return (
     <>
-    <Header />
+      <Header />
       <Container>
         <section
           style={{
@@ -91,18 +112,32 @@ function CourseReviewDetail() {
           <div
             style={{
               margin: "0 auto",
-              marginBottom: "10px",
               padding: "10px",
               width: "100%",
             }}
             className="section-heading text-center"
           >
-            <h4 style={{fontFamily:"JalnanGothic", fontSize:"25px", padding: "10px", margin: "0 auto" }}>
+            <h4
+              style={{
+                fontFamily: "JalnanGothic",
+                fontSize: "25px",
+                padding: "10px",
+                margin: "0 auto",
+              }}
+            >
               {detailsData && detailsData[0].boardTitle}{" "}
             </h4>
             <hr />
-            <h7 style={{fontFamily:"JalnanGothic", fontSize:"18px", textAlign: "left", margin: "0 auto" }}>
-              <b>작성자 :</b> {detailsData && detailsData[0].nickname} &nbsp;&nbsp; &nbsp;
+            <h7
+              style={{
+                fontFamily: "JalnanGothic",
+                fontSize: "18px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              <b>작성자 :</b> {detailsData && detailsData[0].nickname}{" "}
+              &nbsp;&nbsp; &nbsp;
               <b>작성일 :</b> {detailsData && detailsData[0].boardDate} <br />{" "}
               <br />
               <FontAwesomeIcon icon={faEye} /> :{" "}
@@ -118,6 +153,20 @@ function CourseReviewDetail() {
                 : "평가 없음"}
             </h7>
             <br />
+            <hr />
+
+            <h7
+              style={{
+                fontSize: "15px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              {detailsData?.[0]?.tags !== undefined &&
+              detailsData?.[0]?.tags !== null
+                ? detailsData[0].tags
+                : "#태그 없음"}
+            </h7>
             <hr />
           </div>
 
@@ -207,34 +256,41 @@ function CourseReviewDetail() {
               목 록
             </Link>
 
-            <button
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-                float: "right",
-                marginRight: "10px",
-              }}
-            >
-              수 정
-            </button>
+            {detailsData &&
+              detailsData[0] &&
+              loginInfo &&
+              loginInfo.email === detailsData[0].email && (
+                <>
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      width: "100px",
+                      borderColor: "#13294b",
+                      backgroundColor: "#13294b",
+                      color: "#fff",
+                      float: "right",
+                      marginRight: "10px",
+                    }}
+                  >
+                    수 정
+                  </button>
 
-            <button
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-                margin: "0 10px 0 0",
-                float: "right",
-              }}
-              onClick={handleDelete}
-            >
-              삭 제
-            </button>
+                  <button
+                    className="btn btn-primary"
+                    style={{
+                      width: "100px",
+                      borderColor: "#13294b",
+                      backgroundColor: "#13294b",
+                      color: "#fff",
+                      margin: "0 10px 0 0",
+                      float: "right",
+                    }}
+                    onClick={handleDelete}
+                  >
+                    삭 제
+                  </button>
+                </>
+              )}
           </div>
           <br />
         </section>
@@ -258,7 +314,6 @@ function CourseReviewDetail() {
             <button
               className="btn btn-primary"
               onClick={handleLike}
-              disabled={liked}
               style={{
                 background: "none",
                 border: "none",

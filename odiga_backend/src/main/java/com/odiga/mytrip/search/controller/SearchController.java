@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.odiga.mytrip.search.service.SearchService;
 import com.odiga.mytrip.search.vo.CatVO;
+import com.odiga.mytrip.search.vo.SearchCourseVO;
 import com.odiga.mytrip.search.vo.SearchVO;
 
 @RestController
@@ -20,7 +21,7 @@ public class SearchController {
     private SearchService searchService;
     
     @GetMapping("/search")
-    public Map<String, Object> getSearchList(
+    public Map<String, Object> GetSearchTavelList(
         @RequestParam("page") String page, 
         @RequestParam("text") String text, 
         @RequestParam("areacode") String areacode,
@@ -48,5 +49,21 @@ public class SearchController {
     public List<CatVO> getMethodName() throws IOException{
         return searchService.CatList();
     }
+    @GetMapping("/searchcourse")
+    public Map<String, Object> GetSearchCourseList(
+        @RequestParam("page") String page, 
+        @RequestParam("text") String text)
+        // @RequestParam(value = "areacode", required = false)String areacode) 
+        {
+        String order = "title";
+        List<SearchCourseVO> CourseListResult =  searchService.SearchCourseList(page, text,  order);
+        int resultCourseCount = searchService.resultCourseCount(text);
+
+        Map<String, Object> searchCourseResult = new HashMap<>();
+        searchCourseResult.put("CourseListResult" , CourseListResult);
+        searchCourseResult.put("resultCourseCount" , resultCourseCount);
+        return searchCourseResult;
+    }
+    
     
 }

@@ -27,7 +27,6 @@ function App() {
                     {/*<Route path="/detail/:contentID" element={<TravelDetailPage/>}/>*/}
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
                     <Route exact path="/courseimport" element={<CourseImport/>}/>
-                    <Route exact path="/coursereview/*" element={<CourseReview/>}/>
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
 
@@ -60,6 +59,11 @@ function App() {
                 <Route path="/result-list/:nickname/:courseNo" element={
                     <LoginInfoProvider>
                         <ResultView/>
+                    </LoginInfoProvider>
+                }/>                
+                <Route path="/coursereview/*" element={
+                    <LoginInfoProvider>
+                        <CourseReview/>
                     </LoginInfoProvider>
                 }/>
                 <Route path="/place" element={
