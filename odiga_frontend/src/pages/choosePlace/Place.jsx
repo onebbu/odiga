@@ -9,23 +9,7 @@ import './cPP.css';
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
 
-const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
-    const [avgrate, setAvgrate] = useState(0); // 여행지 평균 별점
-    const [cntrate, setCntrate] = useState(0); // 여행지 리뷰 개수
-    
-    useEffect(() => {
-          // 백엔드 API 호출
-          axios.get(`/placerate/${id}`)
-            .then((response) => {
-              response.data.averageRate !== null ? setAvgrate(response.data.averageRate) : setAvgrate('빵점');
-              response.data.cntRating !== null ? setCntrate(response.data.cntRating) : setCntrate(0);
-            })
-            .catch((error) => {
-              console.error('Error fetching data:', error);
-            });
-
-    }, [id]);
-
+const Place = ({id,pic,name,region, averageRate, cntRating}) =>{ //개별 플레이스 drag 가능~
     const[{ isDragging },drag] = useDrag({
         type: 'placeitem',
         item: { id, name, region },
@@ -43,52 +27,55 @@ const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
             <img src={pic} />
         </a>
             {name} <P> <br/>{region}</P><br/>
-            <Rate>{avgrate}</Rate> <P>/{cntrate}개</P>
+            <Rate>{averageRate}</Rate> <P>/{cntRating}개</P>
         </div>
     )
 }
 
 function ListPlace({areacode, order}) {
-    const [dataList, setDataList] = useState(null);
+    const [dataList, setDataList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const [displayStart, setDisplayStart] = useState(0);
+    const [displayStart, setDisplayStart] = useState(1);
+
+    const fetchList = () => {
+        if (areacode !== null){
+            axios.get(`/place/${areacode}/${displayStart}/${order}`)
+                .then((response) => {
+                    const newData = response.data || [];
+                    setDataList((prevDataList) => {
+                        return displayStart === 1 ? newData : [...prevDataList, ...newData];
+                    });
+                    setIsLoading(false);
+                    console.log("fetchList 완료  displaySTart === " + displayStart);
+                    console.log("order?? === " +order);
+                })
+                .catch((error) => {
+                    console.log("displaySTart === " + displayStart);
+                    console.log("order?? === " +order);
+                    console.error('Error fetching data:', error);
+                    setIsLoading(true);
+            });
+        } else {
+            setIsLoading(true);
+        }
+    };
     
     const handleShowMore = () => {
-        if (displayStart == 0)
-            { setDisplayStart(1); } // 처음 불러올 때
-        else if(displayStart != 0)
-            { setDisplayStart((prevCount) => prevCount + 8); } // 두번째 불러올 때
-        fetchList(); // 추가 데이터를 가져오도록 fetchList 호출
+        setDisplayStart(prevDisplayStart => prevDisplayStart + 8);
     };
-    
-    const fetchList = () => {
-          // 백엔드 API 호출
-        axios.get(`/place/${areacode}/${displayStart}/${order}`)
-            .then((response) => {
-                    console.log('Data received:', response.data);
-                    setDataList((prevDataList) => {
-                        return prevDataList ? [...prevDataList, ...response.data] : response.data;
-                    });
-              setIsLoading(false);
-            })
-            .catch((error) => {
-                console.log("displaySTart === " + displayStart);
-              console.error('Error fetching data:', error);
-              
-              setIsLoading(true);
-        });
-        
-    };
-    
+
+    useEffect(() => {     
+        setDisplayStart(1); // order 값이 변경되면 displayStart를 1로 설정
+    }, [order]);
+
     useEffect(() => {
-        fetchList(); //초기에 한 번 데이터를 가져옴.
-    }, [areacode, order]);
+        setIsLoading(false); //displayStart는 값이 변해도 IsLoading 실행 XX
+    }, [displayStart]);
 
-    useEffect(() => { //order 가 바뀌면 재로딩~~
-        setIsLoading(true);  //로딩화면으로 한 번 돌렸다가.
+    useEffect(() => {
         fetchList();
-    },[order])
-
+    }, [areacode, order, displayStart]); 
+    
     return (
         <div>
             {isLoading ? ( <><p>Loading....</p> <button onClick={fetchList}>다시 시도</button><br/><br/></> ) : (
@@ -101,7 +88,13 @@ function ListPlace({areacode, order}) {
                     gridGap: "30px",
                 }}>
                     {dataList && dataList.map((data) => ( 
-                        <Place key={data.contentid} id={data.contentid} pic={data.firstimage} name={data.title} region={data.addr1}/>
+                        <Place key={data.contentid} 
+                                id={data.contentid} 
+                                pic={data.firstimage} 
+                                name={data.title} 
+                                region={data.addr1} 
+                                averageRate={data.averageRate}
+                                cntRating={data.cntRating} />
                     ))}
                 </div>
                 <div>

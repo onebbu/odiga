@@ -10,25 +10,25 @@
         <result column="firstimage" property="firstimage"/>
         <result column="cat3" property="cat3"/>
         <result column="areacode" property="areacode"/>
+        <result column="averageRate" property="averageRate" />
+        <result column="cntRating" property="cntRating" />
     </resultMap>
 
     <!-- 여행지 지역별 리스트 가져오기 -->
     <select id="getPlaceList" resultMap="PlaceList" parameterType="String">
         SELECT * FROM
-            (SELECT a.*, ROWNUM as rn FROM (
-                SELECT contentid, title, addr1, firstimage, cat3, areacode
-                    FROM travellist
-                    WHERE AREACODE = #{areacode}
-                    ORDER BY ${order} 
-                )a
-            ) WHERE rn <![CDATA[>=]]> #{displayStart} and rn <![CDATA[<]]> #{displayEnd}
-    </select>
-
-    <!-- 여행지별 리뷰 평균 별점 조회 -->
-    <select id="getPlaceRate" resultType="java.util.Map" parameterType="String">
-        SELECT NVL(ROUND(AVG(REVIEWGRADE)),0) AS "averageRate", count(*) as "cntRating"
-        FROM TRAVELREVIEW
-        WHERE contentid = #{contentID}
+            ( SELECT a.*, ROWNUM as rn FROM (
+                SELECT TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TL.CAT3, TL.AREACODE, TL.TRAVELVIEWCOUNT,
+                        COALESCE(ROUND(AVG(TR.REVIEWGRADE)), 0) AS averageRate,
+                        COALESCE(COUNT(TR.CONTENTID) , 0) AS cntRating
+                    FROM TRAVELLIST TL
+                    LEFT JOIN TRAVELREVIEW TR ON TL.CONTENTID = TR.CONTENTID
+                    WHERE TL.AREACODE = #{areacode}
+                    GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TL.CAT3, TL.AREACODE, TL.TRAVELVIEWCOUNT
+                    ORDER BY ${order}              
+                ) a
+            )
+        WHERE rn <![CDATA[>=]]> #{displayStart} and rn <![CDATA[<]]> #{displayEnd} 
     </select>
 
     <!-- 여행지 코스 저장 -->

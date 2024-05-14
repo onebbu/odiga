@@ -28,10 +28,6 @@ public class PlaceService {
         return placeDAO.getPlaceList(areacode, displayStart, displayEnd, order);
     }
 
-    public Map<String, Object> placeRate(String contentID) {
-        return placeDAO.getPlaceRate(contentID);
-    }
-
     @Transactional
     public String areaname(String areacode)  throws IOException{
         String apiKey = "eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D";        

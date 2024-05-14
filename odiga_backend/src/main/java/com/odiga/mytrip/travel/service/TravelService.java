@@ -173,6 +173,12 @@ public class TravelService {
     public List<WishVO> selectAllWish(String nickname){
         return travelDAO.selectAllWish(nickname);
     }
+
+    @Transactional
+    public List<WishVO> selectWishforRegion(String nickname, String areacode){
+        return travelDAO.selectWishforRegion(nickname, areacode);
+    }
+
     
     
 }

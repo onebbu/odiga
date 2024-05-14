@@ -99,29 +99,53 @@ public class TravelController {
     }
 
     // 닉네임으로 가지고 와야함
-    @GetMapping("/mypage/mylike/{nickname}")
-    public Map<Integer, Map<String, Object>> getWishlist(@PathVariable String nickname) {
-        // 아이디에 맞는 wishlist 가져오기
-        List<WishVO> userWishList = travelService.selectAllWish(nickname);
-        Map<Integer, Map<String, Object>> userWishMap = new HashMap<>();
+    @GetMapping("/mypage/mylike/{nickname}")                                  // required = false로 설정하여 파라미터가 필수가 아니게 함
+    public Map<Integer, Map<String, Object>> getWishlist(@PathVariable String nickname, @RequestParam(required = false) String areacode ) {
 
-        int i = 0;
-        Iterator<WishVO> wishIter = userWishList.iterator();
-        while (wishIter.hasNext()) {
-            WishVO userWish = wishIter.next();
-            TravelListVO travelInfo = travelService.TravelList(String.valueOf(userWish.getContentid()));
-            Map<String, Object> wishMap = new HashMap<>();
-            wishMap.put("contentId", String.valueOf(userWish.getContentid()));
-            wishMap.put("title", travelInfo.getTitle());
-            wishMap.put("addr", travelInfo.getAddr1());
-            wishMap.put("img", travelInfo.getFirstimage());
-            wishMap.put("cat", travelInfo.getCat3());
-            userWishMap.put(i, wishMap);
-            i++;
+        List<WishVO> userWishList;
+        Map<Integer, Map<String, Object>> userWishMap = new HashMap<>();
+        if (areacode == null) {
+            userWishList = travelService.selectAllWish(nickname);
+            // 아이디에 맞는 wishlist 가져오기
+            int i = 0;
+            Iterator<WishVO> wishIter = userWishList.iterator();
+            while (wishIter.hasNext()) {
+                WishVO userWish = wishIter.next();
+                TravelListVO travelInfo = travelService.TravelList(String.valueOf(userWish.getContentid()));
+                Map<String, Object> wishMap = new HashMap<>();
+                wishMap.put("contentId", String.valueOf(userWish.getContentid()));
+                wishMap.put("title", travelInfo.getTitle());
+                wishMap.put("addr", travelInfo.getAddr1());
+                wishMap.put("img", travelInfo.getFirstimage());
+                wishMap.put("cat", travelInfo.getCat3());
+                userWishMap.put(i, wishMap);
+                i++;
+            }
+            System.out.println("아리아코드 널");
+            
+        }  else{      // region 값이 null 이 아닐때 이거 ChoosePlace 화면에서 쓰려고 분리했슴당
+            userWishList = travelService.selectWishforRegion(nickname, areacode);
+            // 아이디에 맞는 wishlist 가져오기
+            int i = 0;
+            Iterator<WishVO> wishIter = userWishList.iterator();
+            while (wishIter.hasNext()) {
+                WishVO userWish = wishIter.next();
+                TravelListVO travelInfo = travelService.TravelList(String.valueOf(userWish.getContentid()));
+                Map<String, Object> wishMap = new HashMap<>();
+                wishMap.put("contentId", String.valueOf(userWish.getContentid()));
+                wishMap.put("title", travelInfo.getTitle());
+                wishMap.put("addr", travelInfo.getAddr1());
+                wishMap.put("img", travelInfo.getFirstimage());
+                wishMap.put("cat", travelInfo.getCat3());
+                userWishMap.put(i, wishMap);
+                i++;
+            }
+            System.out.println("아리아코드 널 아님");
+            System.out.println("근데 왜 안뜨냐고 ㅅㅂ"+ userWishMap);
         }
 
-
         return userWishMap;
+        
     }
 
 
