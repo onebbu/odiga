@@ -42,7 +42,9 @@ function CourseReviewDetail() {
         setLikeCount(boardLikeCount);
 
         // 로컬 스토리지에서 좋아요 상태 확인
-        const storedLikedStatus = localStorage.getItem(`liked_${boardNo}_${loginInfo.email}`);
+        const storedLikedStatus = localStorage.getItem(
+          `liked_${boardNo}_${loginInfo.email}`
+        );
         if (storedLikedStatus === "true") {
           setLiked(true);
         }
@@ -64,13 +66,13 @@ function CourseReviewDetail() {
           setLikeCount((prevCount) => prevCount + 1);
           setLiked(true);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "true");
-          alert("좋아요를 눌렀습니다.")
+          alert("좋아요를 눌렀습니다.");
         } else {
           await axios.post(`/coursereview/likeCancel/${boardNo}`);
           setLikeCount((prevCount) => prevCount - 1);
           setLiked(false);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "false");
-          alert("좋아요를 취소하였습니다.")
+          alert("좋아요를 취소하였습니다.");
         }
       } catch (error) {
         console.error("게시물 좋아요 중 오류 발생:", error);
@@ -110,7 +112,6 @@ function CourseReviewDetail() {
           <div
             style={{
               margin: "0 auto",
-              marginBottom: "10px",
               padding: "10px",
               width: "100%",
             }}
@@ -152,6 +153,20 @@ function CourseReviewDetail() {
                 : "평가 없음"}
             </h7>
             <br />
+            <hr />
+
+            <h7
+              style={{
+                fontSize: "15px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              {detailsData?.[0]?.tags !== undefined &&
+              detailsData?.[0]?.tags !== null
+                ? detailsData[0].tags
+                : "#태그 없음"}
+            </h7>
             <hr />
           </div>
 

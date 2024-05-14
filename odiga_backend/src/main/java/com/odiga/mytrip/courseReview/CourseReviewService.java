@@ -56,5 +56,9 @@ public class CourseReviewService {
         courseReviewDAO.commentDel(commentsVO);
     }
 
+    public List<CourseReviewVO> courseReviewSearch(String search) {
+        return courseReviewDAO.courseReviewSearch(search);
+    }
+
     
 }

@@ -1,12 +1,15 @@
-import React, {useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import axios from "axios";
 import styles from "./static/courseReview.module.css";
 import Styled from "styled-components";
 import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
 import stylee from "../choosePlace/cPP.css";
-import Footer from '../component/footer/Footer';
+import Footer from "../component/footer/Footer";
 import Header from "../component/navbar/Header";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import CourseReviewSearch from "./CourseReviewSearch";
 
 const Place = ({
   boardContent,
@@ -20,6 +23,8 @@ const Place = ({
   email,
   nickname,
   mainImage,
+  tags,
+  courseNo,
 }) => {
   return (
     <div className="grid-item">
@@ -102,17 +107,22 @@ const CourseReviewBoard = () => {
             <div className="col-lg-10 offset-lg-1">
               <div className="header-text">
                 <div style={{ display: "flex" }}>
-                  <div style={{padding:"30px", flex: 1 }}>
+                  <div style={{ padding: "30px", flex: 1 }}>
                     <iframe
                       width="100%"
                       height="100%"
                       src="https://www.youtube.com/embed/rPZGxw6Jsrg?autoplay=1&mute=1"
                       frameborder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share, fullscreen"
-                      style={{ marginLeft: "0", minHeight:"300px", maxWidth:"500px", borderRadius:"20px"}}
+                      style={{
+                        marginLeft: "0",
+                        minHeight: "300px",
+                        maxWidth: "500px",
+                        borderRadius: "20px",
+                      }}
                     ></iframe>
                   </div>
-                  <div style={{ flex: 1, padding: "30px"}}>
+                  <div style={{ flex: 1, padding: "30px" }}>
                     <h2
                       style={{
                         padding: "50px",
@@ -171,6 +181,7 @@ const CourseReviewBoard = () => {
                   </em>{" "}
                   REVIEW ARTICLES
                 </h4>
+                <CourseReviewSearch setPosts={setPosts} />
               </div>
             </div>
             {/* 여기부터는 카드 목록 */}

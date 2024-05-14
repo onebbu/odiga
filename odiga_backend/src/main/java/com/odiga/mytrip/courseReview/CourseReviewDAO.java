@@ -19,4 +19,5 @@ public interface CourseReviewDAO {
 
     List<CourseReviewVO> getMemberArticles(String nickname);
     void commentDel(CommentsVO commentsVO);
+    List<CourseReviewVO> courseReviewSearch(String search);
 }

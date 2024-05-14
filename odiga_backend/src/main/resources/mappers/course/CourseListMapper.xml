@@ -84,4 +84,11 @@
         WHERE boardNo = #{boardNo}
     </update>
 
+    <select id="courseReviewSearch" parameterType="String" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
+        SELECT *
+        FROM COURSEREVIEW
+        WHERE boardYN = 'Y' AND boardTitle LIKE '%' || #{search} || '%'
+        ORDER BY boardno DESC
+    </select>    
+
 </mapper>
