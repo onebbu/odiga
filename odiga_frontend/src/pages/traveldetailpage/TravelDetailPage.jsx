@@ -1,6 +1,5 @@
-import React, { useState ,  useEffect } from "react";
+import React, { useState ,  useEffect , useContext} from "react";
 import axios from 'axios';
-import ReviewImportForm from './component/ReviewImportForm';
 import ReviewDisplay from "./component/ReviewDisplay";
 import Header from "../component/navbar/Header";
 import './TravelDetailPage.css';
@@ -13,6 +12,7 @@ import { faHeart } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
+
 function TravelDetailPage() {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
@@ -24,11 +24,14 @@ function TravelDetailPage() {
     const navigate = useNavigate();
     const [tags, setTags] = useState([]);
     const { contentID } = useParams();
+     
 
     useEffect(() => {
+
         axios.get(`/detail/${contentID}`)
             .then(response => {
                 setData(response.data);
+                console.log(data);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
@@ -132,7 +135,7 @@ function TravelDetailPage() {
         axios.get(`/detail/${contentID}`)
             .then(response => {
                 setData(response.data);
-                setLikes(response.data.likecount || 0);
+                setLikes(response.data.wishlist_count || 0);
                 setViews(response.data.viewcount || 0);
             })
             .catch(error => {
@@ -151,6 +154,7 @@ function TravelDetailPage() {
 //         });
 // }, []);
 
+
     return (
         <div className="inner">
             <Header/>
@@ -163,9 +167,9 @@ function TravelDetailPage() {
                 <section className="detailInfo" id="detail-info">
                     <div className="InfoAndLikeBox">
                         <h2>상세 정보</h2>
-                        <div>
+                        <div className="likeview">
                             <span id="view-count">👀 {data && (data.travelviewcount || 0)}</span>
-                            <span style={{marginLeft: '20px'}}><FontAwesomeIcon icon={faHeart} /> {likes}</span>
+                            <span style={{marginLeft: '20px'}}><FontAwesomeIcon icon={faHeart} /> {likes}</span>               
                         </div>
                     </div>
                     <div className="contourLine3"></div>
@@ -177,27 +181,27 @@ function TravelDetailPage() {
                 </section>
 
                 <section className="tagList" id="tag-list">
-                    <div className="tagItem" id="tag-list-placeholder">
-                        {data && (
-                            <>
-                                {data.cat1 && (
-                                    <div className="tagItemBox">
-                                        <p>#{data.cat1}</p>
-                                    </div>
-                                )}
-                                {data.cat2 && (
-                                    <div className="tagItemBox">
-                                        <p>#{data.cat2}</p>
-                                    </div>
-                                )}
-                                {data.cat3 && (
-                                    <div className="tagItemBox">
-                                        <p>#{data.cat3}</p>
-                                    </div>
-                                )}
-                            </>
+                  <div className="tagItem" id="tag-list-placeholder">
+                    {data && (
+                      <>
+                        {data.cat1 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat1}</p>
+                          </div>
                         )}
-                    </div>
+                        {data.cat2 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat2}</p>
+                          </div>
+                        )}
+                        {data.cat3 && (
+                          <div className="tagItemBox">
+                            <p>#{data.cat3}</p>
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </section>
                 {/* Tag 엔드포인트 완료되면 */}
                 {/* <section className="tagList" id="tag-list">
@@ -251,7 +255,7 @@ function TravelDetailPage() {
                 </section>
 
                 <section id="review-display">
-                    <ReviewDisplay/>
+                    <ReviewDisplay travelInfo= {data}/>
                 </section>
 
             </div>

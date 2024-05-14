@@ -1,77 +1,63 @@
-import React, {useContext, useEffect, useState} from "react"; // React를 불러옵니다.
+import React, {useContext, useEffect} from "react";
 import styled from "styled-components";
-import {LoginInfoContext} from "../login/LoginInfoProvider";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
 import Logout from "../login/Logout";
+import {useNavigate} from "react-router-dom";
 
 const MyPage = () => {
     const loginInfo = useContext(LoginInfoContext);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (!loginInfo) {
+            alert("로그인 정보를 찾을 수 없습니다.")
+            navigate("/login")
+        }
+    }, [loginInfo]);
 
     return (
-        <div
-            style={{marginTop: "4rem"}}>
+        <div style={{ width: "50rem", margin: "auto" }}>
             <Title>회원 정보 조회</Title>
-            <div className="ui hidden divider"/>
-            <FormContainer>
-                <Label>아이디</Label>
-                <Input
-                    type="text"
-                    id="email"
-                    className="form-control"
-                    placeholder={loginInfo.email}
-                    style={{width: "10rem", marginBottom: "2rem"}}
-                    disabled
-                />
-                <Label>닉네임</Label>
-                <Input
-                    style={{width: "10rem", marginBottom: "2rem"}}
-                    type="text"
-                    id="nickname"
-                    className="form-control"
-                    placeholder={loginInfo.nickname}
-                    disabled
-                />
-                {/*<Label>비밀번호</Label>*/}
-                {/*<Input*/}
-                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
-                {/*    type="password"*/}
-                {/*    id="password"*/}
-                {/*    className="form-control"*/}
-                {/*    placeholder="현재 비밀번호"*/}
-                {/*/>*/}
-                {/*<Label>변경할 비밀번호</Label>*/}
-                {/*<Input*/}
-                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
-                {/*    type="password"*/}
-                {/*    id="password"*/}
-                {/*    className="form-control"*/}
-                {/*    placeholder="변경할 비밀번호"*/}
-                {/*/>*/}
-                {/*<Label>변경 비밀번호 확인</Label>*/}
-                {/*<Input*/}
-                {/*    style={{width: "10rem", marginBottom: "2rem"}}*/}
-                {/*    type="password"*/}
-                {/*    id="password"*/}
-                {/*    className="form-control"*/}
-                {/*    placeholder="변경할 비밀번호"*/}
-                {/*/>*/}
-            </FormContainer>
-
-            <ButtonContainer>
-                <Logout />
-                {/*<button className="btn btn-primary" type="submit">*/}
-                {/*    수정*/}
-                {/*</button>*/}
-            </ButtonContainer>
+            {loginInfo ? (
+                <>
+                    <hr style={{ marginBottom: "4rem" }} />
+                    <FormContainer>
+                        <Label>아이디</Label>
+                        <Input
+                            type="text"
+                            id="email"
+                            className="form-control"
+                            placeholder={loginInfo.email}
+                            style={{ width: "10rem", marginBottom: "2rem" }}
+                            disabled
+                        />
+                        <Label>닉네임</Label>
+                        <Input
+                            style={{ width: "10rem", marginBottom: "2rem" }}
+                            type="text"
+                            id="nickname"
+                            className="form-control"
+                            placeholder={loginInfo.nickname}
+                            disabled
+                        />
+                    </FormContainer>
+                    <ButtonContainer>
+                        <Logout />
+                    </ButtonContainer>
+                </>
+            ) : (
+                <Message>로그인 정보가 없습니다.</Message>
+            )}
         </div>
     );
-}
+};
 
 export default MyPage;
 
-const Title = styled.h4`
+const Title = styled.h3`
+  margin-top: 4rem;
   text-align: center;
   width: 100%;
-  margin-bottom: 4rem;
 `;
 
 const FormContainer = styled.div`
@@ -99,4 +85,10 @@ const Input = styled.input`
 const ButtonContainer = styled.div`
   text-align: center;
   margin-top: 70px;
+`;
+
+const Message = styled.div`
+  text-align: center;
+  margin-top: 4rem;
+  font-size: 1.2rem;
 `;
