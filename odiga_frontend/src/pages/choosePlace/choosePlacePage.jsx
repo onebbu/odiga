@@ -14,6 +14,7 @@ import { LoginInfoContext } from "../login/LoginInfoProvider";
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
+import ScrollToTopButton from '../component/scrollTopBtn';
 import axios from "axios";
 
 // http://localhost:3000/place
@@ -32,7 +33,7 @@ const OpenButton = Styled.button`position: fixed; top: 0px; right: 100px; width:
     transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
 const ItemsContainer = Styled.div`
-    margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
+    margin-top: ${(props) => (props.isDrawerOpen ? 350 : 0)}px;
     transition: margin-top 0.3s ease-in-out;
   `;
 
@@ -56,21 +57,19 @@ const areaList = [
     { areacode: '39', areaname: '제주도' },
 ];
 
+
+
 const ChoosePlace = () => {
 
-
   const loginInfo = useContext(LoginInfoContext);
-  //const containerRef = useRef(null);
-  //const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
-  
-  const [targetArea, setTargetArea] = useState('1');
-  const [targetDura, setTargetDura] = useState('3');
+  const [targetArea, setTargetArea] = useState(null);
+  const [targetDura, setTargetDura] = useState(null);
   const [targetTheme, setTargetTheme] = useState(null);
-  const navigate = useNavigate();
   const location = useLocation();
-  const [selectedValues, setSelectedValues] = useState(null);
+  const [selectedValues, setSelectedValues] = useState(null); //위의 세 개 값 저장해서 쓸라고.
+  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   useEffect(() => {
     const startTime = performance.now();
@@ -86,37 +85,21 @@ const ChoosePlace = () => {
 
 
     setSelectedValues(location.state);
-      // 선택한 값이 모두 채워져 있는지 확인
-    if (!selectedValues || !selectedValues.region || !selectedValues.duration || selectedValues.theme.length < 2) {
-      // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동
-      //navigate('/wrongpath/preference');
-    }
-    else{
-      console.log("선택한 값들:", selectedValues); // 선택한 값들을 콘솔에 출력
+     // 선택한 값이 모두 채워져 있는지 확인하고 targetArea, targetDura, targetTheme 설정
+    if (selectedValues && selectedValues.region && selectedValues.duration && selectedValues.theme.length >= 2) {
+      console.log("선택한 값들:", selectedValues);
       setTargetArea(selectedValues.region);
       setTargetDura(selectedValues.duration);
       setTargetTheme(selectedValues.theme);
+    } else {
+      // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동 또는 사용자에게 메시지 표시
     }
-      // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-      return () => {
+      
+    return () => { // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
         window.removeEventListener("load", handleLoad);
     };
 
-  }, [navigate, location, selectedValues]); 
-  // ^^^^^^^^^^^^^^^choosePage의 Preference들 ^^^^^^^^^^^^^^
-
-  // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
-  //   if (containerRef.current) {
-  //     const height = containerRef.current.clientHeight;
-  //     console.log('isDrawerOpen:', isDrawerOpen);
-  //     console.log('containerHeight:', containerHeight);
-  //     setContainerHeight(height);
-  //   }
-  // }, [isDrawerOpen, containerHeight]);
-  // const ItemsContainer = Styled.div`
-  //   margin-top: ${(props) => props.isDrawerOpen ? `${props.containerHeight}px` : '0'};
-  //   transition: margin-top 0.3s ease-in-out;
-  // `;
+  }, [selectedValues]); 
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -129,11 +112,12 @@ const ChoosePlace = () => {
         <CustomizedAccordions duration={targetDura} loginInfo={loginInfo} />
             <Section>  
               <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
-              <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} />
+              <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}  loginInfo={loginInfo} areacode={targetArea}/>
               <ItemsWrapper isDrawerOpen={isDrawerOpen} 
                             targetAreacode={targetArea}
                             targetTheme={targetTheme}
                             loginInfo={loginInfo}/>
+              <ScrollToTopButton/>
             </Section>
         </Wrapper>
       </DndProvider>
@@ -164,9 +148,9 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) =
       </div>
       {targetTheme}
       <div className="item"> <span> 
-                <Orderbtn name={'조회순'} orderID={'travelviewcount'}/>|
+                <Orderbtn name={'조회순'} orderID={'travelviewcount desc'}/>|
                 <Orderbtn name={'가나다순'} orderID={'title'}/>|
-                <Orderbtn name={'별점순'} orderID={'likecount'}/> </span>    </div>
+                <Orderbtn name={'별점순'} orderID={'averageRate'}/> </span>    </div>
       <div className="item">
         <ListPlace areacode={targetAreacode} order={order}/>
       </div>
@@ -220,7 +204,7 @@ const Position = Styled.div`
   position: relative;
 `;
 
-function CustomizedAccordions({duration , loginInfo}) {
+function CustomizedAccordions({duration, loginInfo}) {
   const [expanded, setExpanded] = useState('');
   const [buttonClicked, setButtonClicked] = useState(true);
   const [savedData, setSavedData] = useState([]);
@@ -260,11 +244,9 @@ function CustomizedAccordions({duration , loginInfo}) {
   const handleClick = () => {
     setButtonClicked(true); //button 이 click 되었으니
      // savedData의 유효성을 검사합니다.
-      const isValid = validateSavedData(savedData);
+      const isValid = validateSavedData(savedData); // 저장된 데이터가 유효한 경우, 서버로 데이터를 전송합니다.
 
       if (isValid) {
-        // 저장된 데이터가 유효한 경우, 서버로 데이터를 전송합니다.
-        // 사용자로부터 'title' 입력 받기
         const title = prompt("원하는 [코스 이름]을 작성하세요:");
         const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
         if (isConfirmed) {
@@ -276,7 +258,7 @@ function CustomizedAccordions({duration , loginInfo}) {
         // 저장된 데이터가 유효하지 않은 경우, 알림을 표시합니다.
         alert("아직 채워지지 않은 날짜가 있습니다. 최소 1개 이상 모두 채워주세요..");
       }
-  }
+  };
 
   const validateSavedData = (data) => {
     let isValidCourseDay;
@@ -307,7 +289,6 @@ function CustomizedAccordions({duration , loginInfo}) {
     axios.post(`/place/savedata/${title}`, savedData)
       .then((response) => {
         // 성공적으로 전송되었을 때의 처리
-        console.log(savedData);
         console.log('데이터를 성공적으로 전송했습니다.' + response.data +"   ");
         alert('저장하였습니다.' );
         

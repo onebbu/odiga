@@ -85,4 +85,13 @@
         select * from wishlist
         where NICKNAME = #{nickname}
     </select>
+
+    <select id="selectWishforRegion" parameterType="String" resultType="com.odiga.mytrip.travel.vo.WishVO">
+        SELECT * FROM wishlist
+        WHERE NICKNAME = #{nickname} AND contentid IN (
+            SELECT contentID
+            FROM travelList
+            WHERE areacode = #{areacode}
+        )
+    </select>
 </mapper>

@@ -1,6 +1,5 @@
-import React, {useEffect} from "react";
-import {BrowserRouter, Route, Routes, Navigate} from "react-router-dom";
-import {BrowserRouter as Router} from 'react-router-dom';
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/sign-up/SignUp";
 import TravelDetailPage from "./pages/traveldetailpage/TravelDetailPage";
@@ -31,7 +30,7 @@ function App() {
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
 
-                    <Route exact path="/place/show" element={<PlaceList/>}></Route>
+                    <Route exact path="/placeList/show" element={<PlaceList/>}></Route>
                 </Route>
 
 
@@ -61,14 +60,13 @@ function App() {
                     <LoginInfoProvider>
                         <ResultView/>
                     </LoginInfoProvider>
-                }/>
-                
+                }/>                
                 <Route path="/coursereview/*" element={
                     <LoginInfoProvider>
                         <CourseReview/>
                     </LoginInfoProvider>
                 }/>
-                <Route exact path="/place" element={
+                <Route path="/place" element={
                     <LoginInfoProvider>
                         <ChoosePlace/>
                     </LoginInfoProvider>
