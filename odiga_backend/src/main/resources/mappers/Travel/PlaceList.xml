@@ -14,13 +14,14 @@
 
     <!-- 여행지 지역별 리스트 가져오기 -->
     <select id="getPlaceList" resultMap="PlaceList" parameterType="String">
-        SELECT *
-        FROM (
-            SELECT contentid, title, addr1, firstimage, cat3, areacode
-            FROM travellist
-            WHERE AREACODE = #{areacode}
-            ORDER BY ${order}
-        ) WHERE ROWNUM <![CDATA[<= ]]> #{displayCount}
+        SELECT * FROM
+            (SELECT a.*, ROWNUM as rn FROM (
+                SELECT contentid, title, addr1, firstimage, cat3, areacode
+                    FROM travellist
+                    WHERE AREACODE = #{areacode}
+                    ORDER BY ${order} 
+                )a
+            ) WHERE rn <![CDATA[>=]]> #{displayStart} and rn <![CDATA[<]]> #{displayEnd}
     </select>
 
     <!-- 여행지별 리뷰 평균 별점 조회 -->

@@ -87,13 +87,13 @@ const places = [
 
 const DrawerContainer = styled.div`
     position: absolute;
-    top: 0;
+    top: -2px;
     left: 0;
     width: 100%;
     background-color: white;
     z-index: 1000;
     transition: transform 0.3s ease-in-out;
-    transform: translateY(${props => (props.isOpen ? '0' : '-100%')});
+    transform: translateY(${(props) => (props.isOpen ? '0' : '-100%')});
 `;
 
 const DrawerContent = styled.div`
@@ -102,8 +102,9 @@ const DrawerContent = styled.div`
 
 const Drawer = ({ isOpen, onClose }) => {
   return (
-    <DrawerContainer isopen={isOpen}>
+    <DrawerContainer isOpen={isOpen}>
       <DrawerContent>
+      <h2> 찜 목록 </h2>
         <div className="drawer">
           {places.map(item => ( <Place key={item.id} id={item.id} pic={item.pic} name={item.name} region={item.region}/> ))}
         </div>
@@ -113,7 +114,9 @@ const Drawer = ({ isOpen, onClose }) => {
   );
 };
 
-const Place = ({id,pic,name,region }) =>{ //개별 플레이스 drag 가능~
+const Place = ({id, pic, name, region }) =>{ //개별 플레이스 drag 가능~
+
+  
 
   const[{ isDragging },drag] = useDrag({
       type: 'placeitem',

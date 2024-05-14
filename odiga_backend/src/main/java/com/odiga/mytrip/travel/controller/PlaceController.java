@@ -29,16 +29,18 @@ public class PlaceController {
     // Logger 선언
     private static final Logger logger = Logger.getLogger(PlaceController.class.getName());
 
-    @GetMapping("/place/{areacode}/{displayCount}/{order}")
+    @GetMapping("/place/{areacode}/{displayStart}/{order}")
     public List<TravelListVO> getPlaceList(
         @PathVariable String areacode, 
-        @PathVariable String displayCount, 
+        @PathVariable String displayStart, 
         @PathVariable String order) throws IOException {
 
         try {
             // order 파라미터를 검증하여 유효한 정렬 기준으로 변환
             String orderByClause = validateAndTransformOrder(order);
-            List<TravelListVO> placeList = placeService.placeList(areacode, displayCount, orderByClause);
+            String displayEnd = String.valueOf(Integer.valueOf(displayStart) + 8);
+            
+            List<TravelListVO> placeList = placeService.placeList(areacode, displayStart, displayEnd, orderByClause);
             return placeList;
         } catch (Exception e) {
             // 예외 발생 시 로그 추가 및 예외 다시 던지기

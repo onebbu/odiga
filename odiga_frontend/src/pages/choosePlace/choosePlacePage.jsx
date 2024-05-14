@@ -14,6 +14,7 @@ import { LoginInfoContext } from "../login/LoginInfoProvider";
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
+import ScrollToTopButton from '../component/scrollTopBtn';
 import axios from "axios";
 
 // http://localhost:3000/place
@@ -32,7 +33,7 @@ const OpenButton = Styled.button`position: fixed; top: 0px; right: 100px; width:
     transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
 const ItemsContainer = Styled.div`
-    margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
+    margin-top: ${(props) => (props.isDrawerOpen ? 350 : 0)}px;
     transition: margin-top 0.3s ease-in-out;
   `;
 
@@ -56,6 +57,8 @@ const areaList = [
     { areacode: '39', areaname: '제주도' },
 ];
 
+
+
 const ChoosePlace = () => {
 
 
@@ -65,8 +68,8 @@ const ChoosePlace = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
   
-  const [targetArea, setTargetArea] = useState('1');
-  const [targetDura, setTargetDura] = useState('3');
+  const [targetArea, setTargetArea] = useState(null);
+  const [targetDura, setTargetDura] = useState(null);
   const [targetTheme, setTargetTheme] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
@@ -129,11 +132,12 @@ const ChoosePlace = () => {
         <CustomizedAccordions duration={targetDura} loginInfo={loginInfo} />
             <Section>  
               <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
-              <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} />
+              <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer} />
               <ItemsWrapper isDrawerOpen={isDrawerOpen} 
                             targetAreacode={targetArea}
                             targetTheme={targetTheme}
                             loginInfo={loginInfo}/>
+              <ScrollToTopButton/>
             </Section>
         </Wrapper>
       </DndProvider>
