@@ -121,8 +121,6 @@ public class TravelController {
                 userWishMap.put(i, wishMap);
                 i++;
             }
-            System.out.println("아리아코드 널");
-            
         }  else{      // region 값이 null 이 아닐때 이거 ChoosePlace 화면에서 쓰려고 분리했슴당
             userWishList = travelService.selectWishforRegion(nickname, areacode);
             // 아이디에 맞는 wishlist 가져오기
@@ -140,8 +138,7 @@ public class TravelController {
                 userWishMap.put(i, wishMap);
                 i++;
             }
-            System.out.println("아리아코드 널 아님");
-            System.out.println("근데 왜 안뜨냐고 ㅅㅂ"+ userWishMap);
+            System.out.println("TravelController : 아리아코드 널 아님");
         }
 
         return userWishMap;

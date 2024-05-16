@@ -1,5 +1,6 @@
 package com.odiga.mytrip.travel.controller;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.odiga.mytrip.travel.service.PlaceService;
@@ -29,19 +31,44 @@ public class PlaceController {
     // Logger 선언
     private static final Logger logger = Logger.getLogger(PlaceController.class.getName());
 
-    @GetMapping("/place/{areacode}/{displayStart}/{order}")
+    @GetMapping("/place/{displayStart}/{order}")
     public List<TravelListVO> getPlaceList(
-        @PathVariable String areacode, 
-        @PathVariable String displayStart, 
-        @PathVariable String order) throws IOException {
+        @RequestParam(required = false) String areacode, 
+        @PathVariable("displayStart") String displayStart, 
+        @PathVariable("order") String order,
+        @RequestParam(required = false) String theme) throws IOException {
+        
+        List<String> catList = new ArrayList<>();
+        Map<String, Object> display = new HashMap<>();
         try {
-            //String orderByClause = validateAndTransformOrder(order); // order 파라미터를 검증하여 유효한 정렬 기준으로 변환
             String displayEnd = String.valueOf(Integer.valueOf(displayStart) + 8);
             
-            List<TravelListVO> placeList = placeService.placeList(areacode, displayStart, displayEnd, order);
-            return placeList;
+            if(areacode != null && theme != null) { 
+                String[] themeList = theme.split(","); 
+                for(int i = 0; i < themeList.length; i++ ){
+                    catList.add(themeList[i]);
+                }
+                display.put("areacode", areacode);
+                display.put("order", order);
+                display.put("displayStart", displayStart);
+                display.put("displayEnd", displayEnd);
+                display.put("list", catList);
+                List<TravelListVO> placeList = placeService.placeList(display);
+                System.out.println("CONTROLLER 1::::::::  THEME ???????????????????????/"+theme);
+                return placeList;
+            }
+            else{
+                display.put("order", order);
+                display.put("displayStart", displayStart);
+                display.put("displayEnd", displayEnd);
+                List<TravelListVO> placeList = placeService.placeALLList(display);
+                System.out.println("CONTROLLER 2::::::::  THEME ???????????????????????/"+theme);
+                return placeList;
+            }            
+            
         } catch (Exception e) {
             // 예외 발생 시 로그 추가 및 예외 다시 던지기
+            System.out.println("실패함?");
             logger.log(Level.SEVERE, "Error processing request", e);
             throw new RuntimeException("Failed to fetch place information.");
         }
@@ -60,7 +87,6 @@ public class PlaceController {
         JSONParser parser = new JSONParser();
         JSONArray jsonArr = (JSONArray)parser.parse(entities);
         
-        //String nickname = "gyugyu"; /////////////////////////////////////////////여기 닉네임 변경해주셔야함. 아직 로그인 세션 구현 안해서그럼.
         String nickname = String.valueOf(((JSONObject)jsonArr.get(0)).get("nickname"));
         int maxNum = placeService.getMaxNum(nickname) + 1;
         String COURSENO = nickname+"_"+String.valueOf(maxNum);

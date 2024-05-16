@@ -88,7 +88,7 @@ const Place = ({id, pic, name, region }) =>{ //개별 플레이스 drag 가능~
 
   return(
       <div key={id} className={`drawer-item ${opacity ? '' : 'dragging'}`} ref={drag}> 
-          <img src={pic} />
+          <img src={pic} alt="이미지 로딩 중"/>
           <span>{name} | {region} </span>
       </div>
   )
