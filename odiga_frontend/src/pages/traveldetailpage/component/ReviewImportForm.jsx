@@ -43,7 +43,7 @@ function StarRating({ starCount, onChange }) {
     );
 } 
 
-function ReviewImportForm({ onReviewSubmitted }) { 
+function ReviewImportForm({ onReviewSubmitted, modalContentId }) {
     const { contentID } = useParams();
     const [reviewComment, setReviewComment] = useState('');
     const [reviewGrade, setReviewGrade] = useState(0);
@@ -51,7 +51,18 @@ function ReviewImportForm({ onReviewSubmitted }) {
     const [liked, setLiked] = useState(false);
     const [likes, setLikes] = useState(0);
     const navigate = useNavigate();
-    const loginInfo = useContext(LoginInfoContext); 
+    const loginInfo = useContext(LoginInfoContext);
+
+    // 모달 관련
+    const [locaContId, setLocaContId] = useState("");
+
+    useEffect(() => {
+        if (modalContentId === null) {
+            setLocaContId(contentID);
+        } else {
+            setLocaContId(modalContentId);
+        }
+    }, [modalContentId]);
     
     // 리뷰 글자 수 제한 
     const handleInputChange = (e) => {
@@ -66,11 +77,11 @@ function ReviewImportForm({ onReviewSubmitted }) {
     
     //로그인 관련 
     const isUserLoggedIn = () => {
-        return Boolean(localStorage.getItem('token'));
+        return Boolean(sessionStorage.getItem('token'));
     };
 
     axios.interceptors.request.use(function (config) {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -86,7 +97,7 @@ function ReviewImportForm({ onReviewSubmitted }) {
             return;
         }
         axios.post('/reviewImport',{
-            contentid : contentID ,
+            contentid : locaContId ,
             reviewcomment : reviewComment ,
             reviewgrade : reviewGrade,
             reviewdate : reviewdate , 
@@ -120,7 +131,7 @@ function ReviewImportForm({ onReviewSubmitted }) {
         try {
             if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
                 const response = await axios.post(`/WishDelete`, {
-                    contentid: contentID, 
+                    contentid: locaContId,
                     email: loginInfo.email,
                     nickname: loginInfo.nickname
                 });
@@ -130,7 +141,7 @@ function ReviewImportForm({ onReviewSubmitted }) {
                 }
             } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
                 const response = await axios.post(`/travelLike`, {
-                    contentid: contentID,
+                    contentid: locaContId,
                     email: loginInfo.email,
                     nickname: loginInfo.nickname
                 });
@@ -155,7 +166,7 @@ function ReviewImportForm({ onReviewSubmitted }) {
         const fetchData = async () => {
             try {
                 // 서버에서 좋아요 상태를 가져오는 요청
-                const response = await axios.get(`/WishInfo?contentid=${contentID}&email=${loginInfo.email}`);
+                const response = await axios.get(`/WishInfo?contentid=${locaContId}&email=${loginInfo.email}`);
                 if (response.data === 1) {
                     setLiked(true); // 서버에서 받아온 값이 1이면 liked를 true로 업데이트
                 } else {
@@ -169,7 +180,7 @@ function ReviewImportForm({ onReviewSubmitted }) {
         };
     
         fetchData();
-    }, [contentID,loginInfo.email]);
+    }, [locaContId,loginInfo.email]);
     
 
     return(

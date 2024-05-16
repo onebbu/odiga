@@ -18,6 +18,7 @@ function SearchPage() {
   const [courseResults, setCourseResults] = useState([]);
   const [resultCourseCount, setResultCourseCount] = useState(0);
   const [coursetotalPages, setCourseTotalPages] = useState(0);
+  const [order, setOrder] = useState('title'); 
 
   useEffect(() => {
     fetchCategories();
@@ -26,7 +27,7 @@ function SearchPage() {
   useEffect(() => {
     fetchSearchResults(currentPage);
     fetchCourseResults(currentPage);
-  }, [currentPage, catCode]); // catCode added
+  }, [currentPage, catCode, order]); // order added to dependency array
 
   const handleSearchInputChange = (event) => {
     setSearchText(event.target.value);
@@ -60,6 +61,7 @@ function SearchPage() {
           page: page,
           text: searchText,
           areacode: selectedAreaCode,
+          order : order,
           catcode: catCode
         }
       });
@@ -81,7 +83,8 @@ function SearchPage() {
         params: {
           page: page,
           text: searchText,
-          areacode: selectedAreaCode
+          areacode: selectedAreaCode,
+          order : order
         }
       });
       const { CourseListResult, resultCourseCount } = response.data;
@@ -149,6 +152,13 @@ function SearchPage() {
     return pageNumbers;
   };
 
+  const handleOrderChange = (newOrder) => {
+    if (order !== newOrder) {
+      setOrder(newOrder);
+      setCurrentPage(1); // Set page to 1 when order changes
+    }
+  };
+
   return (
     <div className="search-page">
       <div className="search-form">
@@ -187,7 +197,11 @@ function SearchPage() {
 
         <button onClick={handleSearch}>검색</button>
       </div>
-
+      <div className="sort-options">
+        <button className={`sort-button ${order === 'title' ? 'active' : ''}`} onClick={() => handleOrderChange('title')}>제목순</button>
+        <button className={`sort-button ${order === 'grade' ? 'active' : ''}`} onClick={() => handleOrderChange('grade')}>별점순</button>
+        <button className={`sort-button ${order === 'date' ? 'active' : ''}`} onClick={() => handleOrderChange('date')}>최신순</button>
+      </div>
       <Tabs>
         <TabList>
           <Tab>여행지</Tab>

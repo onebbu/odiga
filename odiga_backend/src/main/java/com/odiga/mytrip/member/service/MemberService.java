@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentMap;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class MemberService {
 
@@ -40,6 +39,7 @@ public class MemberService {
         return false;
     }
 
+    @Transactional
     public void join(JoinRequest joinRequest) {
         memberDAO.save(joinRequest.toEntity());
     }

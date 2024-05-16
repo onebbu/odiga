@@ -198,11 +198,14 @@ const ITEM2 = [
 const ITEM3 = [
     { icon : "https://source.unsplash.com/featured/?mountain", content : '산' },
     { icon : "https://source.unsplash.com/featured/?beach", content : '바다' },
-    { icon : "https://source.unsplash.com/featured/?indoor", content : '실내여행지' },
+    { icon : "https://source.unsplash.com/featured/?nature", content : "자연" },
+    { icon : "https://source.unsplash.com/featured/?indoor", content : "실내여행지" },
     { icon : "https://source.unsplash.com/featured/?cafe", content : "카페" },
+    { icon : "https://source.unsplash.com/featured/?restaurant", content : "식당" },
+    { icon : "https://source.unsplash.com/featured/?shopping", content : "쇼핑" },
     { icon : "https://source.unsplash.com/featured/?adventure", content : "액티비티" },
     { icon : "https://source.unsplash.com/featured/?theme park", content : "테마파크" },
-    { icon : "https://source.unsplash.com/featured/?museum", content : "문화 | 역사" },
+    { icon : "https://source.unsplash.com/featured/?museum", content : "문화역사" },
     { icon : "https://source.unsplash.com/featured/?trandition", content : "전통시장" },
     { icon : "https://source.unsplash.com/featured/?festival", content : "축제" }
 ];
