@@ -143,10 +143,10 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) =
   return(<>
     <ItemsContainer isDrawerOpen={isDrawerOpen} >
       <div className="item">
-          <p> {loginInfo.nickname} 님 ! 여행지를 드래그하여 채워보세요! </p>
+          <p> {loginInfo.nickname} GYURI 님 ! 여행지를 드래그하여 채워보세요! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
-      {targetTheme}
+      {/* {targetTheme} */}
       <div className="item"> <span> 
                 <Orderbtn name={'조회순'} orderID={'travelviewcount desc'}/>|
                 <Orderbtn name={'가나다순'} orderID={'title'}/>|

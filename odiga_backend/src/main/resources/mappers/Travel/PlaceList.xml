@@ -23,7 +23,12 @@
                         COALESCE(COUNT(TR.CONTENTID) , 0) AS cntRating
                     FROM TRAVELLIST TL
                     LEFT JOIN TRAVELREVIEW TR ON TL.CONTENTID = TR.CONTENTID
-                    WHERE TL.AREACODE = #{areacode}
+                    WHERE TL.AREACODE = #{areacode} 
+                    AND TL.CAT3 IN ( SELECT CATCODE FROM TRAVELCAT WHERE
+                        <foreach item="cat" index="index" collection="list" open="(" separator=" OR " close=")">
+                            CATTYPE LIKE #{cat}
+                        </foreach>
+                    )
                     GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TL.CAT3, TL.AREACODE, TL.TRAVELVIEWCOUNT
                     ORDER BY ${order}              
                 ) a
