@@ -198,30 +198,3 @@
     text-align: center;
 }
 
-.sort-options {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
-}
-
-.sort-button {
-    background-color: #ffffff;
-    color: #4285F4;
-    border: 2px solid #4285F4;
-    padding: 10px 20px;
-    margin: 0 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.sort-button:hover {
-    background-color: #4285F4;
-    color: #ffffff;
-}
-
-.sort-button.active {
-    background-color: #4285F4;
-    color: #ffffff;
-    border-color: #357AE8;
-}
