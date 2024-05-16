@@ -73,6 +73,7 @@ public class PlaceService {
         placeDAO.courseSave(contentID, index);
     }
 
+    @Transactional
     public void SaveResult(Map<String, Object> result){
         placeDAO.SaveResultList(result);
     }
