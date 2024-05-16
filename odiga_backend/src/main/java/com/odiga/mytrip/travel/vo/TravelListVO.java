@@ -24,4 +24,6 @@ public class TravelListVO {
     private String contenttypeid;
     private String wishlist_count;
     private String AVERAGE_GRADE;
+    private String averageRate;
+    private String cntRating;
 }

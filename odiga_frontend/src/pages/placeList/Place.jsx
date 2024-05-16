@@ -6,7 +6,7 @@ import './PL.css';
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
 
-const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
+const Place = ({id,pic,name,region}) =>{ 
     const [avgrate, setAvgrate] = useState(0); // 여행지 평균 별점
     const [cntrate, setCntrate] = useState(0); // 여행지 리뷰 개수
     
@@ -24,7 +24,7 @@ const Place = ({id,pic,name,region}) =>{ //개별 플레이스 drag 가능~
     }, [id]);
 
     return(
-        <div key={id} ref={drag}> 
+        <div key={id}> 
         {/* traveldetailpage 링크 */}
         <a href={`/detail/${id}`}> 
             <img src={pic} />
