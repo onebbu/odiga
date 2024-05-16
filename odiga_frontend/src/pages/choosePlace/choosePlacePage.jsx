@@ -57,7 +57,19 @@ const areaList = [
     { areacode: '39', areaname: '제주도' },
 ];
 
-
+const catColors = {
+  '액티비티': {backgroundColor: '#B4DAF2'},
+  '테마파크': {backgroundColor: '#B4DAF2'},
+  '축제': {backgroundColor: '#B4DAF2'},
+  '바다': {backgroundColor: '#DBDBC5'},
+  '자연': {backgroundColor: '#DBDBC5'},
+  '산': {backgroundColor: '#DBDBC5'},
+  '문화역사': {backgroundColor: '#F7AB89'},
+  '실내여행지': {backgroundColor: '#F7AB89'},
+  '쇼핑': {backgroundColor: '#F7AB89'},
+  '카페': {backgroundColor: '#F4D35E'},
+  '식당': {backgroundColor: '#F4D35E'},
+};
 
 const ChoosePlace = () => {
 
@@ -66,7 +78,8 @@ const ChoosePlace = () => {
   // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
   const [targetArea, setTargetArea] = useState(null);
   const [targetDura, setTargetDura] = useState(null);
-  const [targetTheme, setTargetTheme] = useState(null);
+  const [targetTheme, setTargetTheme] = useState([]);
+  const navigate = useNavigate();
   const location = useLocation();
   const [selectedValues, setSelectedValues] = useState(null); //위의 세 개 값 저장해서 쓸라고.
   //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -93,13 +106,14 @@ const ChoosePlace = () => {
       setTargetTheme(selectedValues.theme);
     } else {
       // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동 또는 사용자에게 메시지 표시
+      //navigate('/wrongpath/preference');
     }
       
     return () => { // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
         window.removeEventListener("load", handleLoad);
     };
 
-  }, [selectedValues]); 
+  }, [location.state, selectedValues]); 
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
@@ -131,7 +145,12 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) =
   // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
   const foundArea = areaList.find(area => area.areacode === targetAreacode);
   const foundAreaName = foundArea ? foundArea.areaname : '없음';
-
+  const themeList = targetTheme.map(theme => ({
+    // 해당 카테고리의 배경색과 폰트색 가져오기
+    ...catColors[theme],
+    themeName: theme,
+    themebackgroundColor: catColors[theme]?.backgroundColor || 'gray',
+}));
   const Orderbtn = ({name, orderID }) => {
     return (
       <div  onClick={()=>setOrder(orderID)} style={{cursor:"pointer", display:"inline", padding:'7px'}}>
@@ -143,16 +162,30 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) =
   return(<>
     <ItemsContainer isDrawerOpen={isDrawerOpen} >
       <div className="item">
-          <p> {loginInfo.nickname} GYURI 님 ! 여행지를 드래그하여 채워보세요! </p>
+          <p> {loginInfo.nickname} 님 ! 여행지를 드래그하여 채워보세요! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
-      {/* {targetTheme} */}
+      <div>
+          {themeList.map((themeItem, index) => (
+            <span key={index} style={{
+                backgroundColor: themeItem.themebackgroundColor,
+                color: 'black',
+                fontFamily: "GmarketSansMedium",
+                fontWeight: '300',
+                padding: '0.5em',
+                marginRight:'8px',
+                borderRadius: "8px"
+            }}>
+                {themeItem.themeName}  
+            </span>
+          ))}
+      </div>
       <div className="item"> <span> 
                 <Orderbtn name={'조회순'} orderID={'travelviewcount desc'}/>|
                 <Orderbtn name={'가나다순'} orderID={'title'}/>|
                 <Orderbtn name={'별점순'} orderID={'averageRate'}/> </span>    </div>
       <div className="item">
-        <ListPlace areacode={targetAreacode} order={order}/>
+        <ListPlace areacode={targetAreacode} order={order} theme={targetTheme}/>
       </div>
     </ItemsContainer>
   
