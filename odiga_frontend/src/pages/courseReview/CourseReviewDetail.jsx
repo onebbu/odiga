@@ -10,8 +10,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useNavigate, Await } from "react-router-dom";
 import styled from "styled-components";
 import Comments from "./Comments";
-import Footer from "../component/footer/Footer";
-import Header from "../component/navbar/Header";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
 import CourseReviewCourse from "./CourseReviewCourse";
 import CustomEditor from "./CustomEditor";
@@ -137,7 +135,6 @@ function CourseReviewDetail() {
 
   return (
     <>
-      <Header />
       <Container>
         <section
           style={{
@@ -419,7 +416,6 @@ function CourseReviewDetail() {
 
         <Comments />
       </Container>
-      <Footer />
     </>
   );
 }
