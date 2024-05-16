@@ -14,6 +14,7 @@ import Footer from "../component/footer/Footer";
 import Header from "../component/navbar/Header";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
 import CourseReviewCourse from "./CourseReviewCourse";
+import CustomEditor from "./CustomEditor";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -23,6 +24,9 @@ function CourseReviewDetail() {
   const [likeCount, setLikeCount] = useState(0); // 좋아요 수 관리
   const navigate = useNavigate(); // useNavigate 훅 사용
   const loginInfo = useContext(LoginInfoContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState("");
+  const [editedTitle, setEditedTitle] = useState("");
 
   console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
@@ -52,7 +56,7 @@ function CourseReviewDetail() {
     if (didMount) {
       fetchData();
     }
-  }, [didMount, boardNo]);
+  }, [didMount, boardNo, isEditing]);
 
   const handleLike = async () => {
     if (loginInfo) {
@@ -93,6 +97,44 @@ function CourseReviewDetail() {
     }
   };
 
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const editCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleEditorChange = (content) => {
+    setEditedContent(content);
+  };
+
+  const handleSave = async () => {
+    const confirmSave = window.confirm("수정한 내용을 저장하시겠습니까?");
+    if (confirmSave) {
+      // 수정된 내용이 없으면 알림을 띄우고 함수를 종료
+      if (!editedTitle.trim()) {
+        alert("제목을 입력해주세요.");
+        return;
+      }
+
+      try {
+        // 서버에 수정된 내용 업데이트 요청
+        await axios.put(`/coursereview/update/${boardNo}`, {
+          boardTitle: editedTitle,
+          boardContent: editedContent,
+          boardNo: boardNo,
+        });
+        alert("수정이 완료되었습니다.");
+        setIsEditing(false); // 수정 모드 종료
+        // 수정 후 페이지 리로드
+        window.location.reload();
+      } catch (error) {
+        console.error("게시물 수정 중 오류 발생:", error);
+      }
+    }
+  };
+
   return (
     <>
       <Header />
@@ -121,7 +163,15 @@ function CourseReviewDetail() {
                 margin: "0 auto",
               }}
             >
-              {detailsData && detailsData[0].boardTitle}{" "}
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                />
+              ) : (
+                detailsData?.[0]?.boardTitle
+              )}
             </h4>
             <hr />
             <h7
@@ -180,17 +230,31 @@ function CourseReviewDetail() {
           >
             <div style={{ display: "flex" }}>
               <div className="ck ck-editor__main" style={{ width: "100%" }}>
-                <div
-                  className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
-                  dangerouslySetInnerHTML={{
-                    __html:
+                {!isEditing ? (
+                  <div
+                    className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        detailsData &&
+                        detailsData[0] &&
+                        detailsData[0].boardContent
+                          ? detailsData[0].boardContent
+                          : "",
+                    }}
+                  />
+                ) : (
+                  <CustomEditor
+                    initialValue={
                       detailsData &&
                       detailsData[0] &&
                       detailsData[0].boardContent
                         ? detailsData[0].boardContent
-                        : "",
-                  }}
-                />
+                        : ""
+                    }
+                    onChange={handleEditorChange}
+                    boardNo={boardNo}
+                  />
+                )}
               </div>
             </div>
           </Div>
@@ -215,52 +279,91 @@ function CourseReviewDetail() {
               alignItems: "center",
             }}
           >
-            <Link
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-              }}
-              to="/coursereview"
-            >
-              목 록
-            </Link>
+            {!isEditing ? (
+              <Link
+                className="btn btn-primary"
+                style={{
+                  width: "100px",
+                  borderColor: "#13294b",
+                  backgroundColor: "#13294b",
+                  color: "#fff",
+                }}
+                to="/coursereview"
+              >
+                목 록
+              </Link>
+            ) : (
+              ""
+            )}
 
             {detailsData &&
               detailsData[0] &&
               loginInfo &&
               loginInfo.email === detailsData[0].email && (
                 <>
-                  <button
-                    className="btn btn-primary"
-                    style={{
-                      width: "100px",
-                      borderColor: "#13294b",
-                      backgroundColor: "#13294b",
-                      color: "#fff",
-                      float: "right",
-                      marginR: "0 10px 0 10px",
-                    }}
-                  >
-                    수 정
-                  </button>
+                  {!isEditing ? (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        float: "right",
+                        margin: "0 10px 0 10px",
+                      }}
+                      onClick={handleEdit}
+                    >
+                      수 정
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        float: "right",
+                        margin: "0 10px 0 10px",
+                      }}
+                      onClick={handleSave}
+                    >
+                      저 장
+                    </button>
+                  )}
 
-                  <button
-                    className="btn btn-primary"
-                    style={{
-                      width: "100px",
-                      borderColor: "#13294b",
-                      backgroundColor: "#13294b",
-                      color: "#fff",
-                      margin: "0 10px 0 0",
-                      float: "right",
-                    }}
-                    onClick={handleDelete}
-                  >
-                    삭 제
-                  </button>
+                  {!isEditing ? (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        margin: "0 10px 0 0",
+                        float: "right",
+                      }}
+                      onClick={handleDelete}
+                    >
+                      삭 제
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        margin: "0 10px 0 0",
+                        float: "right",
+                      }}
+                      onClick={editCancel}
+                    >
+                      취 소
+                    </button>
+                  )}
                 </>
               )}
           </div>

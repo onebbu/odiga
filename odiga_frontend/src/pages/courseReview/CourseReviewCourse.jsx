@@ -29,7 +29,7 @@ const CourseReading = ({ detailsData }) => {
     };
 
     fetchData();
-  }, [detailsData, data]);
+  }, [detailsData]);
 
   console.log(data);
 
