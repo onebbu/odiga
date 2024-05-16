@@ -54,7 +54,7 @@ public class PlaceController {
                 display.put("displayEnd", displayEnd);
                 display.put("list", catList);
                 List<TravelListVO> placeList = placeService.placeList(display);
-                System.out.println("CONTROLLER ::::::::  THEME ???????????????????????/"+theme);
+                System.out.println("CONTROLLER 1::::::::  THEME ???????????????????????/"+theme);
                 return placeList;
             }
             else{
@@ -62,7 +62,7 @@ public class PlaceController {
                 display.put("displayStart", displayStart);
                 display.put("displayEnd", displayEnd);
                 List<TravelListVO> placeList = placeService.placeALLList(display);
-                System.out.println("CONTROLLER ::::::::  THEME ???????????????????????/"+theme);
+                System.out.println("CONTROLLER 2::::::::  THEME ???????????????????????/"+theme);
                 return placeList;
             }            
             
