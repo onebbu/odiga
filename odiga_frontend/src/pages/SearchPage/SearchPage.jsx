@@ -3,59 +3,78 @@ import axios from 'axios';
 import Sidebar from './SideBar';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import './SearchPage.css';
 
 function SearchPage() {
   const [searchText, setSearchText] = useState('');
+  const [recentSearches, setRecentSearches] = useState(() => JSON.parse(localStorage.getItem('recentSearches')) || []);
   const [selectedAreaCode, setSelectedAreaCode] = useState('1');
-  const [searchResults, setSearchResults] = useState([1]);
+  const [searchResults, setSearchResults] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [resultCount, setResultCount] = useState(0);
   const [catList, setCatList] = useState([]); 
-  const [catCode , setCatCode] = useState(null);
+  const [catCode, setCatCode] = useState(null);
   const [courseResults, setCourseResults] = useState([]);
   const [resultCourseCount, setResultCourseCount] = useState(0);
   const [coursetotalPages, setCourseTotalPages] = useState(0);
 
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
-    // 페이지 변경 시 검색 결과 요청
     fetchSearchResults(currentPage);
     fetchCourseResults(currentPage);
-    fetchCategories();
-  }, [currentPage]);
+  }, [currentPage, catCode]); // catCode added
 
-  // 함수: 검색어 입력 시 상태 업데이트
   const handleSearchInputChange = (event) => {
     setSearchText(event.target.value);
   };
 
-  // 함수: 옵션 선택 시 상태 업데이트
   const handleAreaChange = (event) => {
     setSelectedAreaCode(event.target.value);
   };
 
-  // 함수: 페이지 변경 시 상태 업데이트
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    fetchSearchResults(page);
-    fetchCourseResults(page);
   };
 
   const handleCatkrSelection = (selectedCatcode) => {
-    setCatCode(selectedCatcode);
-    fetchSearchResults(1);
+    setCatCode(selectedCatcode); // Now triggers search in useEffect
   };
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('/categories'); // 카테고리 가져오는 API 엔드포인트
+      const response = await axios.get('/categories');
       setCatList(response.data);
     } catch (error) {
-      console.error('카테고리를 불러오는 중 에러 발생:', error);
+      console.error('Error fetching categories:', error);
     }
   };
-  // 여행코스 결과를 가져오는 함수 (예시)
+
+  const fetchSearchResults = async (page) => {
+    try {
+      const response = await axios.get('/search', {
+        params: {
+          page: page,
+          text: searchText,
+          areacode: selectedAreaCode,
+          catcode: catCode
+        }
+      });
+      const { searchList, resultCount } = response.data;
+      setSearchResults(searchList || []);
+      setTotalPages(Math.floor(resultCount / 10) || 0);
+      setResultCount(resultCount || 0);
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+      setSearchResults([]);
+      setTotalPages(0);
+      setResultCount(0);
+    }
+  };
+
   const fetchCourseResults = async (page) => {
     try {
       const response = await axios.get('/searchcourse', {
@@ -65,96 +84,74 @@ function SearchPage() {
           areacode: selectedAreaCode
         }
       });
-      const { CourseListResult , resultCourseCount } = response.data;
+      const { CourseListResult, resultCourseCount } = response.data;
       setCourseResults(CourseListResult);
       setResultCourseCount(resultCourseCount);
       setCourseTotalPages(Math.floor(resultCourseCount / 10) || 0);
     } catch (error) {
-      console.error('여행코스 검색 결과를 불러오는 중 에러 발생:', error);
-      setCourseResults([]); // 오류 발생 시 결과 초기화
+      console.error('Error fetching course results:', error);
+      setCourseResults([]);
     }
   };
 
-  // 함수: 여행지 검색 결과 요청
-  const fetchSearchResults = async (page) => {
-    try {
-      const response = await axios.get('/search', {
-        params: {
-          page: page,
-          text: searchText,
-          areacode: selectedAreaCode,
-          catcode : catCode
-        }
-      });
-      const { searchList, resultCount } = response.data;
-      setSearchResults(searchList || []);
-      setTotalPages(Math.floor(resultCount / 10) || 0);
-      setResultCount(resultCount || 0);
-    } catch (error) {
-      console.error('Error fetching search results:', error);
-      // 오류 발생 시 검색 결과 초기화
-      setSearchResults([]);
-      setTotalPages(0);
-      setResultCount(0);
-    }
-  };
-
-  // 함수: 검색 버튼 클릭 시 검색 수행
   const handleSearch = () => {
     setCurrentPage(1);
-    fetchSearchResults(1); 
+    fetchSearchResults(1);
     fetchCourseResults(1);
+    updateRecentSearches(searchText);
   };
-// 여행지 페이지 번호를 생성하는 함수 
-const renderTravlePageNumbers = () => {
-  const pageNumbers = [];
-  const totalPagesToShow = Math.ceil(resultCount / 10); // 결과를 10개씩 나눈 총 페이지 수
-  const groupIndex = Math.floor((currentPage - 1) / 5); // 현재 페이지 그룹 인덱스
-  const maxPage = Math.min(totalPagesToShow, (groupIndex + 1) * 5); // 현재 그룹의 마지막 페이지
-  const minPage = groupIndex * 5 + 1; // 현재 그룹의 첫 페이지
 
-  for (let i = minPage; i <= maxPage; i++) {
-    pageNumbers.push(
-      <button
-        key={i}
-        onClick={() => handlePageChange(i)}
-        className={i === currentPage ? 'active' : ''}
-      >
-        {i}
-      </button>
-    );
-  }
-  return pageNumbers;
-};
-// 여행코스 전용 페이지 번호를 생성하는 함수
-const renderCoursePageNumbers = () => {
-  const pageNumbers = [];
-  const totalPagesToShow = Math.ceil(resultCourseCount / 10); // 결과를 10개씩 나눈 총 페이지 수
-  const groupIndex = Math.floor((currentPage - 1) / 5); // 현재 페이지 그룹 인덱스
-  const maxPage = Math.min(totalPagesToShow, (groupIndex + 1) * 5); // 현재 그룹의 마지막 페이지
-  const minPage = groupIndex * 5 + 1; // 현재 그룹의 첫 페이지
+  const updateRecentSearches = (searchTerm) => {
+    const updatedSearches = [searchTerm, ...recentSearches.filter(term => term !== searchTerm)].slice(0, 5);
+    setRecentSearches(updatedSearches);
+    localStorage.setItem('recentSearches', JSON.stringify(updatedSearches));
+  };
 
-  for (let i = minPage; i <= maxPage; i++) {
-    pageNumbers.push(
-      <button
-        key={i}
-        onClick={() => handlePageChange(i)}
-        className={i === currentPage ? 'active' : ''}
-      >
-        {i}
-      </button>
-    );
-  }
-  return pageNumbers;
-};
-  
-  
+  const renderTravlePageNumbers = () => {
+    const pageNumbers = [];
+    const totalPagesToShow = Math.ceil(resultCount / 10);
+    const groupIndex = Math.floor((currentPage - 1) / 5);
+    const maxPage = Math.min(totalPagesToShow, (groupIndex + 1) * 5);
+    const minPage = groupIndex * 5 + 1;
+
+    for (let i = minPage; i <= maxPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={i === currentPage ? 'active' : ''}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
+
+  const renderCoursePageNumbers = () => {
+    const pageNumbers = [];
+    const totalPagesToShow = Math.ceil(resultCourseCount / 10);
+    const groupIndex = Math.floor((currentPage - 1) / 5);
+    const maxPage = Math.min(totalPagesToShow, (groupIndex + 1) * 5);
+    const minPage = groupIndex * 5 + 1;
+
+    for (let i = minPage; i <= maxPage; i++) {
+      pageNumbers.push(
+        <button
+          key={i}
+          onClick={() => handlePageChange(i)}
+          className={i === currentPage ? 'active' : ''}
+        >
+          {i}
+        </button>
+      );
+    }
+    return pageNumbers;
+  };
 
   return (
     <div className="search-page">
-      {/* 검색 입력 폼 */}
       <div className="search-form">
-        {/* 시군구 옵션 */}
         <select value={selectedAreaCode} onChange={handleAreaChange}>
           <option value="1">서울</option>
           <option value="2">인천</option>
@@ -173,86 +170,90 @@ const renderCoursePageNumbers = () => {
           <option value="37">전라북도</option>
           <option value="38">전라남도</option>
           <option value="39">제주도</option>
-          {/* 옵션 목록 */}
         </select>
 
-        {/* 검색 입력 */}
         <input
           type="text"
           value={searchText}
           onChange={handleSearchInputChange}
           placeholder="검색어를 입력하세요"
+          list="recent-searches"
         />
+        <datalist id="recent-searches">
+          {recentSearches.map((search, index) => (
+            <option key={index} value={search} />
+          ))}
+        </datalist>
 
-        {/* 검색 버튼 */}
         <button onClick={handleSearch}>검색</button>
       </div>
+
       <Tabs>
         <TabList>
           <Tab>여행지</Tab>
           <Tab>여행코스</Tab>
         </TabList>
 
-      <TabPanel>
-        {/* 사이드바 */}
-      <Sidebar
-        catList={catList}
-        // catKr={catKr}
-        setCatCode={handleCatkrSelection}
-      />
-      {/* 검색 결과 표시 */}
-      <div className="search-results">
-        {/* 검색 결과 목록 */}
-        {searchResults.length > 0 ? (
-          searchResults.map((result, index) => (
-            <div key={index}>{result.title}</div>
-          ))
-        ) : (
-          <p>검색 결과가 없습니다.</p>
-        )}
-      </div>
+        <TabPanel>
+          <div className="search-results-container">
+            <Sidebar catList={catList} setCatCode={handleCatkrSelection} />
+            <div className="search-results">
+              {searchResults.length > 0 ? (
+                searchResults.map((result, index) => (
+                  <div key={index} className="search-result-card">
+                    <div className="search-result-title">{result.title}</div>
+                    <div className="search-result-info">
+                      위치: {result.addr1}
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>검색 결과가 없습니다.</p>
+              )}
+            </div>
+          </div>
 
-      {/* 페이지네이션 */}
-      <div className="pagination">
-          {/* 이전 버튼: 현재 페이지 그룹의 첫 페이지가 1보다 큰 경우에만 활성화 */}
-          <button disabled={currentPage <= 5} onClick={() => handlePageChange(currentPage - 5)}>이전</button>
-          {renderTravlePageNumbers()}
-          {/* 다음 버튼: 현재 페이지 그룹의 마지막 페이지가 총 페이지 수보다 작은 경우에만 활성화 */}
-          <button disabled={(Math.floor((currentPage - 1) / 5) + 1) * 5 >= totalPages} onClick={() => handlePageChange(currentPage + 5)}>다음</button>
-        </div>
-        
-        {/* 최종 결과 수 표시 */}
-        <div>
-          총 {resultCount}개의 결과
-        </div>
-      </TabPanel>
+          <div className="pagination">
+            <button disabled={currentPage <= 5} onClick={() => handlePageChange(currentPage - 5)}>이전</button>
+            {renderTravlePageNumbers()}
+            <button disabled={(Math.floor((currentPage - 1) / 5) + 1) * 5 >= totalPages} onClick={() => handlePageChange(currentPage + 5)}>다음</button>
+          </div>
 
-      <TabPanel>
-        <div className="course-results">
-          {courseResults.length > 0 ? (
-            courseResults.map((result, index) => (
-              <div key={index}>{result.boardtitle}</div>
-            ))
-          ) : (
-            <p>여행코스 결과가 없습니다.</p>
-          )}
-        </div>
-        {/* 여행코스 전용 페이지네이션 */}
-        <div className="pagination">
-          <button disabled={currentPage <= 5} onClick={() => handlePageChange(currentPage - 5)}>이전</button>
-          {renderCoursePageNumbers()}
-          <button disabled={(Math.floor((currentPage - 1) / 5) + 1) * 5 >= coursetotalPages} onClick={() => handlePageChange(currentPage + 5)}>다음</button>
-        </div>
+          <div>
+            총 {resultCount}개의 결과
+          </div>
+        </TabPanel>
 
-        <div>
-          총 {resultCourseCount}개의 결과
-        </div>
-      </TabPanel>
-        </Tabs>
-        
+        <TabPanel>
+          <div className="search-result-card">
+            {courseResults.length > 0 ? (
+              courseResults.map((result, index) => (
+                <div key={index} className="search-result-card">
+                  <div className="search-result-title">{result.boardtitle}</div>
+                  <div className="search-result-info">
+                    작성날짜 : {result.boarddate}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>여행코스 결과가 없습니다.</p>
+            )}
+          </div>
+
+          <div className="pagination">
+            <button disabled={currentPage <= 5} onClick={() => handlePageChange(currentPage - 5)}>이전</button>
+            {renderCoursePageNumbers()}
+            <button disabled={(Math.floor((currentPage - 1) / 5) + 1) * 5 >= coursetotalPages} onClick={() => handlePageChange(currentPage + 5)}>다음</button>
+          </div>
+
+          <div>
+            총 {resultCourseCount}개의 결과
+          </div>
+        </TabPanel>
+      </Tabs>
     </div>
   );
 }
 
-
 export default SearchPage;
+
