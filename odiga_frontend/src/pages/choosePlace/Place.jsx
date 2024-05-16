@@ -9,7 +9,29 @@ import './cPP.css';
 const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
 const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
 
-const Place = ({id,pic,name,region, averageRate, cntRating}) =>{ //개별 플레이스 drag 가능~
+const Place = ({id,pic,name,region,cat, averageRate, cntRating}) =>{ //개별 플레이스 drag 가능~
+
+    // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
+    const catColors = {
+        '액티비티': {backgroundColor: '#B4DAF2', color: 'black'},
+        '테마파크': {backgroundColor: '#B4DAF2', color: 'black'},
+        '축제': {backgroundColor: '#B4DAF2', color: 'black'},
+        '바다': {backgroundColor: '#DBDBC5', color: 'black'},
+        '자연': {backgroundColor: '#DBDBC5', color: 'black'},
+        '산': {backgroundColor: '#DBDBC5', color: 'black'},
+        '문화역사': {backgroundColor: '#F7AB89', color: 'black'},
+        '실내여행지': {backgroundColor: '#F7AB89', color: 'black'},
+        '쇼핑': {backgroundColor: '#F7AB89', color: 'black'},
+        '카페': {backgroundColor: '#F4D35E', color: 'black'},
+        '식당': {backgroundColor: '#F4D35E', color: 'black'},
+    };
+    // 해당 카테고리의 배경색과 폰트색 가져오기
+    const {backgroundColor, color, fontWeight} = catColors[cat] || {
+        backgroundColor: 'gray',
+        color: 'black',
+        fontFamily: "GmarketSansMedium"
+    };
+
     const[{ isDragging },drag] = useDrag({
         type: 'placeitem',
         item: { id, name, region },
@@ -26,32 +48,45 @@ const Place = ({id,pic,name,region, averageRate, cntRating}) =>{ //개별 플레
         <a href={`/detail/${id}`}> 
             <img src={pic} />
         </a>
+        <div>
+            <span style={{
+                backgroundColor, color,
+                fontSize: '75%', fontFamily: "GmarketSansMedium",
+                fontWeight: '300',
+                padding: '0.25em 0.5em', borderRadius: "8px"
+            }}>{cat}</span>
+        </div>
             {name} <P> <br/>{region}</P><br/>
             <Rate>{averageRate}</Rate> <P>/{cntRating}개</P>
         </div>
     )
 }
 
-function ListPlace({areacode, order}) {
+function ListPlace({areacode, order, theme}) {
     const [dataList, setDataList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [displayStart, setDisplayStart] = useState(1);
-
     const fetchList = () => {
         if (areacode !== null){
-            axios.get(`/place/${areacode}/${displayStart}/${order}`)
-                .then((response) => {
+            axios.get(`/place/${displayStart}/${order}`, {
+                params: {
+                    areacode : areacode,
+                    theme: theme.join(',') //displayStart,order는 PathVariable로 넘기고 areacode,theme는 param으로 넘기려구용 ㅎㅎ
+                }
+            }).then((response) => {
                     const newData = response.data || [];
                     setDataList((prevDataList) => {
                         return displayStart === 1 ? newData : [...prevDataList, ...newData];
                     });
                     setIsLoading(false);
                     console.log("fetchList 완료  displaySTart === " + displayStart);
-                    console.log("order?? === " +order);
+                    console.log("theme[0]?? == " +theme[0]);
+                    console.log("theme[1]?? == " +theme[1]);
                 })
                 .catch((error) => {
                     console.log("displaySTart === " + displayStart);
-                    console.log("order?? === " +order);
+                    console.log("theme[0]?? == " +theme[0]);
+                    console.log("theme[1]?? == " +theme[1]);
                     console.error('Error fetching data:', error);
                     setIsLoading(true);
             });
@@ -92,7 +127,8 @@ function ListPlace({areacode, order}) {
                                 id={data.contentid} 
                                 pic={data.firstimage} 
                                 name={data.title} 
-                                region={data.addr1} 
+                                region={data.addr1}
+                                cat={data.cat3}
                                 averageRate={data.averageRate}
                                 cntRating={data.cntRating} />
                     ))}

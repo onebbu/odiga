@@ -29,8 +29,7 @@ function App() {
                     <Route exact path="/courseimport" element={<CourseImport/>}/>
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
-
-                    <Route exact path="/placeList/show" element={<PlaceList/>}></Route>
+                    <Route exact path="/placelist/show" element={<PlaceList/>}></Route>
                 </Route>
 
 
