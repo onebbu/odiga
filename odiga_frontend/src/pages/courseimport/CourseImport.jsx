@@ -27,10 +27,11 @@ function CourseImport() {
   const [MainImage, setMainImage] = useState(null);
   const [tags, setTags] = useState(null);
   const [areacode, setAreacode] = useState("");
-  const [nickname, setNickname] = useState("");
   const loginInfo = useContext(LoginInfoContext); 
   const navigate = useNavigate();
   const [selectedImageId, setSelectedImageId] = useState(null); 
+
+  console.log(loginInfo);
 
   const handleTitleChange = (event) => {
     const areaName = getAreaName(areacode);
@@ -85,7 +86,8 @@ function CourseImport() {
       MainImage: MainImage,
       Tags: tags,
       areacode: areacode,
-      nickname: nickname
+      nickname: loginInfo.nickname,
+      email : loginInfo.email
     })
       .then((response) => {
         console.log(response, "가 전송됐습니다.");
