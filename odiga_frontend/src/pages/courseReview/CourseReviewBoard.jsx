@@ -69,7 +69,7 @@ const CourseReviewBoard = () => {
     const indexOfFirst = indexOfLast - postsPerPage;
     const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
     setCurrentPosts(slicedPosts);
-  }, [posts, currentPage, postsPerPage]); // posts, currentPage, postsPerPage가 변경될 때마다 실행
+  }, [posts, currentPage, postsPerPage]); 
 
   const handleSortByLatest = () => {
     const sortedPosts = [...posts].sort(
@@ -245,7 +245,8 @@ const CourseReviewBoard = () => {
                 gridGap: "50px",
               }}
             >
-              {currentPosts.map((item) => (
+             {Array.isArray(currentPosts) && currentPosts.length > 0 ? (
+                currentPosts.map((item) => (
                 <StyledLink
                   href={`/coursereview/detail/${item.boardNo}`}
                   key={item.boardNo}
@@ -265,7 +266,9 @@ const CourseReviewBoard = () => {
                     courseNo={item.courseNo}
                   />
                 </StyledLink>
-              ))}
+              ))) : (
+                <p>데이터가 없습니다.</p>
+              )}
             </div>
             <div style={{ visibility: "hidden", minHeight: "50px" }} />
             {/* 페이지네이션 */}
