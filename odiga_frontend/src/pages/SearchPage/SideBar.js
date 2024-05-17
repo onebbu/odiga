@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import Accordion from 'react-bootstrap/Accordion';
+
 
 function Sidebar({ catList, setCatCode }) {
   const [selectedCatType, setSelectedCatType] = useState(null);
@@ -39,39 +41,50 @@ function Sidebar({ catList, setCatCode }) {
 
   return (
     <div className="sidebar" style={{ float: "right" }}>
-      <h2>카테고리</h2>
-      <h5>cattype</h5>
-      <div>
-        {Object.keys(catTypesMap).map((cattype, index) => (
-          <div key={index}>
-            <button
-              onClick={() => handleCatTypeClick(cattype)}
-              className={selectedCatType === cattype ? 'active' : ''}
-              style={{ padding: '5px 10px', fontSize: '0.8rem' }}
-            >
-              {cattype}
-            </button>
-          </div>
-        ))}
-      </div>
-      <h5>catkr</h5>
-      <div>
-        {selectedCatType && (
-          <div>
-            {catTypesMap[selectedCatType].map((cat, index) => (
-              <div key={index}>
-                <button
-                  onClick={() => handleCatkrClick(cat.catcode)}
-                  className={selectedCatCode === cat.catcode ? 'active' : ''}
-                  style={{ padding: '5px 10px', fontSize: '0.8rem' }}
-                >
-                  {cat.catkr}
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+        <h2>카테고리</h2>
+
+        <Accordion defaultActiveKey="0">
+            <Accordion.Item eventKey="0">
+                <Accordion.Header>cattype</Accordion.Header>
+                <Accordion.Body>
+                    <div>
+                        {Object.keys(catTypesMap).map((cattype, index) => (
+                            <div key={index}>
+                                <button
+                                    onClick={() => handleCatTypeClick(cattype)}
+                                    className={selectedCatType === cattype ? 'active' : ''}
+                                    style={{ padding: '5px 10px', fontSize: '0.8rem' }}
+                                >
+                                    {cattype}
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                </Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="1">
+                <Accordion.Header>catkr</Accordion.Header>
+                <Accordion.Body>
+                    <div>
+                        {selectedCatType && (
+                            <div>
+                                {catTypesMap[selectedCatType].map((cat, index) => (
+                                    <div key={index}>
+                                        <button
+                                            onClick={() => handleCatkrClick(cat.catcode)}
+                                            className={selectedCatCode === cat.catcode ? 'active' : ''}
+                                            style={{ padding: '5px 10px', fontSize: '0.8rem' }}
+                                        >
+                                            {cat.catkr}
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </Accordion.Body>
+            </Accordion.Item>
+        </Accordion>
       {selectedCatCode && (
         <div className="selected-category">
           선택된 카테고리: {catList.find(cat => cat.catcode === selectedCatCode)?.catkr}

@@ -7,6 +7,7 @@ import stylee from "../choosePlace/cPP.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CourseReviewSearch from "./CourseReviewSearch";
+import YoutubePlaylist from "./YoutubeAPI";
 
 const Place = ({
   boardContent,
@@ -107,19 +108,7 @@ const CourseReviewBoard = () => {
               <div className="header-text">
                 <div style={{ display: "flex" }}>
                   <div style={{ padding: "30px", flex: 1 }}>
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src="https://www.youtube.com/embed/rPZGxw6Jsrg?autoplay=1&mute=1"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share, fullscreen"
-                      style={{
-                        marginLeft: "0",
-                        minHeight: "300px",
-                        maxWidth: "500px",
-                        borderRadius: "20px",
-                      }}
-                    ></iframe>
+                    <YoutubePlaylist />
                   </div>
                   <div style={{ flex: 1, padding: "30px" }}>
                     <h2

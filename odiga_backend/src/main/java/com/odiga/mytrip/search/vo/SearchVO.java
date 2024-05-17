@@ -11,5 +11,6 @@ public class SearchVO {
     private String areacode;
     private String sigungucode;
     private String cat3;
-    
+    private String firstImage;
+
 }

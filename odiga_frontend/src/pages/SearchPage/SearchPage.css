@@ -1,3 +1,31 @@
+.search-container {
+    display: flex;
+    padding-top: 15vh;
+    width: 100%;
+}
+
+.search-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 65%;
+    height: 85vh;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-bottom: 4rem;
+    overflow: auto;
+    margin: 0;
+}
+
+.search-map {
+    padding-top: 10rem;
+    text-align: center;
+    width: 35%;
+    height: auto; /* 세로 공간을 내용에 따라 조정하기 위해 변경 */
+    margin-left: auto;
+    flex-grow: 1;
+    background-color: #f4f4f4;
+}
+
 .search-page {
     display: flex;
     flex-direction: column;
@@ -60,6 +88,10 @@
     padding: 20px;
     margin-bottom: 10px;
     transition: box-shadow 0.3s ease-in-out;
+    font-size: 20px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
 }
 
 .search-result-card:hover {
