@@ -56,7 +56,7 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
     const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
-        if (typeof modalContentId === "undefined" || modalContentId === "") {
+        if (typeof modalContentId === "undefined" || modalContentId === "" || modalContentId === null) {
             setLocaContId(contentID);
         } else {
             setLocaContId(modalContentId);
@@ -162,13 +162,16 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // 서버에서 좋아요 상태를 가져오는 요청
-                const response = await axios.get(`/WishInfo?contentid=${locaContId}&email=${loginInfo.email}`);
-                if (response.data === 1) {
-                    setLiked(true); // 서버에서 받아온 값이 1이면 liked를 true로 업데이트
-                } else {
-                    // 서버에서 받아온 값이 0이나 3이면 liked를 false로 업데이트
-                    setLiked(false);
+                if (typeof locaContId !== "undefined" || locaContId !== "") {
+                    // 서버에서 좋아요 상태를 가져오는 요청
+                    console.log("보내기 직전", locaContId);
+                    const response = await axios.get(`/WishInfo?contentid=${locaContId}&email=${loginInfo.email}`);
+                    if (response.data === 1) {
+                        setLiked(true); // 서버에서 받아온 값이 1이면 liked를 true로 업데이트
+                    } else {
+                        // 서버에서 받아온 값이 0이나 3이면 liked를 false로 업데이트
+                        setLiked(false);
+                    }
                 }
             } catch (error) {
                 console.error('Failed to fetch like status:', error);
@@ -176,7 +179,7 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
         };
 
         fetchData();
-    }, [locaContId, loginInfo.email]);
+    }, [loginInfo.email]);
 
 
     return (
