@@ -48,7 +48,6 @@ function App() {
                     <Route exact path="/" element={<Main/>}/>
                     {/*<Route path="/detail/:contentID" element={<TravelDetailPage/>}/>*/}
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
-                    <Route exact path="/courseimport" element={<CourseImport/>}/>
                     <Route exact path="/coursereview/*" element={<CourseReview/>}/>
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
@@ -61,6 +60,11 @@ function App() {
                 <Route path="/my-page/*" element={
                     <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
                         <MypageMain/>
+                    </LoginInfoProvider>
+                }/>
+                   <Route path="/courseimport" element={
+                    <LoginInfoProvider> {/* LoginInfoProvider를 MypageMain 컴포넌트의 상위에 배치 */}
+                        <CourseImport/>
                     </LoginInfoProvider>
                 }/>
                 <Route path="/login" element={
