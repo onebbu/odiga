@@ -101,6 +101,8 @@ function SearchLocation() {
         }
     };
 
+    console.log("결과", searchResults);
+
     const fetchAreaCounts = async () => {
         try {
             const response = await axios.get('/count-areas', {
@@ -347,6 +349,7 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
         color: 'black',
         fontFamily: "GmarketSansMedium"
     };
+
     return (
         <div key={index} className="search-result-card">
             <div>
@@ -359,19 +362,41 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
                         <img src={firstImage}
                              style={{width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px'}}/>
                     </a>
-                    {title}
-                    <Rate>{averageRate}</Rate> <P>/{cntRating}개</P>
+                    <div
+                    style={{
+                        display: "block"
+                    }}
+                    >
+                        <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-between"
+                        }}
+                        >
+                            <div>
+                                {title}
+                            </div>
+                            <div>
+                                <strong style={{
+                                    backgroundColor, color,
+                                    fontSize: '75%', fontFamily: "GmarketSansMedium",
+                                    fontWeight: '300',
+                                    padding: '0.25em 0.5em', borderRadius: "8px",
+                                    marginLeft: '10px'
+                                }}>{cat3}</strong>
+                            </div>
+                            <div
+                            style={{right: "0"}}
+                            >
+                                <Rate>{averageRate}</Rate><P>/{cntRating}개</P>
+                            </div>
+                        </div>
+                        <P>{addr1}</P>
+                    </div>
+
                 </div>
-                <div>
-                    <strong style={{
-                        backgroundColor, color,
-                        fontSize: '75%', fontFamily: "GmarketSansMedium",
-                        fontWeight: '300',
-                        padding: '0.25em 0.5em', borderRadius: "8px",
-                        marginLeft: '10px'
-                    }}>{cat3}</strong>
-                    <P>{addr1}</P>
-                </div>
+
+
             </div>
 
         </div>
