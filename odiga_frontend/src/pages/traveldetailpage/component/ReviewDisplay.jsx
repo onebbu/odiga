@@ -15,13 +15,12 @@ function ReviewDisplay({travelInfo, modalContentId}) {
     const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
-        if (modalContentId === null) {
+        if (typeof modalContentId === "undefined" || modalContentId === "") {
             setLocaContId(contentID);
         } else {
             setLocaContId(modalContentId);
         }
     }, [modalContentId]);
-
 
     useEffect(() => {
         fetchReviews();
