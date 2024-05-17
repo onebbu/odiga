@@ -12,5 +12,7 @@ public class SearchVO {
     private String sigungucode;
     private String cat3;
     private String firstImage;
+    private String averageRate;
+    private String cntRating;
 
 }
