@@ -29,14 +29,12 @@ function CourseImport() {
   const [areacode, setAreacode] = useState("");
   const loginInfo = useContext(LoginInfoContext); 
   const navigate = useNavigate();
-  const [selectedImageId, setSelectedImageId] = useState(null); 
+  const [selectedImageId, setSelectedImageId] = useState(null);
+  const [cosNo , setCosNo] = useState(null); 
 
-  console.log(loginInfo);
 
   const handleTitleChange = (event) => {
-    const areaName = getAreaName(areacode);
-    const userInput = event.target.value.replace(`[${areaName}] `, ""); 
-    setTitle(`[${areaName}] ${userInput}`); 
+    setTitle(event.target.value); 
   };
 
   useEffect(() => {
@@ -54,7 +52,7 @@ function CourseImport() {
   useEffect(() => {
     fetchTravelCourse();
   }, []);
-  
+
   const areaCodeToName = {
     '1': '서울',
     '2': '인천',
@@ -80,17 +78,22 @@ function CourseImport() {
   };
 
   const courseImport = () => {
+    const areaName = getAreaName(areacode);
+    const fullTitle = `[${areaName}] ${title}`;
     axios.post("/courseimport", {
-      Title: title,
+      Title: fullTitle,
       BoardContent: boardContent,
       MainImage: MainImage,
       Tags: tags,
       areacode: areacode,
       nickname: loginInfo.nickname,
-      email : loginInfo.email
+      email : loginInfo.email ,
+      courseno : cosNo
     })
       .then((response) => {
         console.log(response, "가 전송됐습니다.");
+        alert("여행코스 후기를 작성하였습니다.")
+        navigate("/coursereview");
       })
       .catch((error) => {
         console.error("POST 요청이 실패했습니다:", error);
@@ -105,8 +108,11 @@ function CourseImport() {
           console.log("여행 코스를 성공적으로 가져왔습니다.", response.data);
           if (response.data.length > 0) {     
             setAreacode(response.data[0].areacode);
+            setCosNo(response.data[0].courseno);
             console.log("Areacode:", response.data[0].areacode); 
             setSelectedCourse(response.data.filter(data => data.courseno === response.data[0].courseno));
+            setMainImage(response.data[0].firstimage);
+            handleImageClick(response.data[0].mapx , response.data[0].mapy ,response.data[0].title , response.data[0].addr1 , response.data[0].firstimage ,response.data[0].contentid)
           }
         })
         .catch((error) => {
@@ -118,8 +124,10 @@ function CourseImport() {
   const handleclickoption = (courseno) => {
     const userCourseNO = userdata.filter((data) => data.courseno === courseno);
     if (userCourseNO.length > 0) {
+      setTitle("");
       setAreacode(userCourseNO[0].areacode);
-      console.log("Selected Areacode:", userCourseNO[0].areacode); 
+      console.log("Selected Areacode:", userCourseNO[0].areacode);
+      handleImageClick(userCourseNO[0].mapx ,userCourseNO[0].mapy , userCourseNO[0].title , userCourseNO[0].addr1 , userCourseNO[0].firstimage , userCourseNO[0].contentid); 
     }
     setSelectedCourse(userCourseNO);
   };
@@ -131,7 +139,7 @@ function CourseImport() {
 
   const handleTagsChange = (newTags) => {
     console.log(newTags);
-    setTags(newTags);
+    setTags(newTags|| null);
   };
 
   const handleImageClick = (mapx, mapy, title, addr1, imgSrc, uniqueId) => {
@@ -181,11 +189,12 @@ function CourseImport() {
           <h3>{loginInfo.nickname}님의 여행기를 공유해주세요 :)</h3>
         </section>
 
-        <section className="couseImportTitleInner"> 
+        <section className="couseImportTitleInner">
+          [{getAreaName(areacode)}] 
           <input
             className="couseImportTitleBox"
             type="text"
-            placeholder={`[${getAreaName(areacode)}] 제목을 입력하세요.`}
+            placeholder={` 제목을 입력하세요.`}
             value={title}
             onChange={handleTitleChange}
           />
@@ -257,9 +266,9 @@ function CourseImport() {
           </div>
         </section>
         <section className="buttonBox">       
-        <button className="button" onClick={courseImport}>
-          완료 ✔
-        </button>
+          <button className="button" onClick={courseImport}>
+            완료 ✔
+          </button>
         </section>
       </section>
       <Footer/>
