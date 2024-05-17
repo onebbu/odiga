@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass, faUser, faBurger } from "@fortawesome/free-solid-svg-icons";
+import { faMagnifyingGlass, faUser, faBurger, faHome } from "@fortawesome/free-solid-svg-icons";
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
@@ -33,23 +33,31 @@ function Header() {
     });
 
     //로그인 상태 확인
-    useEffect(() => {
-        const token = sessionStorage.getItem('token');
-        setIsLoggedIn(!!token);
-    }, []);
+    // useEffect(() => {
+    //     const token = sessionStorage.getItem('token');
+    //     setIsLoggedIn(!!token);
+    // }, []);
 
     const handleLoginClick = () => {
         if (isLoggedIn) {
-            navigate('/my-page/*');
+            navigate('/my-page');
         } else {
             navigate('/login');
+            const token = sessionStorage.getItem('token');
+            setIsLoggedIn(true);
         }
     };
 
+    const handleLogoutClick = () => {
+        sessionStorage.removeItem('token');
+        setIsLoggedIn(false);
+        navigate('/');
+    };
 
     return (
         <header className="app-header">
-            <div className="header-logo"></div>
+            <div className="header-logo" onClick={() => navigate('/')}>
+            </div>
             <nav className="header-nav">
                 <ul className="NavMenu">
                     <li><a href="/">홈</a></li>
@@ -75,13 +83,21 @@ function Header() {
                 </div>
                 <div className="sub-menu-line"></div>
                 <div className="login-box">
-                    <button className="login-link" onClick={handleLoginClick}>
-                        <FontAwesomeIcon icon={faUser} style={{ color: isLoggedIn ? 'green' : 'black' }}/>
-                    </button>
+                    {isLoggedIn ? (
+                        <>
+                            <button className="login-link" onClick={handleLogoutClick} style={{ marginRight: '15px' }}>
+                                로그아웃
+                            </button>
+                            <button className="login-link" onClick={() => navigate('/my-page')}>
+                                마이페이지
+                            </button>
+                        </>
+                    ) : (
+                        <button className="login-link" onClick={handleLoginClick}>
+                            로그인
+                        </button>
+                    )}
                 </div>
-                {/* <button className={`hamburger ${isMenuOpen ? 'open' : ''}`} onClick={toggleMenu}>
-                <FontAwesomeIcon icon={faBurger} />
-            </button> */}
             </div>
         </header>
     );

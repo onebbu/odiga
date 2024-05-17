@@ -9,11 +9,9 @@ function Main() {
     return (
 
         <div>
-            <Header/>
             <Banner/>
             <KoreaLocations/>
             <Maincontents/>
-            <Footer/>
         </div>
 
     );

@@ -41,6 +41,7 @@ function App() {
 
                     {/* 로그인 o / 로그인 x / 코스 생성자 3가지 경우의 수 // LoginInfoProvider 지우기 X*/}
                     <Route path="/result-list/:nickname/:courseNo" element={<ResultView/>}/>
+                    
 
                 </Routes>
                 <Footer/>
