@@ -7,54 +7,55 @@
 
     <!-- 여행지 지역별 리스트 가져오기 -->
     <select id="getSearchList" resultType="com.odiga.mytrip.search.vo.SearchVO" parameterType="java.util.Map">
-        SELECT *
-        FROM (
-            SELECT t.*, ROW_NUMBER() OVER (
-                <choose>
-                    <when test="order == 'title'">
-                        ORDER BY t.title 
-                    </when>
-                    <when test="order == 'grade'">
-                        ORDER BY COALESCE((
-                            SELECT AVG(reviewgrade)
-                            FROM travelreview
-                            WHERE contentid = t.contentid
-                        ), 0) DESC
-                    </when>
-                </choose>
-            ) AS row_num
-            FROM travellist t
-            WHERE t.title LIKE '%' || #{text} || '%'
-            AND t.areacode = #{areacode}
-            <choose>
-                <when test="catcode != null">
-                    AND t.cat3 = #{catcode}
-                </when>
-            </choose>
-        ) sub
-        WHERE sub.row_num BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
+        SELECT * FROM
+        ( SELECT a.*, ROWNUM as rn FROM (
+        SELECT TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE AS CAT3, TL.AREACODE, TL.TRAVELVIEWCOUNT,
+        COALESCE(ROUND(AVG(TR.REVIEWGRADE)), 0) AS averageRate,
+        COALESCE(COUNT(TR.CONTENTID) , 0) AS cntRating
+        FROM TRAVELLIST TL
+        LEFT JOIN TRAVELREVIEW TR ON TL.CONTENTID = TR.CONTENTID
+        LEFT JOIN TRAVELCAT TC ON TL.CAT3 = TC.CATCODE
+        WHERE TL.AREACODE = #{areacode}
+        AND TL.title LIKE '%' || #{text} || '%'
+        <choose>
+            <when test="catcode != null">
+                AND TL.CAT3 IN ( SELECT CATCODE FROM TRAVELCAT WHERE
+                <foreach item="cat" index="index" collection="list" open="(" separator=" OR " close=")">
+                    CATTYPE LIKE #{catcode}
+                </foreach>
+                )
+            </when>
+        </choose>
+        GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE, TL.AREACODE, TL.TRAVELVIEWCOUNT
+        ORDER BY <choose>
+        <when test="order == 'title'"> TL.TITLE </when>
+        <when test="order == 'grade'"> averageRate </when>
+    </choose>
+        ) a
+        )
+        WHERE rn BETWEEN ((#{page} - 1) * 12 + 1) AND (#{page} * 12)
     </select>
 
     <!-- 여행코스 후기 검색결과 가져오기-->
     <select id="getSearchCourseList" resultType="com.odiga.mytrip.search.vo.SearchCourseVO" parameterType="java.util.Map">
         SELECT *
         FROM (
-            SELECT t.*, ROW_NUMBER() OVER (
-                <choose>
-                    <when test="order == 'boardtitle'">
-                        ORDER BY t.BOARDTITLE
-                    </when>
-                    <when test="order == 'boardgrade'">
-                        ORDER BY t.BOARDGRADE DESC
-                    </when>
-                    <when test="order == 'boarddate'">
-                        ORDER BY t.BOARDDATE DESC
-                    </when>
-                </choose>
-            ) AS row_num
-            FROM COURSEREVIEW t
-            WHERE t.BOARDTITLE LIKE '%' || #{text} || '%' OR t.TAGS LIKE '%' || #{text} || '%'
-            AND t.BOARDYN = 'Y'
+        SELECT t.*, ROW_NUMBER() OVER (
+        <choose>
+            <when test="order == 'boardtitle'">
+                ORDER BY t.BOARDTITLE
+            </when>
+            <when test="order == 'boardgrade'">
+                ORDER BY t.BOARDGRADE DESC
+            </when>
+            <when test="order == 'boarddate'">
+                ORDER BY t.BOARDDATE DESC
+            </when>
+        </choose>
+        ) AS row_num
+        FROM COURSEREVIEW t
+        WHERE t.BOARDTITLE LIKE '%' || #{text} || '%' OR t.TAGS LIKE '%' || #{text} || '%'
+        AND t.BOARDYN = 'Y'
         ) sub
         WHERE sub.row_num BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
     </select>
@@ -76,13 +77,13 @@
         SELECT count(*)
         FROM COURSEREVIEW
         WHERE BOARDTITLE LIKE '%' || #{text} || '%'
-        OR TAGS LIKE '%' || #{text} || '%'
+           OR TAGS LIKE '%' || #{text} || '%'
     </select>
 
 
     <select id="getCatList" resultType="com.odiga.mytrip.search.vo.CatVO">
-    SELECT *
-    FROM TRAVELCAT
+        SELECT *
+        FROM TRAVELCAT
     </select>
 
     <!-- 여행지별 리뷰 평균 별점 조회 placeList에서 가져온거 커스텀해야함.
@@ -91,5 +92,18 @@
         FROM TRAVELREVIEW
         WHERE contentid = #{contentID}
     </select> -->
+
+    <!-- 지역별 여행지 수(카테고리, 지역 필터링) -->
+    <select id="getResultAreaCount" resultType="int" parameterType="java.util.Map">
+        SELECT count(*)
+        FROM TRAVELLIST
+        WHERE areacode = #{areacode}
+        and title LIKE '%' || #{text} || '%'
+        <choose>
+            <when test="catcode != null">
+                AND cat3 = #{catcode}
+            </when>
+        </choose>
+    </select>
 </mapper>
 

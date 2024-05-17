@@ -2,6 +2,7 @@ package com.odiga.mytrip.search.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -19,14 +20,14 @@ import com.odiga.mytrip.search.vo.SearchVO;
 public class SearchController {
     @Autowired
     private SearchService searchService;
-    
+
     @GetMapping("/search")
     public Map<String, Object> GetSearchTavelList(
-        @RequestParam("page") String page, 
-        @RequestParam("text") String text, 
-        @RequestParam("areacode") String areacode,
-        @RequestParam("order") String frontorder,
-        @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
+            @RequestParam("page") String page,
+            @RequestParam("text") String text,
+            @RequestParam("areacode") String areacode,
+            @RequestParam("order") String frontorder,
+            @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
 
         try {
             String order = "title";
@@ -45,6 +46,7 @@ public class SearchController {
             searchResult.put("searchList", searchList);
             searchResult.put("resultCount", resultCount);
 
+
             return searchResult;
         } catch (Exception e) {
             // Handle IOException appropriately (e.g., log error, return error response)
@@ -58,17 +60,17 @@ public class SearchController {
     }
     @GetMapping("/searchcourse")
     public Map<String, Object> GetSearchCourseList(
-        @RequestParam("page") String page, 
-        @RequestParam("text") String text,
-        @RequestParam("order") String frontorder)
-        // @RequestParam(value = "areacode", required = false)String areacode) 
-        { 
-            String order = "boardtitle";
-            if("grade".equals(frontorder)) {
-                order = "boardgrade";
-            } else if ("date".equals(frontorder)) {
-                order = "boarddate";
-            }
+            @RequestParam("page") String page,
+            @RequestParam("text") String text,
+            @RequestParam("order") String frontorder)
+    // @RequestParam(value = "areacode", required = false)String areacode)
+    {
+        String order = "boardtitle";
+        if("grade".equals(frontorder)) {
+            order = "boardgrade";
+        } else if ("date".equals(frontorder)) {
+            order = "boarddate";
+        }
         List<SearchCourseVO> CourseListResult =  searchService.SearchCourseList(page, text,  order);
         int resultCourseCount = searchService.resultCourseCount(text);
 
@@ -77,6 +79,21 @@ public class SearchController {
         searchCourseResult.put("resultCourseCount" , resultCourseCount);
         return searchCourseResult;
     }
-    
-    
+
+    @GetMapping("/count-areas")
+    public Map<Integer, Integer> getAreaResultCount(
+            @RequestParam("text") String text,
+            @RequestParam(value = "catcode", required = false) String catcode
+    ) {
+        int[] areaArr = {1, 2, 3, 4, 5, 6, 7, 8, 31, 32, 33, 34, 35, 36, 37, 38, 39};
+
+        Map<Integer, Integer> areaMap = new HashMap<>();
+
+        for (int areaNum : areaArr) {
+            int areaResultCount = searchService.getAreaResultCount(text, catcode, areaNum);
+            areaMap.put(areaNum, areaResultCount);
+        }
+
+        return areaMap;
+    }
 }
