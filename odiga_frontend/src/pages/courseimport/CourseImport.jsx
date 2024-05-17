@@ -9,10 +9,6 @@ import Header from "../component/navbar/Header";
 import Footer from '../component/footer/Footer';
 import './styles.css';
 import './couseImport.css';
-import Header from "../component/navbar/Header";
-import Footer from '../component/footer/Footer';
-import './styles.css';
-import './couseImport.css';
 
 const Input = styled.input`
   width: 100%;
