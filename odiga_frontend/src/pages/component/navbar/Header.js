@@ -19,11 +19,11 @@ function Header() {
 
     //로그인 관련 기능
     const isUserLoggedIn = () => {
-        return Boolean(localStorage.getItem('token'));
+        return Boolean(sessionStorage.getItem('token'));
     };
 
     axios.interceptors.request.use(function (config) {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -34,7 +34,7 @@ function Header() {
 
     //로그인 상태 확인
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
         setIsLoggedIn(!!token);
     }, []);
 

@@ -89,6 +89,11 @@
         FROM COURSEREVIEW
         WHERE boardYN = 'Y' AND boardTitle LIKE '%' || #{search} || '%'
         ORDER BY boardno DESC
-    </select>    
+    </select>
 
+    <update id="courseReviewEdit" parameterType="com.odiga.mytrip.courseReview.CourseReviewVO">
+        UPDATE COURSEREVIEW
+        SET boardTitle = #{boardTitle}, boardContent = TO_CLOB(#{boardContent})
+        WHERE boardNo = #{boardNo}
+    </update>
 </mapper>

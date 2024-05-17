@@ -49,7 +49,6 @@ public class CourseReviewService {
         courseReviewDAO.likeCancel(boardNo);
     }
 
-
     @Transactional
     public void articleDelete(int boardNo) {
         courseReviewDAO.articleDelete(boardNo);
@@ -69,5 +68,10 @@ public class CourseReviewService {
         return courseReviewDAO.courseReviewSearch(search);
     }
 
-    
+    @Transactional
+    public void courseReviewEdit(CourseReviewVO CourseReviewVO) {
+        courseReviewDAO.courseReviewEdit(CourseReviewVO);
+    }
+
+
 }
