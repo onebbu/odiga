@@ -5,8 +5,6 @@ import Styled from "styled-components";
 import Pagination from "./Pagination";
 import { Link } from "react-router-dom";
 import stylee from "../choosePlace/cPP.css";
-import Footer from "../component/footer/Footer";
-import Header from "../component/navbar/Header";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CourseReviewSearch from "./CourseReviewSearch";
@@ -98,8 +96,6 @@ const CourseReviewBoard = () => {
 
   return (
     <>
-      <Header />
-
       {/* 메인배너 */}
       <div className={styles["main-banner"]}>
         <div>
@@ -259,6 +255,7 @@ const CourseReviewBoard = () => {
                     email={item.email}
                     nickname={item.nickname}
                     mainImage={item.mainImage}
+                    courseNo={item.courseNo}
                   />
                 </StyledLink>
               ))}
@@ -274,7 +271,6 @@ const CourseReviewBoard = () => {
           </div>
         </div>
       </section>
-      <Footer />
     </>
   );
 };

@@ -64,6 +64,11 @@ public class CourseReviewController {
         courseReviewService.articleDelete(boardNo);
     }
 
+    @PutMapping("/coursereview/update/{boardNo}")
+    public void courseReviewEdit(@RequestBody CourseReviewVO CourseReviewVO) {
+        courseReviewService.courseReviewEdit(CourseReviewVO);
+    }
+
     @GetMapping("/coursereviewsearch")
     public List<CourseReviewVO> courseReviewSearch(@RequestParam("query") String search) {
         return courseReviewService.courseReviewSearch(search);
