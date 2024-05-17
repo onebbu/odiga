@@ -16,16 +16,17 @@ import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 import PlaceList from "./pages/placeList/placeList";
 import Header from "./pages/component/navbar/Header.js";
 import Footer from "./pages/component/footer/Footer";
+import SearchView from "./pages/SearchPage/SearchView";
 
 
 function App() {
 
     return (
         <BrowserRouter>
+            <Header/>
             <LoginInfoProvider>
-                <Header/>
-
                 <Routes>
+
                     <Route exact path="/" element={<Main/>}/>
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
                     <Route exact path="/courseimport" element={<CourseImport/>}/>
@@ -38,13 +39,14 @@ function App() {
                     <Route path="/detail/:contentID" element={<TravelDetailPage/>}/>
                     <Route path="/coursereview/*" element={<CourseReview/>}/>
                     <Route path="/place" element={<ChoosePlace/>}></Route>
+                    <Route path="/search-view/*" element={<SearchView/>}></Route>
 
                     {/* 로그인 o / 로그인 x / 코스 생성자 3가지 경우의 수 // LoginInfoProvider 지우기 X*/}
                     <Route path="/result-list/:nickname/:courseNo" element={<ResultView/>}/>
-
                 </Routes>
-                <Footer/>
             </LoginInfoProvider>
+
+            <Footer/>
         </BrowserRouter>
     );
 }
