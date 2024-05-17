@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.odiga.mytrip.search.service.SearchService;
 import com.odiga.mytrip.search.vo.CatVO;
+import com.odiga.mytrip.search.vo.SearchCourseVO;
 import com.odiga.mytrip.search.vo.SearchVO;
 
 @RestController
@@ -20,14 +21,21 @@ public class SearchController {
     private SearchService searchService;
     
     @GetMapping("/search")
-    public Map<String, Object> getSearchList(
+    public Map<String, Object> GetSearchTavelList(
         @RequestParam("page") String page, 
         @RequestParam("text") String text, 
         @RequestParam("areacode") String areacode,
+        @RequestParam("order") String frontorder,
         @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
 
         try {
             String order = "title";
+            if("grade".equals(frontorder)) {
+                order = "grade";
+            } else if ("date".equals(frontorder)) {
+                order = "title"; // date 가 없어서 일단 title설정
+            }
+            System.out.println(frontorder);
             // order 파라미터를 검증하여 유효한 정렬 기준으로 변환
             List<SearchVO> searchList = searchService.SearchList(page, text, areacode , order , catcode);
             int resultCount = searchService.resultCount(text, areacode , catcode);
@@ -48,5 +56,27 @@ public class SearchController {
     public List<CatVO> getMethodName() throws IOException{
         return searchService.CatList();
     }
+    @GetMapping("/searchcourse")
+    public Map<String, Object> GetSearchCourseList(
+        @RequestParam("page") String page, 
+        @RequestParam("text") String text,
+        @RequestParam("order") String frontorder)
+        // @RequestParam(value = "areacode", required = false)String areacode) 
+        { 
+            String order = "boardtitle";
+            if("grade".equals(frontorder)) {
+                order = "boardgrade";
+            } else if ("date".equals(frontorder)) {
+                order = "boarddate";
+            }
+        List<SearchCourseVO> CourseListResult =  searchService.SearchCourseList(page, text,  order);
+        int resultCourseCount = searchService.resultCourseCount(text);
+
+        Map<String, Object> searchCourseResult = new HashMap<>();
+        searchCourseResult.put("CourseListResult" , CourseListResult);
+        searchCourseResult.put("resultCourseCount" , resultCourseCount);
+        return searchCourseResult;
+    }
+    
     
 }

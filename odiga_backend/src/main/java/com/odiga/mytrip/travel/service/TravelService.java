@@ -139,15 +139,11 @@ public class TravelService {
     public List<ReviewDataVO> ReviewList(String contentId) {
         return travelDAO.getReviewList(contentId);
     }
-
-    public void LikePlusOne(String contentid){
-        travelDAO.Like(contentid);
-    }
     public TravelCatKorVO Catkr(String cat1 , String cat2 , String cat3){
         return travelDAO.cattranskr(cat1, cat2, cat3);
     }
     @Transactional
-    public void ReviewUpdate(String reviewno , String reviewcomment){
+    public void ReviewUpdate(int reviewno , String reviewcomment){
         travelDAO.reviewUpdate(reviewno , reviewcomment);
     }
     @Transactional
@@ -166,10 +162,23 @@ public class TravelService {
     public String TravelGradeAvg(String contentid){
         return travelDAO.travelGradeAvg(contentid);
     }
-
+    public boolean WishUserInfo(Integer contentid, String email) {
+        if (contentid != null && travelDAO.wishUserInfo(contentid, email) == 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     @Transactional
     public List<WishVO> selectAllWish(String nickname){
         return travelDAO.selectAllWish(nickname);
     }
 
+    @Transactional
+    public List<WishVO> selectWishforRegion(String nickname, String areacode){
+        return travelDAO.selectWishforRegion(nickname, areacode);
+    }
+
+    
+    
 }

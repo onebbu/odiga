@@ -47,7 +47,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         GrantedAuthority auth = iterator.next();
         String role = auth.getAuthority();
 
-        // JWTUtil에 token 생성 요청
+        // JWTUtil에 token 생성 요청(60*60*1000L = 1시간)
         String token = jwtUtil.createJwt(username, role, 60*60*1000L);
 
         // JWT를 response에 담아서 응답 (header 부분에)

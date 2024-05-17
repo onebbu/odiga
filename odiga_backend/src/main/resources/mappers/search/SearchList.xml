@@ -7,33 +7,76 @@
 
     <!-- 여행지 지역별 리스트 가져오기 -->
     <select id="getSearchList" resultType="com.odiga.mytrip.search.vo.SearchVO" parameterType="java.util.Map">
-    SELECT *
-    FROM (
-        SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.title) AS row_num
-        FROM travellist t
-        WHERE t.title LIKE '%' || #{text} || '%'
-        AND t.areacode = #{areacode}
-        <choose>
-            <when test="catcode != null">
-                AND t.cat3 = #{catcode}
-            </when>
-        </choose>
-    ) sub
-    WHERE sub.row_num BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
+        SELECT *
+        FROM (
+            SELECT t.*, ROW_NUMBER() OVER (
+                <choose>
+                    <when test="order == 'title'">
+                        ORDER BY t.title 
+                    </when>
+                    <when test="order == 'grade'">
+                        ORDER BY COALESCE((
+                            SELECT AVG(reviewgrade)
+                            FROM travelreview
+                            WHERE contentid = t.contentid
+                        ), 0) DESC
+                    </when>
+                </choose>
+            ) AS row_num
+            FROM travellist t
+            WHERE t.title LIKE '%' || #{text} || '%'
+            AND t.areacode = #{areacode}
+            <choose>
+                <when test="catcode != null">
+                    AND t.cat3 = #{catcode}
+                </when>
+            </choose>
+        ) sub
+        WHERE sub.row_num BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
+    </select>
+
+    <!-- 여행코스 후기 검색결과 가져오기-->
+    <select id="getSearchCourseList" resultType="com.odiga.mytrip.search.vo.SearchCourseVO" parameterType="java.util.Map">
+        SELECT *
+        FROM (
+            SELECT t.*, ROW_NUMBER() OVER (
+                <choose>
+                    <when test="order == 'boardtitle'">
+                        ORDER BY t.BOARDTITLE
+                    </when>
+                    <when test="order == 'boardgrade'">
+                        ORDER BY t.BOARDGRADE DESC
+                    </when>
+                    <when test="order == 'boarddate'">
+                        ORDER BY t.BOARDDATE DESC
+                    </when>
+                </choose>
+            ) AS row_num
+            FROM COURSEREVIEW t
+            WHERE t.BOARDTITLE LIKE '%' || #{text} || '%' OR t.TAGS LIKE '%' || #{text} || '%'
+            AND t.BOARDYN = 'Y'
+        ) sub
+        WHERE sub.row_num BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
     </select>
 
 
-
     <select id="getResultCount" resultType="int" parameterType="java.util.Map">
-    SELECT COUNT(*)
-    FROM TRAVELLIST
-    WHERE areacode = #{areacode}
-    AND title LIKE '%' || #{text} || '%'
-    <choose>
-        <when test="catcode != null">
-            AND cat3 = #{catcode}
-        </when>
-    </choose>
+        SELECT COUNT(*)
+        FROM TRAVELLIST
+        WHERE areacode = #{areacode}
+        AND title LIKE '%' || #{text} || '%'
+        <choose>
+            <when test="catcode != null">
+                AND cat3 = #{catcode}
+            </when>
+        </choose>
+    </select>
+
+    <select id="getCourseResultCount" resultType="int" parameterType="java.util.Map">
+        SELECT count(*)
+        FROM COURSEREVIEW
+        WHERE BOARDTITLE LIKE '%' || #{text} || '%'
+        OR TAGS LIKE '%' || #{text} || '%'
     </select>
 
 
@@ -49,3 +92,4 @@
         WHERE contentid = #{contentID}
     </select> -->
 </mapper>
+

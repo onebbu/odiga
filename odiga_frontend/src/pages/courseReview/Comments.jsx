@@ -1,7 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
 
 function Comments() {
   const [comment, setComment] = useState("");
@@ -9,16 +10,23 @@ function Comments() {
   const [allComments, setAllComments] = useState([]);
   const [responseError, setResponseError] = useState("");
   const { boardNo } = useParams();
+  const loginInfo = useContext(LoginInfoContext);
 
   const handleRatingChange = (value) => {
     setRating(value);
   };
 
   const handleSubmit = async () => {
+    if (!loginInfo) {
+      // 로그인되어 있지 않은 경우
+      alert("로그인 후 다시 시도해주세요.");
+      return;
+    }
+
     if (comment.length > 100) {
-        alert("댓글은 100 byte 이하로 작성해주세요.");
-        return; // 글쓰기 중단
-      }
+      alert("댓글은 100 byte 이하로 작성해주세요.");
+      return; // 글쓰기 중단
+    }
 
     try {
       const response = await axios.post(
@@ -27,6 +35,8 @@ function Comments() {
           boardNo: boardNo,
           commentContent: comment,
           starRating: rating,
+          email: loginInfo.email,
+          commenterName: loginInfo.nickname,
         }
       );
 
@@ -60,6 +70,23 @@ function Comments() {
     } catch (error) {
       console.error("댓글 목록을 불러오는 중 오류 발생:", error);
       setResponseError("댓글 목록을 불러오는 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleDeleteClick = async (commentId) => {
+    const confirmDelete = window.confirm("댓글을 삭제하시겠습니까?");
+    if (confirmDelete) {
+      await commentDel(commentId);
+    }
+  };
+
+  const commentDel = async (commentId) => {
+    try {
+      await axios.post(`/coursereview/commentDel`, { commentId: commentId });
+      console.log("댓글이 성공적으로 삭제되었습니다.");
+      fetchComments(); // 댓글 목록을 다시 불러옵니다.
+    } catch (error) {
+      console.error("댓글 삭제 중 오류 발생:", error);
     }
   };
 
@@ -121,7 +148,7 @@ function Comments() {
               paddingRight: "23px",
               fontSize: "16px",
               color: "black",
-              textAlign:"left"
+              textAlign: "left",
             }}
           >
             <CommentContent>{item.commentContent}</CommentContent>
@@ -162,6 +189,25 @@ function Comments() {
             >
               <StarRating starCount={item.starRating} />
             </div>
+            {loginInfo && loginInfo.email === item.email && (
+              <>
+                <button
+                  style={{
+                    width: "100px",
+                    height: "40px",
+                    color: "black",
+                    border: "1px solid #B7B5C4",
+                    backgroundColor: "white",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                  }}
+                  onClick={handleDeleteClick.bind(this, item.commentId)}
+                >
+                  삭제
+                </button>
+              </>
+            )}
           </div>
         </Reviews>
       ))}
