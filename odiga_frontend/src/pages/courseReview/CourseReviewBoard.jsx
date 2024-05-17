@@ -53,11 +53,15 @@ const CourseReviewBoard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get("/coursereview");
-      const fetchedPosts = response.data;
-
-      // 상태 업데이트
-      setPosts(fetchedPosts);
+      let storedPosts = localStorage.getItem("posts");
+      if (storedPosts) {
+        setPosts(JSON.parse(storedPosts));
+      } else {
+        const response = await axios.get("/coursereview");
+        const fetchedPosts = response.data;
+        setPosts(fetchedPosts);
+        localStorage.setItem("posts", JSON.stringify(fetchedPosts));
+      }
     };
 
     fetchData();
@@ -69,7 +73,7 @@ const CourseReviewBoard = () => {
     const indexOfFirst = indexOfLast - postsPerPage;
     const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
     setCurrentPosts(slicedPosts);
-  }, [posts, currentPage, postsPerPage]); 
+  }, [posts, currentPage, postsPerPage]);
 
   const handleSortByLatest = () => {
     const sortedPosts = [...posts].sort(
@@ -245,28 +249,29 @@ const CourseReviewBoard = () => {
                 gridGap: "50px",
               }}
             >
-             {Array.isArray(currentPosts) && currentPosts.length > 0 ? (
+              {Array.isArray(currentPosts) && currentPosts.length > 0 ? (
                 currentPosts.map((item) => (
-                <StyledLink
-                  href={`/coursereview/detail/${item.boardNo}`}
-                  key={item.boardNo}
-                >
-                  <Place
-                    boardContent={item.boardContent}
-                    boardDate={item.boardDate}
-                    boardGrade={item.boardGrade}
-                    boardLikeCount={item.boardLikeCount}
-                    boardNo={item.boardNo}
-                    boardTitle={item.boardTitle}
-                    boardViewCount={item.boardViewCount}
-                    boardYN={item.boardYN}
-                    email={item.email}
-                    nickname={item.nickname}
-                    mainImage={item.mainImage}
-                    courseNo={item.courseNo}
-                  />
-                </StyledLink>
-              ))) : (
+                  <StyledLink
+                    href={`/coursereview/detail/${item.boardNo}`}
+                    key={item.boardNo}
+                  >
+                    <Place
+                      boardContent={item.boardContent}
+                      boardDate={item.boardDate}
+                      boardGrade={item.boardGrade}
+                      boardLikeCount={item.boardLikeCount}
+                      boardNo={item.boardNo}
+                      boardTitle={item.boardTitle}
+                      boardViewCount={item.boardViewCount}
+                      boardYN={item.boardYN}
+                      email={item.email}
+                      nickname={item.nickname}
+                      mainImage={item.mainImage}
+                      courseNo={item.courseNo}
+                    />
+                  </StyledLink>
+                ))
+              ) : (
                 <p>데이터가 없습니다.</p>
               )}
             </div>
