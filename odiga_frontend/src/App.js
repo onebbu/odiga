@@ -16,6 +16,7 @@ import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 import PlaceList from "./pages/placeList/placeList";
 import Header from "./pages/component/navbar/Header.js";
 import Footer from "./pages/component/footer/Footer";
+import SearchLocation from "./pages/SearchPage/SearchLocation";
 
 
 function App() {
@@ -23,15 +24,15 @@ function App() {
     return (
         <BrowserRouter>
             <Header/>
+
             <LoginInfoProvider>
                 <Header/>
 
                 <Routes>
-
                     <Route exact path="/" element={<Main/>}/>
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
                     <Route exact path="/courseimport" element={<CourseImport/>}/>
-                    <Route exact path="/SearchPage" element={<SearchPage/>}/>
+                    <Route exact path="/search-location" element={<SearchLocation/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
                     <Route exact path="/placeList/show" element={<PlaceList/>}></Route>
                     <Route path="/my-page/*" element={<MypageMain/>}/>
@@ -40,14 +41,12 @@ function App() {
                     <Route path="/detail/:contentID" element={<TravelDetailPage/>}/>
                     <Route path="/coursereview/*" element={<CourseReview/>}/>
                     <Route path="/place" element={<ChoosePlace/>}></Route>
-                
 
                     {/* 로그인 o / 로그인 x / 코스 생성자 3가지 경우의 수 // LoginInfoProvider 지우기 X*/}
                     <Route path="/result-list/:nickname/:courseNo" element={<ResultView/>}/>
 
                 </Routes>
             </LoginInfoProvider>
-
             <Footer/>
         </BrowserRouter>
     );

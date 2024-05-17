@@ -2,6 +2,7 @@ package com.odiga.mytrip.search.dao;
 
 import java.util.List;
 
+import io.micrometer.core.instrument.search.Search;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.odiga.mytrip.search.vo.CatVO;
@@ -18,5 +19,7 @@ public interface SearchDAO {
     int getResultCount(String text , String areacode , String catcode);
     int getCourseResultCount(String text);
     List<CatVO> getCatList();
+
+    int getResultAreaCount(String text, String catcode, int areacode);
     
 }
