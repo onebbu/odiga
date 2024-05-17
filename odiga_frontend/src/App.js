@@ -16,6 +16,7 @@ import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 import PlaceList from "./pages/placeList/placeList";
 import Header from "./pages/component/navbar/Header.js";
 import Footer from "./pages/component/footer/Footer";
+import SearchLocation from "./pages/SearchPage/SearchLocation";
 
 
 function App() {
@@ -31,7 +32,7 @@ function App() {
                     <Route exact path="/" element={<Main/>}/>
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
                     <Route exact path="/courseimport" element={<CourseImport/>}/>
-                    <Route exact path="/SearchPage" element={<SearchPage/>}/>
+                    <Route exact path="/search-location" element={<SearchLocation/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
                     <Route exact path="/placeList/show" element={<PlaceList/>}></Route>
                     <Route path="/my-page/*" element={<MypageMain/>}/>

@@ -35,5 +35,8 @@ public class SearchService {
     public List<CatVO> CatList(){
         return searchDAO.getCatList();
     }
+
+    public int getAreaResultCount(String text ,String catcode, int areaCode) {
+        return searchDAO.getResultAreaCount(text, catcode, areaCode);}
     
 }
