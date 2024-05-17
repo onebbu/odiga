@@ -173,7 +173,7 @@ function CourseReviewDetail() {
             <hr />
             <h7
               style={{
-                fontSize: "15px",
+                fontSize: "18px",
                 textAlign: "left",
                 margin: "0 auto",
               }}
@@ -199,7 +199,7 @@ function CourseReviewDetail() {
 
             <h7
               style={{
-                fontSize: "15px",
+                fontSize: "18px",
                 textAlign: "left",
                 margin: "0 auto",
               }}
