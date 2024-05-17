@@ -1,27 +1,26 @@
 import axios from "axios";
-import React, { useState  , useContext , useEffect} from "react";
+import React, {useState, useContext, useEffect} from "react";
 import styled from 'styled-components';
 import '../TravelDetailPage.css';
-import { useNavigate } from "react-router-dom"; 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useParams } from 'react-router-dom';
+import {useNavigate} from "react-router-dom";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faHeart} from "@fortawesome/free-solid-svg-icons";
+import {useParams} from 'react-router-dom';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
 
 
 const StarRatingContainer = styled.div`
-    display: inline-block;
+  display: inline-block;
 `;
 
 const Star = styled.span`
-    font-size: 40px;
-    color: ${props => props.checked ? '#ffc107' : '#e4e5e9'};
-    cursor: pointer;
-`; 
+  font-size: 40px;
+  color: ${props => props.checked ? '#ffc107' : '#e4e5e9'};
+  cursor: pointer;
+`;
 
 
-
-function StarRating({ starCount, onChange }) {
+function StarRating({starCount, onChange}) {
     const [rating, setRating] = useState(0);
     const handleStarClick = (selectedRating) => {
         setRating(selectedRating);
@@ -31,9 +30,9 @@ function StarRating({ starCount, onChange }) {
     return (
         <StarRatingContainer>
             {[...Array(starCount)].map((_, index) => (
-                <Star 
-                    key={index} 
-                    checked={index < rating} 
+                <Star
+                    key={index}
+                    checked={index < rating}
                     onClick={() => handleStarClick(index + 1)}
                 >
                     &#9733;
@@ -41,10 +40,10 @@ function StarRating({ starCount, onChange }) {
             ))}
         </StarRatingContainer>
     );
-} 
+}
 
-function ReviewImportForm({ onReviewSubmitted, modalContentId }) {
-    const { contentID } = useParams();
+function ReviewImportForm({onReviewSubmitted, modalContentId}) {
+    const {contentID} = useParams();
     const [reviewComment, setReviewComment] = useState('');
     const [reviewGrade, setReviewGrade] = useState(0);
     const [reviewdate, setReviewdate] = useState();
@@ -57,14 +56,14 @@ function ReviewImportForm({ onReviewSubmitted, modalContentId }) {
     const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
-        if (modalContentId === null) {
+        if (typeof modalContentId === "undefined" || modalContentId === "") {
             setLocaContId(contentID);
         } else {
             setLocaContId(modalContentId);
         }
     }, [modalContentId]);
-    
-    // 리뷰 글자 수 제한 
+
+    // 리뷰 글자 수 제한
     const handleInputChange = (e) => {
         const input = e.target.value;
         if (input.length <= 100) {
@@ -74,7 +73,7 @@ function ReviewImportForm({ onReviewSubmitted, modalContentId }) {
             alert("100byte 이하로 작성해 주세요.");
         }
     };
-    
+
     //로그인 관련 
     const isUserLoggedIn = () => {
         return Boolean(sessionStorage.getItem('token'));
@@ -93,37 +92,40 @@ function ReviewImportForm({ onReviewSubmitted, modalContentId }) {
     const handleSubmit = () => {
         if (!isUserLoggedIn()) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            navigate('/login'); 
+            navigate('/login');
             return;
         }
-        axios.post('/reviewImport',{
-            contentid : locaContId ,
-            reviewcomment : reviewComment ,
-            reviewgrade : reviewGrade,
-            reviewdate : reviewdate , 
-            email : loginInfo.email ,
-            nickname : loginInfo.nickname
+        if (typeof locaContId !== "undefined" && locaContId !== "") {
+            return;
+        }
+        axios.post('/reviewImport', {
+            contentid: locaContId,
+            reviewcomment: reviewComment,
+            reviewgrade: reviewGrade,
+            reviewdate: reviewdate,
+            email: loginInfo.email,
+            nickname: loginInfo.nickname
         })
-        .then(response => {
-            console.log(response.data);
-            alert("리뷰가 성공적으로 제출되었습니다!");
-            setReviewComment('');
-            setReviewGrade(0);
-            onReviewSubmitted(); 
-        })
-        .catch(error => {
-            console.error('에러 :', error); 
-            alert("리뷰 제출 중 오류가 발생했습니다.");
-            console.error('에러 :', error); 
-            alert("리뷰 제출 중 오류가 발생했습니다.");
-        });
+            .then(response => {
+                console.log(response.data);
+                alert("리뷰가 성공적으로 제출되었습니다!");
+                setReviewComment('');
+                setReviewGrade(0);
+                onReviewSubmitted();
+            })
+            .catch(error => {
+                console.error('에러 :', error);
+                alert("리뷰 제출 중 오류가 발생했습니다.");
+                console.error('에러 :', error);
+                alert("리뷰 제출 중 오류가 발생했습니다.");
+            });
     };
-    
-    
+
+
     // 찜 추가 / 삭제 기능~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~백엔드 엔드포인트 확인해보셔야 함
 
     const handleLikeToggle = async () => {
-        if (!localStorage.getItem('token')) {
+        if (!sessionStorage.getItem('token')) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
             navigate('/login');
             return;
@@ -156,11 +158,6 @@ function ReviewImportForm({ onReviewSubmitted, modalContentId }) {
     };
 
 
-
-
-
-
-
     //찜 관련 (엔드포인트 임의 지정 travelLike)
     useEffect(() => {
         const fetchData = async () => {
@@ -170,51 +167,50 @@ function ReviewImportForm({ onReviewSubmitted, modalContentId }) {
                 if (response.data === 1) {
                     setLiked(true); // 서버에서 받아온 값이 1이면 liked를 true로 업데이트
                 } else {
-                    // 서버에서 받아온 값이 0이나 3이면 liked를 false로 업데이트 
+                    // 서버에서 받아온 값이 0이나 3이면 liked를 false로 업데이트
                     setLiked(false);
                 }
-                
             } catch (error) {
                 console.error('Failed to fetch like status:', error);
             }
         };
-    
-        fetchData();
-    }, [locaContId,loginInfo.email]);
-    
 
-    return(
-        <div className="reviewImportForm"> 
+        fetchData();
+    }, [locaContId, loginInfo.email]);
+
+
+    return (
+        <div className="reviewImportForm">
             <p>별점과 리뷰로 여러분의 소중한 경험을 들려주세요 !</p>
             <div className="contourLine4"></div>
             <section className="starBox">
-            <StarRating starCount={5} onChange={setReviewGrade} />
-            {/* <div className="contourLine5"></div>
+                <StarRating starCount={5} onChange={setReviewGrade}/>
+                {/* <div className="contourLine5"></div>
             <button onClick={handleLike} className="LikeButton">
                   <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
               </button> */}
-           </section>
-           <section className="reviewsuccessBox">
-              <div>
-              <textarea className="reviewBox"                 
-                value={reviewComment} 
-                onChange={handleInputChange} 
-                placeholder="리뷰를 작성해주세요 (100byte 이하)" 
-                
-              /> 
-              </div>
-              <div className="successButtonBox">
-              <button className="successButton" onClick={handleSubmit}> <h2>완료 ✔</h2> </button> 
-              </div>
-          </section>
-          <section className="likeinner">
-            <div className="likeTitle"> <h4> 다시 보고 싶다면 ? </h4> </div>
-            <div>
-            <button onClick={handleLikeToggle} className="LikeButton">
-                <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'} style={{marginLeft : '10px'}}/>
-            </button>
-            </div>
-          </section>
+            </section>
+            <section className="reviewsuccessBox">
+                <div>
+              <textarea className="reviewBox"
+                        value={reviewComment}
+                        onChange={handleInputChange}
+                        placeholder="리뷰를 작성해주세요 (100byte 이하)"
+
+              />
+                </div>
+                <div className="successButtonBox">
+                    <button className="successButton" onClick={handleSubmit}><h2>완료 ✔</h2></button>
+                </div>
+            </section>
+            <section className="likeinner">
+                <div className="likeTitle"><h4> 다시 보고 싶다면 ? </h4></div>
+                <div>
+                    <button onClick={handleLikeToggle} className="LikeButton">
+                        <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'} style={{marginLeft: '10px'}}/>
+                    </button>
+                </div>
+            </section>
         </div>
     )
 
