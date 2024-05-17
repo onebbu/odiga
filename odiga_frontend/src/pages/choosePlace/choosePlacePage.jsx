@@ -181,7 +181,7 @@ const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
           ))}
       </div>
       <div className="item"> <span> 
-                <Orderbtn name={'조회순'} orderID={'travelviewcount desc'}/>|
+                <Orderbtn name={'조회순'} orderID={'travelviewcount'}/>|
                 <Orderbtn name={'가나다순'} orderID={'title'}/>|
                 <Orderbtn name={'별점순'} orderID={'averageRate'}/> </span>    </div>
       <div className="item">
