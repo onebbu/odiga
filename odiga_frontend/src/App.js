@@ -23,7 +23,7 @@ function App() {
     return (
         <BrowserRouter>
             <LoginInfoProvider>
-                <Header/>
+                {/* <Header/> */}
 
                 <Routes>
                     <Route exact path="/" element={<Main/>}/>
