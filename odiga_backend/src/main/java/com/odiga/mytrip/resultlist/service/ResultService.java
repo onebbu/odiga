@@ -12,7 +12,6 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ResultService {
 
@@ -45,7 +44,13 @@ public class ResultService {
         return resultDAO.findCategoryKR(category);
     }
 
+    @Transactional
     public void saveCoursePw(String coursePw, String courseNo){
         resultDAO.savePw(coursePw, courseNo);
+    }
+
+    @Transactional
+    public void deleteTravelResult(String courseNo){
+        resultDAO.deleteTravelResult(courseNo);
     }
 }

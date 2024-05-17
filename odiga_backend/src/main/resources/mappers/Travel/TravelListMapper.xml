@@ -6,10 +6,32 @@
 
     <!-- 여행지 정보 가져오기 -->
     <select id="getTravelInfo" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
-        SELECT *
-        FROM TravelList
-        WHERE contentId = #{contentId}
+        SELECT TL.*, NVL(WC.WISHLIST_COUNT, 0) AS WISHLIST_COUNT
+        FROM TravelList TL
+        LEFT JOIN (
+            SELECT CONTENTID, COUNT(*) AS WISHLIST_COUNT
+            FROM WISHLIST
+            GROUP BY CONTENTID
+        ) WC ON TL.CONTENTID = WC.CONTENTID
+        WHERE TL.CONTENTID = #{contentid}
     </select>
+    <select id="travelGradeAvg" resultType="String">
+        SELECT ROUND(AVG(REVIEWGRADE), 1) AS AVERAGE_GRADE
+        FROM TRAVELREVIEW
+        WHERE CONTENTID = #{contentId}
+    </select>
+    <select id="wishUserInfo" resultType="int">
+        SELECT COALESCE(COUNT(*), 0)
+        FROM WISHLIST
+        WHERE CONTENTID = COALESCE(#{contentid}, 0)
+        <if test="email != null">
+            AND EMAIL = #{email}
+        </if>
+        <if test="email == null">
+            AND EMAIL IS NULL
+        </if>
+    </select>
+
     <!-- 페이지 방문후 뷰카운트 1증가 -->
     <select id="countPlusOne" resultType="com.odiga.mytrip.travel.vo.TravelListVO">
         UPDATE TravelList
@@ -26,7 +48,7 @@
     <insert id="importReviewData" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
         INSERT INTO TRAVELREVIEW
         (REVIEWNO, EMAIL, NICKNAME, CONTENTID, REVIEWCOMMENT, REVIEWGRADE, REVIEWDATE)
-        VALUES (REVIEWNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{contentid}, #{reviewcomment}, #{reviewgrade}, SYSDATE)
+        VALUES (REVIEWNO_SEQ.NEXTVAL, #{email} , #{nickname}, #{contentid}, #{reviewcomment}, #{reviewgrade}, SYSDATE)
     </insert>
     <!-- 리뷰 리스트 가져오기 -->
     <select id="getReviewList" resultType="com.odiga.mytrip.travel.vo.ReviewDataVO">
@@ -34,16 +56,42 @@
         FROM TRAVELREVIEW
         WHERE contentId = #{contentId}
     </select>
-    <!-- 좋아요 수 1 증가 -->
-    <update id="Like" parameterType="string">
-        UPDATE TravelList
-        SET LIKECOUNT = COALESCE(LIKECOUNT, 0) + 1
-        WHERE contentId = #{contentId}
-    </update>
+    
     <select id="cattranskr" resultType="com.odiga.mytrip.travel.vo.TravelCatKorVO">
         SELECT CAT1, CAT2, CAT3, CAT1KR, CAT2KR, CAT3KR 
         FROM TOURRISMSERVICE
         WHERE cat1 = #{cat1} and cat2 = #{cat2} and cat3 = #{cat3}
     </select>
+    <update id="reviewUpdate" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
+        UPDATE TRAVELREVIEW
+        SET reviewcomment = #{reviewcomment}, REVIEWDATE = SYSDATE
+        WHERE reviewno = #{reviewno}
+    </update>
+    <delete id="reviewDelete" parameterType="String">
+        DELETE FROM TRAVELREVIEW
+        WHERE reviewno = #{reviewno}
+    </delete>
+    <insert id="wishPlus" parameterType="com.odiga.mytrip.travel.vo.WishVO">
+        INSERT INTO WISHLIST
+        (WISHLISTNO, CONTENTID, EMAIL, NICKNAME)
+        VALUES (WISHNO_SEQ.NEXTVAL, #{contentid} , #{email} , #{nickname})
+    </insert>
+    <delete id="wishDelete" parameterType="com.odiga.mytrip.travel.vo.WishVO">
+        DELETE FROM WISHLIST
+        WHERE CONTENTID = #{contentid} AND EMAIL =#{email} and NICKNAME = #{nickname}
+    </delete>
 
+    <select id="selectAllWish" parameterType="String" resultType="com.odiga.mytrip.travel.vo.WishVO">
+        select * from wishlist
+        where NICKNAME = #{nickname}
+    </select>
+
+    <select id="selectWishforRegion" parameterType="String" resultType="com.odiga.mytrip.travel.vo.WishVO">
+        SELECT * FROM wishlist
+        WHERE NICKNAME = #{nickname} AND contentid IN (
+            SELECT contentID
+            FROM travelList
+            WHERE areacode = #{areacode}
+        )
+    </select>
 </mapper>

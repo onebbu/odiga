@@ -1,5 +1,6 @@
 package com.odiga.mytrip.travel.controller;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.odiga.mytrip.travel.service.PlaceService;
@@ -29,52 +31,47 @@ public class PlaceController {
     // Logger 선언
     private static final Logger logger = Logger.getLogger(PlaceController.class.getName());
 
-    @GetMapping("/place/{areacode}/{displayCount}/{order}")
+    @GetMapping("/place/{displayStart}/{order}")
     public List<TravelListVO> getPlaceList(
-        @PathVariable String areacode, 
-        @PathVariable String displayCount, 
-        @PathVariable String order) throws IOException {
+            @RequestParam(required = false) String areacode,
+            @PathVariable("displayStart") String displayStart,
+            @PathVariable("order") String order,
+            @RequestParam(required = false) String theme) throws IOException {
 
+        List<String> catList = new ArrayList<>();
+        Map<String, Object> display = new HashMap<>();
         try {
-            // order 파라미터를 검증하여 유효한 정렬 기준으로 변환
-            String orderByClause = validateAndTransformOrder(order);
-            List<TravelListVO> placeList = placeService.placeList(areacode, displayCount, orderByClause);
-            return placeList;
+            String displayEnd = String.valueOf(Integer.valueOf(displayStart) + 8);
+
+            if(areacode != null && theme != null) {
+                String[] themeList = theme.split(",");
+                for(int i = 0; i < themeList.length; i++ ){
+                    catList.add(themeList[i]);
+                }
+                display.put("areacode", areacode);
+                display.put("order", order);
+                display.put("displayStart", displayStart);
+                display.put("displayEnd", displayEnd);
+                display.put("list", catList);
+                List<TravelListVO> placeList = placeService.placeList(display);
+                System.out.println("CONTROLLER 1::::::::  THEME ???????????????????????/"+theme);
+                return placeList;
+            }
+            else{
+                display.put("order", order);
+                display.put("displayStart", displayStart);
+                display.put("displayEnd", displayEnd);
+                List<TravelListVO> placeList = placeService.placeALLList(display);
+                System.out.println("CONTROLLER 2::::::::  THEME ???????????????????????/"+theme);
+                return placeList;
+            }
+
         } catch (Exception e) {
             // 예외 발생 시 로그 추가 및 예외 다시 던지기
+            System.out.println("실패함?");
             logger.log(Level.SEVERE, "Error processing request", e);
             throw new RuntimeException("Failed to fetch place information.");
         }
-    }
-
-    private String validateAndTransformOrder(String order) {
-        // order 파라미터 값이 null이거나 빈 문자열인 경우 기본 정렬 기준을 반환
-        if (order == null || order.trim().isEmpty()) {
-            return "title"; // 기본적으로는 이름(name) 순으로 정렬
-        }
-    
-        // order 파라미터 값을 소문자로 변환하여 비교 (대소문자 구분 없이 비교하기 위함)
-        String normalizedOrder = order.toLowerCase();
-    
-        // 허용된 정렬 기준에 따라 반환할 정렬 문자열 결정
-        if ("title".equals(normalizedOrder)) {
-            return "title"; // 이름 순으로 정렬
-        } else if ("travelviewcount".equals(normalizedOrder)) {
-            return "travelviewcount"; 
-        } else {
-            // 허용되지 않는 정렬 기준이 입력된 경우, 기본 정렬 기준을 반환
-            return "title"; 
-        }
-    }
-
-    @GetMapping("/placerate/{contentID}")
-    public Map<String, Object> getPlaceRate(@PathVariable String contentID){
-
-        Map<String, Object> resultMap = placeService.placeRate(contentID);
-        // resultMap = {averageRate, cntRating} 
-        // 로그 추가
-        logger.info("Place rate fetched successfully. Content ID: " + contentID);
-        return resultMap;
     }
 
     @GetMapping("/place/*") // 잘못된 URL
@@ -84,33 +81,20 @@ public class PlaceController {
         return "redirect:/wrongpath/preference";
     }
 
-    @PostMapping("/coursesave") // 잘못된 URL
-    public void courseListSave(@PathVariable String contentID, @PathVariable String Day, @PathVariable String index) {
-        Map<String, Object> course = new HashMap<String, Object>();
-        // 데이터 저장하기!
-		course.put("contentid", "siri");
-		course.put("Day", 13);
-		course.put("index", "학생");
-        
-
-        //placeService.courseSave(contentID, index);
-    }
-
     @PostMapping("/place/savedata/{title}")
-    public void postMethodName(@RequestBody String entities, @PathVariable("title") String title) throws ParseException {
+    public String postMethodName(@RequestBody String entities, @PathVariable("title") String title) throws ParseException {
         // reader를 Object로 parse
         JSONParser parser = new JSONParser();
         JSONArray jsonArr = (JSONArray)parser.parse(entities);
-        
-        String nickname = "gyugyu"; /////////////////////////////////////////////여기 닉네임 변경해주셔야함. 아직 로그인 세션 구현 안해서그럼.
+
+        String nickname = String.valueOf(((JSONObject)jsonArr.get(0)).get("nickname"));
         int maxNum = placeService.getMaxNum(nickname) + 1;
+        String COURSENO = nickname+"_"+String.valueOf(maxNum);
         // jsonArr에서 하나씩 JSONObject로 cast해서 사용
         if (jsonArr.size() > 0){
-            for(int i=0; i< jsonArr.size(); i++){   
+            for(int i=0; i< jsonArr.size(); i++){
                 Map<String, Object> resultMap = new HashMap<>();
                 JSONObject jsonObj = (JSONObject)jsonArr.get(i);
-                
-                String COURSENO = nickname+"_"+String.valueOf(maxNum);
                 String coursepw = "password";
                 String COURSEDAY = String.valueOf(jsonObj.get("courseDay"));
                 String TRAVELNUM = String.valueOf(jsonObj.get("travelNum"));
@@ -123,14 +107,12 @@ public class PlaceController {
                 resultMap.put("NICKNAME", nickname);
                 resultMap.put("COURSEPW", coursepw);
                 resultMap.put("title", title);
-
                 placeService.SaveResult(resultMap);
-
             }
         }
 
-        
+        return COURSENO;
     }
-    
+
 }
  

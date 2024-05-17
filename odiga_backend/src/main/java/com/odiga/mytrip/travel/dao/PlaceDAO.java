@@ -6,8 +6,9 @@ import java.util.Map;
 
 @Mapper
 public interface PlaceDAO {
-    List<TravelListVO> getPlaceList(String areacode, String displayCount, String order);
-    Map<String, Object> getPlaceRate(String contentID);
+    // List<TravelListVO> getPlaceList(String areacode, String displayStart, String displayEnd, String order);
+    List<TravelListVO> getPlaceList(Map<String, Object> display);
+    List<TravelListVO> getALLPlaceList(Map<String, Object> display);
     void courseSave(String contentID, String index);
     void SaveResultList(Map<String, Object> result);
     int getMaxNum(String nickname);

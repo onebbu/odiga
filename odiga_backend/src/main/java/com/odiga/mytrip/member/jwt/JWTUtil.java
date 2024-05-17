@@ -1,6 +1,7 @@
 package com.odiga.mytrip.member.jwt;
 
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,6 @@ public class JWTUtil {
     }
 
     // email 반환 메서드
-    // 현재 role은 정상, email 뭔가 이상해서 null이 출력됨
     public String getEmail(String token) {
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
     }
@@ -38,12 +38,22 @@ public class JWTUtil {
 
     // 토큰이 소멸 (유효기간 만료) 하였는지 검증 메서드
     public Boolean isExpired(String token) {
-
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        try {
+            return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration().before(new Date());
+        } catch (ExpiredJwtException e) {
+            // 만료된 JWT인 경우 처리
+            return true;
+        }
     }
 
     // 토큰 생성 메서드
     public String createJwt(String email, String role, Long expiredMs) {
+        // 토큰 생성, 삭제
+        Date issuedAt = new Date(System.currentTimeMillis());
+        Date expiration = new Date(System.currentTimeMillis() + expiredMs);
+        log.info("token issuedAt={}", issuedAt);
+        log.info("token expiration={}", expiration);
+
         return Jwts.builder()
                 .claim("email", email)
                 .claim("role", role)
@@ -52,4 +62,5 @@ public class JWTUtil {
                 .signWith(secretKey)
                 .compact();
     }
+
 }

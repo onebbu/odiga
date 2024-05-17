@@ -23,13 +23,15 @@ public class PlaceService {
     @Autowired
     private PlaceDAO placeDAO;
 
-    public List<TravelListVO> placeList(String areacode, String displayCount, String order) {
-        System.out.println("service : "+areacode+" "+displayCount+" "+order);
-        return placeDAO.getPlaceList(areacode, displayCount, order);
+    // public List<TravelListVO> placeList(String areacode, String displayStart, String displayEnd, String order) {
+    //     System.out.println("service : "+areacode+" "+displayStart+" "+order);
+    //     return placeDAO.getPlaceList(areacode, displayStart, displayEnd, order);
+    // }
+    public List<TravelListVO> placeList(Map<String, Object> display) {
+        return placeDAO.getPlaceList(display);
     }
-
-    public Map<String, Object> placeRate(String contentID) {
-        return placeDAO.getPlaceRate(contentID);
+    public List<TravelListVO> placeALLList(Map<String, Object> display) {
+        return placeDAO.getALLPlaceList(display);
     }
 
     @Transactional
@@ -71,6 +73,7 @@ public class PlaceService {
         placeDAO.courseSave(contentID, index);
     }
 
+    @Transactional
     public void SaveResult(Map<String, Object> result){
         placeDAO.SaveResultList(result);
     }

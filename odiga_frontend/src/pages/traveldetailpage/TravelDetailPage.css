@@ -193,3 +193,33 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
  .commentDetail {
     margin: 5px 5px;
  }
+
+
+ .likeinner {
+    margin-top: 20px;
+    margin-bottom: 15px;
+    display: flex;
+ }
+
+
+.reviewsuccessBox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.successButtonBox {
+    margin-left: 20px;
+}
+
+.successButtonBox h2:hover {
+   font-weight: bold;
+   color: brown;
+}
+
+.likeview {
+    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

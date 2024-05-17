@@ -10,6 +10,6 @@ public class SuggestTraVO {
     private String addr1;
     private String firstimage;
     private String travelviewcount;
-    private String likecount;
+    private String wishlist_count;
     
 }
