@@ -22,20 +22,18 @@ import axios from "axios";
 const Body= Styled.div`
     margin: 0;
     padding: 0;
+    padding-top: 100px;
     background: #f3f4f6; /* 미미한 회색 */
 `;
 const Wrapper=Styled.div` display: flex; min-height: 100vh; `;
 const AccordionWrap=Styled.div`width:20%; height: 100%; position:fixed;`;
 const Section=Styled.div` position: relative; border: 1px solid #ccc; width: 75%; gap: 20px;
     margin-left:20%; display: flex; flex-direction: column; width:80%; padding: 16px;`;
-const OpenButton = Styled.button`position: fixed; top: 0px; right: 100px; width: 200px; height: 60px;
+const OpenButton = Styled.button`position: fixed; top: 100px; right: 100px; width: 200px; height: 60px;
     background-color: #549C9B; /* Green */ border: none; border-radius: 0 0 10px 10px; cursor: pointer; outline: none;
     transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
-const ItemsContainer = Styled.div`
-    margin-top: ${(props) => (props.isDrawerOpen ? 350 : 0)}px;
-    transition: margin-top 0.3s ease-in-out;
-  `;
+
 
 const areaList = [
     { areacode: '1', areaname: '서울' },
@@ -117,6 +115,10 @@ const ChoosePlace = () => {
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
   return(
@@ -127,8 +129,7 @@ const ChoosePlace = () => {
             <Section>  
               <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
               <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}  loginInfo={loginInfo} areacode={targetArea}/>
-              <ItemsWrapper isDrawerOpen={isDrawerOpen} 
-                            targetAreacode={targetArea}
+              <ItemsWrapper targetAreacode={targetArea}
                             targetTheme={targetTheme}
                             loginInfo={loginInfo}/>
               <ScrollToTopButton/>
@@ -140,7 +141,7 @@ const ChoosePlace = () => {
 }
 
 
-const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) => {
+const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
   const [order, setOrder] = useState('title'); //order defalt = 'title'
   // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
   const foundArea = areaList.find(area => area.areacode === targetAreacode);
@@ -160,7 +161,6 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) =
   }; 
 
   return(<>
-    <ItemsContainer isDrawerOpen={isDrawerOpen} >
       <div className="item">
           <p> {loginInfo.nickname} 님 ! 여행지를 드래그하여 채워보세요! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
@@ -186,9 +186,7 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) =
                 <Orderbtn name={'별점순'} orderID={'averageRate'}/> </span>    </div>
       <div className="item">
         <ListPlace areacode={targetAreacode} order={order} theme={targetTheme}/>
-      </div>
-    </ItemsContainer>
-  
+      </div>  
   </>)
 }
 
