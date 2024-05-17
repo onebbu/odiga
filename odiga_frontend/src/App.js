@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/sign-up/SignUp";
 import TravelDetailPage from "./pages/traveldetailpage/TravelDetailPage";
@@ -14,21 +14,18 @@ import SearchPage from "./pages/SearchPage/SearchPage";
 import ChoosePlace from "./pages/choosePlace/choosePlacePage";
 import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 import PlaceList from "./pages/placeList/placeList";
-import Header from "./pages/component/navbar/Header.js";
-import Footer from "./pages/component/footer/Footer";
-
 
 function App() {
 
     return (
         <BrowserRouter>
             <LoginInfoProvider>
-                <Header/>
-
-                <Routes>
+                {/*<Header />*/}
+            <Routes>
+                {/* 로그인 x */}
                     <Route exact path="/" element={<Main/>}/>
+                    {/*<Route path="/detail/:contentID" element={<TravelDetailPage/>}/>*/}
                     <Route exact path="/preference" element={<ChoosePreference/>}/>
-                    <Route exact path="/courseimport" element={<CourseImport/>}/>
                     <Route exact path="/SearchPage" element={<SearchPage/>}/>
                     <Route exact path="/wrongpath/:nextPath" element={<WrongPathPage/>}/>
                     <Route exact path="/placeList/show" element={<PlaceList/>}></Route>
