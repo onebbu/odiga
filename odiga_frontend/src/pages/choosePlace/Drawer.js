@@ -10,7 +10,7 @@ const DrawerContainer = styled.div`
     left: 0;
     width: 100%;
     background-color: white;
-    z-index: 1000;
+    z-index: 50;
     transition: transform 0.3s ease-in-out;
     transform: translateY(${(props) => (props.isOpen ? '0' : '-100%')});
 `;
