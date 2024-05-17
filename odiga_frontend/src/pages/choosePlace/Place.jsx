@@ -63,6 +63,7 @@ const Place = ({id, pic, name, region, cat, averageRate, cntRating}) => { //개�
     return (
         <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}>
             {/* traveldetailpage 링크 */}
+
             <div>
             {/*    style={{width: "10rem"}}>
                 <button
@@ -82,6 +83,9 @@ const Place = ({id, pic, name, region, cat, averageRate, cntRating}) => { //개�
                 </button>
             */}
             <img src={pic} onClick={()=>handleShowModal(id)} />
+
+
+
                 {name} <strong style={{
                 backgroundColor, color,
                 fontSize: '75%', fontFamily: "GmarketSansMedium",

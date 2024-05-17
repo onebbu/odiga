@@ -17,10 +17,13 @@ import PlaceList from "./pages/placeList/placeList";
 import Header from "./pages/component/navbar/Header.js";
 import Footer from "./pages/component/footer/Footer";
 
+
 function App() {
 
     return (
         <BrowserRouter>
+            <Header/>
+
             <LoginInfoProvider>
                 <Header/>
 
@@ -42,8 +45,8 @@ function App() {
                     <Route path="/result-list/:nickname/:courseNo" element={<ResultView/>}/>
 
                 </Routes>
-                <Footer/>
             </LoginInfoProvider>
+            <Footer/>
         </BrowserRouter>
     );
 }
