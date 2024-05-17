@@ -16,8 +16,8 @@ public interface CourseReviewDAO {
     void likeCount(int boardNo);
     void articleDelete(int boardNo);
     void likeCancel(int boardNo);
-
     List<CourseReviewVO> getMemberArticles(String nickname);
     void commentDel(CommentsVO commentsVO);
     List<CourseReviewVO> courseReviewSearch(String search);
+    void courseReviewEdit(CourseReviewVO courseReviewVO);
 }

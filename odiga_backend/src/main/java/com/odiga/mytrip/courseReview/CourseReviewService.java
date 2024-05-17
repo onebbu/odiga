@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CourseReviewService {
@@ -19,6 +20,7 @@ public class CourseReviewService {
         return courseReviewDAO.detailPage(boardNo);
     }
 
+    @Transactional
     public void viewCount(int boardNo) {
         courseReviewDAO.viewCount(boardNo);
     }
@@ -27,22 +29,27 @@ public class CourseReviewService {
         return courseReviewDAO.comments(boardNo);
     }
 
+    @Transactional
     public void commentWrite(CommentsVO commentsVO) {
         courseReviewDAO.commentWrite(commentsVO);
     }
 
+    @Transactional
     public void boardGrade(int boardNo) {
         courseReviewDAO.boardGrade(boardNo);
     }
 
+    @Transactional
     public void likeCount(int boardNo) {
         courseReviewDAO.likeCount(boardNo);
     }
 
+    @Transactional
     public void likeCancel(int boardNo) {
         courseReviewDAO.likeCancel(boardNo);
     }
 
+    @Transactional
     public void articleDelete(int boardNo) {
         courseReviewDAO.articleDelete(boardNo);
     }
@@ -52,6 +59,7 @@ public class CourseReviewService {
         return courseReviewDAO.getMemberArticles(nickname);
     }
 
+    @Transactional
     public void commentDel(CommentsVO commentsVO) {
         courseReviewDAO.commentDel(commentsVO);
     }
@@ -60,5 +68,10 @@ public class CourseReviewService {
         return courseReviewDAO.courseReviewSearch(search);
     }
 
-    
+    @Transactional
+    public void courseReviewEdit(CourseReviewVO CourseReviewVO) {
+        courseReviewDAO.courseReviewEdit(CourseReviewVO);
+    }
+
+
 }

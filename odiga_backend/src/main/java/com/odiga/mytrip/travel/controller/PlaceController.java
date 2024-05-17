@@ -33,18 +33,18 @@ public class PlaceController {
 
     @GetMapping("/place/{displayStart}/{order}")
     public List<TravelListVO> getPlaceList(
-        @RequestParam(required = false) String areacode, 
-        @PathVariable("displayStart") String displayStart, 
-        @PathVariable("order") String order,
-        @RequestParam(required = false) String theme) throws IOException {
-        
+            @RequestParam(required = false) String areacode,
+            @PathVariable("displayStart") String displayStart,
+            @PathVariable("order") String order,
+            @RequestParam(required = false) String theme) throws IOException {
+
         List<String> catList = new ArrayList<>();
         Map<String, Object> display = new HashMap<>();
         try {
             String displayEnd = String.valueOf(Integer.valueOf(displayStart) + 8);
-            
-            if(areacode != null && theme != null) { 
-                String[] themeList = theme.split(","); 
+
+            if(areacode != null && theme != null) {
+                String[] themeList = theme.split(",");
                 for(int i = 0; i < themeList.length; i++ ){
                     catList.add(themeList[i]);
                 }
@@ -64,8 +64,8 @@ public class PlaceController {
                 List<TravelListVO> placeList = placeService.placeALLList(display);
                 System.out.println("CONTROLLER 2::::::::  THEME ???????????????????????/"+theme);
                 return placeList;
-            }            
-            
+            }
+
         } catch (Exception e) {
             // 예외 발생 시 로그 추가 및 예외 다시 던지기
             System.out.println("실패함?");
@@ -86,13 +86,13 @@ public class PlaceController {
         // reader를 Object로 parse
         JSONParser parser = new JSONParser();
         JSONArray jsonArr = (JSONArray)parser.parse(entities);
-        
+
         String nickname = String.valueOf(((JSONObject)jsonArr.get(0)).get("nickname"));
         int maxNum = placeService.getMaxNum(nickname) + 1;
         String COURSENO = nickname+"_"+String.valueOf(maxNum);
         // jsonArr에서 하나씩 JSONObject로 cast해서 사용
         if (jsonArr.size() > 0){
-            for(int i=0; i< jsonArr.size(); i++){   
+            for(int i=0; i< jsonArr.size(); i++){
                 Map<String, Object> resultMap = new HashMap<>();
                 JSONObject jsonObj = (JSONObject)jsonArr.get(i);
                 String coursepw = "password";
@@ -113,6 +113,6 @@ public class PlaceController {
 
         return COURSENO;
     }
-    
+
 }
  
