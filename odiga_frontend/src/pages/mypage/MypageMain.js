@@ -6,7 +6,6 @@ import Myarticle from "./Myarticle";
 import Mypage from "./Mypage";
 import MyLikeList from "./MyLikeList";
 import Mycourse from "./Mycourse";
-import Header from "../component/navbar/Header";
 import {LoginInfoContext} from "../login/LoginInfoProvider";
 
 function MypageMain() {
@@ -22,7 +21,7 @@ function MypageMain() {
 
   return (
       <>
-        <Header/>
+      
         <Container>
           <Sub_cotainer>
             <Aside>

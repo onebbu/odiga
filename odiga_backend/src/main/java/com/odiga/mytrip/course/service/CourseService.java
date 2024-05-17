@@ -25,8 +25,8 @@ public class CourseService {
     }
     
     @Transactional
-    public void saveCourse(String boardTitle, String boardContent , String mainimage , String tags) {
-        courseDAO.saveCourseData(boardTitle, boardContent , mainimage , tags);
+    public void saveCourse(String boardTitle, String boardContent , String mainimage , String tags, String email , String nickname) {
+        courseDAO.saveCourseData(boardTitle, boardContent , mainimage , tags , email , nickname);
     }
     
 }

@@ -31,7 +31,7 @@
         </foreach>
         )
         GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE, TL.AREACODE, TL.TRAVELVIEWCOUNT
-        ORDER BY ${order}
+        ORDER BY ${order} 
         ) a
         )
         WHERE rn <![CDATA[>=]]> #{displayStart} and rn <![CDATA[<]]> #{displayEnd}
@@ -57,7 +57,7 @@
         Insert into resultlist
         (RESULTID, COURSENO, COURSEDAY, TRAVELNUM, CONTENTID, NICKNAME, courseyn, WRITEYN, COURSEPW, COURSETITLE)
         VALUES (#{RESULTID}, #{COURSENO}, #{COURSEDAY}, #{TRAVELNUM}, #{CONTENTID},
-                #{NICKNAME}, 'y', 'n', #{COURSEPW}, #{title})
+                #{NICKNAME}, 'Y', 'N', #{COURSEPW}, #{title})
     </insert>
 
     <select id="getMaxNum" parameterType="String">

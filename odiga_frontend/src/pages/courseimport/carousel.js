@@ -29,8 +29,9 @@ function Carousel({selectedCourse, MainImage, setMainImage , userdata }) {
       <div style={{ top: "50%", textAlign: "center" }}>
         {selectedCourse && selectedCourse.length > 0 && (
           <Slider {...settings}>
-            {selectedCourse.map((course) => (
+            {selectedCourse.map((course, index) => (
               <div key={course.courseno}>
+                <span>{index + 1}. </span>
                 {ItemImg(course.firstimage , course.mapx , course.mapy ,course.title , course.addr1)}             
                 {ItemTitle(course.title)}
                 <button onClick={() => handleImageSelect(course)}>Select Image</button>
@@ -160,5 +161,9 @@ function Carousel({selectedCourse, MainImage, setMainImage , userdata }) {
       </button>
     );
   }
+
+
+
+
 
   export default Carousel;

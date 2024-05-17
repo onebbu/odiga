@@ -1,7 +1,6 @@
 import React, {useContext, useEffect} from "react";
 import styled from "styled-components";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
-import Logout from "../login/Logout";
 import {useNavigate} from "react-router-dom";
 
 const MyPage = () => {
@@ -41,9 +40,6 @@ const MyPage = () => {
                             disabled
                         />
                     </FormContainer>
-                    <ButtonContainer>
-                        <Logout />
-                    </ButtonContainer>
                 </>
             ) : (
                 <Message>로그인 정보가 없습니다.</Message>

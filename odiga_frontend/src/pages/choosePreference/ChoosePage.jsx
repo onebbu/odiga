@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Wrapper= styled.div`
     margin: 0;
     padding: 0;
+    padding-top : 110px;
     font-family: 'JalnanGothic';
     background: #f3f4f6; /* 미미한 회색 */
     overflow: auto;

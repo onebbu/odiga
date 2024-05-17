@@ -30,7 +30,7 @@
     <insert id="saveCourseData" parameterType="String">
         INSERT INTO COURSEREVIEW
         (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , TAGS)
-        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
+        VALUES (BOARDNO_SEQ.NEXTVAL, #{email} , #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
     </insert>
 
 
