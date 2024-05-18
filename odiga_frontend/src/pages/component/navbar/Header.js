@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import './Header.css';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import Logout from '../../login/Logout';
+import {LoginInfoContext} from "../../login/LoginInfoProvider";
 
 function Header() {
     const [searchQuery, setSearchQuery] = useState('');
     const [lastScrollY, setLastScrollY] = useState(0);
     const navigate = useNavigate();
+    const loginInfo = useContext(LoginInfoContext);
+    console.log("로그인 정보",loginInfo)
 
     const handleScroll = () => {
         const currentScrollY = window.scrollY;
@@ -56,26 +59,19 @@ function Header() {
             </div>
             <nav className="header-nav">
                 <ul className="NavMenu">
-                    <li><a href="/">홈</a></li>
                     <li><a href="/preference">여행코스 생성</a></li>
-                    <li><a href="/">여행코스 검색</a></li>
+                    <li><a href="/coursereview">여행코스 검색</a></li>
                     <li><a href="/search-location">여행지 검색</a></li>
                 </ul>
             </nav>
             <div className="header-actions">
-                <div className="search-box">
-                    <form onSubmit={handleSearch}>
-                        <input
-                            type="text"
-                            className="search-input"
-                            placeholder="어디로, 어떤 여행을 떠날 예정인가요?"
-                            value={searchQuery}
-                            onChange={e => setSearchQuery(e.target.value)}
-                        />
-                        <button className="search-button" type="submit">
-                            <FontAwesomeIcon icon={faMagnifyingGlass}/>
-                        </button>
-                    </form>
+                <div className="hello-box">
+                    {loginInfo &&
+                        <p
+                            style={{marginRight: "3px"}}
+                        >{loginInfo.nickname}님</p>
+                    }
+                    <p>어디로, 어떤 여행을 떠날 예정인가요?</p>
                 </div>
                 <div className="sub-menu-line"></div>
                 <div className="login-box">

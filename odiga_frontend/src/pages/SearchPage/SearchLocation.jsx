@@ -22,7 +22,6 @@ function SearchLocation() {
     const [areaCode, setAreaCode] = useState(0);
     const [mapData, setMapData] = useState([]);
 
-
     const data = [
         {locale: "서울", localeNum: 1, count: 0},
         {locale: "인천", localeNum: 2, count: 0},
@@ -46,16 +45,13 @@ function SearchLocation() {
 
     useEffect(() => {
         fetchCategories();
-        fetchAreaCounts();
     }, [catCode, areaCode, searchText]);
 
     useEffect(() => {
         fetchSearchResults(currentPage);
+        fetchAreaCounts();
     }, [currentPage, catCode, areaCode, order]);
 
-    const handleSearchInputChange = (event) => {
-        setSearchText(event.target.value);
-    };
 
     const handlePageChange = (page) => {
         setCurrentPage(page);
@@ -135,9 +131,22 @@ function SearchLocation() {
     };
 
     const handleSearch = () => {
+        // 검색 버튼 클릭 시에만 fetchAreaCounts 호출
         setCurrentPage(1);
         fetchSearchResults(1);
         updateRecentSearches(searchText);
+        fetchAreaCounts(); // 검색 버튼 클릭 시에만 호출
+        setRecentSearches([...recentSearches, searchText]);
+    };
+
+    const handleSearchChange = (event) => {
+        setSearchText(event.target.value); // 검색어 입력 시에만 상태 업데이트
+    };
+
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch(); // 엔터 키를 누르면 검색 실행
+        }
     };
 
     const updateRecentSearches = (searchTerm) => {
@@ -187,15 +196,15 @@ function SearchLocation() {
     };
 
     const setColorByCount = (count) => {
-        if (count === 0) return "#F1F1F1";
-        if (count > 5000) return "#79D3C4";
-        if (count > 3000) return "#43cdb6";
-        if (count > 1000) return "#61CDBB";
-        if (count > 200) return "#91D9CD";
-        if (count > 100) return "#A9DFD6";
-        if (count > 50) return "#C1E5DF";
-        if (count > 5) return "#D9EBE8";
-        return "#ebfffd"; // 기본값
+        if (count > 320) return "#085259";
+        if (count > 160) return "#0b737D";
+        if (count > 80) return "#0E94A0";
+        if (count > 40) return "#12C0CF";
+        if (count > 20) return "#33DEED";
+        if (count > 10) return "#6EE7F2";
+        if (count > 5) return "#A8F1F7";
+        if (count > 0) return "#E2FAFC";
+        return "#F4F4F4"; // 기본값
     };
 
 
@@ -245,7 +254,8 @@ function SearchLocation() {
                             value={searchText}
                             placeholder="검색어를 입력하세요"
                             list="recent-searches"
-                            onChange={handleSearchInputChange}
+                            onChange={handleSearchChange}
+                            onKeyPress={handleKeyPress}
                         />
                         <datalist id="recent-searches">
                             {recentSearches.map((search, index) => (
@@ -253,7 +263,7 @@ function SearchLocation() {
                             ))}
                         </datalist>
 
-                        <button onClick={() => handleSearch(searchText)}>검색</button>
+                        <button onClick={handleSearch}>검색</button>
                     </div>
                     <div className="sort-options">
                         <button className={`sort-button ${order === 'title' ? 'active' : ''}`}
@@ -363,15 +373,15 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
                              style={{width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px'}}/>
                     </a>
                     <div
-                    style={{
-                        display: "block"
-                    }}
+                        style={{
+                            display: "block"
+                        }}
                     >
                         <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-between"
-                        }}
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between"
+                            }}
                         >
                             <div>
                                 {title}
@@ -386,7 +396,7 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
                                 }}>{cat3}</strong>
                             </div>
                             <div
-                            style={{right: "0"}}
+                                style={{right: "0"}}
                             >
                                 <Rate>{averageRate}</Rate><P>/{cntRating}개</P>
                             </div>
