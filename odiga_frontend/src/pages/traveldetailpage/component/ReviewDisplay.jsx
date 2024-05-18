@@ -109,9 +109,7 @@ function ReviewDisplay({travelInfo, modalContentId}) {
                 )}
             </div>
             <div className="contourLine6"></div>
-            <div id="review-display-placeholder">
-
-
+            <div>
                 {reviews && reviews.map((review, index) => (
                     <div key={index} className="reviewItem">
                         {loginInfo.email === review.email ? (

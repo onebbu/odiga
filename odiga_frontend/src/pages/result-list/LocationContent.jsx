@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import "./LocationContent.css";
 import { red } from '@mui/material/colors';
@@ -12,13 +12,9 @@ import PlaceIcon from '@mui/icons-material/Place';
 
 function LocationContent(
     { show, handleClose, contentId}
-    // { show, handleClose}
 ) {
 
     const [data, setData] = useState([null]);
-    // const { contentId } = useParams();
-
-    // const id = 2860963;
 
     useEffect(() => {
         async function fetchData() {
@@ -110,12 +106,12 @@ function LocationContent(
                 {/*이미지, 주소 가운데 정렬 + 간격 두기*/}
                 <Image src={img} rounded style={{width:"20rem", marginBottom: '1rem'}}/>
                 <br />
-                <div style={{wordBreak: "keep-all"}}>
-                    <hr />
-                    {overview}
-                </div>
-                <br />
                 <span><PlaceIcon/> 주소: {addr}</span>
+                <p
+                    style={{
+                        color: "gray"
+                    }}
+                >더 자세한 여행지 정보는? <Link to={`/detail/${contentId}`} target="_blank">여기</Link></p>
 
             </Modal.Body>
             <Modal.Footer>

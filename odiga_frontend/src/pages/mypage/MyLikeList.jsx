@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Image from 'react-bootstrap/Image';
 import axios from "axios";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
+import {Link} from "react-router-dom";
 
 function MyLikeList() {
 
@@ -34,9 +35,16 @@ function MyLikeList() {
                 {likeInfo ? (
                     Object.keys(likeInfo).map((courseKey) => (
                         <div key={courseKey}>
-                            <LocationImage src={likeInfo[courseKey].img} rounded/>
+                            <Link to={`/detail/${likeInfo[courseKey].contentId}`}
+                                style={{
+                                    textDecoration: "none",
+                                    color: "inherit"
+                                }}
+                            >
+                                <LocationImage src={likeInfo[courseKey].img} rounded/>
                                 {likeInfo[courseKey].title}
                                 <P>{likeInfo[courseKey].addr}</P>
+                            </Link>
                         </div>
                     ))
                 ) : (
