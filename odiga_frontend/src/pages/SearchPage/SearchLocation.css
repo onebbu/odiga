@@ -2,12 +2,14 @@
     display: flex;
     padding-top: 15vh;
     width: 100%;
+    background: #f4f4f4;
+
 }
 
 .search-wrap {
     display: flex;
     flex-direction: column;
-    width: 65%;
+    width: 60%;
     height: 85vh;
     margin-left: 1rem;
     margin-right: 1rem;
@@ -19,7 +21,7 @@
 .search-map {
     padding-top: 10rem;
     text-align: center;
-    width: 35%;
+    width: 40%;
     height: auto; /* 세로 공간을 내용에 따라 조정하기 위해 변경 */
     margin-left: auto;
     flex-grow: 1;
@@ -35,16 +37,12 @@
     background-color: #f4f4f4;
 }
 
-.search-form {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
+.search-cat {
     padding: 20px;
     background: white;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     border-radius: 24px;
-    margin-bottom: 20px;
+    text-align: center;
 }
 
 .search-form input {
@@ -71,10 +69,11 @@
 }
 
 .search-results {
-    width: calc(100% - 240px); /* 사이드바 너비만큼 감소 */
+    margin-top: 20px;
+    width: 100%;
     padding: 20px;
     background: white;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     position: relative; /* 위치 상대적으로 설정 */
     z-index: 1; /* 검색 결과가 사이드바보다 낮은 z-index를 가짐 */
@@ -101,7 +100,6 @@
 .search-result-title {
     font-size: 18px;
     color: #333;
-    margin-bottom: 5px;
 }
 
 .search-result-info {
@@ -109,29 +107,17 @@
     color: #666;
 }
 
-/* 사이드바 스타일 */
-.sidebar {
-    width: 200px;
-    padding: 20px;
-    margin-right: 20px;
-    background: #fff;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    position: relative; /* 위치 상대적으로 설정 */
-    z-index: 2; /* z-index를 통해 레이어 순서 조정 */
+.cat-sort{
+    display: flex;
+    justify-content: center;
 }
 
-.sidebar button {
-    padding: 5px 10px;
-    font-size: 0.8rem;
-    margin: 2px 0; /* 버튼 간의 간격 조정 */
-    width: 100%; /* 버튼을 컨테이너의 전체 너비로 확장 */
-    text-align: left; /* 텍스트 왼쪽 정렬 */
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    color: #007bff;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+/* 사이드바 스타일 */
+.sidebar {
+    display: flex;
+    margin: 10px 0;
+    padding: 10px;
+    z-index: 2; /* z-index를 통해 레이어 순서 조정 */
 }
 
 .sidebar button:hover {
@@ -144,20 +130,20 @@
     color: white;
 }
 
-/* 반응형 디자인: 화면 크기가 768px 이하일 때 사이드바 숨기기 */
-@media (max-width: 768px) {
-    .sidebar {
-        display: none;
-    }
+/*!* 반응형 디자인: 화면 크기가 768px 이하일 때 사이드바 숨기기 *!*/
+/*@media (max-width: 768px) {*/
+/*    .sidebar {*/
+/*        display: none;*/
+/*    }*/
 
-    .search-page {
-        flex-direction: column;
-    }
+/*    .search-page {*/
+/*        flex-direction: column;*/
+/*    }*/
 
-    .search-results {
-        width: 100%;
-    }
-}
+/*    .search-results {*/
+/*        width: 100%;*/
+/*    }*/
+/*}*/
 
 .tabs {
     width: 100%;
@@ -232,15 +218,16 @@
 
 .sort-options {
     display: flex;
-    justify-content: center;
     margin: 20px 0;
+    width: 50%;
+    justify-content: center;
 }
 
 .sort-button {
     background-color: #ffffff;
     color: #4285F4;
     border: 2px solid #4285F4;
-    padding: 10px 20px;
+    padding: 5px 10px;
     margin: 0 10px;
     border-radius: 4px;
     cursor: pointer;

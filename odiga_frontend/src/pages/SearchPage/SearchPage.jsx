@@ -3,7 +3,7 @@ import axios from 'axios';
 import Sidebar from './SideBar';
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import './SearchPage.css';
+import './SearchLocation.css';
 import southKorea from "../../assets/images/south-korea.svg";
 import mapPath from "./MapPath.json";
 

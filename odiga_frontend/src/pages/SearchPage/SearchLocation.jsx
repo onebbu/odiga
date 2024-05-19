@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Sidebar from './SideBar';
 import 'react-tabs/style/react-tabs.css';
-import './SearchPage.css';
+import './SearchLocation.css';
 import southKorea from "../../assets/images/south-korea.svg";
 import mapPath from "./MapPath.json";
 import {Link} from "react-router-dom";
@@ -248,37 +248,43 @@ function SearchLocation() {
             </div>
             <div className="search-wrap">
                 <div className="search-page">
-                    <div className="search-form">
-                        <input
-                            type="text"
-                            value={searchText}
-                            placeholder="검색어를 입력하세요"
-                            list="recent-searches"
-                            onChange={handleSearchChange}
-                            onKeyPress={handleKeyPress}
-                        />
-                        <datalist id="recent-searches">
-                            {recentSearches.map((search, index) => (
-                                <option key={index} value={search}/>
-                            ))}
-                        </datalist>
+                    <div className="search-cat">
+                        <div className="search-form">
+                            <input
+                                type="text"
+                                value={searchText}
+                                placeholder="검색어를 입력하세요"
+                                list="recent-searches"
+                                onChange={handleSearchChange}
+                                onKeyPress={handleKeyPress}
+                            />
+                            <datalist id="recent-searches">
+                                {recentSearches.map((search, index) => (
+                                    <option key={index} value={search}/>
+                                ))}
+                            </datalist>
+                            <button onClick={handleSearch}>검색</button>
+                        </div>
+                        <div className="cat-sort">
+                            <Sidebar catList={catList} setCatCode={handleCatkrSelection}/>
 
-                        <button onClick={handleSearch}>검색</button>
-                    </div>
-                    <div className="sort-options">
-                        <button className={`sort-button ${order === 'title' ? 'active' : ''}`}
-                                onClick={() => handleOrderChange('title')}>제목순
-                        </button>
-                        <button className={`sort-button ${order === 'grade' ? 'active' : ''}`}
-                                onClick={() => handleOrderChange('grade')}>별점순
-                        </button>
-                        <button className={`sort-button ${order === 'date' ? 'active' : ''}`}
-                                onClick={() => handleOrderChange('date')}>최신순
-                        </button>
+                            <div className="sort-options">
+                                <button className={`sort-button ${order === 'title' ? 'active' : ''}`}
+                                        onClick={() => handleOrderChange('title')}>제목순
+                                </button>
+                                <button className={`sort-button ${order === 'grade' ? 'active' : ''}`}
+                                        onClick={() => handleOrderChange('grade')}>별점순
+                                </button>
+                                <button className={`sort-button ${order === 'date' ? 'active' : ''}`}
+                                        onClick={() => handleOrderChange('date')}>최신순
+                                </button>
+                            </div>
+                        </div>
+
+
                     </div>
 
                     <div className="search-results-container">
-                        <Sidebar catList={catList} setCatCode={handleCatkrSelection}/>
                         <div className="search-results">
                             {searchResults.length > 0 ? (
                                 searchResults.map((result, index) => (
