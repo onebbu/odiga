@@ -26,7 +26,6 @@ function CourseReviewDetail() {
   const [editedContent, setEditedContent] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
 
-  console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
     setDidMount(true);
     // 로컬 스토리지에서 좋아요 상태 확인 및 설정

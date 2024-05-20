@@ -52,6 +52,21 @@ const CourseReviewBoard = () => {
   const [postsPerPage, setPostsPerPage] = useState(8);
   const [currentPosts, setCurrentPosts] = useState([]);
 
+  useEffect(() => {
+    setCurrentPage(1); // 게시물 목록이 변경될 때마다 currentPage를 1로 재설정
+  }, [posts]);
+
+  useEffect(() => {
+    fetchData();
+
+    // currentPosts 계산 및 설정
+    const indexOfLast = currentPage * postsPerPage;
+    const indexOfFirst = indexOfLast - postsPerPage;
+    const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
+    setCurrentPosts(slicedPosts);
+
+  }, [posts, currentPage, postsPerPage]);
+
   const fetchData = async () => {
     try {
       const response = await axios.get("/coursereview");
@@ -61,35 +76,7 @@ const CourseReviewBoard = () => {
       console.error("Error fetching data:", error);
     }
   };
-
-  useEffect(() => {
-    setCurrentPage(1); // 게시물 목록이 변경될 때마다 currentPage를 1로 재설정
-  }, [posts]);
-
-  useEffect(() => {
-    // 페이지가 로드될 때 데이터 가져오기
-    fetchData();
-
-    // popstate 이벤트 리스너 추가 (뒤로가기 버튼을 눌렀을 때)
-    const handlePopState = () => {
-      fetchData();
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    // 컴포넌트 언마운트 시 popstate 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
-
-  useEffect(() => {
-    // currentPosts 계산 및 설정
-    const indexOfLast = currentPage * postsPerPage;
-    const indexOfFirst = indexOfLast - postsPerPage;
-    const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
-    setCurrentPosts(slicedPosts);
-  }, [posts, currentPage, postsPerPage]);
+  
 
   const handleSortByLatest = () => {
     const sortedPosts = [...posts].sort(
