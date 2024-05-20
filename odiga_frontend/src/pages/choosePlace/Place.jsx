@@ -49,43 +49,17 @@ const Place = ({id, pic, name, region, cat, averageRate, cntRating}) => { //개�
     const [showModal, setShowModal] = useState(false);
     const [contentId, setContentId] = useState('');
 
-    const loginInfo = useContext(LoginInfoContext);
-    let {nickname, courseNo} = useParams();
-
-
     const handleShowModal = (id) => {
-        setShowModal(true);
         setContentId(id);
+        setShowModal(true);
     };
 
     const handleCloseModal = () => setShowModal(false);
 
     return (
         <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}>
-            {/* traveldetailpage 링크 */}
-
             <div>
-            {/*    style={{width: "10rem"}}>
-                <button
-                    style={{
-                        border: "none",
-                        width: "10rem",
-                        height: "10rem"
-                    }}
-                    onClick={() => handleShowModal(id)}
-                >
-                    <img src={pic}
-                         style={{
-                             width: "100%",
-                             height: "100%",
-                             objectFit: "cover"
-                         }}/>
-                </button>
-            */}
             <img src={pic} onClick={()=>handleShowModal(id)} />
-
-
-
                 {name} <strong style={{
                 backgroundColor, color,
                 fontSize: '75%', fontFamily: "GmarketSansMedium",
