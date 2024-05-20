@@ -9,15 +9,9 @@ import PlaceIcon from '@mui/icons-material/Place';
 import TravelDetailPage from "../traveldetailpage/TravelDetailPage";
 
 
-function LocationContent(
-    { show, handleClose, contentId}
-    // { show, handleClose}
-) {
+function LocationContent({ show, handleClose, contentId}) {
 
     const [data, setData] = useState([null]);
-    // const { contentId } = useParams();
-
-    // const id = 2860963;
 
     useEffect(() => {
         async function fetchData() {
@@ -52,23 +46,21 @@ function LocationContent(
 
     // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
     const catColors = {
-        '액티비티': { backgroundColor: '#B4DAF2', color: 'black'},
-        '테마파크': { backgroundColor: '#B4DAF2', color: 'black'},
-        '축제': { backgroundColor: '#B4DAF2', color: 'black'},
-        '바다': { backgroundColor: '#DBDBC5', color: 'black'},
-        '자연': { backgroundColor: '#DBDBC5', color: 'black'},
-        '산': { backgroundColor: '#DBDBC5', color: 'black'},
-        '문화역사': { backgroundColor: '#F7AB89', color: 'black'},
-        '실내여행지': { backgroundColor: '#F7AB89', color: 'black'},
-        '쇼핑': { backgroundColor: '#F7AB89', color: 'black'},
-        '카페': { backgroundColor: '#F4D35E', color: 'black'},
-        '식당': { backgroundColor: '#F4D35E', color: 'black'},
+        '액티비티': { backgroundColor: '#B4DAF2'},
+        '테마파크': { backgroundColor: '#B4DAF2'},
+        '축제': { backgroundColor: '#B4DAF2'},
+        '바다': { backgroundColor: '#DBDBC5'},
+        '자연': { backgroundColor: '#DBDBC5'},
+        '산': { backgroundColor: '#DBDBC5'},
+        '문화역사': { backgroundColor: '#F7AB89'},
+        '실내여행지': { backgroundColor: '#F7AB89'},
+        '쇼핑': { backgroundColor: '#F7AB89'},
+        '카페': { backgroundColor: '#F4D35E'},
+        '식당': { backgroundColor: '#F4D35E'},
     };
 
     // 해당 카테고리의 배경색과 폰트색 가져오기
-    const { backgroundColor, color } = catColors[cat] || { backgroundColor: 'gray', color: 'black' };
-
-
+    const { backgroundColor } = catColors[cat] || { backgroundColor: 'gray'};
 
     const [selectedData, setSelectedData] = useState(null);
     const contentData = '';
@@ -92,7 +84,7 @@ function LocationContent(
                     {title}
                     <span style={{
                         backgroundColor,
-                        color,
+                        color: 'black',
                         fontSize: '60%',
                         fontFamily: "GmarketSansMedium",
                         padding: '0.25em 0.5em',
