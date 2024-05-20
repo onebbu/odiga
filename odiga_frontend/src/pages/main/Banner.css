@@ -1,57 +1,81 @@
-
 .MainBanner {
     width: 100%;
     height: 450px;
-    padding-top: 60px; 
- }
-
- .BannerContent {
+    margin-top: 100px;
+  }
+  
+  .BannerContent {
     width: 100%;
     height: 100%;
     padding-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    
-
- }
- 
-
- .BannerText {
-     width: 350px;
-     height: 350px;
-     display: flex;
-     flex-direction: column;
-     justify-content: center;
-     align-items: flex-start;
-     margin-right: 50px;
- }
- 
-
- .BannerHeading {
-     border-radius: 10px;
-     background-color: black;
-     color: white;
-     padding: 10px 20px; 
-     margin-bottom: 30px; 
-     width: fit-content; 
-     
- }
- 
-
- .BannerDescription {
-     font-size: 25px;
-     text-align: left;
-     margin-bottom: 25px; 
- }
- 
- 
- .BannerImage {
-     width: 800px; 
-     height: 450px; 
-     border-radius: 20px; 
-     background-size: cover;
-     background-position: center;
-     background-image: url('../../assets/images/south-korea.jpg'); 
-     
- }
+  }
+  
+  .BannerText {
+    width: 350px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-right: 50px;
+  }
+  
+  .BannerHeading {
+    border-radius: 10px;
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    margin-bottom: 30px;
+    width: fit-content;
+  }
+  
+  .BannerDescription {
+    font-size: 25px;
+    text-align: left;
+    margin-bottom: 25px;
+  }
+  
+  .BannerImage {
+    width: 800px;
+    height: 450px;
+    border-radius: 20px;
+    overflow: hidden; /* 이미지가 경계 밖으로 나가지 않도록 */
+  }
+  
+  .BannerImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: opacity 1s ease-in-out; /* 부드러운 전환 효과 */
+  }
+  
+  .BannerControls {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .ProgressBarContainer {
+    width: 60%;
+    height: 5px;
+    background-color: #ccc;
+    margin-right: 10px;
+    position: relative;
+  }
+  
+  .ProgressBar {
+    height: 100%;
+    background-color: #000;
+    transition: width 0.1s linear; /* 진행 바 전환 속도 조정 */
+  }
+  
+  .ImageCount {
+    font-size: 18px;
+  }
+  
