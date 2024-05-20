@@ -1,4 +1,4 @@
-import React, {useContext, useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import './CP.css';
 import date1 from './img/date_1.png'; import date2 from './img/date_2.png'; import date3 from './img/date_3.png';
@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 const Wrapper= styled.div`
     margin: 0;
     padding: 0;
+    padding-top : 110px;
     font-family: 'JalnanGothic';
     background: #f3f4f6; /* 미미한 회색 */
     overflow: auto;
@@ -24,13 +25,24 @@ function ChoosePreference() {
         duration : null,
         theme : []
     });
+    const [filteredITEM3, setFilteredITEM3] = useState(ITEM3);
 
     // 다음 페이지로 선택된 값들을 전달하는 함수
     const goToNextPage = () => {
+        if (!sessionStorage.getItem('token')) {
+            alert("로그인이 필요한 서비스 입니다. 로그인 페이지로 이동합니다.");
+            navigate('/login');
+            return;
+        }
+
         // 모든 영역에서 선택된 값들을 검사하여 누락된 값이 있는지 확인
             if (selectedValues.region === null || selectedValues.duration === null || selectedValues.theme.length < 2) {
                 // 누락된 값이 있으면 사용자에게 알림을 표시
                 alert('모든 영역에서 선택이 완료되지 않았습니다. 선택을 완료해주세요.');
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                  });
             } else {
                 // 모든 값이 선택되었으면 다음 페이지 경로와 함께 선택된 값들을 전달합니다.
                 navigate(`/place`, { state: selectedValues });
@@ -70,7 +82,12 @@ function ChoosePreference() {
         }));
     };
 
-
+    useEffect(() => {
+        const exclusions = regionExclusions[selectedValues.region] || [];
+        const newFilteredITEM3 = ITEM3.filter(item => !exclusions.includes(item.content));
+        setFilteredITEM3(newFilteredITEM3);
+    }, [selectedValues.region]);
+    
     return(
         <Wrapper>
             <Container>
@@ -115,7 +132,7 @@ function ChoosePreference() {
                 </div>
                 <p><em>원하는 여행 테마를 2개 이상</em><br/>선택해 주세요. (최대 4개)</p>
                 <div className="grid2">
-                    <ButtonList List={ITEM3} OneCheck={false} onSelect={handleThemeSelect} />
+                    <ButtonList List={filteredITEM3} OneCheck={false} onSelect={handleThemeSelect} />
                 </div>
             </div>
             <button id="nextbtn" onClick={goToNextPage}>다음</button>
@@ -125,12 +142,11 @@ function ChoosePreference() {
 }
 function ButtonList ({List, OneCheck, onSelect}) {
     const [isSelected, setIsSelected]= useState([false]);
-    const testList = List;
     const handleClick = (idx) => {
-        const newArr = Array(testList.length).fill(false);
+        const newArr = Array(List.length).fill(false);
         newArr[idx] = true;
         setIsSelected(newArr);
-        onSelect(testList[idx].code);
+        onSelect(List[idx].code);
     };
     const handleClick2 = (idx) => {
         let cnt = 0;
@@ -142,10 +158,10 @@ function ButtonList ({List, OneCheck, onSelect}) {
             copy[idx] = isSelected[idx];
         }
         setIsSelected(copy);
-        onSelect(testList[idx].content);
+        onSelect(List[idx].content);
     };
     return (
-        testList.map((elm, index) => {
+        List.map((elm, index) => {
             return (
                 <Button
                     key={index}
@@ -168,6 +184,15 @@ const Button = ({handleClick, isSelected, elementIndex, icon, content }) => {
         </button>
     );
 }
+
+const regionExclusions = {
+    '1' : ['바다'], //서울
+    '3' : ['바다'], //대전
+    '4' : ['바다'], //대구
+    '5' : ['바다'], //광주
+    '8' : ['바다']  //세종
+    // 다른 지역과 제외할 테마를 추가하세요
+};
 
 const ITEM1 = [
     {  content: '서울' , code:'1' },
@@ -198,11 +223,14 @@ const ITEM2 = [
 const ITEM3 = [
     { icon : "https://source.unsplash.com/featured/?mountain", content : '산' },
     { icon : "https://source.unsplash.com/featured/?beach", content : '바다' },
-    { icon : "https://source.unsplash.com/featured/?indoor", content : '실내여행지' },
+    { icon : "https://source.unsplash.com/featured/?nature", content : "자연" },
+    { icon : "https://source.unsplash.com/featured/?indoor", content : "실내여행지" },
     { icon : "https://source.unsplash.com/featured/?cafe", content : "카페" },
+    { icon : "https://source.unsplash.com/featured/?restaurant", content : "식당" },
+    { icon : "https://source.unsplash.com/featured/?shopping", content : "쇼핑" },
     { icon : "https://source.unsplash.com/featured/?adventure", content : "액티비티" },
     { icon : "https://source.unsplash.com/featured/?theme park", content : "테마파크" },
-    { icon : "https://source.unsplash.com/featured/?museum", content : "문화 | 역사" },
+    { icon : "https://source.unsplash.com/featured/?museum", content : "문화역사" },
     { icon : "https://source.unsplash.com/featured/?trandition", content : "전통시장" },
     { icon : "https://source.unsplash.com/featured/?festival", content : "축제" }
 ];

@@ -1,121 +1,82 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import styled from 'styled-components';
 import {useDrag} from 'react-dnd';
+import axios from "axios";
 import './cPP.css';
-
-const places = [
-  {
-      id : 1,
-      pic : "https://source.unsplash.com/featured/?mountain",
-      name: "대구산",
-      region: "대구시 중구",
-      rate: "4.0",
-      review: "10000개"
-  },
-  {
-      id : 2,
-      pic : "https://source.unsplash.com/featured/?sunflower",
-      name: "해바라기",
-      region: "부산광역시 중구",
-      rate: "4.5",
-      review: "13300개"
-  },
-  {
-      id : 3,
-      pic : "https://source.unsplash.com/featured/?fire",
-      name: "산불",
-      region: "대구시 중구",
-      rate: "4.2",
-      review: "10500개"
-  },
-  {
-      id : 4,
-      pic : "https://source.unsplash.com/featured/?cat",
-      name: "충주시 산",
-      region: "충청북도 충주시",
-      rate: "4.5",
-      review: "10060개"
-  },
-  {
-      id : 5,
-      pic : "https://source.unsplash.com/featured/?flower",
-      name: "꽃밭",
-      region: "대구시 달서구",
-      rate: "4.5",
-      review: "20000개"
-  },
-  {
-      id : 6,
-      pic : "https://source.unsplash.com/featured/?activity",
-      name: "서울 산",
-      region: "서울특별시 중구",
-      rate: "4.5",
-      review: "10300개"
-  },
-  {
-      id : 7,
-      pic : "https://source.unsplash.com/featured/?beach",
-      name: "강원도 산",
-      region: "강원도",
-      rate: "4.5",
-      review: "20개"
-  },
-  {
-      id : 8,
-      pic : "https://source.unsplash.com/featured/?meseum",
-      name: "산산",
-      region: "대구시 중구",
-      rate: "4.5",
-      review: "24개"
-  },
-  {   id : 9,
-      pic : "https://source.unsplash.com/featured/?mountain",
-      name: "산산2",
-      region: "대구시 중구",
-      rate: "4.0",
-      review: "10000개"
-  },
-  {
-      id : 10,
-      pic : "https://source.unsplash.com/featured/?sunflower",
-      name: "해바라기",
-      region: "부산광역시 중구",
-      rate: "4.5",
-      review: "13300개"
-  },
-]
 
 const DrawerContainer = styled.div`
     position: absolute;
-    top: 0;
+    top: -2px;
     left: 0;
     width: 100%;
     background-color: white;
-    z-index: 1000;
+    z-index: 50;
     transition: transform 0.3s ease-in-out;
-    transform: translateY(${props => (props.isOpen ? '0' : '-100%')});
+    transform: translateY(${(props) => (props.isOpen ? '0' : '-100%')});
 `;
 
 const DrawerContent = styled.div`
   padding: 20px;
 `;
 
-const Drawer = ({ isOpen, onClose }) => {
+const H2 = styled.div`
+  color:#909090;
+  font-size: 25px;
+  font-family: 'JalnanGothic';
+  padding-bottom : 5px;
+`;
+
+const Message = styled.div`
+  text-align: center;
+  font-size: 1.2rem;
+`;
+
+const Drawer = ({ isOpen, onClose, loginInfo, areacode }) => {
+  const [likeInfo, setLikeInfo] = useState([]);
+  
+  useEffect(() => {
+        fetchData(); // 함수 호출
+        console.log("likeInfo 길이길이길이 "+likeInfo);
+
+  }, [isOpen]);
+
+  const fetchData = () => {
+    try {
+      console.log("왜 안되냐? ? " + areacode);
+        axios.get(`/mypage/mylike/${loginInfo.nickname}`, {
+          params: {
+            areacode: areacode
+          }
+        }).then(response => {
+          setLikeInfo(response.data);
+          console.log("likeInfo 저장함? "+likeInfo);
+        })
+        
+    } catch (error) {
+        console.error('좋아요 목록 가져오기 실패:', error);
+    }
+  };
+
   return (
-    <DrawerContainer isopen={isOpen}>
+    <DrawerContainer isOpen={isOpen}>
       <DrawerContent>
-        <div className="drawer">
-          {places.map(item => ( <Place key={item.id} id={item.id} pic={item.pic} name={item.name} region={item.region}/> ))}
-        </div>
+      <H2> {loginInfo.nickname} 님의 찜 목록 </H2>
+      {likeInfo && Object.keys(likeInfo).length > 0 ? ( 
+          <div className="drawer">
+            {Object.keys(likeInfo).map((courseKey) => (
+              <Place key={courseKey} id={courseKey} pic={likeInfo[courseKey].img} name={likeInfo[courseKey].title} region={likeInfo[courseKey].addr}/>
+            ))}
+          </div>
+        ) : ( <Message> 찜 목록이 비어있습니다. </Message> )
+      }
         <button className="buttondesign" onClick={onClose}>Close</button>
       </DrawerContent>
     </DrawerContainer>
   );
 };
 
-const Place = ({id,pic,name,region }) =>{ //개별 플레이스 drag 가능~
-
-  const[{ isDragging },drag] = useDrag({
+const Place = ({id, pic, name, region }) =>{ //개별 플레이스 drag 가능~
+  const[{ isDragging }, drag] = useDrag({
       type: 'placeitem',
       item: { id, name, region },
       collect: (monitor) => ({
@@ -127,7 +88,7 @@ const Place = ({id,pic,name,region }) =>{ //개별 플레이스 drag 가능~
 
   return(
       <div key={id} className={`drawer-item ${opacity ? '' : 'dragging'}`} ref={drag}> 
-          <img src={pic} />
+          <img src={pic} alt="이미지 로딩 중"/>
           <span>{name} | {region} </span>
       </div>
   )

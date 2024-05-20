@@ -36,16 +36,12 @@ public class CourseDisplayController {
         String boardContent = courseRequest.get("BoardContent");
         String mainimage = courseRequest.get("MainImage");
         String tags = courseRequest.get("Tags");
-
-
-
-        
-        System.out.println("메인이미지: "+ mainimage);
-        courseService.saveCourse(boardTitle,boardContent,mainimage,tags);
-        System.out.println("courseimport컨트롤러 실행");
-        System.out.println("제목: " + boardTitle);
-        System.out.println("내용: " + boardContent);
-        System.out.println("태그: " + tags);
+        String email = courseRequest.get("email");
+        String nickname = courseRequest.get("nickname");
+        String courseno = courseRequest.get("courseno");
+ 
+        courseService.saveCourse(boardTitle,boardContent,mainimage,tags,email,nickname,courseno);
+     
         return "코스 정보가 성공적으로 저장되었습니다.";
     }
 

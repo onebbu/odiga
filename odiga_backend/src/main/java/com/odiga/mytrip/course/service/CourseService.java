@@ -20,13 +20,12 @@ public class CourseService {
             System.out.println("nickname이 null입니다.");
         }
         List<CourseVO> Courselist = courseDAO.getResultList(nickname);
-        System.out.println(Courselist);
         return Courselist;    
     }
     
     @Transactional
-    public void saveCourse(String boardTitle, String boardContent , String mainimage , String tags) {
-        courseDAO.saveCourseData(boardTitle, boardContent , mainimage , tags);
+    public void saveCourse(String boardTitle, String boardContent , String mainimage , String tags, String email , String nickname , String courseno) {
+        courseDAO.saveCourseData(boardTitle, boardContent , mainimage , tags , email , nickname ,courseno);
     }
     
 }
