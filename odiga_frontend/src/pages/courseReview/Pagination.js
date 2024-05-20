@@ -31,6 +31,8 @@ const Pagination = ({
         setCurrentPage(firstNum - 5);
       }
     };
+
+    console.log(currentPage);
   
     return (
       <>

@@ -10,7 +10,6 @@ import CourseReview from "./pages/courseReview/CourseReview";
 import Main from "./pages/main/Main";
 import ResultView from "./pages/result-list/ResultView";
 import WrongPathPage from "./pages/wrongpathPage/WrongPath";
-import SearchPage from "./pages/SearchPage/SearchPage";
 import ChoosePlace from "./pages/choosePlace/choosePlacePage";
 import LoginInfoProvider from "./pages/login/LoginInfoProvider";
 import PlaceList from "./pages/placeList/placeList";
@@ -23,7 +22,6 @@ function App() {
 
     return (
         <BrowserRouter>
-            <Header/>
 
             <LoginInfoProvider>
                 <Header/>

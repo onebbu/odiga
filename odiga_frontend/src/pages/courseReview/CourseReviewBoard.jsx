@@ -7,6 +7,7 @@ import stylee from "../choosePlace/cPP.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CourseReviewSearch from "./CourseReviewSearch";
+import YoutubePlaylist from "./YoutubeAPI";
 
 const Place = ({
   boardContent,
@@ -51,21 +52,36 @@ const CourseReviewBoard = () => {
   const [postsPerPage, setPostsPerPage] = useState(8);
   const [currentPosts, setCurrentPosts] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("/coursereview");
+      const fetchedPosts = response.data;
+      setPosts(fetchedPosts);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      let storedPosts = localStorage.getItem("posts");
-      if (storedPosts) {
-        setPosts(JSON.parse(storedPosts));
-      } else {
-        const response = await axios.get("/coursereview");
-        const fetchedPosts = response.data;
-        setPosts(fetchedPosts);
-        localStorage.setItem("posts", JSON.stringify(fetchedPosts));
-      }
+    setCurrentPage(1); // 게시물 목록이 변경될 때마다 currentPage를 1로 재설정
+  }, [posts]);
+
+  useEffect(() => {
+    // 페이지가 로드될 때 데이터 가져오기
+    fetchData();
+
+    // popstate 이벤트 리스너 추가 (뒤로가기 버튼을 눌렀을 때)
+    const handlePopState = () => {
+      fetchData();
     };
 
-    fetchData();
-  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
+    window.addEventListener("popstate", handlePopState);
+
+    // 컴포넌트 언마운트 시 popstate 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
 
   useEffect(() => {
     // currentPosts 계산 및 설정
@@ -107,19 +123,7 @@ const CourseReviewBoard = () => {
               <div className="header-text">
                 <div style={{ display: "flex" }}>
                   <div style={{ padding: "30px", flex: 1 }}>
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src="https://www.youtube.com/embed/rPZGxw6Jsrg?autoplay=1&mute=1"
-                      frameborder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share, fullscreen"
-                      style={{
-                        marginLeft: "0",
-                        minHeight: "300px",
-                        maxWidth: "500px",
-                        borderRadius: "20px",
-                      }}
-                    ></iframe>
+                    <YoutubePlaylist />
                   </div>
                   <div style={{ flex: 1, padding: "30px" }}>
                     <h2

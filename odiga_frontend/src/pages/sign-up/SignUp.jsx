@@ -63,7 +63,7 @@ export default function SignUp() {
             } else if(result === "NICKNAME_ALREADY_EXIST") {
                 alert("이미 닉네임이 존재합니다.");
             } else if(result === "SIGN_UP_SUCCESS") {
-                navigate('/');
+                navigate('/login');
                 alert("회원가입이 성공했습니다.");
             }
         } catch (error) {
