@@ -182,9 +182,8 @@ const CourseReviewBoard = () => {
                       color: "#0a97cd",
                     }}
                   >
-                    TRAVEL COURSE
-                  </em>{" "}
-                  REVIEW ARTICLES
+                    TRAVEL COURSE &nbsp;
+                  </em>REVIEW ARTICLES
                 </h4>
                 <CourseReviewSearch setPosts={setPosts} />
               </div>
