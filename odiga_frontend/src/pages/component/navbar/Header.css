@@ -55,10 +55,13 @@
   padding-right: 50px;
 }
 
-.search-box {
-  display: flex;
+.hello-box {
+  display: block;
   align-items: center;
   margin-right: 20px; 
+}
+.hello-box p{
+  margin: 0;
 }
 
 .search-input {

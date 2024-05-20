@@ -6,6 +6,7 @@
 
 
     <!-- 여행지 지역별 리스트 가져오기 -->
+    <!-- 여행지 지역별 리스트 가져오기 -->
     <select id="getSearchList" resultType="com.odiga.mytrip.search.vo.SearchVO" parameterType="java.util.Map">
         SELECT * FROM
         ( SELECT a.*, ROWNUM as rn FROM (
@@ -15,17 +16,21 @@
         FROM TRAVELLIST TL
         LEFT JOIN TRAVELREVIEW TR ON TL.CONTENTID = TR.CONTENTID
         LEFT JOIN TRAVELCAT TC ON TL.CAT3 = TC.CATCODE
-        WHERE TL.AREACODE = #{areacode}
-        AND TL.title LIKE '%' || #{text} || '%'
+        WHERE
+        <choose>
+            <when test="areacode != 0">
+                TL.AREACODE = #{areacode} AND
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        TL.title LIKE '%' || #{text} || '%' AND
         <choose>
             <when test="catcode != null">
-                AND TL.CAT3 IN ( SELECT CATCODE FROM TRAVELCAT WHERE
-                <foreach item="cat" index="index" collection="list" open="(" separator=" OR " close=")">
-                    CATTYPE LIKE #{catcode}
-                </foreach>
-                )
+                TL.CAT3 = #{catcode} AND
             </when>
+            <otherwise></otherwise>
         </choose>
+        1=1
         GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE, TL.AREACODE, TL.TRAVELVIEWCOUNT
         ORDER BY <choose>
         <when test="order == 'title'"> TL.TITLE </when>
@@ -33,7 +38,7 @@
     </choose>
         ) a
         )
-        WHERE rn BETWEEN ((#{page} - 1) * 12 + 1) AND (#{page} * 12)
+        WHERE rn BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
     </select>
 
     <!-- 여행코스 후기 검색결과 가져오기-->

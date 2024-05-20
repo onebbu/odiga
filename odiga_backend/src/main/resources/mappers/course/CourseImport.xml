@@ -29,8 +29,8 @@
     </select>
     <insert id="saveCourseData" parameterType="String">
         INSERT INTO COURSEREVIEW
-        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , TAGS)
-        VALUES (BOARDNO_SEQ.NEXTVAL, #{email} , #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
+        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN ,MAINIMAGE ,TAGS , COURSENO)
+        VALUES (BOARDNO_SEQ.NEXTVAL, #{email} , #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' ,#{mainimage} , #{tags , jdbcType=VARCHAR} , #{courseno})
     </insert>
 
 

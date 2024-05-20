@@ -40,7 +40,7 @@ function Myarticle() {
                 <>
                     <GridContainer style={{marginBottom: "100px"}}>
                         {articleList && Object.keys(articleList).map(articleKey => (
-                            <Link to={"/detail/" + articleList[articleKey].
+                            <Link to={"/coursereview/detail/" + articleList[articleKey].
                                 boardNo}
                                   style={{
                                       textDecoration: "none", /* 링크의 밑줄 제거 */
