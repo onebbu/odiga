@@ -63,6 +63,10 @@ const CourseReviewBoard = () => {
   };
 
   useEffect(() => {
+    setCurrentPage(1); // 게시물 목록이 변경될 때마다 currentPage를 1로 재설정
+  }, [posts]);
+
+  useEffect(() => {
     // 페이지가 로드될 때 데이터 가져오기
     fetchData();
 
