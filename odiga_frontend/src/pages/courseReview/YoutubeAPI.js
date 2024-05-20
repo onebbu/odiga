@@ -19,7 +19,7 @@ const YoutubePlaylist = () => {
               part: "snippet",
               playlistId: playlistId,
               key: "AIzaSyCuvenJJj2OaMIrQtRwP2lmlTrR84RpYl0", // 여기에 자신의 YouTube API 키를 넣어주세요
-              maxResults: 30, // 최대 20개의 동영상을 가져옴
+              maxResults: 5, // 최대 20개의 동영상을 가져옴
             },
           }
         );
