@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import styled from "styled-components";
 import './CP.css';
 import date1 from './img/date_1.png'; import date2 from './img/date_2.png'; import date3 from './img/date_3.png';
@@ -25,6 +25,7 @@ function ChoosePreference() {
         duration : null,
         theme : []
     });
+    const [filteredITEM3, setFilteredITEM3] = useState(ITEM3);
 
     // 다음 페이지로 선택된 값들을 전달하는 함수
     const goToNextPage = () => {
@@ -81,7 +82,12 @@ function ChoosePreference() {
         }));
     };
 
-
+    useEffect(() => {
+        const exclusions = regionExclusions[selectedValues.region] || [];
+        const newFilteredITEM3 = ITEM3.filter(item => !exclusions.includes(item.content));
+        setFilteredITEM3(newFilteredITEM3);
+    }, [selectedValues.region]);
+    
     return(
         <Wrapper>
             <Container>
@@ -126,7 +132,7 @@ function ChoosePreference() {
                 </div>
                 <p><em>원하는 여행 테마를 2개 이상</em><br/>선택해 주세요. (최대 4개)</p>
                 <div className="grid2">
-                    <ButtonList List={ITEM3} OneCheck={false} onSelect={handleThemeSelect} />
+                    <ButtonList List={filteredITEM3} OneCheck={false} onSelect={handleThemeSelect} />
                 </div>
             </div>
             <button id="nextbtn" onClick={goToNextPage}>다음</button>
@@ -136,12 +142,11 @@ function ChoosePreference() {
 }
 function ButtonList ({List, OneCheck, onSelect}) {
     const [isSelected, setIsSelected]= useState([false]);
-    const testList = List;
     const handleClick = (idx) => {
-        const newArr = Array(testList.length).fill(false);
+        const newArr = Array(List.length).fill(false);
         newArr[idx] = true;
         setIsSelected(newArr);
-        onSelect(testList[idx].code);
+        onSelect(List[idx].code);
     };
     const handleClick2 = (idx) => {
         let cnt = 0;
@@ -153,10 +158,10 @@ function ButtonList ({List, OneCheck, onSelect}) {
             copy[idx] = isSelected[idx];
         }
         setIsSelected(copy);
-        onSelect(testList[idx].content);
+        onSelect(List[idx].content);
     };
     return (
-        testList.map((elm, index) => {
+        List.map((elm, index) => {
             return (
                 <Button
                     key={index}
@@ -179,6 +184,15 @@ const Button = ({handleClick, isSelected, elementIndex, icon, content }) => {
         </button>
     );
 }
+
+const regionExclusions = {
+    '1' : ['바다'], //서울
+    '3' : ['바다'], //대전
+    '4' : ['바다'], //대구
+    '5' : ['바다'], //광주
+    '8' : ['바다']  //세종
+    // 다른 지역과 제외할 테마를 추가하세요
+};
 
 const ITEM1 = [
     {  content: '서울' , code:'1' },

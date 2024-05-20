@@ -8,7 +8,6 @@ import Logout from '../../login/Logout';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
 
 function Header() {
-    const [searchQuery, setSearchQuery] = useState('');
     const [lastScrollY, setLastScrollY] = useState(0);
     const navigate = useNavigate();
     const loginInfo = useContext(LoginInfoContext);
@@ -29,11 +28,6 @@ function Header() {
         return () => window.removeEventListener('scroll', handleScroll);
     }, [lastScrollY]);
 
-    const handleSearch = (event) => {
-        event.preventDefault();
-        navigate(`/SearchPage?query=${encodeURIComponent(searchQuery)}`);
-    };
-
     axios.interceptors.request.use(function (config) {
         const token = sessionStorage.getItem('token');
         if (token) {
@@ -44,11 +38,14 @@ function Header() {
         return Promise.reject(error);
     });
 
-    const handleLoginClick = () => {
-        if (sessionStorage.getItem('token')) {
-            navigate('/my-page');
+    const handleNavigation = (path) => {
+        if (path === '/preference' && !sessionStorage.getItem('token')) {
+            const isConfirmed = window.confirm('로그인이 필요한 페이지입니다. 로그인 페이지로 이동하시겠습니까?');
+            if (isConfirmed) {
+                navigate('/login');
+            }
         } else {
-            navigate('/login');
+            navigate(path);
         }
     };
 
@@ -59,7 +56,7 @@ function Header() {
             </div>
             <nav className="header-nav">
                 <ul className="NavMenu">
-                    <li><a href="/preference">여행코스 생성</a></li>
+                    <li><a onClick={() => handleNavigation('/preference')}>여행코스 생성</a></li>
                     <li><a href="/coursereview">여행코스 검색</a></li>
                     <li><a href="/search-location">여행지 검색</a></li>
                 </ul>
@@ -83,7 +80,7 @@ function Header() {
                             </button>
                         </>
                     ) : (
-                        <button className="login-link" onClick={handleLoginClick}>
+                        <button className="login-link" onClick={() => navigate('/login')}>
                             로그인
                         </button>
                     )}
