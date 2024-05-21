@@ -36,19 +36,25 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
 }
 
 .InfoAndLikeBox {
+
+.InfoAndLikeBox {
     display: flex;
     justify-content: space-between;
 }
 
 .actionBar {
+
+.actionBar {
     display: flex;
 }
+
 
 .countContainer {
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 
 .mapLocation {
     width: 100%;
@@ -59,6 +65,7 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     align-items: center;
 }
 
+
 .detailInfo {
     width: 83%;
     padding-left: 110px;
@@ -66,10 +73,14 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     margin-bottom: 50px;
 }
 
+
 .contourLine3 {
     margin: 20px 0px;
     width: 100%;
     height: 2px;
+    background-color: #ccc;
+}
+
     background-color: #ccc;
 }
 
@@ -80,16 +91,22 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     background-color: #ccc;
 }
 
+    background-color: #ccc;
+}
+
 .contourLine5 {
     margin: 0px 30px;
     width: 2px;
     height: 50px;
     background-color: #ccc;
+    background-color: #ccc;
 }
+
 
 .starBox {
     display: flex;
 }
+
 
 .tagList {
     width: 83%;
@@ -99,10 +116,12 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     display: flex;
 }
 
+
 .tagItem {
     width: 100%;
     display: flex;
 }
+
 
 .tagItemBox {
     width: auto;
@@ -112,13 +131,16 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     justify-content: center;
     border-radius: 10px;
     background-color: cornflowerblue;
+    background-color: cornflowerblue;
     margin-left: 5px;
     margin-right: 5px;
 }
 
+
 .tagItemBox p {
     margin-left: 8px;
     margin-right: 8px;
+    color: white;
     color: white;
     margin-bottom: 0px;
 }
@@ -188,6 +210,11 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     background: none;
     border: none;
     box-shadow: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.successButton p {
     font-size: 16px;
     cursor: pointer;
 }

@@ -16,3 +16,4 @@ out/
 
 ### VS Code ###
 .vscode/
+odiga_frontend/package-lock.json
