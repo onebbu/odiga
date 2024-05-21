@@ -22,6 +22,7 @@ const Star = styled.span`
 
 function StarRating({starCount, onChange}) {
     const [rating, setRating] = useState(0);
+    
     const handleStarClick = (selectedRating) => {
         setRating(selectedRating);
         onChange(selectedRating);
@@ -95,7 +96,9 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
             navigate('/login');
             return;
         }
-        if (typeof locaContId !== "undefined" && locaContId !== "") {
+        console.log("handleSubmit 호출됨", { locaContId, reviewComment, reviewGrade, reviewdate });
+        if (typeof locaContId === "undefined" || locaContId === "") {
+            alert("콘텐츠 ID가 유효하지 않습니다.");
             return;
         }
         axios.post('/reviewImport', {

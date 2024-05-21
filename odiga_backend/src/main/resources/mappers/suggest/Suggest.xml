@@ -19,6 +19,7 @@
                 boardlikecount,
                 boarddate,
                 mainimage,
+                COALESCE(tags, '#태그없음') as tags,
                 CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
                     ELSE boardgrade * 0.3 
                 END AS weighted_rating,
@@ -35,7 +36,8 @@
                 boardviewcount,
                 boardlikecount,
                 boarddate,
-                mainimage
+                mainimage,
+                tags
             FROM coursereview
             ORDER BY 
                 CASE WHEN boardgrade > 4 THEN boardgrade * 0.6
