@@ -135,8 +135,8 @@ function ReviewDisplay({travelInfo, modalContentId}) {
                                             <div className="commentDetail">{review.nickname} |</div>
                                             <div className="commentDetail">{renderStars(review.reviewgrade)} |</div>
                                             <div className="commentDetail">{review.reviewdate}</div>
-                                            <button onClick={() => startEditing(review)}>수정</button>
-                                            <button onClick={() => deleteReview(review.reviewno)}>삭제</button>
+                                            <button style={{border : 'none'}} onClick={() => startEditing(review)}>수정</button>
+                                            <button calssName="editingButton" onClick={() => deleteReview(review.reviewno)}>삭제</button>
                                         </div>
                                     </>
                                 )}

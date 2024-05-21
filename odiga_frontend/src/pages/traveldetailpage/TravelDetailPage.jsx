@@ -191,7 +191,7 @@ function TravelDetailPage({modalContentId}) {
                 </section>
 
                 <section className="mapLocation" id="map-location">
-                    <div id="map" style={{width: '100%', height: '500px'}}></div>
+                    <div id="map" style={{width: '80%', height: '500px'}}></div>
                 </section>
 
                 <section className="tagList" id="tag-list">
