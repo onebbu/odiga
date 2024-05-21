@@ -25,15 +25,15 @@ const Body= Styled.div`
     padding-top: 100px;
     background: #f3f4f6; /* 미미한 회색 */
 `;
-const Wrapper=Styled.div` display: flex; min-height: 100vh; `;
-const AccordionWrap=Styled.div`width:20%; height: 100%; position:fixed;`;
+const Wrapper=Styled.div` display: flex; min-height: 100vh;`;
+const AccordionWrap=Styled.div`width:100%;`;
 const Section=Styled.div` position: relative; border: 1px solid #ccc; width: 75%; gap: 20px;
-    margin-left:20%; display: flex; flex-direction: column; width:80%; padding: 16px;`;
+    display: flex; flex-direction: column; width:80%; padding: 16px;`;
 const OpenButton = Styled.button`position: fixed; top: 100px; right: 100px; width: 200px; height: 60px;
     background-color: #549C9B; /* Green */ border: none; border-radius: 0 0 10px 10px; cursor: pointer; outline: none;
     transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
-
+const Position = Styled.div`position:relative; width:25%; height: 100vh;`;
 
 const areaList = [
     { areacode: '1', areaname: '서울' },
@@ -181,7 +181,7 @@ const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
           ))}
       </div>
       <div className="item"> <span> 
-                <Orderbtn name={'조회순'} orderID={'travelviewcount desc'}/>|
+                <Orderbtn name={'조회순'} orderID={'travelviewcount'}/>|
                 <Orderbtn name={'가나다순'} orderID={'title'}/>|
                 <Orderbtn name={'별점순'} orderID={'averageRate'}/> </span>    </div>
       <div className="item">
@@ -231,10 +231,6 @@ const scheduleData = [
   { id: 3, title: 'DAY 3', duration: ['2박3일'] },
 ];
 
-const Position = Styled.div`
-  position: relative;
-`;
-
 function CustomizedAccordions({duration, loginInfo}) {
   const [expanded, setExpanded] = useState('');
   const [buttonClicked, setButtonClicked] = useState(true);
@@ -261,7 +257,6 @@ function CustomizedAccordions({duration, loginInfo}) {
       }));
 
       console.log("업데이트 데이터???????????????",updatedData);
-      // 업데이트된 데이터를 상태에 설정
       // 중복되지 않은 id를 가진 요소만 상태에 추가
       // Add only unique data to the state
       updatedData.forEach(data => {
@@ -273,10 +268,8 @@ function CustomizedAccordions({duration, loginInfo}) {
   };
 
   const handleClick = () => {
-    setButtonClicked(true); //button 이 click 되었으니
-     // savedData의 유효성을 검사합니다.
-      const isValid = validateSavedData(savedData); // 저장된 데이터가 유효한 경우, 서버로 데이터를 전송합니다.
-
+    setButtonClicked(true);
+      const isValid = validateSavedData(savedData);
       if (isValid) {
         const title = prompt("원하는 [코스 이름]을 작성하세요:");
         const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
@@ -286,8 +279,11 @@ function CustomizedAccordions({duration, loginInfo}) {
           alert("취소되었습니다.");
         }
       } else {
-        // 저장된 데이터가 유효하지 않은 경우, 알림을 표시합니다.
         alert("아직 채워지지 않은 날짜가 있습니다. 최소 1개 이상 모두 채워주세요..");
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       }
   };
 
@@ -304,17 +300,12 @@ function CustomizedAccordions({duration, loginInfo}) {
     } else {
       isValidCourseDay = false;
     }
-    
-    // 여기서 추가적인 유효성 검사를 수행할 수 있습니다.
-  
-    // 모든 유효성 검사를 통과하면 true를 반환합니다.
+
     return isValidCourseDay;
   };
 
   const sendDataToServer = (savedData, title) => {
-    // 서버로 데이터를 전송하는 로직을 작성합니다.
-    // 예를 들어, axios를 사용하여 POST 요청을 보낼 수 있습니다.
-    
+  
     console.log("전송될 데이터: ", savedData);
     console.log("title: ",title);
     axios.post(`/place/savedata/${title}`, savedData)
@@ -348,14 +339,11 @@ function CustomizedAccordions({duration, loginInfo}) {
                   </AccordionDetails>
                 </Accordion>
               );
-            } else {
-              return null;
-            }
+            } else {   return null;   }
           })
         }
-        <button className="buttondesign save" onClick={handleClick}>저장하기</button>
       </AccordionWrap>
-      
+      <button className="buttondesignSave" onClick={handleClick}>코스 저장하기</button> 
       </Position>
     );
 }

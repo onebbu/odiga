@@ -36,7 +36,7 @@ function Myarticle() {
         <div style={{width: "50rem", margin: "auto"}}>
             <Title>{loginInfo.nickname}님이 작성한 글</Title>
             <hr/>
-            {articleList ? (
+            {articleList && Object.keys(articleList).length > 0 ? (
                 <>
                     <GridContainer style={{marginBottom: "100px"}}>
                         {articleList && Object.keys(articleList).map(articleKey => (
@@ -49,7 +49,12 @@ function Myarticle() {
                             >
                                 <CardContainer key={articleKey}>
                                     <Card.Img variant="top"
-                                              src={articleList[articleKey].mainImage ? articleList[articleKey].mainImage : odigaLogo}/>
+                                              src={articleList[articleKey].mainImage ? articleList[articleKey].mainImage : odigaLogo}
+                                    style={{
+                                        width: "16rem",
+                                        height: "8rem",
+                                        objectFit: "cover"
+                                    }} />
                                     <LikeBadge bg="dark">
                                         <FavoriteBorderIcon
                                             sx={{fontSize: 15}}
@@ -74,13 +79,11 @@ function Myarticle() {
                 </>
             ) :(
                 <>
-                    <Message>코스 정보가 없습니다.</Message>
+                    <Message>작성한 글이 없습니다.</Message>
                 </>
             )}
         </div>
-
-    )
-        ;
+    );
 }
 
 export default Myarticle;
@@ -101,7 +104,8 @@ const GridContainer = styled.div`
 const CardContainer = styled(Card)`
   position: relative;
   width: 16rem;
-  height: 23rem;
+  height: 16rem;
+  background-color: #f4f4f4;
 `;
 
 const StackContainer = styled(Stack)`
