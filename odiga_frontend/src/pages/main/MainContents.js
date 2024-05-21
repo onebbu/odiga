@@ -87,7 +87,9 @@ function Maincontents() {
                           </div>
                         </div>
                         {/* 백엔드 엔드포인트에 카테고리 없음 */}
-                        <div className="cardCategory"><p>#</p>{cosData.category}</div> 
+                        <div className="cardCategory">
+                          #{cosData.tags && cosData.tags.split('#')[1] ? cosData.tags.split('#')[1] : ''}  
+                        </div> 
                       </div>
                    </div>
                   ))} 
