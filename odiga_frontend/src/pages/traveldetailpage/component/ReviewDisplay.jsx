@@ -1,28 +1,39 @@
-import React, { useEffect, useState , useContext } from "react";
+import React, {useEffect, useState, useContext} from "react";
 import axios from "axios";
 import '../TravelDetailPage.css';
-import ReviewImportForm from './ReviewImportForm'; 
-import { useParams } from 'react-router-dom';
+import ReviewImportForm from './ReviewImportForm';
+import {useParams} from 'react-router-dom';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
 
-function ReviewDisplay(props) {
-    const { contentID } = useParams();
+function ReviewDisplay({travelInfo, modalContentId}) {
+    const {contentID} = useParams();
     const [reviews, setReviews] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [editedContent, setEditedContent] = useState('');
     const loginInfo = useContext(LoginInfoContext);
-    const { travelInfo } = props;
 
+    const [locaContId, setLocaContId] = useState("");
+
+    useEffect(() => {
+        if (typeof modalContentId === "undefined" || modalContentId === "") {
+            setLocaContId(contentID);
+        } else {
+            setLocaContId(modalContentId);
+        }
+    }, [modalContentId]);
 
     useEffect(() => {
         fetchReviews();
         console.log(reviews);
-    }, []);
+    }, [locaContId]);
+
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.get(`/reviews/${contentID}`); 
-            setReviews(response.data);
+            if (typeof locaContId !== "undefined" && locaContId !== "") {
+                const response = await axios.get(`/reviews/${locaContId}`);
+                setReviews(response.data);
+            }
         } catch (error) {
             console.error("리뷰를 불러오는 중 오류가 발생했습니다:", error);
         }
@@ -31,21 +42,16 @@ function ReviewDisplay(props) {
     const handleNewReview = () => {
         fetchReviews();  // 새 리뷰가 추가될 때마다 리뷰 목록 새로고침
     };
-    
-
-    
-
 
     const renderStars = (rating) => {
         let stars = [];
         for (let i = 0; i < 5; i++) {
             stars.push(
-                <span key={i} style={{ color: i < rating ? '#ffc107' : '#e4e5e9' }}>&#9733;</span>
+                <span key={i} style={{color: i < rating ? '#ffc107' : '#e4e5e9'}}>&#9733;</span>
             );
         }
         return stars;
     };
-
 
 
     //리뷰 수정 / 삭제 기능 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~변수명, 엔드포인트 확인 필요~~~~
@@ -63,10 +69,11 @@ function ReviewDisplay(props) {
 
     const submitEdit = async (reviewno) => {
         try {
-            await axios.post(`/ReviewUpdate`, 
-            {  reviewno : reviewno ,
-                reviewcomment: editedContent
-            });
+            await axios.post(`/ReviewUpdate`,
+                {
+                    reviewno: reviewno,
+                    reviewcomment: editedContent
+                });
             fetchReviews();
             cancelEditing();
         } catch (error) {
@@ -79,16 +86,17 @@ function ReviewDisplay(props) {
         if (window.confirm("리뷰를 삭제하시겠습니까?")) {
             try {
                 axios.post(`/ReviewDelete/${reviewno}`);
-                
+
             } catch (error) {
                 console.error("리뷰 삭제 중 오류가 발생했습니다:", error);
             }
-        }fetchReviews();
+        }
+        fetchReviews();
     };
 
     return (
         <section id="review-display" className="reviewDisplay">
-            <ReviewImportForm onReviewSubmitted={handleNewReview} />
+            <ReviewImportForm onReviewSubmitted={handleNewReview} modalContentId={locaContId}/>
             <div className="averageRatingInner">
                 <h4> Comment ! </h4>
                 {travelInfo ? ( // travelInfo가 존재하는 경우에만 렌더링
@@ -101,60 +109,58 @@ function ReviewDisplay(props) {
                 )}
             </div>
             <div className="contourLine6"></div>
-            <div id="review-display-placeholder">
-
-
-            {reviews.map((review, index) => (
-                <div key={index} className="reviewItem">
-                    {loginInfo.email === review.email ? (
-                        <>
-                            {review.reviewno === editingId ? (
-                                <>
+            <div>
+                {reviews && reviews.map((review, index) => (
+                    <div key={index} className="reviewItem">
+                        {loginInfo.email === review.email ? (
+                            <>
+                                {review.reviewno === editingId ? (
+                                    <>
                                     <textarea
                                         value={editedContent}
                                         onChange={(e) => setEditedContent(e.target.value)}
                                         className="commentDetail"
                                     />
-                                <div className="commentInfo">
-                                    <button onClick={() => submitEdit(review.reviewno)}>확인</button>
-                                    <button onClick={cancelEditing}>취소</button>
+                                        <div className="commentInfo">
+                                            <button onClick={() => submitEdit(review.reviewno)}>확인</button>
+                                            <button onClick={cancelEditing}>취소</button>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="reviewComment">
+                                            <p className="commentContent">{review.reviewcomment}</p>
+                                        </div>
+                                        <div className="commentInfo">
+                                            <div className="commentDetail">{review.nickname} |</div>
+                                            <div className="commentDetail">{renderStars(review.reviewgrade)} |</div>
+                                            <div className="commentDetail">{review.reviewdate}</div>
+                                            <button style={{border : 'none'}} onClick={() => startEditing(review)}>수정</button>
+                                            <button calssName="editingButton" onClick={() => deleteReview(review.reviewno)}>삭제</button>
+                                        </div>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <>
+                                <div className="reviewComment">
+                                    <p className="commentContent">{review.reviewcomment}</p>
                                 </div>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="reviewComment">
-                                        <p className="commentContent">{review.reviewcomment}</p>
-                                    </div>
-                                    <div className="commentInfo">
-                                        <div className="commentDetail">{review.nickname} |</div>
-                                        <div className="commentDetail">{renderStars(review.reviewgrade)} |</div>
-                                        <div className="commentDetail">{review.reviewdate}</div>
-                                        <button onClick={() => startEditing(review)}>수정</button>
-                                        <button onClick={() => deleteReview(review.reviewno)}>삭제</button>
-                                    </div>
-                                </>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <div className="reviewComment">
-                                <p className="commentContent">{review.reviewcomment}</p>
-                            </div>
-                            <div className="commentInfo">
-                                <div className="commentDetail">{review.nickname} |</div>
-                                <div className="commentDetail">{renderStars(review.reviewgrade)} |</div>
-                                <div className="commentDetail">{review.reviewdate}</div>
-                            </div>
-                        </>
-                    )}
-                </div>
-            ))}
-            </div> 
+                                <div className="commentInfo">
+                                    <div className="commentDetail">{review.nickname} |</div>
+                                    <div className="commentDetail">{renderStars(review.reviewgrade)} |</div>
+                                    <div className="commentDetail">{review.reviewdate}</div>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                ))}
+            </div>
             {/* <div id="review-display-placeholder">
                 {reviews.map((review, index) => (
                     <div key={index} className="reviewItem">
-                        
-                        
+
+
                         <div className="reviewComment">
                         <p className="commentContent">{review.reviewcomment}</p>
                         </div>
@@ -162,7 +168,7 @@ function ReviewDisplay(props) {
                             <div className="commentDetail">{review.nickname}  &nbsp;|</div>
                             <div className="commentDetail">{renderStars(review.reviewgrade)}  &nbsp;|</div>
                             <div className="commentDetail">{review.reviewdate}</div>
-                        </div> 
+                        </div>
                     </div>
                 ))}
             </div> */}
