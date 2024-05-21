@@ -12,7 +12,8 @@ function Header() {
     const [lastScrollY, setLastScrollY] = useState(0);
     const navigate = useNavigate();
     const loginInfo = useContext(LoginInfoContext);
-    console.log("로그인 정보",loginInfo)
+    // console.log("로그인 정보",loginInfo)
+    
 
     const handleScroll = () => {
         const currentScrollY = window.scrollY;
@@ -23,6 +24,8 @@ function Header() {
         }
         setLastScrollY(currentScrollY);
     };
+
+    
 
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
@@ -75,7 +78,7 @@ function Header() {
                 </div>
                 <div className="sub-menu-line"></div>
                 <div className="login-box">
-                    {sessionStorage.getItem('token') ? (
+                    {loginInfo ? (
                         <>
                             <Logout />
                             <button className="login-link" onClick={() => navigate('/my-page')}>

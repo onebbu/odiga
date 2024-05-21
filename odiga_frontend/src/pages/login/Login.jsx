@@ -79,6 +79,7 @@ export default function Login() {
                 }, 60*60*1000); // 1시간 후
 
                 navigate('/');
+                window.location.reload();
             }
         } catch (error) {
             if (error.name === 'ValidationError') {
