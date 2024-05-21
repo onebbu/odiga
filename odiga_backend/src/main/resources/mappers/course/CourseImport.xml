@@ -11,7 +11,8 @@
             r.COURSEDAY, 
             r.TRAVELNUM, 
             r.CONTENTID, 
-            r.NICKNAME,  
+            r.NICKNAME, 
+            r.EMAIL,  
             r.COURSEYN,
             r.COURSETITLE,
             t.FIRSTIMAGE,
@@ -43,6 +44,7 @@
         <result property="travelnum" column="TRAVELNUM"/>
         <result property="contentid" column="CONTENTID"/>
         <result property="nickname" column="NICKNAME"/>
+        <result property="email" column="EMAIL"/>
         <result property="courseyn" column="COURSEYN"/>
         <result property="firstimage" column="FIRSTIMAGE"/>
         <result property="title" column="TITLE"/>
