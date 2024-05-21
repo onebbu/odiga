@@ -55,6 +55,7 @@ const CourseReviewBoard = () => {
   const fetchData = async () => {
     try {
       const response = await axios.get("/coursereview");
+      console.log(response);
       const fetchedPosts = response.data;
       setPosts(fetchedPosts);
     } catch (error) {
@@ -69,9 +70,11 @@ const CourseReviewBoard = () => {
   useEffect(() => {
     // 페이지가 로드될 때 데이터 가져오기
     fetchData();
+    console.log("유즈이펙트 호출");
 
     // popstate 이벤트 리스너 추가 (뒤로가기 버튼을 눌렀을 때)
     const handlePopState = () => {
+      console.log("팝스테이트호출")
       fetchData();
     };
 
@@ -122,9 +125,9 @@ const CourseReviewBoard = () => {
             <div className="col-lg-10 offset-lg-1">
               <div className="header-text">
                 <div style={{ display: "flex" }}>
-                  <div style={{ padding: "30px", flex: 1 }}>
+                  {/* <div style={{ padding: "30px", flex: 1 }}>
                     <YoutubePlaylist />
-                  </div>
+                  </div> */}
                   <div style={{ flex: 1, padding: "30px" }}>
                     <h2
                       style={{

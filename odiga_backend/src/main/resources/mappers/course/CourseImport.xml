@@ -11,8 +11,7 @@
             r.COURSEDAY, 
             r.TRAVELNUM, 
             r.CONTENTID, 
-            r.NICKNAME, 
-            r.EMAIL,  
+            r.NICKNAME,  
             r.COURSEYN,
             r.COURSETITLE,
             t.FIRSTIMAGE,
@@ -28,10 +27,13 @@
         WHERE 
             r.nickname = #{nickname}
     </select>
-    <insert id="saveCourseData" parameterType="String">
+    <insert id="saveCourseData" parameterType="com.odiga.mytrip.course.vo.CourseImportVO" >
+        <selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
+            SELECT BOARDNO_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
         INSERT INTO COURSEREVIEW
         (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN ,MAINIMAGE ,TAGS , COURSENO)
-        VALUES (BOARDNO_SEQ.NEXTVAL, #{email} , #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' ,#{mainimage} , #{tags , jdbcType=VARCHAR} , #{courseno})
+        VALUES (#{boardNo}, #{email}, #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' ,#{mainimage} , #{tags , jdbcType=VARCHAR} , #{courseno})
     </insert>
 
 

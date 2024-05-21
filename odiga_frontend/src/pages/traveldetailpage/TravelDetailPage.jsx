@@ -1,9 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import axios from 'axios';
 import ReviewDisplay from "./component/ReviewDisplay";
-import Header from "../component/navbar/Header";
 import './TravelDetailPage.css';
-import Footer from '../component/footer/Footer';
 import Slider from "react-slick";
 import './slick.css';
 import './slick-theme.css';

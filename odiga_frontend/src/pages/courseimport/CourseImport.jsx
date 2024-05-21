@@ -81,23 +81,25 @@ function CourseImport() {
     const areaName = getAreaName(areacode);
     const fullTitle = `[${areaName}] ${title}`;
     axios.post("/courseimport", {
-      Title: fullTitle,
-      BoardContent: boardContent,
-      MainImage: MainImage,
-      Tags: tags,
+      boardTitle: fullTitle,
+      boardContent: boardContent,
+      mainimage: MainImage,
+      tags: tags,
       areacode: areacode,
       nickname: loginInfo.nickname,
-      email : loginInfo.email ,
-      courseno : cosNo
+      email: loginInfo.email,
+      courseno: cosNo
     })
-      .then((response) => {
-        console.log(response, "가 전송됐습니다.");
-        alert("여행코스 후기를 작성하였습니다.")
-        navigate("/coursereview");
-      })
-      .catch((error) => {
-        console.error("POST 요청이 실패했습니다:", error);
-      });
+    .then((response) => {
+      console.log(response, "가 전송됐습니다.");
+      alert("여행코스 후기를 작성하였습니다.");
+      // response.data에 boardNo가 포함되어 있다고 가정
+      const boardNo = response.data;
+      navigate(`/coursereview/detail/${boardNo}`);
+    })
+    .catch((error) => {
+      console.error("POST 요청이 실패했습니다:", error);
+    });
   };
 
   const fetchTravelCourse = () => {
@@ -180,6 +182,7 @@ function CourseImport() {
   if (loginInfo === undefined) {
     return null;
   }
+  
 
   return (
     <>
@@ -201,7 +204,7 @@ function CourseImport() {
         </section>
 
         <section className="couseImportTextBox">
-          <div>
+          <div className="editor-container">
             <TextEditor setData={setBoardContent} />
           </div>
         </section>
