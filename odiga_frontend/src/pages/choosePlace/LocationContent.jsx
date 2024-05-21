@@ -3,16 +3,13 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {Link} from "react-router-dom";
 import axios from "axios";
-import "./LocationContent.css";
 import { red } from '@mui/material/colors';
 import PlaceIcon from '@mui/icons-material/Place';
+import TravelDetailPage from "../traveldetailpage/TravelDetailPage";
 
 
-function LocationContent(
-    { show, handleClose, contentId}
-) {
+function LocationContent({ show, handleClose, contentId}) {
 
     const [data, setData] = useState([null]);
 
@@ -34,6 +31,11 @@ function LocationContent(
         };
     }, []);
 
+    console.log("현재 타이틀",data[contentId]?.title);
+    
+    console.log("확인",data[contentId]);
+
+
     const img = data[contentId]?.img;
     const likeCount = data[contentId]?.likeCount;
     const title = data[contentId]?.title;
@@ -44,23 +46,21 @@ function LocationContent(
 
     // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
     const catColors = {
-        '액티비티': { backgroundColor: '#B4DAF2', color: 'black'},
-        '테마파크': { backgroundColor: '#B4DAF2', color: 'black'},
-        '축제': { backgroundColor: '#B4DAF2', color: 'black'},
-        '바다': { backgroundColor: '#DBDBC5', color: 'black'},
-        '자연': { backgroundColor: '#DBDBC5', color: 'black'},
-        '산': { backgroundColor: '#DBDBC5', color: 'black'},
-        '문화역사': { backgroundColor: '#F7AB89', color: 'black'},
-        '실내여행지': { backgroundColor: '#F7AB89', color: 'black'},
-        '쇼핑': { backgroundColor: '#F7AB89', color: 'black'},
-        '카페': { backgroundColor: '#F4D35E', color: 'black'},
-        '식당': { backgroundColor: '#F4D35E', color: 'black'},
+        '액티비티': { backgroundColor: '#B4DAF2'},
+        '테마파크': { backgroundColor: '#B4DAF2'},
+        '축제': { backgroundColor: '#B4DAF2'},
+        '바다': { backgroundColor: '#DBDBC5'},
+        '자연': { backgroundColor: '#DBDBC5'},
+        '산': { backgroundColor: '#DBDBC5'},
+        '문화역사': { backgroundColor: '#F7AB89'},
+        '실내여행지': { backgroundColor: '#F7AB89'},
+        '쇼핑': { backgroundColor: '#F7AB89'},
+        '카페': { backgroundColor: '#F4D35E'},
+        '식당': { backgroundColor: '#F4D35E'},
     };
 
     // 해당 카테고리의 배경색과 폰트색 가져오기
-    const { backgroundColor, color } = catColors[cat] || { backgroundColor: 'gray', color: 'black' };
-
-
+    const { backgroundColor } = catColors[cat] || { backgroundColor: 'gray'};
 
     const [selectedData, setSelectedData] = useState(null);
     const contentData = '';
@@ -74,24 +74,17 @@ function LocationContent(
     }, [contentData]);
 
 
-    const tokenData = sessionStorage.getItem("token");
-
-    function openDetailPage() {
-        sessionStorage.setItem("token", tokenData);
-        window.open(`/detail/${contentId}`, "_blank");
-    }
-
     return (
         <Modal show={show}
                onHide={handleClose}
                centered
-               dialogClassName="modal-90w">
+               size="lg">
             <Modal.Header closeButton>
                 <Modal.Title>
                     {title}
                     <span style={{
                         backgroundColor,
-                        color,
+                        color: 'black',
                         fontSize: '60%',
                         fontFamily: "GmarketSansMedium",
                         padding: '0.25em 0.5em',
@@ -105,22 +98,7 @@ function LocationContent(
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body style={{ textAlign: 'center', fontFamily: "GmarketSansMedium"}}>
-                {/*이미지, 주소 가운데 정렬 + 간격 두기*/}
-                <Image src={img} rounded style={{width:"20rem", marginBottom: '1rem'}}/>
-                <br />
-                <span><PlaceIcon/> 주소: {addr}</span>
-                <p
-                    style={{
-                        color: "gray"
-                    }}
-                >더 자세한 여행지 정보는? <button onClick={openDetailPage}
-                style={{
-                    border: "none",
-                    backgroundColor: "transparent",
-                    color: "blue"
-                }}
-                >여기</button></p>
-
+                <TravelDetailPage modalContentId={contentId}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>

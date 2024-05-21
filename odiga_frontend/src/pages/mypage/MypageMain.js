@@ -6,7 +6,6 @@ import Myarticle from "./Myarticle";
 import Mypage from "./Mypage";
 import MyLikeList from "./MyLikeList";
 import Mycourse from "./Mycourse";
-import Header from "../component/navbar/Header";
 import {LoginInfoContext} from "../login/LoginInfoProvider";
 
 function MypageMain() {
@@ -22,7 +21,7 @@ function MypageMain() {
 
   return (
       <>
-        <Header/>
+      
         <Container>
           <Sub_cotainer>
             <Aside>
@@ -66,21 +65,16 @@ function MypageMain() {
 
 export default MypageMain;
 
-const Hidden = styled.div`
-  visibility: hidden;
-`;
 
 const Container = styled.div`
-  position: fixed;
-  top: 5em;
-  bottom: 5em;
-  display: block;
+  margin-bottom: 5em;
   width: 100%;
-  overflow: auto;
+  min-height: 65vh;
+  //overflow: auto;
 `;
 
 const Sub_cotainer = styled.div`
-  display: block;
+  margin-top: 5rem;
   padding: 1%;
   height: 100%;
   width: 100%;

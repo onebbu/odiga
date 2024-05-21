@@ -31,6 +31,8 @@ const Pagination = ({
         setCurrentPage(firstNum - 5);
       }
     };
+
+    console.log(currentPage);
   
     return (
       <>
@@ -43,7 +45,7 @@ const Pagination = ({
           }}
         >
           <button
-            style={{ margin: "1px" }}
+            style={{margin: "1px" }}
             className="btn btn-primary"
             onClick={prevPageGroup}
             disabled={firstNum <= 1}
@@ -52,7 +54,7 @@ const Pagination = ({
           </button>
           {pageNumbers.map((number) => (
             <button
-              style={{ margin: "1px" }}
+              style={{margin: "1px" }}
               className="btn btn-primary"
               key={number}
               onClick={() => setCurrentPage(number)}
@@ -61,7 +63,7 @@ const Pagination = ({
             </button>
           ))}
           <button
-            style={{ margin: "1px" }}
+            style={{margin: "1px" }}
             className="btn btn-primary"
             onClick={nextPageGroup}
             disabled={lastNum >= Math.ceil(totalPosts / postsPerPage)}

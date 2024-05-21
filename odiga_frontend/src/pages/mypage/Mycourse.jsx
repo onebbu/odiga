@@ -43,12 +43,10 @@ function Mycourse() {
         <div style={{width: "50rem", margin: "auto"}}>
             <Title>{loginInfo.nickname}님의 여행코스</Title>
             <hr style={{marginBottom: "4rem"}}/>
-            {courseInfo ? (
+            {courseInfo && Object.keys(courseInfo).length > 0 ? (
                 <>
                     <Accordion>
                         {Object.keys(courseInfo).map((courseKey, index) => {
-                                console.log(courseInfo)
-
                                 return (
                                     <Accordion.Item key={courseKey} eventKey={index}>
                                         <Accordion.Header style={{width: "49rem"}}>

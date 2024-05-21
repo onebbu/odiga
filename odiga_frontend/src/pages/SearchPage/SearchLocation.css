@@ -1,0 +1,246 @@
+.search-container {
+    display: flex;
+    padding-top: 15vh;
+    width: 100%;
+    background: #f4f4f4;
+
+}
+
+.search-wrap {
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+    height: 85vh;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-bottom: 4rem;
+    overflow: auto;
+    margin: 0;
+}
+
+.search-map {
+    padding-top: 10rem;
+    text-align: center;
+    width: 40%;
+    height: auto; /* 세로 공간을 내용에 따라 조정하기 위해 변경 */
+    margin-left: auto;
+    flex-grow: 1;
+    background-color: #f4f4f4;
+}
+
+.search-page {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.search-cat {
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 24px;
+    text-align: center;
+}
+
+.search-form input {
+    width: 70%;
+    height: 44px;
+    border: 2px solid #ddd;
+    margin-right: 10px;
+    padding: 0 10px;
+    font-size: 16px;
+    border-radius: 22px;
+}
+
+.search-form button {
+    padding: 10px 20px;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 22px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #357AE8;
+}
+
+.search-results {
+    margin-top: 20px;
+    width: 100%;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    position: relative; /* 위치 상대적으로 설정 */
+    z-index: 1; /* 검색 결과가 사이드바보다 낮은 z-index를 가짐 */
+    margin-right: 240px; /* 사이드바 너비만큼 왼쪽 여백 설정 */
+}
+
+.search-result-card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-bottom: 10px;
+    transition: box-shadow 0.3s ease-in-out;
+    font-size: 20px;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+}
+
+.search-result-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.search-result-title {
+    font-size: 18px;
+    color: #333;
+}
+
+.search-result-info {
+    font-size: 14px;
+    color: #666;
+}
+
+.cat-sort{
+    display: flex;
+    justify-content: center;
+}
+
+/* 사이드바 스타일 */
+.sidebar {
+    display: flex;
+    margin: 10px 0;
+    padding: 10px;
+    z-index: 2; /* z-index를 통해 레이어 순서 조정 */
+}
+
+.sidebar button:hover {
+    background-color: #e9ecef;
+    color: #0056b3;
+}
+
+.sidebar button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+/*!* 반응형 디자인: 화면 크기가 768px 이하일 때 사이드바 숨기기 *!*/
+/*@media (max-width: 768px) {*/
+/*    .sidebar {*/
+/*        display: none;*/
+/*    }*/
+
+/*    .search-page {*/
+/*        flex-direction: column;*/
+/*    }*/
+
+/*    .search-results {*/
+/*        width: 100%;*/
+/*    }*/
+/*}*/
+
+.tabs {
+    width: 100%;
+    max-width: 800px;
+}
+
+.tab-list {
+    display: flex;
+    justify-content: space-around;
+    list-style: none;
+    padding: 0;
+}
+
+.tab-list li {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+}
+
+.tab-list li.selected {
+    border-bottom: 2px solid #007bff;
+}
+
+.tab-panel {
+    padding: 20px;
+    background: white;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination button {
+    padding: 8px 16px;
+    margin: 0 4px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #007bff;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination button:hover {
+    background-color: #e9ecef;
+    color: #0056b3;
+}
+
+.pagination button:disabled {
+    color: #6c757d;
+    cursor: not-allowed;
+    background-color: #f8f9fa;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: white;
+}
+
+.selected-category {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    color: #007bff;
+    text-align: center;
+}
+
+.sort-options {
+    display: flex;
+    margin: 20px 0;
+    width: 50%;
+    justify-content: center;
+}
+
+.sort-button {
+    background-color: #ffffff;
+    color: #4285F4;
+    border: 2px solid #4285F4;
+    padding: 5px 10px;
+    margin: 0 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.sort-button:hover {
+    background-color: #4285F4;
+    color: #ffffff;
+}
+
+.sort-button.active {
+    background-color: #4285F4;
+    color: #ffffff;
+    border-color: #357AE8;
+}

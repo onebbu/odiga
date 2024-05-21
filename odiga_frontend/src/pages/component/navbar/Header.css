@@ -4,7 +4,7 @@
   background-color: white;
   padding: 5px;
   position: fixed;
- 
+  transition: top 0.3s; 
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -41,6 +41,7 @@
   text-decoration: none;
   color: #333;
   font-size: 18px;
+  cursor: pointer;
 }
 
 .Header .NavMenu a:hover {
@@ -55,10 +56,13 @@
   padding-right: 50px;
 }
 
-.search-box {
-  display: flex;
+.hello-box {
+  display: block;
   align-items: center;
   margin-right: 20px; 
+}
+.hello-box p{
+  margin: 0;
 }
 
 .search-input {

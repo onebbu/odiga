@@ -14,6 +14,7 @@ import { LoginInfoContext } from "../login/LoginInfoProvider";
 import ListPlace from './Place';
 import DropContainer from "./DropContainer";
 import Drawer from './Drawer';
+import ScrollToTopButton from '../component/scrollTopBtn';
 import axios from "axios";
 
 // http://localhost:3000/place
@@ -21,20 +22,18 @@ import axios from "axios";
 const Body= Styled.div`
     margin: 0;
     padding: 0;
+    padding-top: 100px;
     background: #f3f4f6; /* 미미한 회색 */
 `;
-const Wrapper=Styled.div` display: flex; min-height: 100vh; `;
-const AccordionWrap=Styled.div`width:20%; height: 100%; position:fixed;`;
+const Wrapper=Styled.div` display: flex; min-height: 100vh;`;
+const AccordionWrap=Styled.div`width:100%;`;
 const Section=Styled.div` position: relative; border: 1px solid #ccc; width: 75%; gap: 20px;
-    margin-left:20%; display: flex; flex-direction: column; width:80%; padding: 16px;`;
-const OpenButton = Styled.button`position: fixed; top: 0px; right: 100px; width: 200px; height: 60px;
+    display: flex; flex-direction: column; width:80%; padding: 16px;`;
+const OpenButton = Styled.button`position: fixed; top: 100px; right: 100px; width: 200px; height: 60px;
     background-color: #549C9B; /* Green */ border: none; border-radius: 0 0 10px 10px; cursor: pointer; outline: none;
     transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
-const ItemsContainer = Styled.div`
-    margin-top: ${(props) => (props.isDrawerOpen ? 320 : 0)}px;
-    transition: margin-top 0.3s ease-in-out;
-  `;
+const Position = Styled.div`position:relative; width:25%; height: 100vh;`;
 
 const areaList = [
     { areacode: '1', areaname: '서울' },
@@ -56,21 +55,32 @@ const areaList = [
     { areacode: '39', areaname: '제주도' },
 ];
 
+const catColors = {
+  '액티비티': {backgroundColor: '#B4DAF2'},
+  '테마파크': {backgroundColor: '#B4DAF2'},
+  '축제': {backgroundColor: '#B4DAF2'},
+  '바다': {backgroundColor: '#DBDBC5'},
+  '자연': {backgroundColor: '#DBDBC5'},
+  '산': {backgroundColor: '#DBDBC5'},
+  '문화역사': {backgroundColor: '#F7AB89'},
+  '실내여행지': {backgroundColor: '#F7AB89'},
+  '쇼핑': {backgroundColor: '#F7AB89'},
+  '카페': {backgroundColor: '#F4D35E'},
+  '식당': {backgroundColor: '#F4D35E'},
+};
+
 const ChoosePlace = () => {
 
-
   const loginInfo = useContext(LoginInfoContext);
-  //const containerRef = useRef(null);
-  //const [containerHeight, setContainerHeight] = useState(0);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
-  
-  const [targetArea, setTargetArea] = useState('1');
-  const [targetDura, setTargetDura] = useState('3');
-  const [targetTheme, setTargetTheme] = useState(null);
+  const [targetArea, setTargetArea] = useState(null);
+  const [targetDura, setTargetDura] = useState(null);
+  const [targetTheme, setTargetTheme] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const [selectedValues, setSelectedValues] = useState(null);
+  const [selectedValues, setSelectedValues] = useState(null); //위의 세 개 값 저장해서 쓸라고.
+  //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   useEffect(() => {
     const startTime = performance.now();
@@ -86,40 +96,29 @@ const ChoosePlace = () => {
 
 
     setSelectedValues(location.state);
-      // 선택한 값이 모두 채워져 있는지 확인
-    if (!selectedValues || !selectedValues.region || !selectedValues.duration || selectedValues.theme.length < 2) {
-      // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동
-      //navigate('/wrongpath/preference');
-    }
-    else{
-      console.log("선택한 값들:", selectedValues); // 선택한 값들을 콘솔에 출력
+     // 선택한 값이 모두 채워져 있는지 확인하고 targetArea, targetDura, targetTheme 설정
+    if (selectedValues && selectedValues.region && selectedValues.duration && selectedValues.theme.length >= 2) {
+      console.log("선택한 값들:", selectedValues);
       setTargetArea(selectedValues.region);
       setTargetDura(selectedValues.duration);
       setTargetTheme(selectedValues.theme);
+    } else {
+      // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동 또는 사용자에게 메시지 표시
+      //navigate('/wrongpath/preference');
     }
-      // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
-      return () => {
+      
+    return () => { // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
         window.removeEventListener("load", handleLoad);
     };
 
-  }, [navigate, location, selectedValues]); 
-  // ^^^^^^^^^^^^^^^choosePage의 Preference들 ^^^^^^^^^^^^^^
-
-  // useEffect(() => { //유동적 높이 조절 포기,,,,,,,
-  //   if (containerRef.current) {
-  //     const height = containerRef.current.clientHeight;
-  //     console.log('isDrawerOpen:', isDrawerOpen);
-  //     console.log('containerHeight:', containerHeight);
-  //     setContainerHeight(height);
-  //   }
-  // }, [isDrawerOpen, containerHeight]);
-  // const ItemsContainer = Styled.div`
-  //   margin-top: ${(props) => props.isDrawerOpen ? `${props.containerHeight}px` : '0'};
-  //   transition: margin-top 0.3s ease-in-out;
-  // `;
+  }, [location.state, selectedValues]); 
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
   };
 
   return(
@@ -129,11 +128,11 @@ const ChoosePlace = () => {
         <CustomizedAccordions duration={targetDura} loginInfo={loginInfo} />
             <Section>  
               <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
-              <Drawer isopen={isDrawerOpen} onClose={toggleDrawer} />
-              <ItemsWrapper isDrawerOpen={isDrawerOpen} 
-                            targetAreacode={targetArea}
+              <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}  loginInfo={loginInfo} areacode={targetArea}/>
+              <ItemsWrapper targetAreacode={targetArea}
                             targetTheme={targetTheme}
                             loginInfo={loginInfo}/>
+              <ScrollToTopButton/>
             </Section>
         </Wrapper>
       </DndProvider>
@@ -142,12 +141,17 @@ const ChoosePlace = () => {
 }
 
 
-const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) => {
+const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
   const [order, setOrder] = useState('title'); //order defalt = 'title'
   // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
   const foundArea = areaList.find(area => area.areacode === targetAreacode);
   const foundAreaName = foundArea ? foundArea.areaname : '없음';
-
+  const themeList = targetTheme.map(theme => ({
+    // 해당 카테고리의 배경색과 폰트색 가져오기
+    ...catColors[theme],
+    themeName: theme,
+    themebackgroundColor: catColors[theme]?.backgroundColor || 'gray',
+}));
   const Orderbtn = ({name, orderID }) => {
     return (
       <div  onClick={()=>setOrder(orderID)} style={{cursor:"pointer", display:"inline", padding:'7px'}}>
@@ -157,21 +161,32 @@ const ItemsWrapper = ({ isDrawerOpen, targetAreacode, targetTheme, loginInfo}) =
   }; 
 
   return(<>
-    <ItemsContainer isDrawerOpen={isDrawerOpen} >
       <div className="item">
           <p> {loginInfo.nickname} 님 ! 여행지를 드래그하여 채워보세요! </p>
           <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
       </div>
-      {targetTheme}
+      <div>
+          {themeList.map((themeItem, index) => (
+            <span key={index} style={{
+                backgroundColor: themeItem.themebackgroundColor,
+                color: 'black',
+                fontFamily: "GmarketSansMedium",
+                fontWeight: '300',
+                padding: '0.5em',
+                marginRight:'8px',
+                borderRadius: "8px"
+            }}>
+                {themeItem.themeName}  
+            </span>
+          ))}
+      </div>
       <div className="item"> <span> 
                 <Orderbtn name={'조회순'} orderID={'travelviewcount'}/>|
                 <Orderbtn name={'가나다순'} orderID={'title'}/>|
-                <Orderbtn name={'별점순'} orderID={'likecount'}/> </span>    </div>
+                <Orderbtn name={'별점순'} orderID={'averageRate'}/> </span>    </div>
       <div className="item">
-        <ListPlace areacode={targetAreacode} order={order}/>
-      </div>
-    </ItemsContainer>
-  
+        <ListPlace areacode={targetAreacode} order={order} theme={targetTheme}/>
+      </div>  
   </>)
 }
 
@@ -216,11 +231,7 @@ const scheduleData = [
   { id: 3, title: 'DAY 3', duration: ['2박3일'] },
 ];
 
-const Position = Styled.div`
-  position: relative;
-`;
-
-function CustomizedAccordions({duration , loginInfo}) {
+function CustomizedAccordions({duration, loginInfo}) {
   const [expanded, setExpanded] = useState('');
   const [buttonClicked, setButtonClicked] = useState(true);
   const [savedData, setSavedData] = useState([]);
@@ -246,7 +257,6 @@ function CustomizedAccordions({duration , loginInfo}) {
       }));
 
       console.log("업데이트 데이터???????????????",updatedData);
-      // 업데이트된 데이터를 상태에 설정
       // 중복되지 않은 id를 가진 요소만 상태에 추가
       // Add only unique data to the state
       updatedData.forEach(data => {
@@ -258,13 +268,9 @@ function CustomizedAccordions({duration , loginInfo}) {
   };
 
   const handleClick = () => {
-    setButtonClicked(true); //button 이 click 되었으니
-     // savedData의 유효성을 검사합니다.
+    setButtonClicked(true);
       const isValid = validateSavedData(savedData);
-
       if (isValid) {
-        // 저장된 데이터가 유효한 경우, 서버로 데이터를 전송합니다.
-        // 사용자로부터 'title' 입력 받기
         const title = prompt("원하는 [코스 이름]을 작성하세요:");
         const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
         if (isConfirmed) {
@@ -273,10 +279,13 @@ function CustomizedAccordions({duration , loginInfo}) {
           alert("취소되었습니다.");
         }
       } else {
-        // 저장된 데이터가 유효하지 않은 경우, 알림을 표시합니다.
         alert("아직 채워지지 않은 날짜가 있습니다. 최소 1개 이상 모두 채워주세요..");
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
       }
-  }
+  };
 
   const validateSavedData = (data) => {
     let isValidCourseDay;
@@ -291,23 +300,17 @@ function CustomizedAccordions({duration , loginInfo}) {
     } else {
       isValidCourseDay = false;
     }
-    
-    // 여기서 추가적인 유효성 검사를 수행할 수 있습니다.
-  
-    // 모든 유효성 검사를 통과하면 true를 반환합니다.
+
     return isValidCourseDay;
   };
 
   const sendDataToServer = (savedData, title) => {
-    // 서버로 데이터를 전송하는 로직을 작성합니다.
-    // 예를 들어, axios를 사용하여 POST 요청을 보낼 수 있습니다.
-    
+  
     console.log("전송될 데이터: ", savedData);
     console.log("title: ",title);
     axios.post(`/place/savedata/${title}`, savedData)
       .then((response) => {
         // 성공적으로 전송되었을 때의 처리
-        console.log(savedData);
         console.log('데이터를 성공적으로 전송했습니다.' + response.data +"   ");
         alert('저장하였습니다.' );
         
@@ -336,14 +339,11 @@ function CustomizedAccordions({duration , loginInfo}) {
                   </AccordionDetails>
                 </Accordion>
               );
-            } else {
-              return null;
-            }
+            } else {   return null;   }
           })
         }
-        <button className="buttondesign save" onClick={handleClick}>저장하기</button>
       </AccordionWrap>
-      
+      <button className="buttondesignSave" onClick={handleClick}>코스 저장하기</button> 
       </Position>
     );
 }
