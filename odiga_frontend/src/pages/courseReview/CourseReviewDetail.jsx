@@ -5,7 +5,7 @@ import {
   faHeart as solidHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
+import axios, { all } from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useParams, useNavigate, Await } from "react-router-dom";
 import styled from "styled-components";
@@ -226,7 +226,7 @@ function CourseReviewDetail() {
             }}
           >
             <div style={{ display: "flex" }}>
-              <div className="ck ck-editor__main" style={{ width: "100%" }}>
+              <div className="ck ck-editor__main" style={{ width: "100%" , wordBreak : "break-all"}}>
                 {!isEditing ? (
                   <div
                     className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"

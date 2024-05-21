@@ -1,12 +1,15 @@
 package com.odiga.mytrip.course.service;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.odiga.mytrip.course.dao.CourseDAO;
+import com.odiga.mytrip.course.vo.CourseImportVO;
 import com.odiga.mytrip.course.vo.CourseVO;
 
 @Service
@@ -24,8 +27,11 @@ public class CourseService {
     }
     
     @Transactional
-    public void saveCourse(String boardTitle, String boardContent , String mainimage , String tags, String email , String nickname , String courseno) {
-        courseDAO.saveCourseData(boardTitle, boardContent , mainimage , tags , email , nickname ,courseno);
+    public int saveCourse(CourseImportVO courseImportVO) {
+        courseDAO.saveCourseData(courseImportVO); 
+        int boardNo = courseImportVO.getBoardNo();
+        return boardNo;  
     }
     
 }
+
