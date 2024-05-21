@@ -1,18 +1,16 @@
-package com.odiga.mytrip.suggest.vo;
+package com.odiga.mytrip.search.vo;
 
 import lombok.*;
 
 @Data
 @AllArgsConstructor
-public class SuggestCosVO {
+public class SearchCourseVO {
     private String boardno;
-    private String nickname;
     private String boardtitle;
-    private String boardcontent;
     private String boardgrade;
     private String boardviewcount;
     private String boardlikecount;
     private String boarddate;
-    private String mainimage;
     private String tags;
+    private String courseno;
 }

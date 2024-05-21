@@ -2,6 +2,7 @@ package com.odiga.mytrip.search.controller;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -12,22 +13,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.odiga.mytrip.search.service.SearchService;
 import com.odiga.mytrip.search.vo.CatVO;
+import com.odiga.mytrip.search.vo.SearchCourseVO;
 import com.odiga.mytrip.search.vo.SearchVO;
 
 @RestController
 public class SearchController {
     @Autowired
     private SearchService searchService;
-    
+
     @GetMapping("/search")
-    public Map<String, Object> getSearchList(
-        @RequestParam("page") String page, 
-        @RequestParam("text") String text, 
-        @RequestParam("areacode") String areacode,
-        @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
+    public Map<String, Object> GetSearchTavelList(
+            @RequestParam("page") String page,
+            @RequestParam("text") String text,
+            @RequestParam("areacode") String areacode,
+            @RequestParam("order") String frontorder,
+            @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
 
         try {
             String order = "title";
+            if("grade".equals(frontorder)) {
+                order = "grade";
+            } else if ("date".equals(frontorder)) {
+                order = "title"; // date 가 없어서 일단 title설정
+            }
+            System.out.println(frontorder);
             // order 파라미터를 검증하여 유효한 정렬 기준으로 변환
             List<SearchVO> searchList = searchService.SearchList(page, text, areacode , order , catcode);
             int resultCount = searchService.resultCount(text, areacode , catcode);
@@ -36,6 +45,7 @@ public class SearchController {
             Map<String, Object> searchResult = new HashMap<>();
             searchResult.put("searchList", searchList);
             searchResult.put("resultCount", resultCount);
+
 
             return searchResult;
         } catch (Exception e) {
@@ -48,5 +58,42 @@ public class SearchController {
     public List<CatVO> getMethodName() throws IOException{
         return searchService.CatList();
     }
-    
+    @GetMapping("/searchcourse")
+    public Map<String, Object> GetSearchCourseList(
+            @RequestParam("page") String page,
+            @RequestParam("text") String text,
+            @RequestParam("order") String frontorder)
+    // @RequestParam(value = "areacode", required = false)String areacode)
+    {
+        String order = "boardtitle";
+        if("grade".equals(frontorder)) {
+            order = "boardgrade";
+        } else if ("date".equals(frontorder)) {
+            order = "boarddate";
+        }
+        List<SearchCourseVO> CourseListResult =  searchService.SearchCourseList(page, text,  order);
+        int resultCourseCount = searchService.resultCourseCount(text);
+
+        Map<String, Object> searchCourseResult = new HashMap<>();
+        searchCourseResult.put("CourseListResult" , CourseListResult);
+        searchCourseResult.put("resultCourseCount" , resultCourseCount);
+        return searchCourseResult;
+    }
+
+    @GetMapping("/count-areas")
+    public Map<Integer, Integer> getAreaResultCount(
+            @RequestParam("text") String text,
+            @RequestParam(value = "catcode", required = false) String catcode
+    ) {
+        int[] areaArr = {1, 2, 3, 4, 5, 6, 7, 8, 31, 32, 33, 34, 35, 36, 37, 38, 39};
+
+        Map<Integer, Integer> areaMap = new HashMap<>();
+
+        for (int areaNum : areaArr) {
+            int areaResultCount = searchService.getAreaResultCount(text, catcode, areaNum);
+            areaMap.put(areaNum, areaResultCount);
+        }
+
+        return areaMap;
+    }
 }

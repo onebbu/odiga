@@ -36,6 +36,11 @@ public class FileUploadController {
          metadata.setContentType(file.getContentType());
          metadata.setContentLength(file.getSize());
 
+         // Add a check for maximum file size
+         if (file.getSize() > 5242880) {
+            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("파일 크기가 너무 큽니다.");
+         }
+
          amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 
          // 파일 URL을 JSON 형식으로 생성

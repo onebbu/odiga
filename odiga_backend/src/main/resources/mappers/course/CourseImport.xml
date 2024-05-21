@@ -27,10 +27,13 @@
         WHERE 
             r.nickname = #{nickname}
     </select>
-    <insert id="saveCourseData" parameterType="String">
+    <insert id="saveCourseData" parameterType="com.odiga.mytrip.course.vo.CourseImportVO" >
+        <selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
+            SELECT BOARDNO_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
         INSERT INTO COURSEREVIEW
-        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , TAGS)
-        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
+        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN ,MAINIMAGE ,TAGS , COURSENO)
+        VALUES (#{boardNo}, #{email}, #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' ,#{mainimage} , #{tags , jdbcType=VARCHAR} , #{courseno})
     </insert>
 
 
@@ -40,6 +43,7 @@
         <result property="travelnum" column="TRAVELNUM"/>
         <result property="contentid" column="CONTENTID"/>
         <result property="nickname" column="NICKNAME"/>
+        <result property="email" column="EMAIL"/>
         <result property="courseyn" column="COURSEYN"/>
         <result property="firstimage" column="FIRSTIMAGE"/>
         <result property="title" column="TITLE"/>

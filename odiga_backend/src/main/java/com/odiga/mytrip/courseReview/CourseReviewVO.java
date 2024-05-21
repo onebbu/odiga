@@ -15,21 +15,10 @@ public class CourseReviewVO {
     private int boardViewCount;
     private int boardLikeCount;
     private Date boardDate;
-    private Character boardYN;
+    private char boardYN;
 	private String mainImage;
-
 	private String tags;
-
-
-
-	public String getMainImage() {
-		return this.mainImage;
-	}
-
-	public void setMainImage(String mainImage) {
-		this.mainImage = mainImage;
-	}
-
+	private String courseNo;
 
 	public int getBoardNo() {
 		return this.boardNo;
@@ -103,20 +92,36 @@ public class CourseReviewVO {
 		this.boardDate = boardDate;
 	}
 
-	public Character getBoardYN() {
+	public char getBoardYN() {
 		return this.boardYN;
 	}
 
-	public void setBoardYN(Character boardYN) {
+	public void setBoardYN(char boardYN) {
 		this.boardYN = boardYN;
 	}
 
+	public String getMainImage() {
+		return this.mainImage;
+	}
+
+	public void setMainImage(String mainImage) {
+		this.mainImage = mainImage;
+	}
+
 	public String getTags() {
-		return tags;
+		return this.tags;
 	}
 
 	public void setTags(String tags) {
 		this.tags = tags;
+	}
+
+	public String getCourseNo() {
+		return this.courseNo;
+	}
+
+	public void setCourseNo(String courseNo) {
+		this.courseNo = courseNo;
 	}
 
 

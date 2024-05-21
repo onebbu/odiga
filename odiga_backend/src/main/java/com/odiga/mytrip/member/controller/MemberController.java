@@ -35,29 +35,6 @@ public class MemberController {
     private final MemberService memberService;
     private final JWTUtil jwtUtil;
 
-    private String token;
-
-
-    // @GetMapping(value = {"", "/"})
-    // public Member home(Model model) {
-    //
-    //     String email = SecurityContextHolder.getContext().getAuthentication().getName();
-    //
-    //     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    //
-    //     Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-    //     Iterator<? extends GrantedAuthority> iter = authorities.iterator();
-    //     GrantedAuthority auth = iter.next();
-    //     String role = auth.getAuthority();
-    //
-    //     Member loginMember = memberService.getLoginMemberByEmail(email);
-    //
-    //     if (loginMember != null) {
-    //         model.addAttribute("nickname", loginMember.getNickname());
-    //     }
-    //     return loginMember;
-    // }
-
     @GetMapping("/join")
     public String joinPage(Model model) {
         // 회원가입을 위해서 model 통해서 joinRequest 전달
@@ -96,7 +73,8 @@ public class MemberController {
             return "EMAIL_PASSWORD_NOT_MATCH";
         }
 
-        String token = jwtUtil.createJwt(member.getEmail(), String.valueOf(member.getRole()), 1000 * 60 * 60L);
+        // 60*60*1000L
+        String token = jwtUtil.createJwt(member.getEmail(), String.valueOf(member.getRole()), 60*60*1000L);
         return token;
     }
 
@@ -124,11 +102,13 @@ public class MemberController {
 
     @GetMapping("/jwt-info")
     public Map<String, String> getJwtLoginInfo(
-            HttpServletRequest request) // 로컬 스토리지 정보(헤더에 있음)
+            HttpServletRequest request, HttpServletResponse response) // 로컬 스토리지 정보(헤더에 있음)
     {
-        Map<String, String> loginInfo = new HashMap<>();
 
         String token = request.getHeader("Authorization");
+
+        Map<String, String> loginInfo = new HashMap<>();
+
         String cleanedToken = token.replace("Bearer ", "");
 
         String email = jwtUtil.getEmail(cleanedToken);
