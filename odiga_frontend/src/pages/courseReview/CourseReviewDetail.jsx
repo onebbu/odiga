@@ -169,7 +169,7 @@ function CourseReviewDetail() {
               {isEditing ? (
                 <input
                   type="text"
-                  value={editedTitle}
+                  value={detailsData?.[0]?.boardTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
                 />
               ) : (

@@ -55,6 +55,12 @@
         DELETE FROM comments
         WHERE commentId = #{commentId}
     </delete>
+
+    <update id="commentEdit" parameterType="com.odiga.mytrip.courseReview.CommentsVO">
+        UPDATE comments
+        SET commentContent= #{commentContent}
+        WHERE commentId = #{commentId}
+    </update>
     
     <update id="boardGrade" parameterType="int">
         UPDATE COURSEREVIEW

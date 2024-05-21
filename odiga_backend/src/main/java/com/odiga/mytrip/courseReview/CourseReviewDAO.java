@@ -20,4 +20,5 @@ public interface CourseReviewDAO {
     void commentDel(CommentsVO commentsVO);
     List<CourseReviewVO> courseReviewSearch(String search);
     void courseReviewEdit(CourseReviewVO courseReviewVO);
+    void commentEdit(CommentsVO commentsVO);
 }

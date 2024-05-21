@@ -19,7 +19,7 @@ const YoutubePlaylist = () => {
               part: "snippet",
               playlistId: playlistId,
               key: "AIzaSyCuvenJJj2OaMIrQtRwP2lmlTrR84RpYl0", // 여기에 자신의 YouTube API 키를 넣어주세요
-              maxResults: 10, // 최대 20개의 동영상을 가져옴
+              maxResults: 15, // 최대 20개의 동영상을 가져옴
             },
           }
         );
@@ -45,6 +45,8 @@ const YoutubePlaylist = () => {
     <>
       {randomVideos.map((video) => (
         <iframe
+
+          key={video}
           width="100%"
           height="100%"
           src={`https://www.youtube.com/embed/${video.snippet.resourceId.videoId}?autoplay=1&mute=1`}

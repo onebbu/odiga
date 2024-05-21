@@ -10,7 +10,10 @@ function Comments() {
   const [allComments, setAllComments] = useState([]);
   const [responseError, setResponseError] = useState("");
   const { boardNo } = useParams();
+  const [editing, setEditing] = useState(false);
   const loginInfo = useContext(LoginInfoContext);
+  const [editCommentId, setEditCommentId] = useState(null); // 추가
+  const [editComment, setEditComment] = useState("");
 
   const handleRatingChange = (value) => {
     setRating(value);
@@ -79,6 +82,32 @@ function Comments() {
       await commentDel(commentId);
     }
   };
+
+  const editClick = async (commentId, commentContent) => {
+    setEditing(true);
+    setEditCommentId(commentId);
+    setEditComment(commentContent);
+  };
+
+  const editCancel = async () => {
+    setEditing(false);
+  };
+
+  const commentEdit = async (commentId) => {
+    const confirmEdit = window.confirm("댓글을 수정하시겠습니까?");
+    if (confirmEdit) {
+      try {
+        await axios.post(`/coursereview/commentEdit`, { commentId: commentId, commentContent: editComment });
+        fetchComments(); // 댓글 목록을 다시 불러옵니다.
+        setEditing(false);
+      } catch (error) {
+        console.error("댓글 수정 중 오류 발생:", error);
+      }
+    } else {
+      console.log("사용자가 수정을 취소했습니다.");
+    }
+  };
+  
 
   const commentDel = async (commentId) => {
     try {
@@ -151,7 +180,26 @@ function Comments() {
               textAlign: "left",
             }}
           >
-            <CommentContent>{item.commentContent}</CommentContent>
+            <CommentContent>
+                {!editing || editCommentId !== item.commentId ? (
+                  item.commentContent
+                ) : (
+                  <textarea
+                    value={editComment}
+                    onChange={(e) => setEditComment(e.target.value)}
+                    style={{
+                      margin: "0 auto",
+                      padding: "15px 20px",
+                      lineHeight: "20px",
+                      border: "1px solid #e5e5e5",
+                      height: "80px",
+                      fontSize: "16px",
+                      width: "100%",
+                      color: "#535455",
+                    }}
+                  />
+                )}
+            </CommentContent>
           </div>
           <div
             style={{ textAlign: "right", fontSize: "14px", color: "#B7B5C4" }}
@@ -189,8 +237,24 @@ function Comments() {
             >
               <StarRating starCount={item.starRating} />
             </div>
-            {loginInfo && loginInfo.email === item.email && (
+            {loginInfo && loginInfo.email === item.email && !editing && (
               <>
+                <button
+                  style={{
+                    width: "100px",
+                    height: "40px",
+                    color: "black",
+                    border: "1px solid #B7B5C4",
+                    backgroundColor: "white",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    marginRight: "5px",
+                  }}
+                  onClick={editClick.bind(this, item.commentId, item.commentContent)}
+                >
+                  수정
+                </button>
                 <button
                   style={{
                     width: "100px",
@@ -205,6 +269,41 @@ function Comments() {
                   onClick={handleDeleteClick.bind(this, item.commentId)}
                 >
                   삭제
+                </button>
+              </>
+            )}
+            {loginInfo && loginInfo.email === item.email && editing && editCommentId === item.commentId && (
+              <>
+                <button
+                  style={{
+                    width: "100px",
+                    height: "40px",
+                    color: "black",
+                    border: "1px solid #B7B5C4",
+                    backgroundColor: "white",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                    marginRight: "5px",
+                  }}
+                  onClick={editCancel}
+                >
+                  취소
+                </button>
+                <button
+                  style={{
+                    width: "100px",
+                    height: "40px",
+                    color: "black",
+                    border: "1px solid #B7B5C4",
+                    backgroundColor: "white",
+                    fontSize: "16px",
+                    cursor: "pointer",
+                    transition: "all 0.3s ease",
+                  }}
+                  onClick={() => commentEdit(item.commentId)}
+                >
+                  저장
                 </button>
               </>
             )}

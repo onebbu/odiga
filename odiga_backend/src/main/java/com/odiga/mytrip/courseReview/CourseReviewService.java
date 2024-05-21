@@ -73,5 +73,10 @@ public class CourseReviewService {
         courseReviewDAO.courseReviewEdit(CourseReviewVO);
     }
 
+    @Transactional
+    public void commentEdit(CommentsVO commentsVO) {
+        courseReviewDAO.commentEdit(commentsVO);
+    }
+
 
 }

@@ -29,15 +29,9 @@
             r.nickname = #{nickname}
     </select>
     <insert id="saveCourseData" parameterType="String">
-<<<<<<< HEAD
-        INSERT INTO TRAVELCOURSEREVIEW
-        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , TAGS)
-        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
-=======
         INSERT INTO COURSEREVIEW
         (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN ,MAINIMAGE ,TAGS , COURSENO)
         VALUES (BOARDNO_SEQ.NEXTVAL, #{email} , #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' ,#{mainimage} , #{tags , jdbcType=VARCHAR} , #{courseno})
->>>>>>> 74bb636b648aa5874f4029883c02b7beac85570b
     </insert>
 
 

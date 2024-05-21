@@ -23,21 +23,6 @@ function Header() {
         setLastScrollY(currentScrollY);
     };
 
-<<<<<<< HEAD
-          //로그인 상태 확인
-          useEffect(() => {
-            const token = localStorage.getItem('token');
-             setIsLoggedIn(!!token); 
-           }, []);
-
-      const handleLoginClick = () => {
-       if (isLoggedIn) {
-        navigate('/my-page/*'); 
-      } else {
-        navigate('/login'); 
-      }
-      };
-=======
     useEffect(() => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
@@ -63,7 +48,6 @@ function Header() {
             navigate(path);
         }
     };
->>>>>>> 74bb636b648aa5874f4029883c02b7beac85570b
 
 
     return (
