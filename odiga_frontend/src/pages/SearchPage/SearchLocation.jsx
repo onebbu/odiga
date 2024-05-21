@@ -275,13 +275,11 @@ function SearchLocation() {
                                 <button className={`sort-button ${order === 'grade' ? 'active' : ''}`}
                                         onClick={() => handleOrderChange('grade')}>별점순
                                 </button>
-                                <button className={`sort-button ${order === 'date' ? 'active' : ''}`}
-                                        onClick={() => handleOrderChange('date')}>최신순
-                                </button>
+                                {/*<button className={`sort-button ${order === 'date' ? 'active' : ''}`}*/}
+                                {/*        onClick={() => handleOrderChange('date')}>최신순*/}
+                                {/*</button>*/}
                             </div>
                         </div>
-
-
                     </div>
 
                     <div className="search-results-container">

@@ -65,21 +65,16 @@ function MypageMain() {
 
 export default MypageMain;
 
-const Hidden = styled.div`
-  visibility: hidden;
-`;
 
 const Container = styled.div`
-  position: fixed;
-  top: 5em;
-  bottom: 5em;
-  display: block;
+  margin-bottom: 5em;
   width: 100%;
-  overflow: auto;
+  min-height: 65vh;
+  //overflow: auto;
 `;
 
 const Sub_cotainer = styled.div`
-  display: block;
+  margin-top: 5rem;
   padding: 1%;
   height: 100%;
   width: 100%;

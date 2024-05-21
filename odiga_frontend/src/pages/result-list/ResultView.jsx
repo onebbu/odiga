@@ -46,7 +46,7 @@ export default function ResultView() {
     useEffect(() => {
         async function fetchLoginInfo() {
             try {
-                const token = localStorage.getItem('token');
+                const token = sessionStorage.getItem('token');
                 const config = {
                     headers: {
                         'Authorization': `${token}`
