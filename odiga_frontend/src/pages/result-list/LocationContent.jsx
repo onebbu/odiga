@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios";
 import "./LocationContent.css";
 import { red } from '@mui/material/colors';
@@ -12,13 +12,9 @@ import PlaceIcon from '@mui/icons-material/Place';
 
 function LocationContent(
     { show, handleClose, contentId}
-    // { show, handleClose}
 ) {
 
     const [data, setData] = useState([null]);
-    // const { contentId } = useParams();
-
-    // const id = 2860963;
 
     useEffect(() => {
         async function fetchData() {
@@ -37,11 +33,6 @@ function LocationContent(
             setData(""); // 컴포넌트가 unmount될 때 data 초기화
         };
     }, []);
-
-    console.log("현재 타이틀",data[contentId]?.title);
-    
-    console.log("확인",data[contentId]);
-
 
     const img = data[contentId]?.img;
     const likeCount = data[contentId]?.likeCount;
@@ -83,6 +74,13 @@ function LocationContent(
     }, [contentData]);
 
 
+    const tokenData = sessionStorage.getItem("token");
+
+    function openDetailPage() {
+        sessionStorage.setItem("token", tokenData);
+        window.open(`/detail/${contentId}`, "_blank");
+    }
+
     return (
         <Modal show={show}
                onHide={handleClose}
@@ -110,12 +108,18 @@ function LocationContent(
                 {/*이미지, 주소 가운데 정렬 + 간격 두기*/}
                 <Image src={img} rounded style={{width:"20rem", marginBottom: '1rem'}}/>
                 <br />
-                <div style={{wordBreak: "keep-all"}}>
-                    <hr />
-                    {overview}
-                </div>
-                <br />
                 <span><PlaceIcon/> 주소: {addr}</span>
+                <p
+                    style={{
+                        color: "gray"
+                    }}
+                >더 자세한 여행지 정보는? <button onClick={openDetailPage}
+                style={{
+                    border: "none",
+                    backgroundColor: "transparent",
+                    color: "blue"
+                }}
+                >여기</button></p>
 
             </Modal.Body>
             <Modal.Footer>

@@ -28,10 +28,13 @@
         WHERE 
             r.nickname = #{nickname}
     </select>
-    <insert id="saveCourseData" parameterType="String">
-        INSERT INTO TRAVELCOURSEREVIEW
-        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN , TAGS)
-        VALUES (BOARDNO_SEQ.NEXTVAL, 'odiga@gmail.com' , 'odiga', #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' , #{tags})
+    <insert id="saveCourseData" parameterType="com.odiga.mytrip.course.vo.CourseImportVO" >
+        <selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
+            SELECT BOARDNO_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO COURSEREVIEW
+        (BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN ,MAINIMAGE ,TAGS , COURSENO)
+        VALUES (#{boardNo}, #{email}, #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' ,#{mainimage} , #{tags , jdbcType=VARCHAR} , #{courseno})
     </insert>
 
 

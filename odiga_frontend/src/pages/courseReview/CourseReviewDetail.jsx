@@ -5,17 +5,14 @@ import {
   faHeart as solidHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick-theme.css";
-import "slick-carousel/slick/slick.css";
+import axios, { all } from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useParams, useNavigate, Await } from "react-router-dom";
 import styled from "styled-components";
 import Comments from "./Comments";
-import "./static/slider.css";
-import Footer from '../component/footer/Footer';
-import Header from "../component/navbar/Header";
+import { LoginInfoContext } from "../login/LoginInfoProvider";
+import CourseReviewCourse from "./CourseReviewCourse";
+import CustomEditor from "./CustomEditor";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -24,42 +21,64 @@ function CourseReviewDetail() {
   const [liked, setLiked] = useState(false); // 좋아요 상태 관리
   const [likeCount, setLikeCount] = useState(0); // 좋아요 수 관리
   const navigate = useNavigate(); // useNavigate 훅 사용
+  const loginInfo = useContext(LoginInfoContext);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedContent, setEditedContent] = useState("");
+  const [editedTitle, setEditedTitle] = useState("");
 
+  console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
     setDidMount(true);
     return () => {};
   }, []);
 
   useEffect(() => {
-    if (didMount) {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(`/coursereview/detail/${boardNo}`);
-          const { boardLikeCount } = response.data[0];
-          setDetailsData(response.data);
-          setLikeCount(boardLikeCount);
-          console.log("조회수 증가");
-        } catch (error) {
-          console.error("Error fetching details:", error);
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`/coursereview/detail/${boardNo}`);
+        const { boardLikeCount } = response.data[0];
+        setDetailsData(response.data);
+        setLikeCount(boardLikeCount);
+        // 로컬 스토리지에서 좋아요 상태 확인
+        const storedLikedStatus = localStorage.getItem(
+          `liked_${boardNo}_${loginInfo.email}`
+        );
+        if (storedLikedStatus === "true") {
+          setLiked(true);
         }
-      };
+      } catch (error) {
+        console.error("Error fetching details:", error);
+      }
+    };
 
+    if (didMount) {
       fetchData();
-      return () => {
-        setDidMount(false);
-      };
     }
-  }, [didMount, boardNo]);
+  }, [didMount, boardNo, isEditing]);
 
   const handleLike = async () => {
-    if (!liked) {
+    if (loginInfo) {
       try {
-        await axios.post(`/coursereview/like/${boardNo}`);
-        setLikeCount((prevCount) => prevCount + 1);
-        setLiked(true);
+        if (!liked) {
+          await axios.post(`/coursereview/like/${boardNo}`);
+          setLikeCount((prevCount) => prevCount + 1);
+          setLiked(true);
+          localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "true");
+          alert("좋아요를 눌렀습니다.");
+        } else {
+          await axios.post(`/coursereview/likeCancel/${boardNo}`);
+          setLikeCount((prevCount) => prevCount - 1);
+          setLiked(false);
+          localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "false");
+          alert("좋아요를 취소하였습니다.");
+        }
       } catch (error) {
-        console.error("Error liking the post:", error);
+        console.error("게시물 좋아요 중 오류 발생:", error);
       }
+    } else {
+      // 로그인되지 않은 경우, 로그인 알림 표시
+      alert("로그인 후 다시 시도해주세요.");
+      // 로그인 페이지로 이동하거나 다른 처리를 수행할 수 있음
     }
   };
 
@@ -76,9 +95,46 @@ function CourseReviewDetail() {
     }
   };
 
+  const handleEdit = () => {
+    setIsEditing(true);
+  };
+
+  const editCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleEditorChange = (content) => {
+    setEditedContent(content);
+  };
+
+  const handleSave = async () => {
+    const confirmSave = window.confirm("수정한 내용을 저장하시겠습니까?");
+    if (confirmSave) {
+      // 수정된 내용이 없으면 알림을 띄우고 함수를 종료
+      if (!editedTitle.trim()) {
+        alert("제목을 입력해주세요.");
+        return;
+      }
+
+      try {
+        // 서버에 수정된 내용 업데이트 요청
+        await axios.put(`/coursereview/update/${boardNo}`, {
+          boardTitle: editedTitle,
+          boardContent: editedContent,
+          boardNo: boardNo,
+        });
+        alert("수정이 완료되었습니다.");
+        setIsEditing(false); // 수정 모드 종료
+        // 수정 후 페이지 리로드
+        window.location.reload();
+      } catch (error) {
+        console.error("게시물 수정 중 오류 발생:", error);
+      }
+    }
+  };
+
   return (
     <>
-    <Header />
       <Container>
         <section
           style={{
@@ -91,18 +147,39 @@ function CourseReviewDetail() {
           <div
             style={{
               margin: "0 auto",
-              marginBottom: "10px",
               padding: "10px",
               width: "100%",
             }}
             className="section-heading text-center"
           >
-            <h4 style={{fontFamily:"JalnanGothic", fontSize:"25px", padding: "10px", margin: "0 auto" }}>
-              {detailsData && detailsData[0].boardTitle}{" "}
+            <h4
+              style={{
+                fontFamily: "JalnanGothic",
+                fontSize: "25px",
+                padding: "10px",
+                margin: "0 auto",
+              }}
+            >
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                />
+              ) : (
+                detailsData?.[0]?.boardTitle
+              )}
             </h4>
             <hr />
-            <h7 style={{fontFamily:"JalnanGothic", fontSize:"18px", textAlign: "left", margin: "0 auto" }}>
-              <b>작성자 :</b> {detailsData && detailsData[0].nickname} &nbsp;&nbsp; &nbsp;
+            <h7
+              style={{
+                fontSize: "18px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              <b>작성자 :</b> {detailsData && detailsData[0].nickname}{" "}
+              &nbsp;&nbsp; &nbsp;
               <b>작성일 :</b> {detailsData && detailsData[0].boardDate} <br />{" "}
               <br />
               <FontAwesomeIcon icon={faEye} /> :{" "}
@@ -119,13 +196,27 @@ function CourseReviewDetail() {
             </h7>
             <br />
             <hr />
+
+            <h7
+              style={{
+                fontSize: "18px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              {detailsData?.[0]?.tags !== undefined &&
+              detailsData?.[0]?.tags !== null
+                ? detailsData[0].tags
+                : "#태그 없음"}
+            </h7>
+            <hr />
           </div>
 
           <Div
             style={{
               textAlign: "left",
-              margin: "0 auto",
-              width: "95%",
+              margin: "10px auto",
+              width: "98%",
               minHeight: "30em",
               marginBottom: "30px",
               padding: "30px",
@@ -135,52 +226,44 @@ function CourseReviewDetail() {
             }}
           >
             <div style={{ display: "flex" }}>
-              <div className="ck ck-editor__main" style={{ width: "100%" }}>
-                <div
-                  className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
-                  dangerouslySetInnerHTML={{
-                    __html:
+              <div className="ck ck-editor__main" style={{ width: "100%" , wordBreak : "break-all"}}>
+                {!isEditing ? (
+                  <div
+                    className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
+                    dangerouslySetInnerHTML={{
+                      __html:
+                        detailsData &&
+                        detailsData[0] &&
+                        detailsData[0].boardContent
+                          ? detailsData[0].boardContent
+                          : "",
+                    }}
+                  />
+                ) : (
+                  <CustomEditor
+                    initialValue={
                       detailsData &&
                       detailsData[0] &&
                       detailsData[0].boardContent
                         ? detailsData[0].boardContent
-                        : "",
-                  }}
-                />
+                        : ""
+                    }
+                    onChange={handleEditorChange}
+                    boardNo={boardNo}
+                  />
+                )}
               </div>
             </div>
           </Div>
-
-          <h4> 여행코스 정보 </h4>
-          <Div
+          <h7
             style={{
-              textAlign: "left",
-              width: "100%",
-              margin: "0 auto",
-              padding: "10px",
-              borderRadius: "10px",
-              marginBottom: "30px",
+              fontFamily: "JalnanGothic",
+              fontSize: "18px",
             }}
           >
-            {carousel()}
-          </Div>
-
-          <Div
-            style={{
-              width: "100%",
-              margin: "30px 0 30px 0 auto",
-            }}
-          >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d6215.7725807321685!2d126.69860724487357!3d37.78789857262643!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x357c8b8a0a9d3671%3A0xd2b2c34c16b1778c!2z7Zek7J2066asIOyYiOyIoOuniOydhA!5e0!3m2!1sko!2skr!4v1713327112832!5m2!1sko!2skr"
-              style={{
-                width: "100%",
-                height: "200px",
-                textAlign: "left",
-                display: "inline-block",
-              }}
-            ></iframe>
-          </Div>
+            여행코스 정보
+          </h7>
+          <CourseReviewCourse detailsData={detailsData} />
 
           <div
             style={{
@@ -193,48 +276,93 @@ function CourseReviewDetail() {
               alignItems: "center",
             }}
           >
-            <Link
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-                marginRight: "10px",
-              }}
-              to="/coursereview"
-            >
-              목 록
-            </Link>
+            {!isEditing ? (
+              <Link
+                className="btn btn-primary"
+                style={{
+                  width: "100px",
+                  borderColor: "#13294b",
+                  backgroundColor: "#13294b",
+                  color: "#fff",
+                }}
+                to="/coursereview"
+              >
+                목 록
+              </Link>
+            ) : (
+              ""
+            )}
 
-            <button
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-                float: "right",
-                marginRight: "10px",
-              }}
-            >
-              수 정
-            </button>
+            {detailsData &&
+              detailsData[0] &&
+              loginInfo &&
+              loginInfo.email === detailsData[0].email && (
+                <>
+                  {!isEditing ? (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        float: "right",
+                        margin: "0 10px 0 10px",
+                      }}
+                      onClick={handleEdit}
+                    >
+                      수 정
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        float: "right",
+                        margin: "0 10px 0 10px",
+                      }}
+                      onClick={handleSave}
+                    >
+                      저 장
+                    </button>
+                  )}
 
-            <button
-              className="btn btn-primary"
-              style={{
-                width: "100px",
-                borderColor: "#13294b",
-                backgroundColor: "#13294b",
-                color: "#fff",
-                margin: "0 10px 0 0",
-                float: "right",
-              }}
-              onClick={handleDelete}
-            >
-              삭 제
-            </button>
+                  {!isEditing ? (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        margin: "0 10px 0 0",
+                        float: "right",
+                      }}
+                      onClick={handleDelete}
+                    >
+                      삭 제
+                    </button>
+                  ) : (
+                    <button
+                      className="btn btn-primary"
+                      style={{
+                        width: "100px",
+                        borderColor: "#13294b",
+                        backgroundColor: "#13294b",
+                        color: "#fff",
+                        margin: "0 10px 0 0",
+                        float: "right",
+                      }}
+                      onClick={editCancel}
+                    >
+                      취 소
+                    </button>
+                  )}
+                </>
+              )}
           </div>
           <br />
         </section>
@@ -258,7 +386,6 @@ function CourseReviewDetail() {
             <button
               className="btn btn-primary"
               onClick={handleLike}
-              disabled={liked}
               style={{
                 background: "none",
                 border: "none",
@@ -289,73 +416,6 @@ function CourseReviewDetail() {
 
         <Comments />
       </Container>
-      <Footer />
-    </>
-  );
-}
-
-function carousel() {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 3,
-    slidesToScroll: 1,
-    rows: 1,
-  };
-  return (
-    <div style={{ top: "50%", textAlign: "center" }}>
-      <Slider {...settings}>
-        <div>
-          {ItemImg()}
-          {ItemTitle("여행지1")}
-        </div>
-        <div>
-          {ItemImg(
-            "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21"
-          )}
-          {ItemTitle("여행지2")}
-        </div>
-        <div>
-          {ItemImg(
-            "https://cdn.visitkorea.or.kr/img/call?cmd=VIEW&id=9916e682-db49-42ec-b894-fea17074ca21"
-          )}
-          {ItemTitle("여행지3")}
-        </div>
-      </Slider>
-    </div>
-  );
-}
-
-function ItemTitle(Title) {
-  return (
-    <>
-      <h4>{Title}</h4>
-    </>
-  );
-}
-
-function ItemImg(imgSrc) {
-  return (
-    <>
-      <button
-        style={{
-          margin: "0 auto",
-          maxWidth: "100%",
-          border: "0px",
-        }}
-      >
-        <img
-          style={{
-            maxWidth: "100%",
-            maxHeight: "300px",
-            overflow: "hidden",
-            padding: "20px",
-            borderRadius: "50px",
-          }}
-          src={imgSrc}
-        />
-      </button>
     </>
   );
 }

@@ -3,10 +3,9 @@ import Styled from "styled-components";
 import './PL.css';
 import Header from "../component/navbar/Header";
 import Footer from '../component/footer/Footer';
-import { useLocation, useNavigate } from "react-router-dom";
-import ListPlace from '../choosePlace/Place';
+import ListPlace from './Place';
 
-// http://localhost:3000/place/show
+// http://localhost:3000/placelist/show
 
 const Body= Styled.div`
     margin: 0;
@@ -43,13 +42,6 @@ const areaList = [
 
 const PlaceList = () => {
 
-  // vvvvvvvvvvvvvvv choosePage의 Preference들 .vvvvvvvvvvvvvvvvvvvvvv
-  
-  const [targetArea, setTargetArea] = useState('1');
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [selectedValues, setSelectedValues] = useState(null);
-
   useEffect(() => {
     const startTime = performance.now();
 
@@ -62,30 +54,19 @@ const PlaceList = () => {
 
     window.addEventListener("load", handleLoad);
 
-
-    setSelectedValues(location.state);
-      // 선택한 값이 모두 채워져 있는지 확인
-    if (!selectedValues || !selectedValues.region ) {
-      // 선택한 값이 모두 채워져 있지 않은 경우, wrongpath 페이지로 이동
-      //navigate('/wrongpath/preference');
-    }
-    else{
-      console.log("선택한 값들:", selectedValues); // 선택한 값들을 콘솔에 출력
-      setTargetArea(selectedValues.region);
-    }
       // cleanup 함수: 컴포넌트가 언마운트될 때 이벤트 리스너 제거
       return () => {
         window.removeEventListener("load", handleLoad);
     };
 
-  }, [navigate, location, selectedValues]); 
+  }, []); 
 
   return(
     <Body>
       <Header />
       <Wrapper>
             <Section>  
-              <ItemsWrapper targetAreacode={targetArea} />
+              <ItemsWrapper/>
             </Section>
         </Wrapper>
         <Footer />
@@ -94,11 +75,11 @@ const PlaceList = () => {
 }
 
 
-const ItemsWrapper = ({ targetAreacode }) => {
+const ItemsWrapper = () => {
   const [order, setOrder] = useState('title'); //order defalt = 'title'
   // find 함수를 사용하여 areacode가 targetAreacode와 일치하는 요소를 찾기
-  const foundArea = areaList.find(area => area.areacode === targetAreacode);
-  const foundAreaName = foundArea ? foundArea.areaname : '없음';
+  // const foundArea = areaList.find(area => area.areacode === targetAreacode);
+  // const foundAreaName = foundArea ? foundArea.areaname : '없음';
 
   const Orderbtn = ({name, orderID }) => {
     return (
@@ -112,14 +93,14 @@ const ItemsWrapper = ({ targetAreacode }) => {
     <ItemsContainer>
       <div className="item">
           <p> 너 오디가 ! </p>
-          <h2> {foundAreaName}의 꼭! 가봐야 할 여행지 </h2>
+          <h2> 꼭! 가봐야 할 여행지 </h2>
       </div>
       <div className="item"> <span> 
                 <Orderbtn name={'조회순'} orderID={'travelviewcount'}/>|
                 <Orderbtn name={'가나다순'} orderID={'title'}/>|
                 <Orderbtn name={'별점순'} orderID={'likecount'}/> </span>    </div>
       <div className="item">
-        <ListPlace areacode={targetAreacode} order={order}/>
+        <ListPlace order={order}/>
       </div>
     </ItemsContainer>
   

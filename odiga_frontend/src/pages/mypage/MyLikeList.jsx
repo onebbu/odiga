@@ -1,8 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useContext, useEffect, useState} from "react";
 import styled from "styled-components";
 import Image from 'react-bootstrap/Image';
 import axios from "axios";
-import { LoginInfoContext } from "../login/LoginInfoProvider";
+import {LoginInfoContext} from "../login/LoginInfoProvider";
+import {Link} from "react-router-dom";
+import Card from 'react-bootstrap/Card';
 
 function MyLikeList() {
 
@@ -27,42 +29,40 @@ function MyLikeList() {
 
 
     return (
-        <Container>
+        <div style={{width: "50rem", margin: "auto"}}>
             <Title>{loginInfo.nickname}님의 여행지 좋아요 목록</Title>
-            <hr style={{marginBottom: "4rem"}}/>
+            <hr/>
             <GridContainer>
-                {likeInfo ? (
+
+                {likeInfo && Object.keys(likeInfo).length > 0 ? (
                     Object.keys(likeInfo).map((courseKey) => (
-                        <div key={courseKey}>
-                            <LocationImage src={likeInfo[courseKey].img} rounded/>
-                                {likeInfo[courseKey].title}
-                                <P>{likeInfo[courseKey].addr}</P>
-                        </div>
+                        <Link to={`/detail/${likeInfo[courseKey].contentId}`}>
+                            <Card className="bg-dark text-white" key={{courseKey}}>
+                                <LocationImage src={likeInfo[courseKey].img} alt={likeInfo[courseKey].title}/>
+                                <Card.ImgOverlay>
+                                    <LikeTitle>{likeInfo[courseKey].title}</LikeTitle>
+                                    <LikeAddr>
+                                        {likeInfo[courseKey].addr}
+                                    </LikeAddr>
+                                </Card.ImgOverlay>
+                            </Card>
+                        </Link>
                     ))
-                ) : (
+                    ) : (
                     <Message>좋아요한 여행지가 없습니다.</Message>
-                )}
+                    )}
             </GridContainer>
-        </Container>
+        </div>
     );
 }
 
 export default MyLikeList;
 
-const Container = styled.div`
-  width: 50rem;
-  margin: auto;
-`;
 
 const Title = styled.h3`
   margin-top: 4rem;
   text-align: center;
-  width: 50rem;
-`;
-
-const Message = styled.div`
-  text-align: center;
-  font-size: 1.2rem;
+  width: 100%;
 `;
 
 const GridContainer = styled.div`
@@ -72,13 +72,32 @@ const GridContainer = styled.div`
   gap: 1rem;
 `;
 
-const LocationImage = styled(Image)`
-  width: 100%;
-  height: auto;
+const LocationImage = styled(Card.Img)`
+  width: 16rem;
+  height: 10rem;
   object-fit: cover;
+  opacity: 0.85;
+  background-color: #f4f4f4;
 `;
 
-const P = styled.div`
+const LikeTitle = styled(Card.Title)`
+  font-size: 14px;
+  position: absolute;
+  bottom: 8px;
+  left: 1px;
+`;
+
+const LikeAddr = styled(Card.Text)`
   font-size: 10px;
-  color: #909090;
+  position: absolute;
+  bottom: 0;
+  left: 1px;
+`;
+
+
+const Message = styled.div`
+  width: 50rem;
+  margin: auto;
+  text-align: center;
+  font-size: 1.2rem;
 `;

@@ -1,7 +1,6 @@
 import React, {useContext, useEffect} from "react";
 import styled from "styled-components";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
-import Logout from "../login/Logout";
 import {useNavigate} from "react-router-dom";
 
 const MyPage = () => {
@@ -23,27 +22,10 @@ const MyPage = () => {
                     <hr style={{ marginBottom: "4rem" }} />
                     <FormContainer>
                         <Label>아이디</Label>
-                        <Input
-                            type="text"
-                            id="email"
-                            className="form-control"
-                            placeholder={loginInfo.email}
-                            style={{ width: "10rem", marginBottom: "2rem" }}
-                            disabled
-                        />
+                        <Label>{loginInfo.email}</Label>
                         <Label>닉네임</Label>
-                        <Input
-                            style={{ width: "10rem", marginBottom: "2rem" }}
-                            type="text"
-                            id="nickname"
-                            className="form-control"
-                            placeholder={loginInfo.nickname}
-                            disabled
-                        />
+                        <Label>{loginInfo.nickname}</Label>
                     </FormContainer>
-                    <ButtonContainer>
-                        <Logout />
-                    </ButtonContainer>
                 </>
             ) : (
                 <Message>로그인 정보가 없습니다.</Message>
@@ -62,7 +44,7 @@ const Title = styled.h3`
 
 const FormContainer = styled.div`
   text-align: left;
-  width: 85%;
+  width: 70%;
   display: block;
   margin-bottom: 40px;
   margin-left: 10%;
@@ -73,18 +55,7 @@ const Label = styled.label`
   display: inline-block;
   text-align: center;
   font-size: 14px;
-`;
-
-const Input = styled.input`
-  width: 30%;
-  display: inline-block;
-  font-size: 12px;
-  max-width: 250px;
-`;
-
-const ButtonContainer = styled.div`
-  text-align: center;
-  margin-top: 70px;
+  margin-bottom: 1rem;
 `;
 
 const Message = styled.div`
