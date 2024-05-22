@@ -27,11 +27,9 @@ public class SecurityConfig {
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-
         return configuration.getAuthenticationManager();
     }
 
-    // jwt를 통한 로그인(url: auth)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -44,35 +42,38 @@ public class SecurityConfig {
 
 
         // 스프링 시큐리티 jwt 로그인 - 경로별 인가 작업
+        // 관리자 기능이 추가될 경우 인가 작업에 ADMIN 추가 필요
         http
                 .authorizeHttpRequests((auth) -> auth
+                        // jwt login
                         .requestMatchers("/auth", "/auth/", "/auth/login", "/auth/join").permitAll()
+                        // google oauth login
                         .requestMatchers("/oauth2/callback/google", "/oauth2/authorization/google").permitAll()
+                        // my-page
+                        .requestMatchers("/my-page/**").hasRole("USER")
+                        // generate course
+                        .requestMatchers("/MyCourseDisplay/**", "/courseimport/**", "/place/savedata/**").hasRole("USER")
+                        // genaerate courseReview
+                        // .requestMatchers("/coursereview/commentWrite/**", "/coursereview/commentDel/**", "/coursereview/like/**", "/coursereview/likeCancel/**", "/coursereview/delete/**", "/coursereview/update/**").hasRole("USER")
+                        // Location add & delete wish
+                        .requestMatchers("/WishDelete/**", "/travelLike/**").hasRole("USER")
                         .anyRequest().permitAll()
                 );
 
-        /*// 스프링 시큐리티 oauth 로그인 - 경로별 인가 작업 필요 -> url 수정 예시
-        http
-                .authorizeHttpRequests((auth) -> auth
-                        // 요청 수정 -> 나중에 완성하고 url 수정 필수
-                        // .requestMatchers("/posts/new", "/comments/save").hasRole(Role.USER.name())
-                        // .requestMatchers("/", "/css/**", "images/**", "/js/**", "/login/*", "/logout/*", "/posts/**", "/comments/**").permitAll()
-                        .anyRequest().authenticated()
-                );
-*/
-
+        // http.logout: 세션 삭제+쿠키 삭제(JSESSIONID)
         http
                 .logout(logout ->
                         logout
                                 .logoutUrl("/auth/logout") // 로그아웃 엔드포인트를 설정합니다.
-                                .logoutSuccessUrl("http://localhost:3000") // 로그아웃 성공 시 리다이렉트할 경로를 설정합니다.
                                 .invalidateHttpSession(true) // HTTP 세션을 무효화합니다.
+                                .logoutSuccessUrl("http://localhost:3000") // 로그아웃 성공 시 리다이렉트할 경로를 설정합니다.
                                 .deleteCookies("JSESSIONID") // 쿠키를 삭제합니다.
                 )
                 .oauth2Login(oauth2 ->
                         oauth2
                                 .defaultSuccessUrl("http://localhost:3000/", true) // 구글 로그인 성공 후 리디렉션될 URI를 설정합니다.
                 );
+
 
         // 세션 설정
         http

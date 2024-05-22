@@ -10,6 +10,7 @@ function ReviewDisplay({travelInfo, modalContentId}) {
     const [reviews, setReviews] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [editedContent, setEditedContent] = useState('');
+    const [editedRating, setEditedRating] = useState(0);  
     const loginInfo = useContext(LoginInfoContext);
 
     const [locaContId, setLocaContId] = useState("");
@@ -53,18 +54,17 @@ function ReviewDisplay({travelInfo, modalContentId}) {
         return stars;
     };
 
-
-    //리뷰 수정 / 삭제 기능 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~변수명, 엔드포인트 확인 필요~~~~
-
     const startEditing = (review) => {
         console.log(review);
         setEditingId(review.reviewno);
         setEditedContent(review.reviewcomment);
+        setEditedRating(review.reviewgrade); 
     };
 
     const cancelEditing = () => {
         setEditingId(null);
         setEditedContent('');
+        setEditedRating(0); 
     };
 
     const submitEdit = async (reviewno) => {
@@ -72,10 +72,12 @@ function ReviewDisplay({travelInfo, modalContentId}) {
             await axios.post(`/ReviewUpdate`,
                 {
                     reviewno: reviewno,
-                    reviewcomment: editedContent
+                    reviewcomment: editedContent,
+                    reviewgrade: editedRating //별점 데이터 추가했습니다~~
                 });
+            console.log('Submitting updated review:', editedRating);
             fetchReviews();
-            cancelEditing();
+            cancelEditing();    
         } catch (error) {
             console.error("리뷰 수정 중 오류가 발생했습니다:", error);
         }
@@ -85,13 +87,16 @@ function ReviewDisplay({travelInfo, modalContentId}) {
         console.log(reviewno);
         if (window.confirm("리뷰를 삭제하시겠습니까?")) {
             try {
-                axios.post(`/ReviewDelete/${reviewno}`);
-
+                await axios.post(`/ReviewDelete/${reviewno}`);
+                fetchReviews();
             } catch (error) {
                 console.error("리뷰 삭제 중 오류가 발생했습니다:", error);
             }
         }
-        fetchReviews();
+    };
+
+    const handleRatingChange = (index) => {
+        setEditedRating(index + 1);
     };
 
     return (
@@ -116,11 +121,24 @@ function ReviewDisplay({travelInfo, modalContentId}) {
                             <>
                                 {review.reviewno === editingId ? (
                                     <>
-                                    <textarea
-                                        value={editedContent}
-                                        onChange={(e) => setEditedContent(e.target.value)}
-                                        className="commentDetail"
-                                    />
+                                        <textarea
+                                            value={editedContent}
+                                            onChange={(e) => setEditedContent(e.target.value)}
+                                            className="commentDetail"
+                                        />
+                                        <div className="editRating">
+                                            <span style={{marginRight : '10px'}}>별점 수정 : </span>
+                                            {[...Array(5)].map((star, i) => (
+                                                <span
+                                                    key={i}
+                                                    className={`star ${i < editedRating ? 'filled' : ''}`}
+                                                    onClick={() => handleRatingChange(i)}
+                                                    style={{color: i < editedRating ? '#ffc107' : '#e4e5e9'}}
+                                                >
+                                                    &#9733;
+                                                </span>
+                                            ))}
+                                        </div>
                                         <div className="commentInfo">
                                             <button onClick={() => submitEdit(review.reviewno)}>확인</button>
                                             <button onClick={cancelEditing}>취소</button>
@@ -135,8 +153,8 @@ function ReviewDisplay({travelInfo, modalContentId}) {
                                             <div className="commentDetail">{review.nickname} |</div>
                                             <div className="commentDetail">{renderStars(review.reviewgrade)} |</div>
                                             <div className="commentDetail">{review.reviewdate}</div>
-                                            <button onClick={() => startEditing(review)}>수정</button>
-                                            <button onClick={() => deleteReview(review.reviewno)}>삭제</button>
+                                            <button style={{border: 'none'}} onClick={() => startEditing(review)}>수정</button>
+                                            <button className="editingButton" onClick={() => deleteReview(review.reviewno)}>삭제</button>
                                         </div>
                                     </>
                                 )}
@@ -156,22 +174,6 @@ function ReviewDisplay({travelInfo, modalContentId}) {
                     </div>
                 ))}
             </div>
-            {/* <div id="review-display-placeholder">
-                {reviews.map((review, index) => (
-                    <div key={index} className="reviewItem">
-
-
-                        <div className="reviewComment">
-                        <p className="commentContent">{review.reviewcomment}</p>
-                        </div>
-                        <div className="commentInfo">
-                            <div className="commentDetail">{review.nickname}  &nbsp;|</div>
-                            <div className="commentDetail">{renderStars(review.reviewgrade)}  &nbsp;|</div>
-                            <div className="commentDetail">{review.reviewdate}</div>
-                        </div>
-                    </div>
-                ))}
-            </div> */}
         </section>
     );
 }
