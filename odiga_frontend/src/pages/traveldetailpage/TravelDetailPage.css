@@ -35,14 +35,12 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     font-size: 15px;
 }
 
-.InfoAndLikeBox {
 
 .InfoAndLikeBox {
     display: flex;
     justify-content: space-between;
 }
 
-.actionBar {
 
 .actionBar {
     display: flex;
@@ -81,9 +79,7 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     background-color: #ccc;
 }
 
-    background-color: #ccc;
-}
-
+ 
 .contourLine4 {
     margin: 20px 0px;
     width: 600px;
@@ -91,8 +87,7 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     background-color: #ccc;
 }
 
-    background-color: #ccc;
-}
+
 
 .contourLine5 {
     margin: 0px 30px;
@@ -247,6 +242,14 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
 
 .reviewComment {
     padding: 15px;
+}
+
+.editRating{
+    display: flex;
+    margin-left: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-right: 10px;
 }
 
 .commentInfo {

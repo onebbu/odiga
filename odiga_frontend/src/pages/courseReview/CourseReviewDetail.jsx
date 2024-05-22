@@ -25,7 +25,7 @@ function CourseReviewDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
-  
+
     const location = useLocation();
     const { pathname: from } = location;
 
