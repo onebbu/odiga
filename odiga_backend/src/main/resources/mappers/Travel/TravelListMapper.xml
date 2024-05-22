@@ -64,7 +64,7 @@
     </select>
     <update id="reviewUpdate" parameterType="com.odiga.mytrip.travel.vo.ReviewDataVO">
         UPDATE TRAVELREVIEW
-        SET reviewcomment = #{reviewcomment}, REVIEWDATE = SYSDATE
+        SET reviewcomment = #{reviewcomment}, REVIEWDATE = SYSDATE , REVIEWGRADE = #{reviewgrade}
         WHERE reviewno = #{reviewno}
     </update>
     <delete id="reviewDelete" parameterType="String">
