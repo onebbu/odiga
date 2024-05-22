@@ -11,13 +11,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import "./Login.css";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState, useRef} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
 import OauthLoginButton from "../component/Oauth/OauthLogin.jsx";
 import {LoginInfoContext} from "./LoginInfoProvider";
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
+import {useLocation} from 'react-router-dom';
 
 // localhost:3000/login
 
@@ -39,20 +40,15 @@ export default function Login() {
     const [errors, setErrors] = useState({}); // 에러 상태 추가
 
     const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(() => {
-        // 로그인 상태 정보가 없을 경우 아무 동작 안함
-        if (Object.keys(loginInfo).length == 0) return;
-        // 로그인 한 상태일 경우 메인 페이지로 리다이렉트
-        if (Object.keys(loginInfo).length != 0) {
-            alert("이미 로그인된 상태입니다.");
-            navigate('/');
-        }
-    }, [loginInfo]);
+            if (Object.keys(loginInfo).length != 0) {
+                alert("이미 로그인된 상태입니다.");
+                navigate('/');
+            }
 
-
-    const previousPageUrl = document.referrer;
-    console.log(previousPageUrl);
+    }, [loginInfo, location.pathname]);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -75,14 +71,14 @@ export default function Login() {
 
             if (result === "EMAIL_PASSWORD_NOT_MATCH") {
                 alert("이메일 또는 비밀번호가 일치하지 않습니다!");
-                // window.location.href = "/login";
             } else {
                 sessionStorage.setItem('token', result);
                 setTimeout(() => {
                     sessionStorage.removeItem('token');
                 }, 60 * 60 * 1000); // 1시간 후
+                // 아니면 이전 페이지로 이동
+                navigate(location.state?.from || '/');
                 window.location.reload();
-                navigate(-1);
             }
         } catch (error) {
             if (error.name === 'ValidationError') {
@@ -96,6 +92,7 @@ export default function Login() {
             }
         }
     };
+
 
     return (
         <div>
@@ -121,8 +118,8 @@ export default function Login() {
                             </Avatar>
                             <Typography component="h1" variant="h5"
                                         sx={{
-                                fontFamily: 'JalnanGothic'
-                            }}
+                                            fontFamily: 'JalnanGothic'
+                                        }}
                             >
                                 로그인
                             </Typography>
@@ -139,7 +136,7 @@ export default function Login() {
                                             onChange={handleChange}
                                             error={Boolean(errors.email)} // 에러가 있으면 true, 없으면 false
                                             helperText={errors.email ? errors.email : ""} // 에러 메시지 표시
-                                            inputProps={{ style: { fontFamily: 'GmarketSansMedium' } }}
+                                            inputProps={{style: {fontFamily: 'GmarketSansMedium'}}}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -178,9 +175,9 @@ export default function Login() {
                 </ThemeProvider>
             </div>
             <div className="oauth"
-            style={{
-                marginBottom: "7rem"
-            }}
+                 style={{
+                     marginBottom: "7rem"
+                 }}
             >
                 <OauthLoginButton/>
             </div>

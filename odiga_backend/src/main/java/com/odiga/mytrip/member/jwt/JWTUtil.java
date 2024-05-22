@@ -51,8 +51,6 @@ public class JWTUtil {
         // 토큰 생성, 삭제
         Date issuedAt = new Date(System.currentTimeMillis());
         Date expiration = new Date(System.currentTimeMillis() + expiredMs);
-        log.info("token issuedAt={}", issuedAt);
-        log.info("token expiration={}", expiration);
 
         return Jwts.builder()
                 .claim("email", email)
