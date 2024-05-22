@@ -125,9 +125,9 @@ const CourseReviewBoard = () => {
             <div className="col-lg-10 offset-lg-1">
               <div className="header-text">
                 <div style={{ display: "flex" }}>
-                  {/* <div style={{ padding: "30px", flex: 1 }}>
+                  <div style={{ padding: "30px", flex: 1 }}>
                     <YoutubePlaylist />
-                  </div> */}
+                  </div>
                   <div style={{ flex: 1, padding: "30px" }}>
                     <h2
                       style={{
