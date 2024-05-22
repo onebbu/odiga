@@ -25,7 +25,7 @@ function CourseReviewDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
-
+  
     const location = useLocation();
     const { pathname: from } = location;
 
@@ -40,7 +40,7 @@ function CourseReviewDetail() {
       setLiked(true);
     }
     return () => {};
-  }, [boardNo, loginInfo.email]);
+  }, [boardNo, loginInfo.email, location]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +64,7 @@ function CourseReviewDetail() {
     if (didMount) {
       fetchData();
     }
-  }, [didMount, boardNo, isEditing]);
+  }, [didMount, boardNo, isEditing, location]);
 
   const handleLike = async () => {
     if (loginInfo) {

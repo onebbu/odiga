@@ -22,7 +22,6 @@ public class CourseReviewController {
 
     @GetMapping("/coursereview")
     public List<CourseReviewVO> AllCourseReviews() {
-        System.out.println("신호 반응");
         return courseReviewService.AllCourseReviews();
     }
 

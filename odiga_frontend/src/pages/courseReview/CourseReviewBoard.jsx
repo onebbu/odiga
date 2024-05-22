@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CourseReviewSearch from "./CourseReviewSearch";
 import YoutubePlaylist from "./YoutubeAPI";
+import { useLocation } from "react-router-dom";
 
 const Place = ({
   boardContent,
@@ -51,11 +52,11 @@ const CourseReviewBoard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(8);
   const [currentPosts, setCurrentPosts] = useState([]);
+  const location = useLocation();
 
   const fetchData = async () => {
     try {
       const response = await axios.get("/coursereview");
-      console.log(response);
       const fetchedPosts = response.data;
       setPosts(fetchedPosts);
     } catch (error) {
@@ -64,27 +65,13 @@ const CourseReviewBoard = () => {
   };
 
   useEffect(() => {
-    setCurrentPage(1); // 게시물 목록이 변경될 때마다 currentPage를 1로 재설정
+    setCurrentPage(1);
   }, [posts]);
 
   useEffect(() => {
-    // 페이지가 로드될 때 데이터 가져오기
     fetchData();
-    console.log("유즈이펙트 호출");
 
-    // popstate 이벤트 리스너 추가 (뒤로가기 버튼을 눌렀을 때)
-    const handlePopState = () => {
-      console.log("팝스테이트호출")
-      fetchData();
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    // 컴포넌트 언마운트 시 popstate 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
+  }, [location]);
 
   useEffect(() => {
     // currentPosts 계산 및 설정
@@ -185,9 +172,9 @@ const CourseReviewBoard = () => {
                       color: "#0a97cd",
                     }}
                   >
-                    TRAVEL COURSE 
-                  </em>{" "} &nbsp;
-                  REVIEW ARTICLES
+                    TRAVEL COURSE
+                  </em>{" "}
+                  &nbsp; REVIEW ARTICLES
                 </h4>
                 <CourseReviewSearch setPosts={setPosts} />
               </div>
@@ -206,7 +193,7 @@ const CourseReviewBoard = () => {
               >
                 총{" "}
                 <em style={{ fontStyle: "normal", color: "#0a97cd" }}>
-                  {posts.length}
+                  {posts && posts.length}
                 </em>{" "}
                 건
               </div>
