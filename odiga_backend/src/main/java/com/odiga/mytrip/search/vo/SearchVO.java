@@ -14,5 +14,6 @@ public class SearchVO {
     private String firstImage;
     private String averageRate;
     private String cntRating;
+    private String travelviewcount;
 
 }
