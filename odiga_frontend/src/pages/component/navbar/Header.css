@@ -18,6 +18,7 @@
   background-size: cover;
   background-position: center;
   background-image: url(/src/assets/images/logo/odiga-logo-rmbg.png);
+  cursor: pointer;
 }
 
 
