@@ -7,12 +7,11 @@ function handleLogout() {
 
     const fetchLogout = async () => {
         try {
-            // jwt 로그아웃의 경우
-            const token = sessionStorage.getItem('token');
+            // jwt 로그아웃의 경우(세션 토큰 삭제)
             sessionStorage.removeItem('token');
 
             // oauth 로그아웃의 경우
-            // /auth/logout 엔드포인트로 POST 요청을 보냅니다.
+            // /auth/logout 엔드포인트로 POST 요청(SecurityConfig 삭제 요청)
             await axios.post('/auth/logout')
 
             // 로그아웃 후 로직
