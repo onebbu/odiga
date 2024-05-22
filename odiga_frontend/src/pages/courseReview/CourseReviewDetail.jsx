@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios, { all } from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useParams, useNavigate, Await } from "react-router-dom";
+import {Link, useParams, useNavigate, Await, useLocation} from "react-router-dom";
 import styled from "styled-components";
 import Comments from "./Comments";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
@@ -25,6 +25,9 @@ function CourseReviewDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
+
+    const location = useLocation();
+    const { pathname: from } = location;
 
   console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
@@ -77,7 +80,8 @@ function CourseReviewDetail() {
       }
     } else {
       // 로그인되지 않은 경우, 로그인 알림 표시
-      alert("로그인 후 다시 시도해주세요.");
+      alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        navigate("/login", { state: { from } });
       // 로그인 페이지로 이동하거나 다른 처리를 수행할 수 있음
     }
   };
