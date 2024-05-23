@@ -37,6 +37,7 @@ public class PlaceController {
             @PathVariable("displayStart") String displayStart,
             @PathVariable("order") String order,
             @RequestParam(required = false) String theme) throws IOException {
+        
 
         List<String> catList = new ArrayList<>();
         Map<String, Object> display = new HashMap<>();

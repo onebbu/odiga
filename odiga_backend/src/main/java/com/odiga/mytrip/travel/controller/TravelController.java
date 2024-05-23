@@ -90,7 +90,7 @@ public class TravelController {
     @PostMapping("/ReviewUpdate")
     public void reviewInfoUpdate(@RequestBody ReviewDataVO request) {
         System.out.println(request);  
-        travelService.ReviewUpdate(request.getReviewno(), request.getReviewcomment()); 
+        travelService.ReviewUpdate(request.getReviewno(), request.getReviewcomment() , request.getReviewgrade()); 
     }
     @PostMapping("/ReviewDelete/{reviewno}")
     public void postMethodName(@PathVariable String reviewno) {

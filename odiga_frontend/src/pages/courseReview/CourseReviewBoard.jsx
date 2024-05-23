@@ -3,11 +3,11 @@ import axios from "axios";
 import styles from "./static/courseReview.module.css";
 import Styled from "styled-components";
 import Pagination from "./Pagination";
-import stylee from "../choosePlace/cPP.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CourseReviewSearch from "./CourseReviewSearch";
 import YoutubePlaylist from "./YoutubeAPI";
+import { useLocation } from "react-router-dom";
 
 const Place = ({
   boardContent,
@@ -47,47 +47,33 @@ const Place = ({
 };
 
 const CourseReviewBoard = () => {
-  const [posts, setPosts] = useState([]); // 초기에 빈 배열로 설정
+  const [posts, setPosts] = useState([]); // 초기 상태 빈 배열로 설정
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(8);
   const [currentPosts, setCurrentPosts] = useState([]);
+  const location = useLocation();
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/coursereview");
-      console.log(response);
+      const response = await axios.get("/coursereviewsearch", {
+        params: {
+          query: ""
+        },
+      });
+    
       const fetchedPosts = response.data;
-      setPosts(fetchedPosts);
+      console.log("fetchdata 실행")
+      setPosts(Array.isArray(fetchedPosts) ? fetchedPosts : []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    setCurrentPage(1); // 게시물 목록이 변경될 때마다 currentPage를 1로 재설정
-  }, [posts]);
-
-  useEffect(() => {
-    // 페이지가 로드될 때 데이터 가져오기
-    fetchData();
-    console.log("유즈이펙트 호출");
-
-    // popstate 이벤트 리스너 추가 (뒤로가기 버튼을 눌렀을 때)
-    const handlePopState = () => {
-      console.log("팝스테이트호출")
       fetchData();
-    };
-
-    window.addEventListener("popstate", handlePopState);
-
-    // 컴포넌트 언마운트 시 popstate 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
   }, []);
 
   useEffect(() => {
-    // currentPosts 계산 및 설정
     const indexOfLast = currentPage * postsPerPage;
     const indexOfFirst = indexOfLast - postsPerPage;
     const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
@@ -125,9 +111,9 @@ const CourseReviewBoard = () => {
             <div className="col-lg-10 offset-lg-1">
               <div className="header-text">
                 <div style={{ display: "flex" }}>
-                  {/* <div style={{ padding: "30px", flex: 1 }}>
+                  <div style={{ padding: "30px", flex: 1 }}>
                     <YoutubePlaylist />
-                  </div> */}
+                  </div>
                   <div style={{ flex: 1, padding: "30px" }}>
                     <h2
                       style={{
@@ -187,9 +173,10 @@ const CourseReviewBoard = () => {
                   >
                     TRAVEL COURSE
                   </em>{" "}
-                  REVIEW ARTICLES
+                  &nbsp; REVIEW ARTICLES
                 </h4>
-                <CourseReviewSearch setPosts={setPosts} />
+                <CourseReviewSearch setPosts={setPosts} setCurrentPage={setCurrentPage} />
+
               </div>
             </div>
             {/* 여기부터는 카드 목록 */}
@@ -256,7 +243,7 @@ const CourseReviewBoard = () => {
                 gridGap: "50px",
               }}
             >
-              {Array.isArray(currentPosts) && currentPosts.length > 0 ? (
+              {currentPosts.length > 0 ? (
                 currentPosts.map((item) => (
                   <StyledLink
                     href={`/coursereview/detail/${item.boardNo}`}
@@ -275,6 +262,7 @@ const CourseReviewBoard = () => {
                       nickname={item.nickname}
                       mainImage={item.mainImage}
                       courseNo={item.courseNo}
+                      loading="lazy"
                     />
                   </StyledLink>
                 ))

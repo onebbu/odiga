@@ -45,7 +45,7 @@ function TravelDetailPage({modalContentId}) {
                     console.error('Error fetching data:', error);
                 });
         }
-    }, [locaContId]);
+    }, [locaContId ]);
 
 
     useEffect(() => {
