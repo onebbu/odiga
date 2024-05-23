@@ -26,24 +26,24 @@ function MypageMain() {
           <Sub_cotainer>
             <Aside>
               <Item>
-                <Link className="mypageitem" to="/my-page">
+                <MypageLink className="mypageitem" to="/my-page">
                   회원 정보
-                </Link>
+                </MypageLink>
               </Item>
               <Item>
-                <Link className="mypageitem" to="/my-page/my-article">
+                <MypageLink className="mypageitem" to="/my-page/my-article">
                   작성한 글
-                </Link>
+                </MypageLink>
               </Item>
               <Item>
-                <Link className="mypageitem" to="/my-page/my-course">
+                <MypageLink className="mypageitem" to="/my-page/my-course">
                   여행 코스
-                </Link>
+                </MypageLink>
               </Item>
               <Item>
-                <Link className="mypageitem" to="/my-page/my-like-list">
+                <MypageLink className="mypageitem" to="/my-page/my-like-list">
                   여행지 좋아요
-                </Link>
+                </MypageLink>
               </Item>
             </Aside>
 
@@ -69,7 +69,8 @@ export default MypageMain;
 const Container = styled.div`
   margin-bottom: 5em;
   width: 100%;
-  min-height: 65vh;
+  min-height: 75vh;
+  background-color: #f3f4f6;
   //overflow: auto;
 `;
 
@@ -103,4 +104,9 @@ const Item = styled.div`
   justify-content: center;
   width: 100%;
   margin-bottom: 20px;
+`;
+
+const MypageLink = styled(Link)`
+  font-family: 'JalnanGothic'; // 원하는 글꼴을 여기에 지정합니다.
+  font-size: 18px;
 `;
