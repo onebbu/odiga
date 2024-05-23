@@ -20,11 +20,6 @@ public class CourseReviewController {
     @Autowired
     private CourseReviewService courseReviewService;
 
-    @GetMapping("/coursereview")
-    public List<CourseReviewVO> AllCourseReviews() {
-        return courseReviewService.AllCourseReviews();
-    }
-
     @GetMapping("/coursereview/detail/{boardNo}")
     public List<CourseReviewVO> detailPage(@PathVariable int boardNo) {
         courseReviewService.viewCount(boardNo);

@@ -40,7 +40,7 @@ function CourseReviewDetail() {
       setLiked(true);
     }
     return () => {};
-  }, [boardNo, loginInfo.email, location]);
+  }, [boardNo, loginInfo.email]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,7 +64,7 @@ function CourseReviewDetail() {
     if (didMount) {
       fetchData();
     }
-  }, [didMount, boardNo, isEditing, location]);
+  }, [didMount, boardNo, isEditing]);
 
   const handleLike = async () => {
     if (loginInfo) {

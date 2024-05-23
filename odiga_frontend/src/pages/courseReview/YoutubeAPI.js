@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-const YoutubePlaylist = () => {
+const YoutubePlaylist = React.memo(() => {
   // 고정된 YouTube 비디오 ID 목록
   const videoIds = [
     "rPZGxw6Jsrg",
@@ -13,8 +13,6 @@ const YoutubePlaylist = () => {
     "xLD8oWRmlAE",
     "JiwY5RQM95w",
     "7veVqy5gFw8"
-
-
   ];
   
   const [videoId, setVideoId] = useState(null);
@@ -23,7 +21,7 @@ const YoutubePlaylist = () => {
     // 무작위로 비디오 ID 선택
     const randomVideoId = videoIds[Math.floor(Math.random() * videoIds.length)];
     setVideoId(randomVideoId);
-  }, [videoIds]);
+  }, []);
 
   return (
     <>
@@ -42,10 +40,10 @@ const YoutubePlaylist = () => {
           }}
         ></iframe>
       ) : (
-        <p>Loading...</p>
+        <p>&nbsp;</p>
       )}
     </>
   );
-};
+});
 
 export default YoutubePlaylist;

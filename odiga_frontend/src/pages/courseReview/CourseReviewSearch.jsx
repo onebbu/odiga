@@ -48,7 +48,7 @@ const SearchButton = styled.button`
   }
 `;
 
-const CourseReviewSearch = ({ setPosts }) => {
+const CourseReviewSearch = ({ setPosts, setCurrentPage }) => {
   const [query, setQuery] = useState("");
 
   const handleSubmit = async (e) => {
@@ -62,7 +62,7 @@ const CourseReviewSearch = ({ setPosts }) => {
       });
       const fetchedPosts = response.data;
       setPosts(fetchedPosts); // 상위 컴포넌트로 전달된 setPosts 함수를 호출하여 상태 업데이트
-      console.log("검색 결과:", response.data);
+      setCurrentPage(1); // 페이지를 1페이지로 설정
     } catch (error) {
       console.error("검색 중 오류 발생:", error);
     }

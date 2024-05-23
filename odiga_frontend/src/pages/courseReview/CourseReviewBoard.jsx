@@ -3,7 +3,6 @@ import axios from "axios";
 import styles from "./static/courseReview.module.css";
 import Styled from "styled-components";
 import Pagination from "./Pagination";
-import stylee from "../choosePlace/cPP.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CourseReviewSearch from "./CourseReviewSearch";
@@ -48,7 +47,7 @@ const Place = ({
 };
 
 const CourseReviewBoard = () => {
-  const [posts, setPosts] = useState([]); // 초기에 빈 배열로 설정
+  const [posts, setPosts] = useState([]); // 초기 상태 빈 배열로 설정
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage, setPostsPerPage] = useState(8);
   const [currentPosts, setCurrentPosts] = useState([]);
@@ -56,25 +55,25 @@ const CourseReviewBoard = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("/coursereview");
+      const response = await axios.get("/coursereviewsearch", {
+        params: {
+          query: ""
+        },
+      });
+    
       const fetchedPosts = response.data;
-      setPosts(fetchedPosts);
+      console.log("fetchdata 실행")
+      setPosts(Array.isArray(fetchedPosts) ? fetchedPosts : []);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
   useEffect(() => {
-    setCurrentPage(1);
-  }, [posts]);
+      fetchData();
+  }, []);
 
   useEffect(() => {
-    fetchData();
-
-  }, [location]);
-
-  useEffect(() => {
-    // currentPosts 계산 및 설정
     const indexOfLast = currentPage * postsPerPage;
     const indexOfFirst = indexOfLast - postsPerPage;
     const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
@@ -176,7 +175,8 @@ const CourseReviewBoard = () => {
                   </em>{" "}
                   &nbsp; REVIEW ARTICLES
                 </h4>
-                <CourseReviewSearch setPosts={setPosts} />
+                <CourseReviewSearch setPosts={setPosts} setCurrentPage={setCurrentPage} />
+
               </div>
             </div>
             {/* 여기부터는 카드 목록 */}
@@ -193,7 +193,7 @@ const CourseReviewBoard = () => {
               >
                 총{" "}
                 <em style={{ fontStyle: "normal", color: "#0a97cd" }}>
-                  {posts && posts.length}
+                  {posts.length}
                 </em>{" "}
                 건
               </div>
@@ -243,7 +243,7 @@ const CourseReviewBoard = () => {
                 gridGap: "50px",
               }}
             >
-              {Array.isArray(currentPosts) && currentPosts.length > 0 ? (
+              {currentPosts.length > 0 ? (
                 currentPosts.map((item) => (
                   <StyledLink
                     href={`/coursereview/detail/${item.boardNo}`}
@@ -262,6 +262,7 @@ const CourseReviewBoard = () => {
                       nickname={item.nickname}
                       mainImage={item.mainImage}
                       courseNo={item.courseNo}
+                      loading="lazy"
                     />
                   </StyledLink>
                 ))
