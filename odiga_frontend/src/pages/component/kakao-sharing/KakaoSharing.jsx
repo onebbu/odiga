@@ -76,7 +76,7 @@ const KakaoSharing = () => {
     };
 
     return (
-        <>
+        <div>
             <TextField
                 required
                 fullWidth
@@ -115,10 +115,12 @@ const KakaoSharing = () => {
                 <p
                     style={{
                         margin: "0", // 기본 마진 제거
+                        fontFamily: "GmarketSansMedium",
+                        fontSize: "15px"
                     }}
                 >카카오톡으로 공유하기</p>
             </div>
-        </>
+        </div>
     )
 }
 

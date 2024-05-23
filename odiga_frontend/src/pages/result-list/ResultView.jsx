@@ -100,7 +100,6 @@ export default function ResultView() {
 
     return (
         <>
-            <Header/>
             <div className="wrapper">
                 {loading ? (
                     <div className="loading-wrap">

@@ -80,12 +80,17 @@ function LocationContent({ show, handleClose, contentId}) {
                centered
                size="lg">
             <Modal.Header closeButton>
-                <Modal.Title>
+                <Modal.Title
+                    style={{
+                        fontFamily: "JalnanGothic",
+                        fontSize: "25px"
+                    }}
+                >
                     {title}
                     <span style={{
                         backgroundColor,
                         color: 'black',
-                        fontSize: '60%',
+                        fontSize: '15px',
                         fontFamily: "GmarketSansMedium",
                         padding: '0.25em 0.5em',
                         borderRadius: "8px",

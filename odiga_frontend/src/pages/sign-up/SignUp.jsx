@@ -10,10 +10,11 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, styled, ThemeProvider} from '@mui/material/styles';
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import axios from 'axios';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
+import {LoginInfoContext} from "../login/LoginInfoProvider";
 
 // localhost:3000/sign-up
 
@@ -37,6 +38,18 @@ export default function SignUp() {
         passwordCheck: ''
     });
     const [errors, setErrors] = useState({}); // 에러 상태 추가
+
+    const loginInfo = useContext(LoginInfoContext);
+    const location = useLocation();
+
+
+    useEffect(() => {
+        if (Object.keys(loginInfo).length != 0) {
+            alert("이미 로그인된 상태입니다.");
+            navigate('/');
+        }
+
+    }, [loginInfo, location.pathname]);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -81,7 +94,10 @@ export default function SignUp() {
 
 
     return (
-        <div>
+        <div style={{
+            backgroundColor: "#f3f4f6",
+            height: "85vh"
+        }}>
             <div>
                 <ThemeProvider theme={defaultTheme}>
                     <Container component="main" maxWidth="xs">
@@ -103,7 +119,8 @@ export default function SignUp() {
                             </Avatar>
                             <Typography component="h1" variant="h5"
                                         sx={{
-                                            fontFamily: 'JalnanGothic'
+                                            fontFamily: 'JalnanGothic',
+                                            fontSize: "25px"
                                         }}>
                                 회원가입
                             </Typography>
@@ -198,8 +215,10 @@ export default function SignUp() {
 
 const SignUpButton = styled(Button)`
   font-family: 'JalnanGothic'; // 원하는 글꼴을 여기에 지정합니다.
+  font-size: 18px;
 `;
 
 const SignUpLink = styled(Link)`
   font-family: 'GmarketSansMedium'; // 원하는 글꼴을 여기에 지정합니다.
+  font-size: 15px;
 `;

@@ -87,12 +87,17 @@ function LocationContent(
                centered
                dialogClassName="modal-90w">
             <Modal.Header closeButton>
-                <Modal.Title>
+                <Modal.Title
+                style={{
+                    fontFamily: "JalnanGothic",
+                    fontSize: "25px"
+                }}
+                >
                     {title}
                     <span style={{
                         backgroundColor,
                         color,
-                        fontSize: '60%',
+                        fontSize: '15px',
                         fontFamily: "GmarketSansMedium",
                         padding: '0.25em 0.5em',
                         borderRadius: "8px",
@@ -108,7 +113,12 @@ function LocationContent(
                 {/*이미지, 주소 가운데 정렬 + 간격 두기*/}
                 <Image src={img} rounded style={{width:"20rem", marginBottom: '1rem'}}/>
                 <br />
-                <span><PlaceIcon/> 주소: {addr}</span>
+                <span
+                style={{
+                    fontFamily: "GmarketSansMedium",
+                    fontSize: "18px"
+                }}
+                ><PlaceIcon/> 주소: {addr}</span>
                 <p
                     style={{
                         color: "gray"
@@ -117,7 +127,9 @@ function LocationContent(
                 style={{
                     border: "none",
                     backgroundColor: "transparent",
-                    color: "blue"
+                    color: "blue",
+                    fontFamily: "GmarketSansMedium",
+                    fontSize: "15px"
                 }}
                 >여기</button></p>
 
