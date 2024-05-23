@@ -32,8 +32,15 @@ function CourseReviewDetail() {
   console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
     setDidMount(true);
+    // 로컬 스토리지에서 좋아요 상태 확인 및 설정
+    const storedLikedStatus = localStorage.getItem(
+      `liked_${boardNo}_${loginInfo.email}`
+    );
+    if (storedLikedStatus === "true") {
+      setLiked(true);
+    }
     return () => {};
-  }, []);
+  }, [boardNo, loginInfo.email]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -167,7 +174,7 @@ function CourseReviewDetail() {
               {isEditing ? (
                 <input
                   type="text"
-                  value={editedTitle}
+                  value={detailsData?.[0]?.boardTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
                 />
               ) : (
