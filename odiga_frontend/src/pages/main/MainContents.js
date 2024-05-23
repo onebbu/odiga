@@ -2,22 +2,17 @@ import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { faUser } from "@fortawesome/free-regular-svg-icons";
-import { faCalendar } from "@fortawesome/free-regular-svg-icons";
 import axios from 'axios';
 
 import './MainContents.css';
 
 function Maincontents() {
-    
-    
     const [animate, setAnimate] = useState(true);
     const onStop = () => setAnimate(false);
     const onRun = () => setAnimate(true);
     const [cosData , setCosData] = useState([]);
     const [traData, setTraData] = useState([]);
     const cloneDataRef = useRef([]); 
-
 
     useEffect(() => {
       const fetchData = async () => {
@@ -28,7 +23,6 @@ function Maincontents() {
           setTraData(Traresult.data.slice(0, 10)); 
           console.log(cosData);
         } catch (error) {
-          // 에러 처리
           console.error('데이터를 불러오는 중 오류가 발생했습니다.', error);
         }
       };
@@ -36,9 +30,7 @@ function Maincontents() {
     }, []);
 
     const stripHtmlAndEntities = (content) => {
-      // HTML 태그 제거
       let strippedContent = content.replace(/<[^>]+>/g, '');
-      // HTML 엔티티 제거
       strippedContent = strippedContent.replace(/&[^;]+;/g, '');
       return strippedContent;
     };
@@ -62,12 +54,13 @@ function Maincontents() {
                    onMouseLeave={onRun}  >
                 <div className={"original".concat(animate ? "" : " stop")}>
                   {cosData.map((cosData) => (
+                       
                     <div className="popularContentCard" >
-                      <a href={`coursereview/detail/${cosData.boardno}`}>                       
+                    <a href={`coursereview/detail/${cosData.boardno}`} key={cosData.boardno}>             
                         <div className="cardThumbnail">
                           <img src={cosData.mainimage} className="cardImg"/>
                         </div>
-                      </a>
+                     
                       <div className="cardInfo">
                         <div className="cardUserInfo">
                           <div className="cardUserNickname">                           
@@ -86,16 +79,21 @@ function Maincontents() {
                             <p>{stripHtmlAndEntities(cosData.boardcontent)}</p>
                           </div>
                         </div>
-                        {/* 백엔드 엔드포인트에 카테고리 없음 */}
-                        <div className="cardCategory"><p>#</p>{cosData.category}</div> 
+                        <div className="cardCategory">
+                          #{cosData.tags && cosData.tags.split('#')[1] ? cosData.tags.split('#')[1] : ''}  
+                        </div> 
                       </div>
+                      </a>
                    </div>
+                   
                   ))} 
                 </div>   
 
                 <div className={"clone".concat(animate ? "" : " stop")}>
                   {cloneDataRef.current.map((card, index) => (
-                    <div className="popularContentCard" key={index}>
+                    
+                    <div className="popularContentCard">
+                    <a href={`coursereview/detail/${card.boardno}`} key={index}>
                       <div className="cardThumbnail">
                         <img src={card.mainimage} className="cardImg"/>
                       </div>
@@ -117,9 +115,13 @@ function Maincontents() {
                             <p>{stripHtmlAndEntities(card.boardcontent)}</p>
                           </div>
                         </div>
-                        <div className="cardCategory"><p>#</p>{card.category}</div> 
+                        <div className="cardCategory">
+                          #{card.tags && card.tags.split('#')[1] ? card.tags.split('#')[1] : ''}  
+                        </div> 
                       </div>
+                      </a>
                     </div>
+                   
                   ))}    
                 </div>              
               </div>

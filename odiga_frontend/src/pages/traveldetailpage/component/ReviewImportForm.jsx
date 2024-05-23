@@ -2,7 +2,7 @@ import axios from "axios";
 import React, {useState, useContext, useEffect} from "react";
 import styled from 'styled-components';
 import '../TravelDetailPage.css';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart} from "@fortawesome/free-solid-svg-icons";
 import {useParams} from 'react-router-dom';
@@ -22,6 +22,7 @@ const Star = styled.span`
 
 function StarRating({starCount, onChange}) {
     const [rating, setRating] = useState(0);
+    
     const handleStarClick = (selectedRating) => {
         setRating(selectedRating);
         onChange(selectedRating);
@@ -89,13 +90,17 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
         return Promise.reject(error);
     });
 
+    const location = useLocation();
+    const { pathname: from } = location;
     const handleSubmit = () => {
         if (!isUserLoggedIn()) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            navigate('/login');
+            navigate("/login", { state: { from } });
             return;
         }
-        if (typeof locaContId !== "undefined" && locaContId !== "") {
+        console.log("handleSubmit 호출됨", { locaContId, reviewComment, reviewGrade, reviewdate });
+        if (typeof locaContId === "undefined" || locaContId === "") {
+            alert("콘텐츠 ID가 유효하지 않습니다.");
             return;
         }
         axios.post('/reviewImport', {

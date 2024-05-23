@@ -20,11 +20,6 @@ public class CourseReviewController {
     @Autowired
     private CourseReviewService courseReviewService;
 
-    @GetMapping("/coursereview")
-    public List<CourseReviewVO> AllCourseReviews() {
-        return courseReviewService.AllCourseReviews();
-    }
-
     @GetMapping("/coursereview/detail/{boardNo}")
     public List<CourseReviewVO> detailPage(@PathVariable int boardNo) {
         courseReviewService.viewCount(boardNo);
@@ -46,6 +41,11 @@ public class CourseReviewController {
     @PostMapping("/coursereview/commentDel")
     public void commentDel(@RequestBody CommentsVO commentsVO) {
         courseReviewService.commentDel(commentsVO);
+    }
+
+    @PostMapping("/coursereview/commentEdit")
+    public void commentEdit(@RequestBody CommentsVO commentsVO) {
+        courseReviewService.commentEdit(commentsVO);
     }
 
     @PostMapping("/coursereview/like/{boardNo}")

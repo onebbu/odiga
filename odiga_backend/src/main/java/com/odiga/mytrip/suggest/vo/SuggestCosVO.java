@@ -14,4 +14,5 @@ public class SuggestCosVO {
     private String boardlikecount;
     private String boarddate;
     private String mainimage;
+    private String tags;
 }
