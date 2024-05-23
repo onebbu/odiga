@@ -17,9 +17,9 @@ function SearchLocation() {
     const [totalPages, setTotalPages] = useState(0);
     const [resultCount, setResultCount] = useState(0);
     const [catList, setCatList] = useState([]);
-    const [catCode, setCatCode] = useState(null);
+    const [catCode, setCatCode] = useState([]);
     const [order, setOrder] = useState('title');
-    const [areaCode, setAreaCode] = useState(0);
+    const [areaCode, setAreaCode] = useState('1');
     const [mapData, setMapData] = useState([]);
 
     const data = [
@@ -62,7 +62,13 @@ function SearchLocation() {
     };
 
     const handleAreaCode = (selectedAreaCode) => {
-        setAreaCode(selectedAreaCode);
+        if (areaCode === selectedAreaCode) {
+            // 선택된 지역 코드가 이미 활성화된 상태인 경우, 해지합니다.
+            setAreaCode(null);
+        } else {
+            // 선택된 지역 코드가 활성화되지 않은 상태인 경우, 설정합니다.
+            setAreaCode(selectedAreaCode);
+        }
     };
 
     const fetchCategories = async () => {
@@ -76,19 +82,21 @@ function SearchLocation() {
 
     const fetchSearchResults = async (page) => {
         try {
+            console.log("page: "+page+" text: "+searchText+" areacode: "+areaCode+" order: "+order+" catcode: "+catCode);
             const response = await axios.get('/search', {
                 params: {
                     page: page,
                     text: searchText,
                     areacode: areaCode,
                     order: order,
-                    catcode: catCode
+                    catcode: catCode.join(',')
                 }
             });
             const {searchList, resultCount} = response.data;
             setSearchResults(searchList || []);
             setTotalPages(Math.floor(resultCount / 10) || 0);
             setResultCount(resultCount || 0);
+            console.log("search result ::: "+searchList);
         } catch (error) {
             console.error('Error fetching search results:', error);
             setSearchResults([]);
@@ -97,14 +105,12 @@ function SearchLocation() {
         }
     };
 
-    console.log("결과", searchResults);
-
     const fetchAreaCounts = async () => {
         try {
             const response = await axios.get('/count-areas', {
                 params: {
                     text: searchText,
-                    catcode: catCode
+                    catcode: catCode.join(',')
                 }
             });
             const areaCounts = response.data;
@@ -196,22 +202,32 @@ function SearchLocation() {
     };
 
     const setColorByCount = (count) => {
-        if (count > 320) return "#085259";
-        if (count > 160) return "#0b737D";
-        if (count > 80) return "#0E94A0";
-        if (count > 40) return "#12C0CF";
-        if (count > 20) return "#33DEED";
-        if (count > 10) return "#6EE7F2";
-        if (count > 5) return "#A8F1F7";
+        if (count > 5000) return "#085259";
+        if (count > 3000) return "#0b737D";
+        if (count > 1000) return "#0E94A0";
+        if (count > 500) return "#12C0CF";
+        if (count > 200) return "#33DEED";
+        if (count > 100) return "#6EE7F2";
+        if (count > 50) return "#A8F1F7";
         if (count > 0) return "#E2FAFC";
         return "#F4F4F4"; // 기본값
     };
+    // const setColorByCount = (count) => {
+    //     if (count === 0) return "#F1F1F1";
+    //     if (count > 5000) return "#79D3C4";
+    //     if (count > 3000) return "#43cdb6";
+    //     if (count > 1000) return "#61CDBB";
+    //     if (count > 200) return "#91D9CD";
+    //     if (count > 100) return "#A9DFD6";
+    //     if (count > 50) return "#C1E5DF";
+    //     if (count > 5) return "#D9EBE8";
+    //     return "#ebfffd"; // 기본값
+    //   };
 
 
     return (
         <div className="search-container">
             <div className="search-map">
-                <div>
                     <svg xmlns={southKorea} viewBox="0 0 524 631">
                         {/* 각 도시 경로에 툴팁과 이벤트 핸들러 추가 */}
                         {mapData && mapData.map((city) => (
@@ -225,12 +241,12 @@ function SearchLocation() {
                                 stroke="#777777"
                                 onMouseOver={(e) => handleMouseOver(e, city.locale, city.count)}
                                 onMouseOut={handleMouseOut}
+                                className={`${areaCode === city.localeNum ? 'active' : ''}`}
                             />
                         ))}
                     </svg>
                     {tooltip.show && (
-                        <div
-                            style={{
+                        <div style={{
                                 position: 'absolute',
                                 left: tooltip.x,
                                 top: tooltip.y,
@@ -244,7 +260,6 @@ function SearchLocation() {
                             <div>{tooltip.cityName}: {tooltip.count}건</div>
                         </div>
                     )}
-                </div>
             </div>
             <div className="search-wrap">
                 <div className="search-page">
@@ -286,8 +301,8 @@ function SearchLocation() {
                         <div className="search-results">
                             {searchResults.length > 0 ? (
                                 searchResults.map((result, index) => (
-
-                                    <Link to={`/detail/${result.contentid}`}
+                                    <Link key={result.contentid}
+                                          to={`/detail/${result.contentid}`}
                                           style={{textDecoration: 'none'}}
                                     >
                                         <Place key={result.contentid}
@@ -316,13 +331,11 @@ function SearchLocation() {
                                 onClick={() => handlePageChange(currentPage + 5)}>다음
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>
     );
 }
-
 
 export default SearchLocation;
 
@@ -367,29 +380,14 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
     return (
         <div key={index} className="search-result-card">
             <div>
-                <div
-                    style={{
-                        display: "flex"
-                    }}
-                >
+                <div style={{ display: "flex" }}>
                     <a href={`/detail/${contentid}`}>
                         <img src={firstImage}
                              style={{width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px'}}/>
                     </a>
-                    <div
-                        style={{
-                            display: "block"
-                        }}
-                    >
-                        <div
-                            style={{
-                                display: "flex",
-                                justifyContent: "space-between"
-                            }}
-                        >
-                            <div>
-                                {title}
-                            </div>
+                    <div style={{ display: "block" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                            <div> {title} </div>
                             <div>
                                 <strong style={{
                                     backgroundColor, color,
@@ -399,20 +397,14 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
                                     marginLeft: '10px'
                                 }}>{cat3}</strong>
                             </div>
-                            <div
-                                style={{right: "0"}}
-                            >
+                            <div style={{right: "0"}}>
                                 <Rate>{averageRate}</Rate><P>/{cntRating}개</P>
                             </div>
                         </div>
                         <P>{addr1}</P>
                     </div>
-
                 </div>
-
-
             </div>
-
         </div>
     )
 }
