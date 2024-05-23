@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Image from 'react-bootstrap/Image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import {Link, useParams} from "react-router-dom";
+import {Link} from "react-router-dom";
 import axios from "axios";
 import "./LocationContent.css";
 import { red } from '@mui/material/colors';
@@ -33,11 +33,6 @@ function LocationContent(
             setData(""); // 컴포넌트가 unmount될 때 data 초기화
         };
     }, []);
-
-    console.log("현재 타이틀",data[contentId]?.title);
-    
-    console.log("확인",data[contentId]);
-
 
     const img = data[contentId]?.img;
     const likeCount = data[contentId]?.likeCount;
@@ -79,6 +74,13 @@ function LocationContent(
     }, [contentData]);
 
 
+    const tokenData = sessionStorage.getItem("token");
+
+    function openDetailPage() {
+        sessionStorage.setItem("token", tokenData);
+        window.open(`/detail/${contentId}`, "_blank");
+    }
+
     return (
         <Modal show={show}
                onHide={handleClose}
@@ -111,7 +113,13 @@ function LocationContent(
                     style={{
                         color: "gray"
                     }}
-                >더 자세한 여행지 정보는? <Link to={`/detail/${contentId}`} target="_blank">여기</Link></p>
+                >더 자세한 여행지 정보는? <button onClick={openDetailPage}
+                style={{
+                    border: "none",
+                    backgroundColor: "transparent",
+                    color: "blue"
+                }}
+                >여기</button></p>
 
             </Modal.Body>
             <Modal.Footer>

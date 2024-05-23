@@ -11,12 +11,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import "./Login.css";
-import {useContext, useEffect, useState} from "react";
+import {useContext, useEffect, useState, useRef} from "react";
 import axios from "axios";
 import {useNavigate} from "react-router-dom";
 import * as Yup from 'yup';
 import OauthLoginButton from "../component/Oauth/OauthLogin.jsx";
 import {LoginInfoContext} from "./LoginInfoProvider";
+import {styled} from '@mui/material/styles';
+import {useLocation} from 'react-router-dom';
 
 // localhost:3000/login
 
@@ -38,18 +40,15 @@ export default function Login() {
     const [errors, setErrors] = useState({}); // 에러 상태 추가
 
     const navigate = useNavigate();
-
-    console.log("로그인 정보", Object.keys(loginInfo).length);
+    const location = useLocation();
 
     useEffect(() => {
-        // 로그인 상태 정보가 없을 경우 아무 동작 안함
-        if(Object.keys(loginInfo).length == 0) return;
-        // 로그인 한 상태일 경우 메인 페이지로 리다이렉트
-        if (Object.keys(loginInfo).length != 0) {
-            alert("이미 로그인된 상태입니다.");
-            navigate('/');
-        }
-    }, [loginInfo]);
+            if (Object.keys(loginInfo).length != 0) {
+                alert("이미 로그인된 상태입니다.");
+                navigate('/');
+            }
+
+    }, [loginInfo, location.pathname]);
 
     const handleChange = (e) => {
         const {name, value} = e.target;
@@ -58,6 +57,7 @@ export default function Login() {
             [name]: value
         });
     };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -71,14 +71,14 @@ export default function Login() {
 
             if (result === "EMAIL_PASSWORD_NOT_MATCH") {
                 alert("이메일 또는 비밀번호가 일치하지 않습니다!");
-                // window.location.href = "/login";
             } else {
                 sessionStorage.setItem('token', result);
                 setTimeout(() => {
                     sessionStorage.removeItem('token');
-                }, 60*60*1000); // 1시간 후
-
-                navigate('/');
+                }, 60 * 60 * 1000); // 1시간 후
+                // 아니면 이전 페이지로 이동
+                navigate(location.state?.from || '/');
+                window.location.reload();
             }
         } catch (error) {
             if (error.name === 'ValidationError') {
@@ -93,79 +93,102 @@ export default function Login() {
         }
     };
 
+
     return (
-        <body>
         <div>
-            <ThemeProvider theme={defaultTheme}>
-                <Container component="main" maxWidth="xs">
-                    <CssBaseline/>
-                    <Box
-                        sx={{
-                            marginTop: 8,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
-                            <LockOutlinedIcon/>
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            로그인
-                        </Typography>
-                        <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
-                            <Grid container spacing={3}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="email"
-                                        label="이메일을 입력하세요"
-                                        name="email"
-                                        autoComplete="email"
-                                        onChange={handleChange}
-                                        error={Boolean(errors.email)} // 에러가 있으면 true, 없으면 false
-                                        helperText={errors.email ? errors.email : ""} // 에러 메시지 표시
-                                    />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        name="password"
-                                        label="비밀번호를 입력하세요"
-                                        type="password"
-                                        id="password"
-                                        autoComplete="new-password"
-                                        onChange={handleChange}
-                                        error={Boolean(errors.password)} // 에러가 있으면 true, 없으면 false
-                                        helperText={errors.password ? errors.password : ""} // 에러 메시지 표시
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{mt: 3, mb: 2}}
+            <div>
+                <ThemeProvider theme={defaultTheme}>
+                    <Container component="main" maxWidth="xs">
+                        <CssBaseline/>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+
+                            }}
+                        >
+                            <div
+                                style={{
+                                    marginTop: "7rem"
+                                }}
+                            ></div>
+                            <Avatar sx={{m: 1, bgcolor: 'secondary.main'}}>
+                                <LockOutlinedIcon/>
+                            </Avatar>
+                            <Typography component="h1" variant="h5"
+                                        sx={{
+                                            fontFamily: 'JalnanGothic'
+                                        }}
                             >
                                 로그인
-                            </Button>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <Link href="http://localhost:3000/sign-up" variant="body2">
-                                        계정이 없으신가요? 회원가입하기
-                                    </Link>
+                            </Typography>
+                            <Box component="form" noValidate onSubmit={handleSubmit} sx={{mt: 3}}>
+                                <Grid container spacing={3}>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            id="email"
+                                            label="이메일을 입력하세요"
+                                            name="email"
+                                            autoComplete="email"
+                                            onChange={handleChange}
+                                            error={Boolean(errors.email)} // 에러가 있으면 true, 없으면 false
+                                            helperText={errors.email ? errors.email : ""} // 에러 메시지 표시
+                                            inputProps={{style: {fontFamily: 'GmarketSansMedium'}}}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            name="password"
+                                            label="비밀번호를 입력하세요"
+                                            type="password"
+                                            id="password"
+                                            autoComplete="new-password"
+                                            onChange={handleChange}
+                                            error={Boolean(errors.password)} // 에러가 있으면 true, 없으면 false
+                                            helperText={errors.password ? errors.password : ""} // 에러 메시지 표시
+                                        />
+                                    </Grid>
                                 </Grid>
-                            </Grid>
+                                <LoginButton
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    sx={{mt: 3, mb: 2}}
+                                >
+                                    로그인
+                                </LoginButton>
+                                <Grid container justifyContent="flex-end">
+                                    <Grid item>
+                                        <LoginLink href="http://localhost:3000/sign-up" variant="body2">
+                                            계정이 없으신가요? 회원가입하기
+                                        </LoginLink>
+                                    </Grid>
+                                </Grid>
+                            </Box>
                         </Box>
-                    </Box>
-                </Container>
-            </ThemeProvider>
+                    </Container>
+                </ThemeProvider>
+            </div>
+            <div className="oauth"
+                 style={{
+                     marginBottom: "7rem"
+                 }}
+            >
+                <OauthLoginButton/>
+            </div>
         </div>
-        <div className="oauth">
-            <OauthLoginButton />
-        </div>
-        </body>
     );
 }
+
+const LoginButton = styled(Button)`
+  font-family: 'JalnanGothic'; // 원하는 글꼴을 여기에 지정합니다.
+`;
+
+const LoginLink = styled(Link)`
+  font-family: 'GmarketSansMedium'; // 원하는 글꼴을 여기에 지정합니다.
+`;

@@ -62,8 +62,13 @@ function SearchLocation() {
     };
 
     const handleAreaCode = (selectedAreaCode) => {
-        setAreaCode(selectedAreaCode);
-        console.log("handleAreaCode::::::::::::::"+areaCode);
+        if (areaCode === selectedAreaCode) {
+            // 선택된 지역 코드가 이미 활성화된 상태인 경우, 해지합니다.
+            setAreaCode(null);
+        } else {
+            // 선택된 지역 코드가 활성화되지 않은 상태인 경우, 설정합니다.
+            setAreaCode(selectedAreaCode);
+        }
     };
 
     const fetchCategories = async () => {
@@ -196,34 +201,33 @@ function SearchLocation() {
         setTooltip({...tooltip, show: false});
     };
 
-    // const setColorByCount = (count) => {
-    //     if (count > 320) return "#085259";
-    //     if (count > 160) return "#0b737D";
-    //     if (count > 80) return "#0E94A0";
-    //     if (count > 40) return "#12C0CF";
-    //     if (count > 20) return "#33DEED";
-    //     if (count > 10) return "#6EE7F2";
-    //     if (count > 5) return "#A8F1F7";
-    //     if (count > 0) return "#E2FAFC";
-    //     return "#F4F4F4"; // 기본값
-    // };
     const setColorByCount = (count) => {
-        if (count === 0) return "#F1F1F1";
-        if (count > 5000) return "#79D3C4";
-        if (count > 3000) return "#43cdb6";
-        if (count > 1000) return "#61CDBB";
-        if (count > 200) return "#91D9CD";
-        if (count > 100) return "#A9DFD6";
-        if (count > 50) return "#C1E5DF";
-        if (count > 5) return "#D9EBE8";
-        return "#ebfffd"; // 기본값
-      };
+        if (count > 5000) return "#085259";
+        if (count > 3000) return "#0b737D";
+        if (count > 1000) return "#0E94A0";
+        if (count > 500) return "#12C0CF";
+        if (count > 200) return "#33DEED";
+        if (count > 100) return "#6EE7F2";
+        if (count > 50) return "#A8F1F7";
+        if (count > 0) return "#E2FAFC";
+        return "#F4F4F4"; // 기본값
+    };
+    // const setColorByCount = (count) => {
+    //     if (count === 0) return "#F1F1F1";
+    //     if (count > 5000) return "#79D3C4";
+    //     if (count > 3000) return "#43cdb6";
+    //     if (count > 1000) return "#61CDBB";
+    //     if (count > 200) return "#91D9CD";
+    //     if (count > 100) return "#A9DFD6";
+    //     if (count > 50) return "#C1E5DF";
+    //     if (count > 5) return "#D9EBE8";
+    //     return "#ebfffd"; // 기본값
+    //   };
 
 
     return (
         <div className="search-container">
             <div className="search-map">
-                <div>
                     <svg xmlns={southKorea} viewBox="0 0 524 631">
                         {/* 각 도시 경로에 툴팁과 이벤트 핸들러 추가 */}
                         {mapData && mapData.map((city) => (
@@ -237,6 +241,7 @@ function SearchLocation() {
                                 stroke="#777777"
                                 onMouseOver={(e) => handleMouseOver(e, city.locale, city.count)}
                                 onMouseOut={handleMouseOut}
+                                className={`${areaCode === city.localeNum ? 'active' : ''}`}
                             />
                         ))}
                     </svg>
@@ -255,7 +260,6 @@ function SearchLocation() {
                             <div>{tooltip.cityName}: {tooltip.count}건</div>
                         </div>
                     )}
-                </div>
             </div>
             <div className="search-wrap">
                 <div className="search-page">
@@ -286,9 +290,9 @@ function SearchLocation() {
                                 <button className={`sort-button ${order === 'grade' ? 'active' : ''}`}
                                         onClick={() => handleOrderChange('grade')}>별점순
                                 </button>
-                                <button className={`sort-button ${order === 'date' ? 'active' : ''}`}
-                                        onClick={() => handleOrderChange('date')}>최신순
-                                </button>
+                                {/*<button className={`sort-button ${order === 'date' ? 'active' : ''}`}*/}
+                                {/*        onClick={() => handleOrderChange('date')}>최신순*/}
+                                {/*</button>*/}
                             </div>
                         </div>
                     </div>
@@ -297,8 +301,8 @@ function SearchLocation() {
                         <div className="search-results">
                             {searchResults.length > 0 ? (
                                 searchResults.map((result, index) => (
-
-                                    <Link to={`/detail/${result.contentid}`}
+                                    <Link key={result.contentid}
+                                          to={`/detail/${result.contentid}`}
                                           style={{textDecoration: 'none'}}
                                     >
                                         <Place key={result.contentid}

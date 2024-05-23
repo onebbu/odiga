@@ -3,7 +3,6 @@ package com.odiga.mytrip.search.controller;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,49 +31,37 @@ public class SearchController {
             @RequestParam("order") String frontorder,
             @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
         
-        List<String> catList = new ArrayList<>();
         Map<String, Object> searchQuery = new HashMap<>();
-
+        List<String> catList = new ArrayList<String>();
+        if (catcode != null && catcode.length() > 0){
+            String[] catCodeList = catcode.split(",");
+            for(int i = 0; i < catCodeList.length; i++ ){
+                catList.add(catCodeList[i]);
+            } 
+            searchQuery.put("catList", catList);
+        }
+        else{searchQuery.put("catList", null); System.out.println("catcode put null--------------------");}
+        
         String order = "title";
-        if("grade".equals(frontorder)) {
-            order = "grade";
-        } else if ("date".equals(frontorder)) {
-            order = "title"; // date 가 없어서 일단 title설정
-        }    
-        String[] catCodeList = catcode.split(",");
-        for(int i = 0; i < catCodeList.length; i++ ){
-            catList.add(catCodeList[i]);
-        }    
+        if("grade".equals(frontorder)) { order = "grade"; }     
+        searchQuery.put("page", 1);
+        searchQuery.put("text", text);
+        if (areacode != null){ searchQuery.put("areacode", areacode); }
+        else{ searchQuery.put("areacode", 0); }
+        
+        searchQuery.put("order", order);
+        System.out.println("Controller::::::::: searchQuery" + searchQuery.toString());
         try {
-            searchQuery.put("page", 1);
-            searchQuery.put("text", "");
-            if (areacode != null) {
-                searchQuery.put("areacode", 1);
-            }
-            searchQuery.put("order", order);
-            // searchQuery.put("catcode", catcode != null ? Arrays.asList(catcode) : Collections.emptyList());
-            searchQuery.put("catcode", catList);
-
             List<SearchVO> searchList = searchService.SearchList(searchQuery);
             int resultCount = searchService.resultCount(searchQuery);
 
-            // 검색 결과와 결과 개수를 담을 Map 생성
-            Map<String, Object> searchResult = new HashMap<>();
+            Map<String, Object> searchResult = new HashMap<>(); // 검색 결과와 결과 개수를 담을 Map 생성
             searchResult.put("searchList", searchList);
             searchResult.put("resultCount", resultCount);
 
-            System.out.println("searchController:: catcode??"+catcode);
-            System.out.println("searchController:: areacode??"+areacode);
-            System.out.println("SearchResult?? " + searchList);
             return searchResult;
         } catch (Exception e) {
             e.printStackTrace();
-            System.err.println("Error processing request: " + e.getMessage());
-            System.out.println("searchController:: page??"+page);
-            System.out.println("searchController:: text??"+text);
-            System.out.println("searchController:: order??"+order);
-            System.out.println("searchController:: catcode??"+catcode);
-            System.out.println("searchController:: areacode??"+areacode);
             throw new RuntimeException("SearchController:: 실패......");
         }
     }
@@ -114,10 +101,28 @@ public class SearchController {
         int[] areaArr = {1, 2, 3, 4, 5, 6, 7, 8, 31, 32, 33, 34, 35, 36, 37, 38, 39};
 
         Map<Integer, Integer> areaMap = new HashMap<>();
+        Map<String, Object> searchQuery = new HashMap<>();
+        List<String> catList = new ArrayList<>();
 
-        for (int areaNum : areaArr) {
-            int areaResultCount = searchService.getAreaResultCount(text, "A02050600", areaNum);
-            areaMap.put(areaNum, areaResultCount);
+        if (catcode != null && catcode.length() > 0){
+            String[] catCodeList = catcode.split(",");
+            for(int i = 0; i < catCodeList.length; i++ ){
+                catList.add(catCodeList[i]);
+            }
+            searchQuery.put("catcode", catList);
+        }
+        else{searchQuery.put("catcode", null); System.out.println("catcode put null--------------------");}
+        searchQuery.put("text", text);
+        
+        try{
+            for (int areaNum : areaArr) {
+                searchQuery.put("areacode", areaNum);
+                int areaResultCount = searchService.getAreaResultCount(searchQuery);
+                areaMap.put(areaNum, areaResultCount);
+            }
+        } catch (Exception e){
+            System.out.println("count-areas 실패........");
+            e.printStackTrace();
         }
 
         return areaMap;

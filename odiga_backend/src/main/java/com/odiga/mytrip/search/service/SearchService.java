@@ -19,8 +19,6 @@ public class SearchService {
     private SearchDAO searchDAO;
 
     public List<SearchVO> SearchList(Map<String, Object> searchQuery) {
-        // System.out.println("service :  검색내용( "+text+" )아레아코드 ("+areacode +") 카테고리코드(" +catcode +")");
-        
         return searchDAO.getSearchList(searchQuery);
     }
     public List<SearchCourseVO> SearchCourseList(String page, String text, String order) {
@@ -37,7 +35,7 @@ public class SearchService {
         return searchDAO.getCatList();
     }
 
-    public int getAreaResultCount(String text ,String catcode, int areaCode) {
-        return searchDAO.getResultAreaCount(text, catcode, areaCode);}
+    public int getAreaResultCount(Map<String, Object> searchQuery) {
+        return searchDAO.getResultAreaCount(searchQuery);}
     
 }

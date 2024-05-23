@@ -20,6 +20,6 @@ public interface SearchDAO {
     int getCourseResultCount(String text);
     List<CatVO> getCatList();
 
-    int getResultAreaCount(String text, String catcode, int areacode);
+    int getResultAreaCount(Map<String, Object> searchQuery);
     
 }

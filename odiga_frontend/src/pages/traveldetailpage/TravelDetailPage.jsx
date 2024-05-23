@@ -1,9 +1,7 @@
 import React, {useState, useEffect, useContext} from "react";
 import axios from 'axios';
 import ReviewDisplay from "./component/ReviewDisplay";
-import Header from "../component/navbar/Header";
 import './TravelDetailPage.css';
-import Footer from '../component/footer/Footer';
 import Slider from "react-slick";
 import './slick.css';
 import './slick-theme.css';
@@ -193,7 +191,7 @@ function TravelDetailPage({modalContentId}) {
                 </section>
 
                 <section className="mapLocation" id="map-location">
-                    <div id="map" style={{width: '100%', height: '500px'}}></div>
+                    <div id="map" style={{width: '80%', height: '500px'}}></div>
                 </section>
 
                 <section className="tagList" id="tag-list">
