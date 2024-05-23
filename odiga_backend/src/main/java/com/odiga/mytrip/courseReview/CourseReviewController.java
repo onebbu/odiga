@@ -66,6 +66,7 @@ public class CourseReviewController {
 
     @PutMapping("/coursereview/update/{boardNo}")
     public void courseReviewEdit(@RequestBody CourseReviewVO CourseReviewVO) {
+        System.out.println("작동");
         courseReviewService.courseReviewEdit(CourseReviewVO);
     }
 

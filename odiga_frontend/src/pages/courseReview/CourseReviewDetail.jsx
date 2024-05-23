@@ -7,12 +7,19 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios, { all } from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import {Link, useParams, useNavigate, Await, useLocation} from "react-router-dom";
+import {
+  Link,
+  useParams,
+  useNavigate,
+  Await,
+  useLocation,
+} from "react-router-dom";
 import styled from "styled-components";
 import Comments from "./Comments";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
 import CourseReviewCourse from "./CourseReviewCourse";
 import CustomEditor from "./CustomEditor";
+import HashtagInput from "../courseimport/HashtagInput";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -25,9 +32,11 @@ function CourseReviewDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
+  const [tags, setTags] = useState(null);
+  const [hashtags, setHashtags] = useState(null); // 태그 상태 추가
 
-    const location = useLocation();
-    const { pathname: from } = location;
+  const location = useLocation();
+  const { pathname: from } = location;
 
   console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
@@ -66,6 +75,12 @@ function CourseReviewDetail() {
     }
   }, [didMount, boardNo, isEditing]);
 
+  useEffect(() => {
+    if (detailsData && detailsData[0]?.boardTitle) {
+      setEditedTitle(detailsData[0]?.boardTitle);
+    }
+  }, [detailsData]);
+
   const handleLike = async () => {
     if (loginInfo) {
       try {
@@ -88,7 +103,7 @@ function CourseReviewDetail() {
     } else {
       // 로그인되지 않은 경우, 로그인 알림 표시
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        navigate("/login", { state: { from } });
+      navigate("/login", { state: { from } });
       // 로그인 페이지로 이동하거나 다른 처리를 수행할 수 있음
     }
   };
@@ -127,12 +142,14 @@ function CourseReviewDetail() {
         return;
       }
 
+      // console.log("해쉬 " + hashtags);
       try {
         // 서버에 수정된 내용 업데이트 요청
         await axios.put(`/coursereview/update/${boardNo}`, {
           boardTitle: editedTitle,
           boardContent: editedContent,
           boardNo: boardNo,
+          tags: hashtags,
         });
         alert("수정이 완료되었습니다.");
         setIsEditing(false); // 수정 모드 종료
@@ -142,6 +159,10 @@ function CourseReviewDetail() {
         console.error("게시물 수정 중 오류 발생:", error);
       }
     }
+  };
+
+  const handleTagsChange = (newTags) => {
+    setHashtags(newTags); // 태그 배열 상태 업데이트
   };
 
   return (
@@ -174,7 +195,7 @@ function CourseReviewDetail() {
               {isEditing ? (
                 <input
                   type="text"
-                  value={detailsData?.[0]?.boardTitle}
+                  value={editedTitle}
                   onChange={(e) => setEditedTitle(e.target.value)}
                 />
               ) : (
@@ -215,10 +236,15 @@ function CourseReviewDetail() {
                 margin: "0 auto",
               }}
             >
-              {detailsData?.[0]?.tags !== undefined &&
-              detailsData?.[0]?.tags !== null
-                ? detailsData[0].tags
-                : "#태그 없음"}
+              {isEditing ? (
+                <HashtagInput onTagsChange={handleTagsChange} />
+              ) : detailsData &&
+                detailsData[0]?.tags !== undefined &&
+                detailsData[0]?.tags !== null ? (
+                detailsData[0].tags
+              ) : (
+                "#태그 없음"
+              )}
             </h7>
             <hr />
           </div>
@@ -237,7 +263,10 @@ function CourseReviewDetail() {
             }}
           >
             <div style={{ display: "flex" }}>
-              <div className="ck ck-editor__main" style={{ width: "100%" , wordBreak : "break-all"}}>
+              <div
+                className="ck ck-editor__main"
+                style={{ width: "100%", wordBreak: "break-all" }}
+              >
                 {!isEditing ? (
                   <div
                     className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
