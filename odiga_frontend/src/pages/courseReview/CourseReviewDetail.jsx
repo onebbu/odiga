@@ -259,13 +259,12 @@ function CourseReviewDetail() {
               padding: "30px",
               border: "1px solid #e5e5e5",
               backgroundColor: "white",
-              overflow: "scroll",
             }}
           >
             <div style={{ display: "flex" }}>
               <div
                 className="ck ck-editor__main"
-                style={{ width: "100%", wordBreak: "break-all" }}
+                style={{width: "100%", wordBreak: "break-all" }}
               >
                 {!isEditing ? (
                   <div
@@ -301,7 +300,7 @@ function CourseReviewDetail() {
               fontSize: "18px",
             }}
           >
-            여행코스 정보
+            {detailsData && detailsData[0].nickname}&nbsp;님의 여행코스 정보
           </h7>
           <CourseReviewCourse detailsData={detailsData} />
 

@@ -3,6 +3,7 @@ import Editor from "ckeditor5-custom-build/build/ckeditor";
 import { useState, useEffect } from "react";
 import MyCustomUploadAdapterPlugin from "../component/Ckeditor/MyUploadAdapter";
 import Base64UploaderPlugin from "../component/Ckeditor/Base64Upload";
+import style from "./static/Editor.css"
 
 const CustomEditor = ({ initialValue, onChange }) => {
   const [editorLoaded, setEditorLoaded] = useState(false);
