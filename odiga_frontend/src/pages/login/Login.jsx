@@ -95,7 +95,7 @@ export default function Login() {
 
 
     return (
-        <div>
+        <div className="login-wrap">
             <div>
                 <ThemeProvider theme={defaultTheme}>
                     <Container component="main" maxWidth="xs">
@@ -118,7 +118,8 @@ export default function Login() {
                             </Avatar>
                             <Typography component="h1" variant="h5"
                                         sx={{
-                                            fontFamily: 'JalnanGothic'
+                                            fontFamily: 'JalnanGothic',
+                                            fontSize: '25px'
                                         }}
                             >
                                 로그인
@@ -187,8 +188,10 @@ export default function Login() {
 
 const LoginButton = styled(Button)`
   font-family: 'JalnanGothic'; // 원하는 글꼴을 여기에 지정합니다.
+  font-size: 18px;
 `;
 
 const LoginLink = styled(Link)`
   font-family: 'GmarketSansMedium'; // 원하는 글꼴을 여기에 지정합니다.
+  font-size: 15px;
 `;

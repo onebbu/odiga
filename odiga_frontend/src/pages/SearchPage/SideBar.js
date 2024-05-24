@@ -1,63 +1,81 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import styled from "styled-components";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import ClearIcon from '@mui/icons-material/Clear';
 
-function Sidebar({catList, setCatCode}) {
+function Sidebar({ catList, setCatCode }) {
     const [selectedCatType, setSelectedCatType] = useState(null);
-    const [selectedCatCode, setSelectedCatCode] = useState(null);
-
+    const [selectedCatCode, setSelectedCatCode] = useState([]);
+    
     useEffect(() => {
         // selectedCatCode가 변경될 때마다 setCatCode를 호출
         setCatCode(selectedCatCode);
+        console.log("setCatCode ::" +selectedCatCode);
     }, [selectedCatCode]); // selectedCatCode가 변경될 때만 이 effect를 실행
 
-    // 카테고리 타입별로 매핑
-    const catTypesMap = {};
-    catList.forEach((cat) => {
-        if (!catTypesMap[cat.cattype]) {
-            catTypesMap[cat.cattype] = [];
-        }
-        catTypesMap[cat.cattype].push(cat);
-    });
+    // 카테고리 타입별로 매핑 catList가 변경될 때만 catTypesMap을 재계산
+    const catTypesMap = useMemo(() => {
+        const map = {};
+        catList.forEach((cat) => {
+            if (!map[cat.cattype]) {
+                map[cat.cattype] = [];
+            }
+            map[cat.cattype].push(cat);
+        });
+        return map;
+    }, [catList]);
 
     // 카테고리 타입 선택 핸들러
     const handleCatTypeClick = (cattype) => {
         setSelectedCatType(cattype);
-        setSelectedCatCode(null); // 새 타입 선택 시 기존 선택된 catCode 초기화
+    //    setSelectedCatCode([]); // 새 타입 선택 시 기존 선택된 catCode 초기화
     };
 
-    // 카테고리 초기화
-    const handleCatTypeReset = () => {
-        setSelectedCatCode(null); // 새 타입 선택 시 기존 선택된 catCode 초기화
+    // 카테고리Kr 삭제 핸들러
+    const handleCatTypeReset = (catcode) => {
+        //setSelectedCatCode(null); 
+        setSelectedCatCode((prevCodes) =>
+            prevCodes.filter((code) => code !== catcode)
+        );
     };
 
     // 카테고리 코드 선택 핸들러
     const handleCatkrClick = (catcode) => {
-        if (selectedCatCode === catcode) {
-            // 이미 선택된 카테고리를 다시 클릭하면 선택 해제
-            setSelectedCatCode(null);
-        } else {
-            // 새로운 카테고리 선택
-            setSelectedCatCode(catcode);
-        }
+        // if (selectedCatCode === catcode) {
+        //     // 이미 선택된 카테고리를 다시 클릭하면 선택 해제
+        //     setSelectedCatCode(null);
+        // } else {
+        //     // 새로운 카테고리 선택
+        //     setSelectedCatCode(catcode);
+        // }
+        setSelectedCatCode((prevCodes) => {
+            if (prevCodes.includes(catcode)) {
+                // 이미 선택된 카테고리를 다시 클릭하면 선택 해제
+                return prevCodes.filter((code) => code !== catcode);
+            } else {
+                // 새로운 카테고리 선택
+                if (prevCodes.length < 4) {
+                    return [...prevCodes, catcode];
+                } else {
+                    alert('최대 4개의 카테고리까지 선택할 수 있습니다.');
+                    return prevCodes;
+                }
+            }
+        });
     };
 
     // 팝오버 내용
     const popoverContent = (
         <Popover id="popover-cat">
             <Popover.Body>
-                <div
-                style={{display: "flex"}}
-                >
+                <div style={{ display: 'flex' }}>
                     <div>
                         {Object.keys(catTypesMap).map((cattype, index) => (
                             <div key={index}>
                                 <CatButton
                                     onClick={() => handleCatTypeClick(cattype)}
                                     className={selectedCatType === cattype ? 'active' : ''}
-                                    style={{padding: '5px 10px', fontSize: '0.8rem'}}
                                 >
                                     {cattype}
                                 </CatButton>
@@ -66,13 +84,12 @@ function Sidebar({catList, setCatCode}) {
                     </div>
                     <div>
                         {selectedCatType && (
-                            <div>
+                            <div  style={{ backgroundColor: '#e9ecef' }}>
                                 {catTypesMap[selectedCatType].map((cat, index) => (
                                     <div key={index}>
                                         <CatButton
                                             onClick={() => handleCatkrClick(cat.catcode)}
-                                            className={selectedCatCode === cat.catcode ? 'active' : ''}
-                                            style={{padding: '5px 10px', fontSize: '0.8rem'}}
+                                            className={selectedCatCode.includes(cat.catcode) ? 'active' : ''}
                                         >
                                             {cat.catkr}
                                         </CatButton>
@@ -96,15 +113,25 @@ function Sidebar({catList, setCatCode}) {
             >
                 <CategoryButton>카테고리 선택</CategoryButton>
             </OverlayTrigger>
-            <div>
-                {selectedCatCode && (
-                    <SelectedCategoryWrapper>
-                        <SelectedCat
-                            onClick={handleCatTypeReset}>{catList.find(cat => cat.catcode === selectedCatCode)?.catkr}
-                            <ClearIcon/></SelectedCat>
-                    </SelectedCategoryWrapper>
-                )}
-            </div>
+            {selectedCatCode && (
+                <div>
+                    {/* {selectedCatCode && (
+                        <SelectedCategoryWrapper>
+                            <SelectedCat onClick={()=>handleCatTypeReset()}>
+                                {catList.find(cat => cat.catcode === selectedCatCode)?.catkr} <ClearIcon/>
+                            </SelectedCat>
+                        </SelectedCategoryWrapper>
+                    )} */}
+                    
+                        {selectedCatCode.map((catcode) => (
+                            <SelectedCategoryWrapper key={catcode}>
+                                <SelectedCat onClick={() => handleCatTypeReset(catcode)}>
+                                    {catList.find((cat) => cat.catcode === catcode)?.catkr} <ClearIcon />
+                                </SelectedCat>
+                            </SelectedCategoryWrapper>
+                        ))}
+                </div>
+            )}
         </div>
     );
 }
@@ -144,10 +171,13 @@ const CatButton = styled.button`
   outline: none;
   padding: 0;
   cursor: pointer;
+  padding: 5px 10px;
+  fontSize: 0.8rem;
   &:hover {
-    background-color: #f8f9fa;
+    background-color: #778899;
   }
   &.active {
     font-weight: bold;
+    background-color: #e9ecef;
   }
 `;
