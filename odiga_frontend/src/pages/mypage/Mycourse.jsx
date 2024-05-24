@@ -81,10 +81,14 @@ const Title = styled.h3`
   margin-top: 4rem;
   text-align: center;
   width: 100%;
+  font-family: JalnanGothic;
+  font-size: 25px;
 `;
 
 const Message = styled.div`
   text-align: center;
   margin-top: 4rem;
   font-size: 1.2rem;
+  font-family: JalnanGothic;
+  font-size: 18px;
 `;

@@ -345,11 +345,18 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
       height: 22px;
       color: white;
       background-color: #4978ce;
-      padding: 2px;
+      //padding: 2px;
       text-align: center;
       line-height: 22px;
       display: inline;
-      margin-left: 10px;`;
+      margin-left: 10px;
+      border-radius: 6px;
+      padding: 0.1em 0.3em;
+    `;
+    const RateP = styled.span`
+        font-size: 13px;
+        color: #DBDBC5;
+    `
     const P = styled.div`display: inline;
       font-size: 15px;
       color: #909090;
@@ -379,30 +386,43 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
 
     return (
         <div key={index} className="search-result-card">
-            <div>
+            <div style={{ display: "flex",
+                width: "100%"
+            }} >
                 <div style={{ display: "flex" }}>
                     <a href={`/detail/${contentid}`}>
                         <img src={firstImage}
-                             style={{width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px'}}/>
+                             style={{ width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px' }}/>
                     </a>
                     <div style={{ display: "block" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                            <div> {title} </div>
+                        <div style={{
+                            display: "flex",
+                            alignItems: "center"
+                        }}>
+                            <div style={{
+                                fontFamily: "JalnanGothic",
+                                fontSize: "18px"
+                            }}> {title} </div>
                             <div>
                                 <strong style={{
                                     backgroundColor, color,
-                                    fontSize: '75%', fontFamily: "GmarketSansMedium",
+                                    fontSize: '75%',
+                                    fontFamily: "GmarketSansMedium",
                                     fontWeight: '300',
-                                    padding: '0.25em 0.5em', borderRadius: "8px",
+                                    padding: '0.25em 0.5em',
+                                    borderRadius: "8px",
                                     marginLeft: '10px'
                                 }}>{cat3}</strong>
                             </div>
-                            <div style={{right: "0"}}>
-                                <Rate>{averageRate}</Rate><P>/{cntRating}개</P>
-                            </div>
+
                         </div>
                         <P>{addr1}</P>
                     </div>
+                </div>
+                <div
+                style={{position: "absolute", right: "2rem" }}
+                >
+                    <Rate>{averageRate}<RateP>/5</RateP></Rate><P>/리뷰 {cntRating}개</P>
                 </div>
             </div>
         </div>

@@ -41,7 +41,7 @@ export default function ResultList({data}) {
     };
 
     return (
-        <body>
+        <div className="result-list-wrap">
         {Object.keys(data).map(dateKey => (
             <div key={dateKey}>
                 <div className="result-plan">
@@ -135,7 +135,7 @@ export default function ResultList({data}) {
                 <br/>
                 <Accordion defaultActiveKey={null}>
                     <Accordion.Item eventKey="0">
-                        <Accordion.Header style={{backgroundColor: "black"}}>
+                        <Accordion.Header>
                             지금 {courseTitle}을 다른 사람과 공유해보세요
                         </Accordion.Header>
                         <Accordion.Body>
@@ -145,7 +145,7 @@ export default function ResultList({data}) {
                 </Accordion>
             </div>
         ) : null}
-        </body>
+        </div>
     );
 }
 
