@@ -52,11 +52,11 @@ public class SecurityConfig {
                         // my-page
                         .requestMatchers("/my-page/**").hasRole("USER")
                         // generate course
-                        .requestMatchers("/MyCourseDisplay/**", "/place/savedata/**").hasRole("USER")
+                        // .requestMatchers("/MyCourseDisplay/**", "/place/savedata/**").hasRole("USER")
                         // genaerate courseReview
                         // .requestMatchers("/coursereview/commentWrite/**", "/coursereview/commentDel/**", "/coursereview/like/**", "/coursereview/likeCancel/**", "/coursereview/delete/**", "/coursereview/update/**", "/courseimport/**").hasRole("USER")
                         // Location add & delete wish
-                        .requestMatchers("/WishDelete/**", "/travelLike/**").hasRole("USER")
+                        // .requestMatchers("/WishDelete/**", "/travelLike/**").hasRole("USER")
                         .anyRequest().permitAll()
                 );
 
