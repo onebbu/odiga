@@ -52,9 +52,9 @@ public class SecurityConfig {
                         // my-page
                         // .requestMatchers("/my-page/**").hasRole("USER")
                         // generate course
-                        // .requestMatchers("/MyCourseDisplay/**", "/courseimport/**", "/place/savedata/**").hasRole("USER")
+                        // .requestMatchers("/MyCourseDisplay/**", "/place/savedata/**").hasRole("USER")
                         // genaerate courseReview
-                        // .requestMatchers("/coursereview/commentWrite/**", "/coursereview/commentDel/**", "/coursereview/like/**", "/coursereview/likeCancel/**", "/coursereview/delete/**", "/coursereview/update/**").hasRole("USER")
+                        // .requestMatchers("/coursereview/commentWrite/**", "/coursereview/commentDel/**", "/coursereview/like/**", "/coursereview/likeCancel/**", "/coursereview/delete/**", "/coursereview/update/**", "/courseimport/**").hasRole("USER")
                         // Location add & delete wish
                         // .requestMatchers("/WishDelete/**", "/travelLike/**").hasRole("USER")
                         .anyRequest().permitAll()
