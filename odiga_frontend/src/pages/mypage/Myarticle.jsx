@@ -34,7 +34,7 @@ function Myarticle() {
 
     return (
         <div style={{width: "50rem", margin: "auto"}}>
-            <Title>{loginInfo.nickname}님이 작성한 글</Title>
+            <Title>{loginInfo.nickname}님이 작성한 여행코스 후기</Title>
             <hr/>
             {articleList && Object.keys(articleList).length > 0 ? (
                 <>

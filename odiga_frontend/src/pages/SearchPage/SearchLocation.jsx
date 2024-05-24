@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Sidebar from './SideBar';
@@ -10,6 +11,7 @@ import styled from "styled-components";
 
 
 function SearchLocation() {
+    const { areacodeUrl } = useParams();
     const [searchText, setSearchText] = useState('');
     const [recentSearches, setRecentSearches] = useState(() => JSON.parse(localStorage.getItem('recentSearches')) || []);
     const [searchResults, setSearchResults] = useState([]);
@@ -19,7 +21,7 @@ function SearchLocation() {
     const [catList, setCatList] = useState([]);
     const [catCode, setCatCode] = useState([]);
     const [order, setOrder] = useState('title');
-    const [areaCode, setAreaCode] = useState('1');
+    const [areaCode, setAreaCode] = useState(areacodeUrl || '1');
     const [mapData, setMapData] = useState([]);
 
     const data = [
@@ -241,7 +243,7 @@ function SearchLocation() {
                                 stroke="#777777"
                                 onMouseOver={(e) => handleMouseOver(e, city.locale, city.count)}
                                 onMouseOut={handleMouseOut}
-                                className={`${areaCode === city.localeNum ? 'active' : ''}`}
+                                className={`${areaCode == city.localeNum ? 'active' : ''}`}
                             />
                         ))}
                     </svg>
