@@ -32,7 +32,7 @@ function MypageMain() {
               </Item>
               <Item>
                 <MypageLink className="mypageitem" to="/my-page/my-article">
-                  작성한 글
+                  여행코스 후기
                 </MypageLink>
               </Item>
               <Item>

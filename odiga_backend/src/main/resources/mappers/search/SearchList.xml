@@ -66,7 +66,7 @@
             GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE, TL.AREACODE, TL.TRAVELVIEWCOUNT
             ORDER BY <choose>
                         <when test="order == 'title'"> TL.TITLE </when>
-                        <when test="order == 'grade'"> averageRate </when>
+                        <when test="order == 'grade'"> averageRate DESC</when>
                     </choose>
             ) a
         )
@@ -104,8 +104,11 @@
                 WHERE areacode = #{areacode}
                 AND title LIKE '%' || #{text} || '%'
                 <choose>
-                    <when test="catcode != null">
-                        AND cat3 = #{catcode}
+                    <when test="catList != null">
+                        AND cat3 IN
+                        <foreach item="code" collection="catList" open="(" separator="," close=")">
+                            #{code}
+                        </foreach>
                     </when>
                 </choose>
     </select>
@@ -137,7 +140,7 @@
         WHERE areacode = #{areacode}
         and title LIKE '%' || #{text,jdbcType=VARCHAR} || '%'
         <choose>
-            <when test="catcode != null and catcode.size() > 0">
+            <when test="catcode != null ">
                 AND cat3 IN
                             <foreach item="code" collection="catcode" open="(" separator="," close=")">
                                 #{code}
