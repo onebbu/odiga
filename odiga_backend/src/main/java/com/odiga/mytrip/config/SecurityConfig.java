@@ -50,7 +50,7 @@ public class SecurityConfig {
                         // google oauth login
                         .requestMatchers("/oauth2/callback/google", "/oauth2/authorization/google").permitAll()
                         // my-page
-                        .requestMatchers("/my-page/**").hasRole("USER")
+                        // .requestMatchers("/my-page/**").hasRole("USER")
                         // generate course
                         // .requestMatchers("/MyCourseDisplay/**", "/place/savedata/**").hasRole("USER")
                         // genaerate courseReview
