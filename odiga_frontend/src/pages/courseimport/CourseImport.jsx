@@ -5,8 +5,6 @@ import styled from "styled-components";
 import axios from "axios";
 import TextEditor from "../component/Ckeditor/TextEditor";
 import HashtagInput from "./HashtagInput.js";
-import Header from "../component/navbar/Header";
-import Footer from '../component/footer/Footer';
 import './styles.css';
 import './couseImport.css';
 
@@ -41,7 +39,7 @@ function CourseImport() {
     if (loginInfo === null) {
       return; 
     }
-    if (!sessionStorage.getItem('token')) {
+    if (!loginInfo) {
       alert("로그인 후 이용 가능합니다.");
       navigate("/login"); 
     } else {
@@ -106,7 +104,8 @@ function CourseImport() {
     if (loginInfo.nickname) {
       axios.post("/MyCourseDisplay", { nickname: loginInfo.nickname })
         .then((response) => {
-          setUserData(response.data);
+          const coursesData = Array.isArray(response.data) ? response.data : [];
+          setUserData(coursesData);
           console.log("여행 코스를 성공적으로 가져왔습니다.", response.data);
           if (response.data.length > 0) {     
             setAreacode(response.data[0].areacode);
@@ -186,7 +185,6 @@ function CourseImport() {
 
   return (
     <>
-      <Header/>
       <section className="couseImportContainer">
         <section className="couseImportTop">
           <h3>{loginInfo.nickname}님의 여행기를 공유해주세요 :)</h3>
@@ -274,7 +272,6 @@ function CourseImport() {
           </button>
         </section>
       </section>
-      <Footer/>
     </>
   );
 }
