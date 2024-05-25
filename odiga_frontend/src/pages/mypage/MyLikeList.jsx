@@ -100,6 +100,7 @@ const LikeOverlay = styled.div`
   `
 
 const LikeTitle = styled(Card.Title)`
+  font-family: 'JalnanGothic', sans-serif;
   font-size: 18px;
   position: absolute;
   bottom: 12px;

@@ -41,36 +41,36 @@
     <select id="getSearchList" resultType="com.odiga.mytrip.search.vo.SearchVO" parameterType="java.util.Map">
         SELECT * FROM
         ( SELECT a.*, ROWNUM as rn FROM (
-            SELECT TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE AS CAT3, TL.AREACODE, TL.TRAVELVIEWCOUNT,
-                    COALESCE(ROUND(AVG(TR.REVIEWGRADE)), 0) AS averageRate,
-                    COALESCE(COUNT(TR.CONTENTID) , 0) AS cntRating
-            FROM TRAVELLIST TL
-            LEFT JOIN TRAVELREVIEW TR ON TL.CONTENTID = TR.CONTENTID
-            LEFT JOIN TRAVELCAT TC ON TL.CAT3 = TC.CATCODE
-            WHERE TL.title LIKE '%' || #{text} || '%' 
-            <choose>
-                <when test="areacode != 0">
-                    AND TL.AREACODE = #{areacode}
-                </when>
-                <otherwise></otherwise>
-            </choose>
-            <choose>
-                <when test="catList != null">
-                    AND TL.CAT3 IN
-                            <foreach item="code" collection="catList" open="(" separator="," close=")">
-                                #{code}
-                            </foreach>
-                </when>
-                <otherwise></otherwise>
-            </choose>
-            GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE, TL.AREACODE, TL.TRAVELVIEWCOUNT
-            ORDER BY <choose>
-                        <when test="order == 'title'"> TL.TITLE </when>
-                        <when test="order == 'grade'"> averageRate DESC</when>
-                    </choose>
-            ) a
+        SELECT TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE AS CAT3, TL.AREACODE, TL.TRAVELVIEWCOUNT,
+        COALESCE(ROUND(AVG(TR.REVIEWGRADE)), 0) AS averageRate,
+        COALESCE(COUNT(TR.CONTENTID) , 0) AS cntRating
+        FROM TRAVELLIST TL
+        LEFT JOIN TRAVELREVIEW TR ON TL.CONTENTID = TR.CONTENTID
+        LEFT JOIN TRAVELCAT TC ON TL.CAT3 = TC.CATCODE
+        WHERE TL.title LIKE '%' || #{text} || '%'
+        <choose>
+            <when test="areacode != 0">
+                AND TL.AREACODE = #{areacode}
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        <choose>
+            <when test="catList != null">
+                AND TL.CAT3 IN
+                <foreach item="code" collection="catList" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </when>
+            <otherwise></otherwise>
+        </choose>
+        GROUP BY TL.CONTENTID, TL.TITLE, TL.ADDR1, TL.FIRSTIMAGE, TC.CATTYPE, TL.AREACODE, TL.TRAVELVIEWCOUNT
+        ORDER BY <choose>
+        <when test="order == 'title'"> TL.TITLE </when>
+        <when test="order == 'grade'"> averageRate DESC</when>
+    </choose>
+        ) a
         )
-    WHERE rn BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
+        WHERE rn BETWEEN ((#{page} - 1) * 10 + 1) AND (#{page} * 10)
     </select>
 
     <!-- 여행코스 후기 검색결과 가져오기-->
@@ -100,17 +100,17 @@
 
     <select id="getResultCount" resultType="int" parameterType="java.util.Map">
         SELECT COUNT(*)
-            FROM TRAVELLIST
-                WHERE areacode = #{areacode}
-                AND title LIKE '%' || #{text} || '%'
-                <choose>
-                    <when test="catList != null">
-                        AND cat3 IN
-                        <foreach item="code" collection="catList" open="(" separator="," close=")">
-                            #{code}
-                        </foreach>
-                    </when>
-                </choose>
+        FROM TRAVELLIST
+        WHERE areacode = #{areacode}
+        AND title LIKE '%' || #{text} || '%'
+        <choose>
+            <when test="catList != null">
+                AND cat3 IN
+                <foreach item="code" collection="catList" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
+            </when>
+        </choose>
     </select>
 
     <select id="getCourseResultCount" resultType="int" parameterType="java.util.Map">
@@ -142,11 +142,10 @@
         <choose>
             <when test="catcode != null ">
                 AND cat3 IN
-                            <foreach item="code" collection="catcode" open="(" separator="," close=")">
-                                #{code}
-                            </foreach>
+                <foreach item="code" collection="catcode" open="(" separator="," close=")">
+                    #{code}
+                </foreach>
             </when>
         </choose>
     </select>
 </mapper>
-

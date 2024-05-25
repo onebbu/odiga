@@ -6,11 +6,14 @@ import './cPP.css';
 import {LoginInfoContext} from "../login/LoginInfoProvider";
 import {useParams} from "react-router-dom";
 import LocationContent from "./LocationContent";
+import styled from "styled-components";
 
 //const region_url = `https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json`;
 
-const Rate = Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
-const P = Styled.div`display:inline; font-size:10px; color:#909090;`;
+const Rate = Styled.div`width: 35px; height: 22px; color:white; background-color:#4978ce; text-align: center; line-height:22px; display:inline; border-Radius: 6px; padding: 0.1em 0.3em; display:flex`;
+const P = Styled.div`display:inline; font-size:12px; color:#909090;`;
+
+
 // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
 const catColors = {
     '액티비티': {backgroundColor: '#B4DAF2'},
@@ -60,15 +63,28 @@ const Place = ({id, pic, name, region, cat, averageRate, cntRating}) => { //개�
         <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}>
             <div>
             <img src={pic} onClick={()=>handleShowModal(id)} />
-                {name} <strong style={{
+                <h6
+                style={{
+                    display: "inline-block",
+                    fontFamily: "JalnanGothic"
+                }}
+                >{name}</h6> <strong style={{
                 backgroundColor, color,
                 fontSize: '75%', fontFamily: "GmarketSansMedium",
                 fontWeight: '300',
                 padding: '0.25em 0.5em', borderRadius: "8px",
                 textAlign: 'right'
             }}>{cat}</strong>
-                <P> <br/>{region}</P><br/>
-                <Rate>{averageRate}</Rate> <P>/{cntRating}개</P>
+                    <P> <br/>{region}</P><br/>
+                <div style={{display: "flex"}}>
+                    <Rate>{averageRate}
+                        <div
+                        style={{
+                            fontSize: "12px",
+                            color: "#909090"
+                        }}
+                        >/5</div></Rate><P>/리뷰 {cntRating}개</P>
+                </div>
             </div>
             {showModal && <LocationContent show={showModal} handleClose={handleCloseModal} contentId={contentId}/>}
         </div>
