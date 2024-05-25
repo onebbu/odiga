@@ -47,8 +47,8 @@ function Header() {
             <nav className="header-nav">
                 <ul className="NavMenu">
                     <li><a onClick={() => handleNavigation('/preference')}>여행코스 생성</a></li>
-                    <li><a href="/coursereview">여행코스 조회</a></li>
-                    <li><a href="/search-location">여행지 검색</a></li>
+                    <li><a href="/coursereview">여행코스 후기</a></li>
+                    <li><a href="/search-location/1">여행지 검색</a></li>
                 </ul>
             </nav>
             <div className="header-actions">

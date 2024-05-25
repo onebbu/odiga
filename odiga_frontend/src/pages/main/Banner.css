@@ -37,6 +37,10 @@
     text-align: left;
     margin-bottom: 25px;
   }
+
+.BannerDescription p{
+  font-family: 'JalnanGothic', sans-serif;
+}
   
   .BannerImage {
     width: 800px;

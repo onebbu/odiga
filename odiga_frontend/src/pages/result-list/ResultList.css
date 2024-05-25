@@ -145,7 +145,7 @@
     content: '';
     position: absolute;
     top: -3rem;
-    left: 1.5rem;
+    left: 5%;
     transform: translateX(-50%);
     height: 10rem;
     width: 0.1rem; /* 세로선의 너비 */

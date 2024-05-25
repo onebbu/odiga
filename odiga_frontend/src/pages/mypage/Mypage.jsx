@@ -89,7 +89,7 @@ const Label = styled.label`
   text-align: center;
   font-size: 14px;
   margin-bottom: 1rem;
-  font-family: JalnanGothic;
+  font-family: GmarketSansMedium;
   font-size: 18px;
   margin-bottom: 1rem;
 `;

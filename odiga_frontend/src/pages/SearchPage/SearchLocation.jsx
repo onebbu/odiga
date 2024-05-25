@@ -21,7 +21,7 @@ function SearchLocation() {
     const [catList, setCatList] = useState([]);
     const [catCode, setCatCode] = useState([]);
     const [order, setOrder] = useState('title');
-    const [areaCode, setAreaCode] = useState(areacodeUrl || '1');
+    const [areaCode, setAreaCode] = useState(areacodeUrl || '0');
     const [mapData, setMapData] = useState([]);
 
     const data = [
@@ -356,11 +356,11 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
       padding: 0.1em 0.3em;
     `;
     const RateP = styled.span`
-        font-size: 13px;
+        font-size: 12px;
         color: #DBDBC5;
     `
     const P = styled.div`display: inline;
-      font-size: 15px;
+      font-size: 12px;
       color: #909090;
       margin-right: 10px;
       margin-left: 10px;`;

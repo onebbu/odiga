@@ -168,6 +168,9 @@ export default function Login() {
                                         <LoginLink href="http://localhost:3000/sign-up" variant="body2">
                                             계정이 없으신가요? 회원가입하기
                                         </LoginLink>
+                                        {/*<LoginLink href="#" variant="body2">*/}
+                                        {/*    비밀번호를 잊으셨나요? 비밀번호찾기*/}
+                                        {/*</LoginLink>*/}
                                     </Grid>
                                 </Grid>
                             </Box>
@@ -192,6 +195,7 @@ const LoginButton = styled(Button)`
 `;
 
 const LoginLink = styled(Link)`
+  display: block;
   font-family: 'GmarketSansMedium'; // 원하는 글꼴을 여기에 지정합니다.
   font-size: 15px;
 `;
