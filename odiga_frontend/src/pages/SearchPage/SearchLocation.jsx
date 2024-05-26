@@ -290,9 +290,6 @@ function SearchLocation() {
                                 <button className={`sort-button ${order === 'grade' ? 'active' : ''}`}
                                         onClick={() => handleOrderChange('grade')}>별점순
                                 </button>
-                                {/*<button className={`sort-button ${order === 'date' ? 'active' : ''}`}*/}
-                                {/*        onClick={() => handleOrderChange('date')}>최신순*/}
-                                {/*</button>*/}
                             </div>
                         </div>
                     </div>
@@ -338,23 +335,22 @@ function SearchLocation() {
 }
 
 export default SearchLocation;
-
-const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, cntRating}) => {
-
-    const Rate = styled.div`width: 45px;
-      height: 22px;
-      color: white;
-      background-color: #4978ce;
-      padding: 2px;
-      text-align: center;
-      line-height: 22px;
-      display: inline;
-      margin-left: 10px;`;
+const Rate = styled.div `width: 80px; height: 22px; color:white; background-color:#00429b; text-align: center;display:inline;
+      border-radius: 20px 0 20px 20px;
+      padding: 4px 5px 2px 5px;
+      margin-left: 10px;
+      p {
+          display:inline; font-size:10px;
+          color: #80a1cd; /* 원하는 색상으로 변경 */
+        }
+`;  
     const P = styled.div`display: inline;
       font-size: 15px;
       color: #909090;
       margin-right: 10px;
       margin-left: 10px;`;
+      
+const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, cntRating}) => {
 
     const catColors = {
         '액티비티': {backgroundColor: '#B4DAF2'},
@@ -378,17 +374,15 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
     };
 
     return (
-        <div key={index} className="search-result-card">
-            <div>
-                <div style={{ display: "flex" }}>
+        <div key={index} className="search-result-card" >
+                <div style={{ display: "flex", width: '100%' }}>
                     <a href={`/detail/${contentid}`}>
                         <img src={firstImage}
                              style={{width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px'}}/>
                     </a>
-                    <div style={{ display: "block" }}>
-                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                            <div> {title} </div>
-                            <div>
+                    <div style={{ display: "block", width: '100%' }}>
+                        <div style={{ display: "flex",justifyContent:'space-between' }}>
+                            <div> {title} 
                                 <strong style={{
                                     backgroundColor, color,
                                     fontSize: '75%', fontFamily: "GmarketSansMedium",
@@ -398,13 +392,12 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
                                 }}>{cat3}</strong>
                             </div>
                             <div style={{right: "0"}}>
-                                <Rate>{averageRate}</Rate><P>/{cntRating}개</P>
+                                <Rate>{averageRate}<p>/5</p></Rate><P>/{cntRating}개</P>
                             </div>
                         </div>
                         <P>{addr1}</P>
                     </div>
                 </div>
-            </div>
         </div>
     )
 }
