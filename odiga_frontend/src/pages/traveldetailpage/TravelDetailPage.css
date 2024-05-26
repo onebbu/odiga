@@ -6,6 +6,7 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
 .inner {
     width: 100%;
     height: 100%;
+    background-color: #f3f4f6;
 }
 
 .main {
@@ -30,8 +31,13 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
     font-size: 24px;
 }
 
+.travelTitle h2{
+    font-family: JalnanGothic;
+    font-size: 25px;
+}
+
 .travelTitle p {
-    color: #bbb;
+    color: grey;
     font-size: 15px;
 }
 
@@ -39,6 +45,11 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
 .InfoAndLikeBox {
     display: flex;
     justify-content: space-between;
+}
+
+.InfoAndLikeBox h2{
+    font-family: JalnanGothic;
+    font-size: 25px;
 }
 
 
@@ -221,6 +232,12 @@ a, abbr, acronym, address, applet, article, aside, audio, b, blockquote, big, bo
 /* .averageRatingInner{
    text-align: center;
 } */
+
+.averageRatingInner h4{
+    font-family: JalnanGothic;
+    font-size: 25px;
+}
+
 
 .contourLine6 {
     margin: 20px auto;

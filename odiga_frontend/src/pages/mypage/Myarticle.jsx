@@ -34,7 +34,7 @@ function Myarticle() {
 
     return (
         <div style={{width: "50rem", margin: "auto"}}>
-            <Title>{loginInfo.nickname}님이 작성한 글</Title>
+            <Title>{loginInfo.nickname}님이 작성한 여행코스 후기</Title>
             <hr/>
             {articleList && Object.keys(articleList).length > 0 ? (
                 <>
@@ -62,13 +62,17 @@ function Myarticle() {
                                     </LikeBadge>
                                     <Card.Body>
                                         <Card.Title>
-                                            {articleList[articleKey].boardTitle}
+                                            <p
+                                                style={{
+                                                    fontFamily: "JalnanGothic",
+                                                    fontSize: "18px"
+                                                }}>{articleList[articleKey].boardTitle}</p>
                                         </Card.Title>
                                         <Card.Text>
                                             <StackContainer direction="horizontal" gap={2}>
-                                                {articleList[articleKey]?.tags && articleList[articleKey].tags.split(" ").map((word, index) => (
+                                                {articleList[articleKey]?.tags ? articleList[articleKey].tags.split(" ").map((word, index) => (
                                                     <HashBadge bg="" key={index}>{word}</HashBadge>
-                                                ))}
+                                                )) :  <HashBadge>#태그없음</HashBadge>}
                                             </StackContainer>
                                         </Card.Text>
                                     </Card.Body>
@@ -92,6 +96,8 @@ const Title = styled.h3`
   margin-top: 4rem;
   text-align: center;
   width: 100%;
+  font-family: JalnanGothic;
+  font-size: 25px;
 `;
 
 const GridContainer = styled.div`
@@ -123,14 +129,23 @@ const LikeBadge = styled(Badge)`
   right: 0.3rem;
 `;
 
-const HashBadge = styled(Badge)`
-  font-size: 0.6rem;
-  background-color: #A9A9A9;
+const HashBadge = styled.strong`
+  font-size: 60%;
+  font-family: "GmarketSansMedium";
+  font-weight: 300;
+  padding: 0.25em 0.5em;
+  border-radius: 8px;
+  text-align: right;
+  color: white;
+  background-color: grey;
 `;
+
 
 const Message = styled.div`
   text-align: center;
   margin-top: 4rem;
   font-size: 1.2rem;
+  font-family: JalnanGothic;
+  font-size: 18px;
 `;
 

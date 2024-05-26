@@ -29,7 +29,7 @@ function Header() {
     }, [lastScrollY]);
 
     const handleNavigation = (path) => {
-        if (path === '/preference' && !sessionStorage.getItem('token')) {
+        if (path === '/preference' && !loginInfo) {
             const isConfirmed = window.confirm('로그인이 필요한 페이지입니다. 로그인 페이지로 이동하시겠습니까?');
             if (isConfirmed) {
                 navigate("/login", { state: { from } });
@@ -47,8 +47,8 @@ function Header() {
             <nav className="header-nav">
                 <ul className="NavMenu">
                     <li><a onClick={() => handleNavigation('/preference')}>여행코스 생성</a></li>
-                    <li><a href="/coursereview">여행코스 조회</a></li>
-                    <li><a href="/search-location">여행지 검색</a></li>
+                    <li><a href="/coursereview">여행코스 후기</a></li>
+                    <li><a href="/search-location/1">여행지 검색</a></li>
                 </ul>
             </nav>
             <div className="header-actions">

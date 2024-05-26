@@ -1,47 +1,48 @@
 @font-face {
-  font-family: 'KyoboHandwriting2023wsa';
-  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404-2@1.0/KyoboHandwriting2023wsa.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'KyoboHandwriting2023wsa';
+    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2404-2@1.0/KyoboHandwriting2023wsa.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
 }
 
 .popularContentCard a {
-  text-decoration: none;
-  color : inherit;
+    text-decoration: none;
+    color: inherit;
 }
+
 /* Reset CSS 포함 */
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 html, body {
-  overflow-x: hidden; /* 가로 스크롤바 방지 */
+    overflow-x: hidden; /* 가로 스크롤바 방지 */
 }
 
 
 .mainContentsComp {
-   width: 100%;
-   height: 100%;
-   background: black;
-   margin-top: 50px;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   box-sizing:border-box;
+    width: 100%;
+    height: 100%;
+    background: black;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
 
 
 .mainContentsInner {
-   width: 100%;
-   height: 100%;
-   background: white;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
+    width: 100%;
+    height: 100%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .popularContent {
@@ -54,14 +55,14 @@ html, body {
     /* overflow: hidden; */
 }
 
-.popularContentTittleInner{
-   width: 100%;
-   height: 80px;
-   display: flex;
-   justify-content: space-between;
-   align-items: center;
-   margin-left: 100px;
-   
+.popularContentTittleInner {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 100px;
+
 }
 
 .popularContentTittle {
@@ -82,17 +83,17 @@ html, body {
 }
 
 .popularContentTittle p {
-    position: relative; 
+    position: relative;
     cursor: pointer;
     margin: 0;
-  }
-  
-  .popularContentTittle p:hover::after {
+}
+
+.popularContentTittle p:hover::after {
     content: "현재 가장 높은 조회수를 기록하고 있는 게시글이에요 :)";
     position: absolute;
-    top: -70%; 
-    left: 188%; 
-    transform: translate(-50%, -50%); 
+    top: -70%;
+    left: 188%;
+    transform: translate(-50%, -50%);
     background-color: black;
     color: #fff;
     padding: 8px 12px;
@@ -100,77 +101,78 @@ html, body {
     white-space: nowrap;
     font-size: 14px;
     z-index: 10;
-    width: max-content; 
-    box-shadow: 0px 2px 5px rgba(0,0,0,0.2); 
-  } 
-  
+    width: max-content;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
 
-  @keyframes slider1 {
+
+@keyframes slider1 {
     0% {
-      transform: translateX(0%);
+        transform: translateX(0%);
     }
     50% {
-      transform: translateX(-100%);
+        transform: translateX(-100%);
     }
     50.1% {
-      transform: translateX(100%);
+        transform: translateX(100%);
     }
     100% {
-      transform: translateX(0%);
+        transform: translateX(0%);
     }
-  }
-  
-  @keyframes slider2 {
+}
+
+@keyframes slider2 {
     0% {
-      transform: translateX(0%);
+        transform: translateX(0%);
     }
     100% {
-      transform: translateX(-200%);
+        transform: translateX(-200%);
     }
-  }
-
-
- .popularContentSliderInner {
-      width: 100%;
-      height: 525px;
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: nowrap;
-      overflow: hidden;
-      padding-top: 10px;
-     
- }
-
- .original {
-  width: 3300px;
-  display: flex;
-  animation: 100s linear infinite normal none running slider1;
 }
+
+
+.popularContentSliderInner {
+    width: 100%;
+    height: 525px;
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: nowrap;
+    overflow: hidden;
+    padding-top: 10px;
+
+}
+
+.original {
+    width: 3300px;
+    display: flex;
+    animation: 100s linear infinite normal none running slider1;
+}
+
 .clone {
- width: 3300px;
- display: flex;
- animation: 100s linear infinite slider2;
+    width: 3300px;
+    display: flex;
+    animation: 100s linear infinite slider2;
 }
 
 
- .popularContentCard{
-     width: 350px;
-     height: 450px;
-     box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5); 
-     border-radius: 10px;
-     margin: 10px;
-     flex-shrink: 0;
-     transition: transform 0.3s ease, box-shadow 0.3s ease;
- }
-
- .popularContentCard:hover {
-  transform: translateY(-10px); 
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-  z-index: 10;
+.popularContentCard {
+    width: 350px;
+    height: 450px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+    margin: 10px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
- .stop {
-  animation-play-state: paused;
+.popularContentCard:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+.stop {
+    animation-play-state: paused;
 }
 
 
@@ -181,35 +183,35 @@ html, body {
 }
 
 .cardInfo {
-  width: 100%;
-  height: 40%;
+    width: 100%;
+    height: 40%;
 }
 
 
 .cardImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  /* transition: transform 0.3s ease; */
-  border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* transition: transform 0.3s ease; */
+    border-radius: 10px;
 }
 
 .cardUserInfo {
-   width: 100%;
-   height: 30%;
-   font-size: 15px;
-   display: flex;
-   align-items: center;
-   margin-left: 5px;
-   border-radius: 10px;
-   
+    width: 100%;
+    height: 30%;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+    border-radius: 10px;
+
 }
 
 .cardUserNickname {
-  height: 30px;
-  display: flex;
-  align-items: center;
-  margin-left: 5px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
 }
 
 .nickNameIcon {
@@ -217,187 +219,188 @@ html, body {
 }
 
 .cardDate {
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
 }
 
 .cardTitle {
-  margin: 5px;
-  width: 340px;
-  height: 50%;
-  font-size: 12px;
+    margin: 5px;
+    width: 340px;
+    height: 50%;
+    font-size: 12px;
 }
 
 .cardUserTitle {
-  width: 300px;
-  height: 35px;
-  padding-left: 5px;
-  overflow: hidden; 
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  margin-bottom: 10px;
+    width: 300px;
+    height: 35px;
+    padding-left: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 10px;
 }
 
 .cardUserTitle h5 {
- margin: 0;
+    font-family: 'JalnanGothic', sans-serif;
+    margin: 0;
 }
+
 /* 텍스트 초과시 말줄임표 문제 해결해야함  */
 .cardUserDescription {
-  width: 100%;
-  height: 65px;
-  color: #666;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-left: 5px;
+    width: 100%;
+    height: 65px;
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 5px;
 }
 
 .cardCategory {
-  color: #007bff; 
-  margin-top: 10px;
-  margin-left: 10px;
-  font-size: 13px;
-  display: flex;
+    color: #007bff;
+    margin-top: 10px;
+    margin-left: 10px;
+    font-size: 13px;
+    display: flex;
 }
 
 
 .contourLine {
-  width: 85%;
-  height: 2px;
-  background-color: #ccc; 
-  margin: 20px 0px; 
-  margin-left: 100px;
-} 
+    width: 85%;
+    height: 2px;
+    background-color: #ccc;
+    margin: 20px 0px;
+    margin-left: 100px;
+}
 
 
-.contourLineCardInfo{
-  width: 2px;
-  height: 20px;
-  background-color: #ccc; 
-  margin-left: 10px;
-  margin-right: 10px;
+.contourLineCardInfo {
+    width: 2px;
+    height: 20px;
+    background-color: #ccc;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .recommendContentInner {
-  width: 100%;
-  height: 800px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+    width: 100%;
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 }
 
 
-.recommendContentTitleInner{
-   width: 100%;
-   height: 100px;
-   display: flex;
-   align-items: center;
-   background: white;
-   
+.recommendContentTitleInner {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    background: white;
+
 }
 
-.recommendContentTitle{
-   width: 500px;
-   height: 50px;
-   margin-left: 190px;
-   font-size: 20px;
+.recommendContentTitle {
+    width: 500px;
+    height: 50px;
+    margin-left: 190px;
+    font-size: 20px;
 }
 
 
 .recommendMainContentInner {
-   width: 100%;
-   height: 85%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 100px;
-  
+    width: 100%;
+    height: 85%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 100px;
+
 }
 
 
- 
 .recommendMainContentContainer {
-  width: 1500px;
-  height: 100%;
-  display: grid;
-  grid-template-columns: repeat(5, 300px);
-  grid-template-rows: 300px;
-  grid-gap: 30px;
-  align-items: center;
-  justify-content: center;
+    width: 1500px;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 300px);
+    grid-template-rows: 300px;
+    grid-gap: 30px;
+    align-items: center;
+    justify-content: center;
 
 }
 
 .recommendMainContentInner a {
-  color: black;
+    color: black;
 }
 
 .recommendMainContentImg {
-  width: 100%;
-  height: 300px;
-  border-radius: 10px;
-  object-fit: cover;
-  
+    width: 100%;
+    height: 300px;
+    border-radius: 10px;
+    object-fit: cover;
+
 }
 
 .imageContainer {
-  position: relative;
+    position: relative;
 }
 
 .overlay {
-  position: absolute; 
-  bottom: 0; 
-  left: 0; 
-  width: 100%; 
-  background: rgba(0, 0, 0, 0.5); 
-  color: white; 
-  padding: 10px; 
-  box-sizing: border-box; 
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .overlayTitle, .overlayAddr {
-  margin: 0; 
+    margin: 0;
 }
 
 .overlayTitle {
-  font-size: 18px;
-  font-weight: bold;
+    font-family: 'JalnanGothic', sans-serif;
+    font-size: 18px;
 }
 
 .overlayAddr {
-  font-size: 14px;
-  color: #bbb; 
+    font-size: 14px;
+    color: #bbb;
 }
 
 
 .recommendMainContent {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5); 
-  border-radius: 10px;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
 
-  flex-shrink: 0;
-  position: relative;
+    flex-shrink: 0;
+    position: relative;
 }
 
 .likeCount {
-  position: absolute;
-  top: 10px; 
-  right: 10px; 
-  display: none; 
-  color: #EEE;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: none;
+    color: #EEE;
 }
 
 .recommendMainContent:hover .likeCount {
-  display: block; 
+    display: block;
 }
 
 .dateFont {
-  font-family: 'KyoboHandwriting2023wsa', sans-serif;
-  font-size: 16px;
+    font-family: 'KyoboHandwriting2023wsa', sans-serif;
+    font-size: 16px;
 
 }

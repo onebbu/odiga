@@ -13,14 +13,14 @@ import Image4 from '../../assets/images/대전.jpg';
 
 function KoreaLocations() {
     const locations = [
-        { name: '서울', image: seoulImage },
-        { name: '부산', image: busanImage },
-        { name: '인천', image: incheonImage },
-        { name: '대구', image: daeguImage },
-        { name: '경기', image: Image1 },
-        { name: '제주', image: Image2 },
-        { name: '광주', image: Image3 },
-        { name: '대전', image: Image4 }
+        { name: '서울', image: seoulImage ,areacode : 1},
+        { name: '부산', image: busanImage ,areacode : 6},
+        { name: '인천', image: incheonImage ,areacode : 2},
+        { name: '대구', image: daeguImage ,areacode : 4},
+        { name: '경기', image: Image1 ,areacode : 31},
+        { name: '제주', image: Image2 , areacode : 39},
+        { name: '광주', image: Image3 , areacode : 5},
+        { name: '대전', image: Image4 , areacode : 3}
         
     ];
 
@@ -61,7 +61,7 @@ function KoreaLocations() {
                 <button className="ArrowButton" onClick={handlePrev}><FontAwesomeIcon icon={faArrowLeft} /></button>
                 {visibleLocations.map((location, index) => (
                     <div className="NavLocations" key={index}>
-                        <a href="/SearchPage">
+                        <a href={`/search-location/${location.areacode}`}>
                             <div className="NavLocationImg">
                                 <img alt={location.name} src={location.image} />
                             </div>

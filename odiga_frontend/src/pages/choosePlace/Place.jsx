@@ -10,12 +10,11 @@ import LocationContent from "./LocationContent";
 const Rate = Styled.div`width: 80px; height: 22px; color:white; background-color:#00429b; padding:2px; text-align: center;display:inline;
                         border-radius: 20px 0 20px 20px;
                         padding: 4px 5px 2px 5px;
-                        p {
-                            display:inline; font-size:10px;
-                            color: #80a1cd; /* 원하는 색상으로 변경 */
-                          }
-`;
+                        p { display:inline; font-size:10px;
+                            color: #80a1cd;
+                        } `;
 const P = Styled.div`display:inline; font-size:10px; color:#909090;`;
+
 // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
 const catColors = {
     '액티비티': {backgroundColor: '#B4DAF2'},
@@ -65,7 +64,12 @@ const Place = ({id, pic, name, region, cat, averageRate, cntRating}) => { //개�
         <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}>
             <div>
             <img src={pic} onClick={()=>handleShowModal(id)} />
-                {name} <strong style={{
+                <h6
+                style={{
+                    display: "inline-block",
+                    fontFamily: "JalnanGothic"
+                }}
+                >{name}</h6> <strong style={{
                 backgroundColor, color,
                 fontSize: '75%', fontFamily: "GmarketSansMedium",
                 fontWeight: '300',

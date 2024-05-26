@@ -44,7 +44,7 @@ public class SearchController {
         
         String order = "title";
         if("grade".equals(frontorder)) { order = "grade"; }     
-        searchQuery.put("page", 1);
+        searchQuery.put("page", page);
         searchQuery.put("text", text);
         if (areacode != null){ searchQuery.put("areacode", areacode); }
         else{ searchQuery.put("areacode", 0); }

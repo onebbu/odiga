@@ -95,7 +95,7 @@ export default function Login() {
 
 
     return (
-        <div>
+        <div className="login-wrap">
             <div>
                 <ThemeProvider theme={defaultTheme}>
                     <Container component="main" maxWidth="xs">
@@ -118,7 +118,8 @@ export default function Login() {
                             </Avatar>
                             <Typography component="h1" variant="h5"
                                         sx={{
-                                            fontFamily: 'JalnanGothic'
+                                            fontFamily: 'JalnanGothic',
+                                            fontSize: '25px'
                                         }}
                             >
                                 로그인
@@ -167,6 +168,9 @@ export default function Login() {
                                         <LoginLink href="http://localhost:3000/sign-up" variant="body2">
                                             계정이 없으신가요? 회원가입하기
                                         </LoginLink>
+                                        {/*<LoginLink href="#" variant="body2">*/}
+                                        {/*    비밀번호를 잊으셨나요? 비밀번호찾기*/}
+                                        {/*</LoginLink>*/}
                                     </Grid>
                                 </Grid>
                             </Box>
@@ -187,8 +191,11 @@ export default function Login() {
 
 const LoginButton = styled(Button)`
   font-family: 'JalnanGothic'; // 원하는 글꼴을 여기에 지정합니다.
+  font-size: 18px;
 `;
 
 const LoginLink = styled(Link)`
+  display: block;
   font-family: 'GmarketSansMedium'; // 원하는 글꼴을 여기에 지정합니다.
+  font-size: 15px;
 `;

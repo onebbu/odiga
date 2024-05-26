@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import Sidebar from './SideBar';
@@ -10,6 +11,7 @@ import styled from "styled-components";
 
 
 function SearchLocation() {
+    const { areacodeUrl } = useParams();
     const [searchText, setSearchText] = useState('');
     const [recentSearches, setRecentSearches] = useState(() => JSON.parse(localStorage.getItem('recentSearches')) || []);
     const [searchResults, setSearchResults] = useState([]);
@@ -19,7 +21,7 @@ function SearchLocation() {
     const [catList, setCatList] = useState([]);
     const [catCode, setCatCode] = useState([]);
     const [order, setOrder] = useState('title');
-    const [areaCode, setAreaCode] = useState('1');
+    const [areaCode, setAreaCode] = useState(areacodeUrl || '0');
     const [mapData, setMapData] = useState([]);
 
     const data = [
@@ -241,7 +243,7 @@ function SearchLocation() {
                                 stroke="#777777"
                                 onMouseOver={(e) => handleMouseOver(e, city.locale, city.count)}
                                 onMouseOut={handleMouseOut}
-                                className={`${areaCode === city.localeNum ? 'active' : ''}`}
+                                className={`${areaCode == city.localeNum ? 'active' : ''}`}
                             />
                         ))}
                     </svg>
@@ -335,6 +337,7 @@ function SearchLocation() {
 }
 
 export default SearchLocation;
+
 const Rate = styled.div `width: 80px; height: 22px; color:white; background-color:#00429b; text-align: center;display:inline;
       border-radius: 20px 0 20px 20px;
       padding: 4px 5px 2px 5px;
@@ -343,9 +346,9 @@ const Rate = styled.div `width: 80px; height: 22px; color:white; background-colo
           display:inline; font-size:10px;
           color: #80a1cd; /* 원하는 색상으로 변경 */
         }
-`;  
+`; 
     const P = styled.div`display: inline;
-      font-size: 15px;
+      font-size: 12px;
       color: #909090;
       margin-right: 10px;
       margin-left: 10px;`;
@@ -376,18 +379,22 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
     return (
         <div key={index} className="search-result-card" >
                 <div style={{ display: "flex", width: '100%' }}>
+
                     <a href={`/detail/${contentid}`}>
                         <img src={firstImage}
-                             style={{width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px'}}/>
+                             style={{ width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px' }}/>
                     </a>
                     <div style={{ display: "block", width: '100%' }}>
                         <div style={{ display: "flex",justifyContent:'space-between' }}>
                             <div> {title} 
+
                                 <strong style={{
                                     backgroundColor, color,
-                                    fontSize: '75%', fontFamily: "GmarketSansMedium",
+                                    fontSize: '75%',
+                                    fontFamily: "GmarketSansMedium",
                                     fontWeight: '300',
-                                    padding: '0.25em 0.5em', borderRadius: "8px",
+                                    padding: '0.25em 0.5em',
+                                    borderRadius: "8px",
                                     marginLeft: '10px'
                                 }}>{cat3}</strong>
                             </div>

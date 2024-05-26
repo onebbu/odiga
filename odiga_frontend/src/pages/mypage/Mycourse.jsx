@@ -51,8 +51,12 @@ function Mycourse() {
                                     <Accordion.Item key={courseKey} eventKey={index}>
                                         <Accordion.Header style={{width: "49rem"}}>
                                             <div style={{width: "40rem", justifyContent: "space-between", display: "flex"}}>
-                                            <span>{courseInfo[courseKey].title}으로 <Link
-                                                to={`/result-list/${loginInfo.nickname}/${courseKey}`}> 이동하기</Link></span>
+                                            <div><span
+                                                style={{
+                                                    fontFamily: "JalnanGothic"
+                                                }}
+                                            >{courseInfo[courseKey].title}</span>으로 <Link
+                                                to={`/result-list/${loginInfo.nickname}/${courseKey}`}> 이동하기</Link></div>
                                                 <span><Link onClick={() => handleSubmit(courseKey)}>삭제하기</Link></span>
                                             </div>
                                         </Accordion.Header>
@@ -78,13 +82,18 @@ function Mycourse() {
 export default Mycourse;
 
 const Title = styled.h3`
+  font-family: 'JalnanGothic', sans-serif;
   margin-top: 4rem;
   text-align: center;
   width: 100%;
+  font-family: JalnanGothic;
+  font-size: 25px;
 `;
 
 const Message = styled.div`
   text-align: center;
   margin-top: 4rem;
   font-size: 1.2rem;
+  font-family: JalnanGothic;
+  font-size: 18px;
 `;
