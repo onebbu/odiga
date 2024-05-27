@@ -2,7 +2,6 @@ package com.odiga.mytrip.search.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +52,8 @@ public class SearchController {
         System.out.println("Controller::::::::: searchQuery" + searchQuery.toString());
         try {
             List<SearchVO> searchList = searchService.SearchList(searchQuery);
-            int resultCount = searchService.resultCount(searchQuery);
-
+            searchQuery.put("catcode",catList);
+            int resultCount = searchService.getAreaResultCount(searchQuery);
             Map<String, Object> searchResult = new HashMap<>(); // 검색 결과와 결과 개수를 담을 Map 생성
             searchResult.put("searchList", searchList);
             searchResult.put("resultCount", resultCount);

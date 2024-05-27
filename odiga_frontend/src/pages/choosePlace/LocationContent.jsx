@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import Image from 'react-bootstrap/Image';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import axios from "axios";
 import { red } from '@mui/material/colors';
-import PlaceIcon from '@mui/icons-material/Place';
-import TravelDetailPage from "../traveldetailpage/TravelDetailPage";
+import TravelDetailView from "./TravelDetailView";
 
 
 function LocationContent({ show, handleClose, contentId}) {
@@ -25,7 +23,6 @@ function LocationContent({ show, handleClose, contentId}) {
 
         fetchData();
 
-        // cleanup 함수에서 completed 변수 제거
         return () => {
             setData(""); // 컴포넌트가 unmount될 때 data 초기화
         };
@@ -35,14 +32,10 @@ function LocationContent({ show, handleClose, contentId}) {
     
     console.log("확인",data[contentId]);
 
-
-    const img = data[contentId]?.img;
     const likeCount = data[contentId]?.likeCount;
     const title = data[contentId]?.title;
-    const addr = data[contentId]?.addr;
     const cat = data[contentId]?.cat;
     const catkr = data[contentId]?.catkr;
-    const overview = data[contentId]?.overview;
 
     // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
     const catColors = {
@@ -62,30 +55,10 @@ function LocationContent({ show, handleClose, contentId}) {
     // 해당 카테고리의 배경색과 폰트색 가져오기
     const { backgroundColor } = catColors[cat] || { backgroundColor: 'gray'};
 
-    const [selectedData, setSelectedData] = useState(null);
-    const contentData = '';
-    // 이미지, 주소, 좋아요(찜 추가되면 나중에 추가)
-
-    // 모달을 열기 전에 선택된 데이터를 설정합니다.
-    useEffect(() => {
-        if (contentData) {
-            setSelectedData(contentData);
-        }
-    }, [contentData]);
-
-
     return (
-        <Modal show={show}
-               onHide={handleClose}
-               centered
-               size="lg">
+        <Modal show={show} onHide={handleClose} centered size="lg" >
             <Modal.Header closeButton>
-                <Modal.Title
-                    style={{
-                        fontFamily: "JalnanGothic",
-                        fontSize: "25px"
-                    }}
-                >
+                <Modal.Title style={{ fontFamily: "JalnanGothic", fontSize: "25px" }} >
                     {title}
                     <span style={{
                         backgroundColor,
@@ -102,9 +75,7 @@ function LocationContent({ show, handleClose, contentId}) {
                     <p style={{color:"#808080", fontSize: "1rem"}}> <FavoriteIcon sx={{ color: red[500], fontSize:"medium" }} /> {likeCount} </p>
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ textAlign: 'center', fontFamily: "GmarketSansMedium"}}>
-                <TravelDetailPage modalContentId={contentId}/>
-            </Modal.Body>
+            <TravelDetailView modalContentId={contentId}/>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
             </Modal.Footer>

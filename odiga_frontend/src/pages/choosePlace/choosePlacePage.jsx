@@ -25,16 +25,19 @@ const Body= Styled.div`
     padding-top: 100px;
     background: #f3f4f6; /* 미미한 회색 */
 `;
-const Wrapper=Styled.div` display: flex; min-height: 100vh;`;
+const Wrapper=Styled.div` display: flex; min-height: 100vh; width: 100%;`;
 const AccordionWrap=Styled.div`width:100%;`;
-const Section=Styled.div` position: relative; border: 1px solid #ccc; width: 75%; gap: 20px;
+const Section=Styled.div` position: relative; border: 1px solid #ccc; margin-left: 25%; width: 75%; gap: 20px;
     display: flex; flex-direction: column; width:80%; padding: 16px;`;
-const OpenButton = Styled.button`position: fixed; top: 100px; right: 100px; width: 200px; height: 60px;
+const OpenButton = Styled.button`position: fixed; top: ${({ top }) => top}px; right: 100px; width: 200px; height: 60px;
     background-color: #549C9B; /* Green */ border: none; border-radius: 0 0 10px 10px; cursor: pointer; outline: none;
-    transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
+    transition: top 0.3s;  color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
 const Position = Styled.div`position:relative; width:25%; height: 100vh;`;
-
+const FixedAccordions = Styled.div` position: fixed; top: ${({ top }) => top}px; width: 100%; height: 100%; overflow: hidden; transition: top 0.3s; `;
+const BtnSave = Styled.button` background-color: #549C9B; color: white; padding: 8px 15px; font-size: 15px;
+  cursor: pointer; border-radius: 5px; transition: background-color 0.3s ease, bottom 0.1s; z-index: 3000; border: none;
+  position: fixed; bottom: ${({ bot }) => bot}px; left: 240px; &:hover { background-color: #417977; width: 148px; transform: translateX(0); } `;
 const areaList = [
     { areacode: '1', areaname: '서울' },
     { areacode: '2', areaname: '인천' },
@@ -94,7 +97,6 @@ const ChoosePlace = () => {
 
     window.addEventListener("load", handleLoad);
 
-
     setSelectedValues(location.state);
      // 선택한 값이 모두 채워져 있는지 확인하고 targetArea, targetDura, targetTheme 설정
     if (selectedValues && selectedValues.region && selectedValues.duration && selectedValues.theme.length >= 2) {
@@ -113,21 +115,46 @@ const ChoosePlace = () => {
 
   }, [location.state, selectedValues]); 
 
+  const [buttonTop, setButtonTop] = useState(100);
+  const [accordionTop, setAccordionTop] = useState(0);
+  const [btnSaveBottom, setbtnSaveBottom] = useState(50);
+
+  const handleScroll = () => {
+    const documentHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    if(window.scrollY > 0 ){
+      setAccordionTop(0);
+      setButtonTop(0);
+    }
+    else {
+      setButtonTop(100);
+      setAccordionTop(100);
+    }
+    if (window.scrollY + windowHeight >= documentHeight - 100) { //하단으로부터 100px 위 스크롤
+      setbtnSaveBottom(200);
+    }
+    else{ setbtnSaveBottom(50); }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+    window.scrollTo({  top: 0, behavior: 'smooth' });
   };
 
   return(
     <Body>
       <DndProvider backend={HTML5Backend}>
       <Wrapper>
-        <CustomizedAccordions duration={targetDura} loginInfo={loginInfo} />
+        <FixedAccordions top={accordionTop}><CustomizedAccordions duration={targetDura} loginInfo={loginInfo} bottom={btnSaveBottom}/></FixedAccordions>
             <Section>  
-              <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
+              <OpenButton top={buttonTop} onClick={toggleDrawer}>찜 목록 열기</OpenButton>
               <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}  loginInfo={loginInfo} areacode={targetArea}/>
               <ItemsWrapper targetAreacode={targetArea}
                             targetTheme={targetTheme}
@@ -152,6 +179,7 @@ const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
     themeName: theme,
     themebackgroundColor: catColors[theme]?.backgroundColor || 'gray',
 }));
+  
   const Orderbtn = ({name, orderID }) => {
     return (
       <div  onClick={()=>setOrder(orderID)} style={{cursor:"pointer", display:"inline", padding:'7px'}}>
@@ -175,8 +203,8 @@ const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
                 padding: '0.5em',
                 marginRight:'8px',
                 borderRadius: "8px"
-            }}>
-                {themeItem.themeName}  
+            }} >
+                {themeItem.themeName}
             </span>
           ))}
       </div>
@@ -231,16 +259,16 @@ const scheduleData = [
   { id: 3, title: 'DAY 3', duration: ['2박3일'] },
 ];
 
-function CustomizedAccordions({duration, loginInfo}) {
+function CustomizedAccordions({duration, loginInfo, bottom}) {
   const [expanded, setExpanded] = useState('');
   const [buttonClicked, setButtonClicked] = useState(true);
   const [savedData, setSavedData] = useState([]);
   const navigate = useNavigate();
 
-  const handleChange = (panel) => (newExpanded) => {
-    setExpanded(newExpanded ? panel : false);
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(prevExpanded => (prevExpanded === panel ? false : panel));
   };
-
+  
   const handleSaveData = (dataList, scheduleID) => {
     if (buttonClicked) {
       // DropContainer 컴포넌트로부터 전달된 데이터를 처리하는 로직을 작성합니다.
@@ -272,12 +300,12 @@ function CustomizedAccordions({duration, loginInfo}) {
       const isValid = validateSavedData(savedData);
       if (isValid) {
         const title = prompt("원하는 [코스 이름]을 작성하세요:");
-        const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
-        if (isConfirmed) {
-          sendDataToServer(savedData, title);
-        } else {
-          alert("취소되었습니다.");
-        }
+        if (title) {  
+          const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
+          if (isConfirmed) {
+            sendDataToServer(savedData, title);
+          } else { alert("취소되었습니다."); }
+        } else { alert("취소되었습니다."); }
       } else {
         alert("아직 채워지지 않은 날짜가 있습니다. 최소 1개 이상 모두 채워주세요..");
         window.scrollTo({
@@ -343,7 +371,7 @@ function CustomizedAccordions({duration, loginInfo}) {
           })
         }
       </AccordionWrap>
-      <button className="buttondesignSave" onClick={handleClick}>코스 저장하기</button> 
+      <BtnSave onClick={handleClick} bot={bottom}>코스 저장하기</BtnSave> 
       </Position>
     );
 }
