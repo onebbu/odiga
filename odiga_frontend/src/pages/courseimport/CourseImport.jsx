@@ -78,26 +78,31 @@ function CourseImport() {
   const courseImport = () => {
     const areaName = getAreaName(areacode);
     const fullTitle = `[${areaName}] ${title}`;
-    axios.post("/courseimport", {
-      boardTitle: fullTitle,
-      boardContent: boardContent,
-      mainimage: MainImage,
-      tags: tags,
-      areacode: areacode,
-      nickname: loginInfo.nickname,
-      email: loginInfo.email,
-      courseno: cosNo
-    })
-    .then((response) => {
-      console.log(response, "가 전송됐습니다.");
-      alert("여행코스 후기를 작성하였습니다.");
-      // response.data에 boardNo가 포함되어 있다고 가정
-      const boardNo = response.data;
-      navigate(`/coursereview/detail/${boardNo}`);
-    })
-    .catch((error) => {
-      console.error("POST 요청이 실패했습니다:", error);
-    });
+    const isConfirmed = window.confirm(`저장하시겠습니까?`);
+    console.log("현재 저장하려는 courseNO? "+ cosNo);
+          if (isConfirmed) {
+            axios.post("/courseimport", {
+              boardTitle: fullTitle,
+              boardContent: boardContent,
+              mainimage: MainImage,
+              tags: tags,
+              areacode: areacode,
+              nickname: loginInfo.nickname,
+              email: loginInfo.email,
+              courseno: cosNo
+            })
+            .then((response) => {
+              console.log(response, "가 전송됐습니다.");
+              alert("여행코스 후기를 작성하였습니다.");
+              // response.data에 boardNo가 포함되어 있다고 가정
+              const boardNo = response.data;
+              navigate(`/coursereview/detail/${boardNo}`);
+            })
+            .catch((error) => {
+              console.error("POST 요청이 실패했습니다:", error);
+            });
+          } else { alert("취소되었습니다."); }
+    
   };
 
   const fetchTravelCourse = () => {
@@ -109,7 +114,6 @@ function CourseImport() {
           console.log("여행 코스를 성공적으로 가져왔습니다.", response.data);
           if (response.data.length > 0) {     
             setAreacode(response.data[0].areacode);
-            setCosNo(response.data[0].courseno);
             console.log("Areacode:", response.data[0].areacode); 
             setSelectedCourse(response.data.filter(data => data.courseno === response.data[0].courseno));
             setMainImage(response.data[0].firstimage);
@@ -128,6 +132,7 @@ function CourseImport() {
       setTitle("");
       setAreacode(userCourseNO[0].areacode);
       console.log("Selected Areacode:", userCourseNO[0].areacode);
+      setCosNo(courseno);
       handleImageClick(userCourseNO[0].mapx ,userCourseNO[0].mapy , userCourseNO[0].title , userCourseNO[0].addr1 , userCourseNO[0].firstimage , userCourseNO[0].contentid); 
     }
     setSelectedCourse(userCourseNO);
@@ -263,7 +268,7 @@ function CourseImport() {
                 </div>
               ))}
             </div>
-            <div id="travelCourseMap" className="travelCourseMap"></div>
+            <div id="travelCourseMap" className="travelCourseMap" ></div>
           </div>
         </section>
         <section className="buttonBox">       

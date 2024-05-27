@@ -11,5 +11,6 @@ import com.odiga.mytrip.course.vo.CourseImportVO;
 public interface CourseDAO {
     List<CourseVO> getResultList(String nickname);
     int saveCourseData(CourseImportVO courseImportVO);
+    void updateCourseWriteYN(String courseno);
 }
 
