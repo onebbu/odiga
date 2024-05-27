@@ -35,33 +35,32 @@ const Drawer = ({ isOpen, onClose, loginInfo, areacode }) => {
   const [likeInfo, setLikeInfo] = useState([]);
   
   useEffect(() => {
-        fetchData(); // 함수 호출
-        console.log("likeInfo 길이길이길이 "+likeInfo);
 
-  }, [isOpen]);
-
-  const fetchData = () => {
+    const fetchData = async () => {
     try {
-      console.log("왜 안되냐? ? " + areacode);
-        axios.get(`/mypage/mylike/${loginInfo.nickname}`, {
-          params: {
-            areacode: areacode
-          }
-        }).then(response => {
-          setLikeInfo(response.data);
-          console.log("likeInfo 저장함? "+likeInfo);
-        })
+      const response = await axios.get(`/mypage/mylike/${loginInfo.nickname}`, {
+        params: {
+          areacode: areacode
+        }
+      });
+      setLikeInfo(response.data);
+      console.log("likeInfo 저장함? " + likeInfo);
         
     } catch (error) {
         console.error('좋아요 목록 가져오기 실패:', error);
     }
   };
+        fetchData(); // 함수 호출
+
+  }, [isOpen]);
+
+  
 
   return (
     <DrawerContainer isOpen={isOpen}>
       <DrawerContent>
       <H2> {loginInfo.nickname} 님의 찜 목록 </H2>
-      {likeInfo && Object.keys(likeInfo).length > 0 ? ( 
+      {isOpen ? ( 
           <div className="drawer">
             {Object.keys(likeInfo).map((courseKey) => (
               <Place key={courseKey} id={courseKey} pic={likeInfo[courseKey].img} name={likeInfo[courseKey].title} region={likeInfo[courseKey].addr}/>

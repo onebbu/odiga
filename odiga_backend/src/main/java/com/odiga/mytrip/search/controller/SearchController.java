@@ -53,8 +53,9 @@ public class SearchController {
         System.out.println("Controller::::::::: searchQuery" + searchQuery.toString());
         try {
             List<SearchVO> searchList = searchService.SearchList(searchQuery);
-            int resultCount = searchService.resultCount(searchQuery);
-
+        //    int resultCount = searchService.resultCount(searchQuery);
+            searchQuery.put("catcode",catList);
+            int resultCount = searchService.getAreaResultCount(searchQuery);
             Map<String, Object> searchResult = new HashMap<>(); // 검색 결과와 결과 개수를 담을 Map 생성
             searchResult.put("searchList", searchList);
             searchResult.put("resultCount", resultCount);

@@ -1,18 +1,19 @@
-import React, {useState, useEffect, useContext} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import Styled from "styled-components";
 import {useDrag} from 'react-dnd';
 import axios from "axios";
 import './cPP.css';
-import {LoginInfoContext} from "../login/LoginInfoProvider";
-import {useParams} from "react-router-dom";
 import LocationContent from "./LocationContent";
-import styled from "styled-components";
 
 //const region_url = `https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json`;
 
-const Rate = Styled.div`width: 35px; height: 22px; color:white; background-color:#4978ce; text-align: center; line-height:22px; display:inline; border-Radius: 6px; padding: 0.1em 0.3em; display:flex`;
-const P = Styled.div`display:inline; font-size:12px; color:#909090;`;
-
+const Rate = Styled.div`width: 80px; height: 22px; color:white; background-color:#00429b; padding:2px; text-align: center;display:inline;
+                        border-radius: 20px 0 20px 20px;
+                        padding: 4px 5px 2px 5px;
+                        p { display:inline; font-size:10px;
+                            color: #80a1cd;
+                        } `;
+const P = Styled.div`display:inline; font-size:10px; color:#909090;`;
 
 // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
 const catColors = {
@@ -75,16 +76,8 @@ const Place = ({id, pic, name, region, cat, averageRate, cntRating}) => { //개�
                 padding: '0.25em 0.5em', borderRadius: "8px",
                 textAlign: 'right'
             }}>{cat}</strong>
-                    <P> <br/>{region}</P><br/>
-                <div style={{display: "flex"}}>
-                    <Rate>{averageRate}
-                        <div
-                        style={{
-                            fontSize: "12px",
-                            color: "#909090"
-                        }}
-                        >/5</div></Rate><P>/리뷰 {cntRating}개</P>
-                </div>
+                <P> <br/>{region}</P><br/>
+                <Rate>{averageRate}<p>/5</p></Rate> <P>/{cntRating}개</P>
             </div>
             {showModal && <LocationContent show={showModal} handleClose={handleCloseModal} contentId={contentId}/>}
         </div>
@@ -95,6 +88,7 @@ function ListPlace({areacode, order, theme}) {
     const [dataList, setDataList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [displayStart, setDisplayStart] = useState(1);
+    
     const fetchList = () => {
         if (areacode !== null) {
             axios.get(`/place/${displayStart}/${order}`, {
@@ -138,37 +132,37 @@ function ListPlace({areacode, order, theme}) {
 
     return (
         <div>
-            {isLoading ? (<><p>Loading....</p>
-                <button onClick={fetchList}>다시 시도</button>
-                <br/><br/></>) : (
+          {isLoading ? ( <>
+              <p>Loading....</p>
+              <button onClick={() => setDisplayStart(1)}>다시 시도</button>
+              <br /><br />
+            </> ) : ( <>
+              {dataList && dataList.length > 0 ? (
                 <>
-                    <div style={{
-                        padding: "10px",
-                        display: "grid",
-                        gridTemplateRows: "1fr ",
-                        gridTemplateColumns: "1fr 1fr 1fr 1fr",
-                        gridGap: "30px",
-                    }}>
-                        {dataList && dataList.map((data) => (
-                            <Place key={data.contentid}
-                                   id={data.contentid}
-                                   pic={data.firstimage}
-                                   name={data.title}
-                                   region={data.addr1}
-                                   cat={data.cat3}
-                                   averageRate={data.averageRate}
-                                   cntRating={data.cntRating}/>
-                        ))}
-                    </div>
-                    <div>
-                        {dataList && dataList.length < 100 && ( // 100개 이상은 안보여줌.
-                            <button className="buttondesign" onClick={handleShowMore}>More</button>
-                        )}
-                    </div>
+                  <div style={{ padding: "10px", display: "grid", gridTemplateRows: "1fr", gridTemplateColumns: "1fr 1fr 1fr 1fr", gridGap: "30px" }} >
+                    {dataList.map((data) => (
+                      <Place
+                        key={data.contentid}
+                        id={data.contentid}
+                        pic={data.firstimage}
+                        name={data.title}
+                        region={data.addr1}
+                        cat={data.cat3}
+                        averageRate={data.averageRate}
+                        cntRating={data.cntRating} />
+                    ))}
+                  </div>
+                  <div>
+                    {dataList.length < 100 && ( // 100개 이상은 안보여줌.
+                      <button className="buttondesign" onClick={handleShowMore}> More </button>
+                    )}
+                  </div>
                 </>
-            )}
+              ) : ( <p>결과가 없습니다.</p> )}
+            </>
+          )}
         </div>
-    )
+      );
 }
 
 export default ListPlace;

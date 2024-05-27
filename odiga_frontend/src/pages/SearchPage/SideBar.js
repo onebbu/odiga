@@ -115,14 +115,6 @@ function Sidebar({ catList, setCatCode }) {
             </OverlayTrigger>
             {selectedCatCode && (
                 <div>
-                    {/* {selectedCatCode && (
-                        <SelectedCategoryWrapper>
-                            <SelectedCat onClick={()=>handleCatTypeReset()}>
-                                {catList.find(cat => cat.catcode === selectedCatCode)?.catkr} <ClearIcon/>
-                            </SelectedCat>
-                        </SelectedCategoryWrapper>
-                    )} */}
-                    
                         {selectedCatCode.map((catcode) => (
                             <SelectedCategoryWrapper key={catcode}>
                                 <SelectedCat onClick={() => handleCatTypeReset(catcode)}>
@@ -140,6 +132,7 @@ export default Sidebar;
 
 const SelectedCategoryWrapper = styled.div`
   text-align: center;
+  margin-bottom: 5px;
 `;
 
 const SelectedCat = styled.button`
@@ -156,7 +149,7 @@ const CategoryButton = styled.button`
   color: #4285F4;
   border-radius: 8px;
   padding: 5px 10px;
-  border: black solid 1px;
+  border: #4285F4 solid 1px;
   margin-right: 10px;
 `;
 
