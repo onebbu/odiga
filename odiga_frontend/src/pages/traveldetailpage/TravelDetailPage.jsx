@@ -24,23 +24,25 @@ function TravelDetailPage({ modalContentId }) {
 
     useEffect(() => {
         if (locaContId) {
-            const fetchData = async () => {
-                try {
-                    const detailResponse = await axios.get(`/detail/${locaContId}`);
-                    setData(detailResponse.data);
-                    setLikes(detailResponse.data.wishlist_count || 0);
-                    setViews(detailResponse.data.viewcount || 0);
-
-                    const imgsResponse = await axios.get(`/imgs/${locaContId}`);
-                    setImgs(imgsResponse.data);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            };
-
             fetchData();
         }
     }, [locaContId]);
+
+    const fetchData = async () => {
+        try {
+            const detailResponse = await axios.get(`/detail/${locaContId}`);
+            setData(detailResponse.data);
+            setLikes(detailResponse.data.wishlist_count || 0);
+            setViews(detailResponse.data.travelviewcount || 0);
+            const imgsResponse = await axios.get(`/imgs/${locaContId}`);
+            setImgs(imgsResponse.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    const handleNewLike = () => {
+        fetchData();  // 새 하트가 추가될 때마다 fetchData 새로고침
+    };
 
     useEffect(() => {
         if (data) {
@@ -93,7 +95,6 @@ function TravelDetailPage({ modalContentId }) {
         slidesToScroll: 1,
         arrows: false,
     };
-
     return (
         <div className="inner">
             <div className="main">
@@ -118,8 +119,9 @@ function TravelDetailPage({ modalContentId }) {
                     <div id="map" style={{ width: '80%', height: '500px' }}></div>
                 </section>
 
-                <section className="tagList" id="tag-list">
-                    <div className="tagItem" id="tag-list-placeholder">
+                {/* 밑에 이 section 안쓰는거 아님???????? */}
+                {/* <section className="tagList" id="tag-list"style={{backgroundColor:'hotpink'}}> 
+                    <div className="tagItem" id="tag-list-placeholder" style={{backgroundColor:'hotpink'}}>
                         {data && (
                             <>
                                 {data.cat1 && (
@@ -140,8 +142,7 @@ function TravelDetailPage({ modalContentId }) {
                             </>
                         )}
                     </div>
-                </section>
-
+                </section> */}
                 <section className="slider" id="similar-destinations">
                     <p>사진을 움직여 둘러보세요!</p>
                     <Slider {...settings}>
@@ -159,7 +160,7 @@ function TravelDetailPage({ modalContentId }) {
                 </section>
 
                 <section id="review-display">
-                    <ReviewDisplay travelInfo={data} modalContentId={locaContId} />
+                    <ReviewDisplay travelInfo={data} onsetLike={handleNewLike}/>
                 </section>
 
             </div>
