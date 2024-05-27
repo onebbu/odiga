@@ -57,11 +57,31 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
     const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
+        console.log("ReviewImportForm :: contentID ??" +modalContentId);
         if (typeof modalContentId === "undefined" || modalContentId === "" || modalContentId === null) {
             setLocaContId(contentID);
         } else {
             setLocaContId(modalContentId);
         }
+        const fetchData = async () => {
+            try {
+                if (typeof locaContId !== "undefined" || locaContId !== "") {
+                    // 서버에서 좋아요 상태를 가져오는 요청
+                    console.log("보내기 직전", locaContId);
+                    const response = await axios.get(`/WishInfo?contentid=${locaContId}&nickname=${loginInfo.nickname}`);
+                    if (response.data) {
+                        setLiked(true); // 서버에서 받아온 값이 true이면 liked를 true로 업데이트
+                    } else {
+                        setLiked(false);
+                    }
+                    console.log("그래서 liked?" + liked);
+                }
+            } catch (error) {
+                console.error('Failed to fetch like status:', error);
+            }
+        };
+
+        fetchData();
     }, [modalContentId]);
 
     // 리뷰 글자 수 제한
@@ -162,50 +182,20 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
         }
     };
 
-
-    //찜 관련 (엔드포인트 임의 지정 travelLike)
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (typeof locaContId !== "undefined" || locaContId !== "") {
-                    // 서버에서 좋아요 상태를 가져오는 요청
-                    console.log("보내기 직전", locaContId);
-                    const response = await axios.get(`/WishInfo?contentid=${locaContId}&email=${loginInfo.email}`);
-                    if (response.data === 1) {
-                        setLiked(true); // 서버에서 받아온 값이 1이면 liked를 true로 업데이트
-                    } else {
-                        // 서버에서 받아온 값이 0이나 3이면 liked를 false로 업데이트
-                        setLiked(false);
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch like status:', error);
-            }
-        };
-
-        fetchData();
-    }, [loginInfo.email]);
-
-
     return (
         <div className="reviewImportForm">
             <p>별점과 리뷰로 여러분의 소중한 경험을 들려주세요 !</p>
             <div className="contourLine4"></div>
             <section className="starBox">
                 <StarRating starCount={5} onChange={setReviewGrade}/>
-                {/* <div className="contourLine5"></div>
-            <button onClick={handleLike} className="LikeButton">
-                  <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
-              </button> */}
             </section>
             <section className="reviewsuccessBox">
                 <div>
-              <textarea className="reviewBox"
-                        value={reviewComment}
-                        onChange={handleInputChange}
-                        placeholder="리뷰를 작성해주세요 (100byte 이하)"
-
-              />
+                    <textarea className="reviewBox"
+                            value={reviewComment}
+                            onChange={handleInputChange}
+                            placeholder="리뷰를 작성해주세요 (100byte 이하)" 
+                    />
                 </div>
                 <div className="successButtonBox">
                     <button className="successButton" onClick={handleSubmit}><h2>완료 ✔</h2></button>

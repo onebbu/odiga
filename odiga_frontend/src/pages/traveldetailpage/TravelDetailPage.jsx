@@ -39,7 +39,7 @@ function TravelDetailPage({modalContentId}) {
             axios.get(`/detail/${locaContId}`)
                 .then(response => {
                     setData(response.data);
-                    console.log(data);
+                    console.log("TravelDetailPage:: data"+data);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
@@ -149,7 +149,7 @@ function TravelDetailPage({modalContentId}) {
             axios.get(`/detail/${locaContId}`)
                 .then(response => {
                     setData(response.data);
-                    setLikes(response.data.wishlist_count || 0);
+                    setLikes(response.data.wishlist_count);
                     setViews(response.data.viewcount || 0);
                 })
                 .catch(error => {
@@ -194,8 +194,9 @@ function TravelDetailPage({modalContentId}) {
                     <div id="map" style={{width: '80%', height: '500px'}}></div>
                 </section>
 
-                <section className="tagList" id="tag-list">
-                    <div className="tagItem" id="tag-list-placeholder">
+                {/* 밑에 이 section 안쓰는거 아님???????? */}
+                {/* <section className="tagList" id="tag-list"style={{backgroundColor:'hotpink'}}> 
+                    <div className="tagItem" id="tag-list-placeholder" style={{backgroundColor:'hotpink'}}>
                         {data && (
                             <>
                                 {data.cat1 && (
@@ -216,7 +217,7 @@ function TravelDetailPage({modalContentId}) {
                             </>
                         )}
                     </div>
-                </section>
+                </section> */}
                 {/* Tag 엔드포인트 완료되면 */}
                 {/* <section className="tagList" id="tag-list">
                    <div className="tagItem" id="tag-list-placeholder">
@@ -247,22 +248,22 @@ function TravelDetailPage({modalContentId}) {
                         )}
                         {imgs && imgs.length > 2 && (
                             <div>
-                                <img src={imgs[2]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                                <img src={imgs[2]} alt="비슷한 여행지 사진 4" className="sliderImg"/>
                             </div>
                         )}
                         {imgs && imgs.length > 3 && (
                             <div>
-                                <img src={imgs[3]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                                <img src={imgs[3]} alt="비슷한 여행지 사진 5" className="sliderImg"/>
                             </div>
                         )}
                         {imgs && imgs.length > 4 && (
                             <div>
-                                <img src={imgs[4]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                                <img src={imgs[4]} alt="비슷한 여행지 사진 6" className="sliderImg"/>
                             </div>
                         )}
                         {imgs && imgs.length > 5 && (
                             <div>
-                                <img src={imgs[5]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                                <img src={imgs[5]} alt="비슷한 여행지 사진 7" className="sliderImg"/>
                             </div>
                         )}
                     </Slider>

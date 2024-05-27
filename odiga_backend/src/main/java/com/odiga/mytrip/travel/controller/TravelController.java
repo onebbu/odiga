@@ -41,6 +41,7 @@ public class TravelController {
         travelInfo.setCat2(catkr.getCat2kr());
         travelInfo.setCat3(catkr.getCat3kr());
         travelInfo.setAVERAGE_GRADE(travelService.TravelGradeAvg(contentId));
+        System.out.println("detail Page ... controller travelInfo :: "+travelInfo);
         return travelInfo;
     }
     @PostMapping("/reviewImport")
@@ -64,19 +65,14 @@ public class TravelController {
         travelService.wish(request.getContentid(), request.getEmail(), request.getNickname());
     }
     @GetMapping("/WishInfo")
-    public int WishUserInfo(
-        @RequestParam(value = "contentid", required = false) Optional<Integer> contentid,
-        @RequestParam(value = "email", required = false) String email) {
-        if (contentid.isPresent()) {
-            if (travelService.WishUserInfo(contentid.get(), email)) {
-                return 1;
-            } else {
-                return 0;
-            }
-        } else {
-            return 3;
+    public boolean WishUserInfo(
+        @RequestParam(value = "contentid", required = false) Integer contentid,
+        @RequestParam(value = "nickname", required = false) String nickname) {
+        System.out.println("travelController :: /WishInfo "+contentid+" nickname:: "+nickname);
+        if (contentid == null || nickname == null){return false;}
+        else { System.out.println(travelService.WishUserInfo(contentid, nickname));
+             return travelService.WishUserInfo(contentid, nickname); 
         }
-        
     }
 
     @PostMapping("/WishDelete")

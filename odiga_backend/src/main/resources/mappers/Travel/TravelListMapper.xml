@@ -21,15 +21,8 @@
         WHERE CONTENTID = #{contentId}
     </select>
     <select id="wishUserInfo" resultType="int">
-        SELECT COALESCE(COUNT(*), 0)
-        FROM WISHLIST
-        WHERE CONTENTID = COALESCE(#{contentid}, 0)
-        <if test="email != null">
-            AND EMAIL = #{email}
-        </if>
-        <if test="email == null">
-            AND EMAIL IS NULL
-        </if>
+        SELECT COUNT(*) from wishlist
+        WHERE contentid = #{contentid} and nickname = #{nickname}
     </select>
 
     <!-- 페이지 방문후 뷰카운트 1증가 -->

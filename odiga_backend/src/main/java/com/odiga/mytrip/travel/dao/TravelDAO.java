@@ -23,5 +23,5 @@ public interface TravelDAO {
     String travelGradeAvg(String contentId);
     List<WishVO> selectAllWish(String nickname);
     List<WishVO> selectWishforRegion(String nickname, String areacode);
-    int wishUserInfo(int contentid , String email);
+    int wishUserInfo(int contentid , String nickname);
 }
