@@ -2,12 +2,10 @@ import axios from "axios";
 import React, {useState, useContext, useEffect} from "react";
 import styled from 'styled-components';
 import '../TravelDetailPage.css';
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart} from "@fortawesome/free-solid-svg-icons";
-import {useParams} from 'react-router-dom';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
-
 
 const StarRatingContainer = styled.div`
   display: inline-block;
@@ -19,10 +17,9 @@ const Star = styled.span`
   cursor: pointer;
 `;
 
-
 function StarRating({starCount, onChange}) {
     const [rating, setRating] = useState(0);
-    
+
     const handleStarClick = (selectedRating) => {
         setRating(selectedRating);
         onChange(selectedRating);
@@ -53,7 +50,6 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
     const navigate = useNavigate();
     const loginInfo = useContext(LoginInfoContext);
 
-    // 모달 관련
     const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
@@ -84,7 +80,6 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
         fetchData();
     }, [modalContentId]);
 
-    // 리뷰 글자 수 제한
     const handleInputChange = (e) => {
         const input = e.target.value;
         if (input.length <= 100) {
@@ -95,7 +90,6 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
         }
     };
 
-    //로그인 관련 
     const isUserLoggedIn = () => {
         return Boolean(sessionStorage.getItem('token'));
     };
@@ -112,15 +106,19 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
 
     const location = useLocation();
     const { pathname: from } = location;
+
     const handleSubmit = () => {
         if (!isUserLoggedIn()) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
             navigate("/login", { state: { from } });
             return;
         }
-        console.log("handleSubmit 호출됨", { locaContId, reviewComment, reviewGrade, reviewdate });
-        if (typeof locaContId === "undefined" || locaContId === "") {
+        if (!locaContId) {
             alert("콘텐츠 ID가 유효하지 않습니다.");
+            return;
+        }
+        if (reviewGrade === 0) {
+            alert("별점을 선택해주세요.");
             return;
         }
         axios.post('/reviewImport', {
@@ -141,22 +139,17 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
             .catch(error => {
                 console.error('에러 :', error);
                 alert("리뷰 제출 중 오류가 발생했습니다.");
-                console.error('에러 :', error);
-                alert("리뷰 제출 중 오류가 발생했습니다.");
             });
     };
 
-
-    // 찜 추가 / 삭제 기능~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~백엔드 엔드포인트 확인해보셔야 함
-
     const handleLikeToggle = async () => {
-        if (!sessionStorage.getItem('token')) {
+        if (!isUserLoggedIn()) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            navigate('/login');
+            navigate("/login", { state: { from } });
             return;
         }
         try {
-            if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
+            if (liked) {
                 const response = await axios.post(`/WishDelete`, {
                     contentid: locaContId,
                     email: loginInfo.email,
@@ -166,7 +159,7 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
                     setLiked(false);
                     setLikes(prev => prev - 1);
                 }
-            } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
+            } else {
                 const response = await axios.post(`/travelLike`, {
                     contentid: locaContId,
                     email: loginInfo.email,
@@ -210,8 +203,7 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
                 </div>
             </section>
         </div>
-    )
-
+    );
 }
 
 export default ReviewImportForm;
