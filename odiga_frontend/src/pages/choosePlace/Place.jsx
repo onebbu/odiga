@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import Styled from "styled-components";
+import styled from "styled-components";
 import {useDrag} from 'react-dnd';
 import axios from "axios";
 import './cPP.css';
@@ -7,13 +7,13 @@ import LocationContent from "./LocationContent";
 
 //const region_url = `https://apis.data.go.kr/B551011/KorService1/areaCode1?serviceKey=eTvi0rTQ1PoHjUzFGNoNUjpVx%2BMk6y8Hs%2FyH4JzAlRk5Ag7c5rqIcBWoLWuG%2BJoHzywuB1cVkEHiZZFuhDYbhA%3D%3D&numOfRows=100&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json`;
 
-const Rate = Styled.div`width: 80px; height: 22px; color:white; background-color:#00429b; padding:2px; text-align: center;display:inline;
+const Rate = styled.div`width: 80px; height: 22px; color:white; background-color:#00429b; padding:2px; text-align: center;display:inline;
                         border-radius: 20px 0 20px 20px;
                         padding: 4px 5px 2px 5px;
                         p { display:inline; font-size:10px;
                             color: #80a1cd;
                         } `;
-const P = Styled.div`display:inline; font-size:10px; color:#909090;`;
+const P = styled.div`display:inline; font-size:10px; color:#909090;`;
 
 // 카테고리 텍스트에 따라 배경색과 폰트색을 매핑하는 객체
 const catColors = {
@@ -120,6 +120,7 @@ function ListPlace({areacode, order, theme}) {
 
     useEffect(() => {
         setDisplayStart(1); // order 값이 변경되면 displayStart를 1로 설정
+        setDataList([]);  //새로 띄워라..
     }, [order]);
 
     useEffect(() => {

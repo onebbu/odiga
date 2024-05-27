@@ -300,12 +300,12 @@ function CustomizedAccordions({duration, loginInfo, bottom}) {
       const isValid = validateSavedData(savedData);
       if (isValid) {
         const title = prompt("원하는 [코스 이름]을 작성하세요:");
-        const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
-        if (isConfirmed) {
-          sendDataToServer(savedData, title);
-        } else {
-          alert("취소되었습니다.");
-        }
+        if (title) {  
+          const isConfirmed = window.confirm(`입력하신 코스 이름은 [${title}] 입니다. 저장하시겠습니까?`);
+          if (isConfirmed) {
+            sendDataToServer(savedData, title);
+          } else { alert("취소되었습니다."); }
+        } else { alert("취소되었습니다."); }
       } else {
         alert("아직 채워지지 않은 날짜가 있습니다. 최소 1개 이상 모두 채워주세요..");
         window.scrollTo({
