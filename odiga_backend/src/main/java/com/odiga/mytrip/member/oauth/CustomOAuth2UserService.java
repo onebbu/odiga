@@ -2,7 +2,6 @@ package com.odiga.mytrip.member.oauth;
 
 
 import com.odiga.mytrip.member.dao.MemberDAO;
-import com.odiga.mytrip.member.jwt.CustomUserDetails;
 import com.odiga.mytrip.member.vo.Member;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
-import java.util.Optional;
 
 
 // 구글 로그인 이후 가져온 사용자의 정보(email, name, picture 등)를 기반으로 가입 및 정보 수정, 세션 저장 기능 등의 기능을 수행
@@ -58,8 +56,6 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         httpSession.setAttribute("member", new SessionMember(member));
         httpSession.setAttribute("registrationId", registrationId);
 
-        log.info("세션 정보={}", httpSession.getAttribute(member.getEmail()));
-
 
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(member.getRole().name())),
@@ -69,7 +65,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
 
     @Transactional
-    private Member saveOrUpdateAndGet(OAuthAttributes attributes) {
+    public Member saveOrUpdateAndGet(OAuthAttributes attributes) {
 
         Member member = memberDAO.findByLoginEmail(attributes.getEmail());
 
@@ -81,8 +77,9 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         } else {
             // 가입되지 않은 사용자 / 계정이 없으면 DB에 insert
             memberDAO.save(attributes.toEntity());
+            // 새로운 사용자를 저장한 후 해당 사용자 객체를 가져옴
+            member = memberDAO.findByLoginEmail(attributes.getEmail());
         }
-
         return member;
     }
 }

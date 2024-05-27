@@ -29,7 +29,7 @@ function LocationContent({ show, handleClose, contentId}) {
     }, []);
 
     console.log("현재 타이틀",data[contentId]?.title);
-    
+
     console.log("확인",data[contentId]);
 
     const likeCount = data[contentId]?.likeCount;
