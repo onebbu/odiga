@@ -1,106 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import styles from "./static/courseReview.module.css";
 import Styled from "styled-components";
 import Pagination from "./Pagination";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import CourseReviewSearch from "./CourseReviewSearch";
 import YoutubePlaylist from "./YoutubeAPI";
-import { useLocation } from "react-router-dom";
-
-const Place = ({
-  boardContent,
-  boardDate,
-  boardGrade,
-  boardLikeCount,
-  boardNo,
-  boardTitle,
-  boardViewCount,
-  boardYN,
-  email,
-  nickname,
-  mainImage,
-  tags,
-  courseNo,
-}) => {
-  return (
-    <div className="grid-item">
-      {mainImage ? (
-        <img src={mainImage} />
-      ) : (
-        <img
-          style={{ objectFit: "scale-down", display: "block" }}
-          src="https://img.icons8.com/?size=512&id=j1UxMbqzPi7n&format=png"
-        />
-      )}
-      {boardTitle} <P>| {nickname}</P>
-      <br />
-      <Rate>
-        {boardGrade !== undefined && boardGrade !== null
-          ? boardGrade.toFixed(1)
-          : "평가 없음"}
-      </Rate>{" "}
-      <P>{boardViewCount}</P>
-    </div>
-  );
-};
+import CourseReviewPlace from "./CourseReviewPlace";
 
 const CourseReviewBoard = () => {
-  const [posts, setPosts] = useState([]); // 초기 상태 빈 배열로 설정
+  const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(8);
-  const [currentPosts, setCurrentPosts] = useState([]);
-  const location = useLocation();
+  const [postsPerPage] = useState(8);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await axios.get("/coursereviewsearch", {
-        params: {
-          query: ""
-        },
+        params: { query: "" }
       });
-    
-      const fetchedPosts = response.data;
-      console.log("fetchdata 실행")
-      setPosts(Array.isArray(fetchedPosts) ? fetchedPosts : []);
+      setPosts(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  };
-
-  useEffect(() => {
-      fetchData();
   }, []);
 
   useEffect(() => {
-    const indexOfLast = currentPage * postsPerPage;
-    const indexOfFirst = indexOfLast - postsPerPage;
-    const slicedPosts = posts.slice(indexOfFirst, indexOfLast);
-    setCurrentPosts(slicedPosts);
+    fetchData();
+  }, [fetchData]);
+
+  const indexOfLast = currentPage * postsPerPage;
+  const indexOfFirst = indexOfLast - postsPerPage;
+  const currentPosts = useMemo(() => {
+    return posts.slice(indexOfFirst, indexOfLast);
   }, [posts, currentPage, postsPerPage]);
 
-  const handleSortByLatest = () => {
-    const sortedPosts = [...posts].sort(
-      (a, b) => new Date(b.boardDate) - new Date(a.boardDate)
-    );
+  const handleSortBy = useCallback((sortKey) => {
+    const sortedPosts = [...posts];
+    if (sortKey === "latest") {
+      sortedPosts.sort((a, b) => new Date(b.boardDate) - new Date(a.boardDate));
+    } else if (sortKey === "views") {
+      sortedPosts.sort((a, b) => b.boardViewCount - a.boardViewCount);
+    } else if (sortKey === "rating") {
+      sortedPosts.sort((a, b) => b.boardGrade - a.boardGrade);
+    }
     setPosts(sortedPosts);
     setCurrentPage(1);
-  };
+  }, [posts]);
 
-  const handleSortByViews = () => {
-    const sortedPosts = [...posts].sort(
-      (a, b) => b.boardViewCount - a.boardViewCount
-    );
-    setPosts(sortedPosts);
-    setCurrentPage(1);
-  };
-
-  const handleSortByRating = () => {
-    const sortedPosts = [...posts].sort((a, b) => b.boardGrade - a.boardGrade);
-    setPosts(sortedPosts);
-    setCurrentPage(1);
-  };
+    const handleSortByRating = () => {
+        const sortedPosts = [...posts].sort((a, b) => b.boardGrade - a.boardGrade);
+        setPosts(sortedPosts);
+        setCurrentPage(1);
+    };
 
     return (
         <>
@@ -205,7 +155,7 @@ const CourseReviewBoard = () => {
                     background: "none",
                     paddingRight: "5px",
                   }}
-                  onClick={handleSortByLatest}
+                  onClick={() => handleSortBy("latest")}
                 >
                   최신순 |
                 </button>
@@ -216,7 +166,7 @@ const CourseReviewBoard = () => {
                     background: "none",
                     paddingRight: "5px",
                   }}
-                  onClick={handleSortByViews}
+                  onClick={() => handleSortBy("views")}
                 >
                   조회순 |
                 </button>
@@ -227,7 +177,7 @@ const CourseReviewBoard = () => {
                     background: "none",
                     paddingRight: "10px",
                   }}
-                  onClick={handleSortByRating}
+                  onClick={() => handleSortBy("rating")}
                 >
                   평점순
                 </button>
@@ -249,20 +199,12 @@ const CourseReviewBoard = () => {
                     href={`/coursereview/detail/${item.boardNo}`}
                     key={item.boardNo}
                   >
-                    <Place
-                      boardContent={item.boardContent}
-                      boardDate={item.boardDate}
+                    <CourseReviewPlace
                       boardGrade={item.boardGrade}
-                      boardLikeCount={item.boardLikeCount}
-                      boardNo={item.boardNo}
                       boardTitle={item.boardTitle}
                       boardViewCount={item.boardViewCount}
-                      boardYN={item.boardYN}
-                      email={item.email}
                       nickname={item.nickname}
                       mainImage={item.mainImage}
-                      courseNo={item.courseNo}
-                      loading="lazy"
                     />
                   </StyledLink>
                 ))
@@ -285,31 +227,13 @@ const CourseReviewBoard = () => {
   );
 };
 
-const Rate = Styled.div`
-  width: 45px;
-  height: 22px;
-  color: white;
-  background-color: #4978ce;
-  padding: 2px;
-  text-align: center;
-  line-height: 22px;
-  display: inline;
-`;
 
-const P = Styled.div`
-  display: inline;
-  font-size: 10px;
-  color: #909090;
-`;
+
 
 const StyledLink = Styled.a`
   text-decoration: none;
   color: inherit;
 `;
 
-const BoardTitle = Styled.span`
-    font-family: JalnanGothic;
-    font-size: 15px;
-`
 
 export default CourseReviewBoard;

@@ -90,12 +90,14 @@ function CourseReviewDetail() {
           setLiked(true);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "true");
           alert("좋아요를 눌렀습니다.");
+          window.location.reload()
         } else {
           await axios.post(`/coursereview/likeCancel/${boardNo}`);
           setLikeCount((prevCount) => prevCount - 1);
           setLiked(false);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "false");
           alert("좋아요를 취소하였습니다.");
+          window.location.reload()
         }
       } catch (error) {
         console.error("게시물 좋아요 중 오류 발생:", error);
