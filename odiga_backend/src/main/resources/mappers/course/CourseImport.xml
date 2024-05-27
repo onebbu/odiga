@@ -26,6 +26,8 @@
             TRAVELLIST t ON r.CONTENTID = t.CONTENTID
         WHERE 
             r.nickname = #{nickname}
+            and r.COURSEYN = 'Y'
+            and r.writeYN = 'N'
     </select>
     <insert id="saveCourseData" parameterType="com.odiga.mytrip.course.vo.CourseImportVO" >
         <selectKey keyProperty="boardNo" resultType="int" order="BEFORE">
@@ -36,6 +38,11 @@
         VALUES (#{boardNo}, #{email}, #{nickname}, #{boardTitle}, #{boardContent}, 0, 0 ,0 ,SYSDATE , 'Y' ,#{mainimage} , #{tags , jdbcType=VARCHAR} , #{courseno})
     </insert>
 
+    <update id="updateCourseWriteYN" parameterType="String">
+        UPDATE resultlist
+        SET writeYN = 'Y'
+        WHERE courseno = #{courseno}
+    </update>
 
     <resultMap id="courseResultMap" type="CourseVO">
         <result property="courseno" column="COURSENO"/>

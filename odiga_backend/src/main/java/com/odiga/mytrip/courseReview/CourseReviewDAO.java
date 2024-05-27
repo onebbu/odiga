@@ -7,7 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface CourseReviewDAO {
 
-    List<CourseReviewVO> AllCourseReviews();
     List<CourseReviewVO> detailPage(int boardNo);
     void viewCount(int boardNo);
     List<CommentsVO> comments(int boardNo);
@@ -20,4 +19,6 @@ public interface CourseReviewDAO {
     void commentDel(CommentsVO commentsVO);
     List<CourseReviewVO> courseReviewSearch(String search);
     void courseReviewEdit(CourseReviewVO courseReviewVO);
+    void commentEdit(CommentsVO commentsVO);
+    void updateCourseWriteYN(int boardNo);
 }

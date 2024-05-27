@@ -1,21 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import axios from 'axios';
-import ReviewDisplay from "./component/ReviewDisplay";
-import './TravelDetailPage.css';
+import '../traveldetailpage/TravelDetailPage.css';
 import Slider from "react-slick";
-import './slick.css';
-import './slick-theme.css';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from 'react-router-dom';
+import '../traveldetailpage/slick.css';
+import '../traveldetailpage/slick-theme.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faHeart} from "@fortawesome/free-solid-svg-icons";
+import {useParams} from 'react-router-dom';
 
-function TravelDetailPage({ modalContentId }) {
+function TravelDetailPage({modalContentId}) {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
-    const [imgs, setImgs] = useState([]);
-    const [views, setViews] = useState(0);
-    const navigate = useNavigate();
-    const { contentID } = useParams();
+    const [imgs, setImgs] = useState(null);
+    const {contentID} = useParams();
+
     const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
@@ -24,23 +22,19 @@ function TravelDetailPage({ modalContentId }) {
 
     useEffect(() => {
         if (locaContId) {
-            const fetchData = async () => {
-                try {
-                    const detailResponse = await axios.get(`/detail/${locaContId}`);
-                    setData(detailResponse.data);
-                    setLikes(detailResponse.data.wishlist_count || 0);
-                    setViews(detailResponse.data.viewcount || 0);
-
-                    const imgsResponse = await axios.get(`/imgs/${locaContId}`);
-                    setImgs(imgsResponse.data);
-                } catch (error) {
+            axios.get(`/detail/${locaContId}`)
+                .then(response => {
+                    setData(response.data);
+                    setLikes(response.data.wishlist_count || 0);
+                })
+                .catch(error => {
                     console.error('Error fetching data:', error);
-                }
-            };
-
-            fetchData();
+                });
+            axios.get(`/imgs/${locaContId}`)
+                .then(response => setImgs(response.data))
+                .catch(error => console.error('Error fetching data:', error));
         }
-    }, [locaContId]);
+    }, [locaContId ]);
 
     useEffect(() => {
         if (data) {
@@ -50,7 +44,7 @@ function TravelDetailPage({ modalContentId }) {
             script.onload = () => {
                 const mapOptions = {
                     center: new window.naver.maps.LatLng(data.mapy, data.mapx),
-                    zoom: 80
+                    zoom: 200
                 };
 
                 const map = new window.naver.maps.Map('map', mapOptions);
@@ -65,8 +59,8 @@ function TravelDetailPage({ modalContentId }) {
                 const contentString = `
                     <div>
                         <h2>${data.title}</h2>
-                        <p>${data.addr1}</p>
-                        <img src=${data.firstimage} style="max-width: 200px;"></img>
+                        <p>${data.addr1}</p>                        
+                        <img src=${data && data.firstimage} style="max-width: 200px;"></img>
                     </div>
                 `;
 
@@ -85,6 +79,7 @@ function TravelDetailPage({ modalContentId }) {
         }
     }, [data]);
 
+    //Slick 라이브러리 사용
     const settings = {
         dots: true,
         infinite: false,
@@ -106,8 +101,8 @@ function TravelDetailPage({ modalContentId }) {
                     <div className="InfoAndLikeBox">
                         <h2>상세 정보</h2>
                         <div className="likeview">
-                            <span id="view-count">👀 {views}</span>
-                            <span style={{ marginLeft: '20px' }}><FontAwesomeIcon icon={faHeart} /> {likes}</span>
+                            <span id="view-count">👀 {data && (data.travelviewcount || 0)}</span>
+                            <span style={{marginLeft: '20px'}}><FontAwesomeIcon icon={faHeart}/> {likes}</span>
                         </div>
                     </div>
                     <div className="contourLine3"></div>
@@ -115,7 +110,7 @@ function TravelDetailPage({ modalContentId }) {
                 </section>
 
                 <section className="mapLocation" id="map-location">
-                    <div id="map" style={{ width: '80%', height: '500px' }}></div>
+                    <div id="map" style={{width: '80%', height: '500px'}}></div>
                 </section>
 
                 <section className="tagList" id="tag-list">
@@ -141,30 +136,49 @@ function TravelDetailPage({ modalContentId }) {
                         )}
                     </div>
                 </section>
-
                 <section className="slider" id="similar-destinations">
                     <p>사진을 움직여 둘러보세요!</p>
-                    <Slider {...settings}>
+                    <Slider {...settings} id="similar-destinations-placeholder">
                         {data && data.firstimage && (
                             <div className="sliderImgBox">
-                                <img src={data.firstimage} alt="비슷한 여행지 사진 1" className="sliderImg" />
+                                <img src={data.firstimage} alt="비슷한 여행지 사진 1" className="sliderImg"/>
                             </div>
                         )}
-                        {imgs && imgs.length > 0 && imgs.map((img, index) => (
-                            <div key={index}>
-                                <img src={img} alt={`비슷한 여행지 사진 ${index + 2}`} className="sliderImg" />
+                        {imgs && imgs.length > 0 && (
+                            <div>
+                                <img src={imgs[0]} alt="비슷한 여행지 사진 2" className="sliderImg"/>
                             </div>
-                        ))}
+                        )}
+                        {imgs && imgs.length > 1 && (
+                            <div>
+                                <img src={imgs[1]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                            </div>
+                        )}
+                        {imgs && imgs.length > 2 && (
+                            <div>
+                                <img src={imgs[2]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                            </div>
+                        )}
+                        {imgs && imgs.length > 3 && (
+                            <div>
+                                <img src={imgs[3]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                            </div>
+                        )}
+                        {imgs && imgs.length > 4 && (
+                            <div>
+                                <img src={imgs[4]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                            </div>
+                        )}
+                        {imgs && imgs.length > 5 && (
+                            <div>
+                                <img src={imgs[5]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
+                            </div>
+                        )}
                     </Slider>
                 </section>
-
-                <section id="review-display">
-                    <ReviewDisplay travelInfo={data} modalContentId={locaContId} />
-                </section>
-
             </div>
         </div>
-    );
+    )
 }
 
 export default TravelDetailPage;

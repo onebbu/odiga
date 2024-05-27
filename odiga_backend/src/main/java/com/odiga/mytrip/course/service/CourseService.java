@@ -1,8 +1,6 @@
 package com.odiga.mytrip.course.service;
 
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +29,11 @@ public class CourseService {
         courseDAO.saveCourseData(courseImportVO); 
         int boardNo = courseImportVO.getBoardNo();
         return boardNo;  
+    }
+
+    @Transactional
+    public void updateCourseWriteYN(String courseno) {
+        courseDAO.updateCourseWriteYN(courseno);
     }
     
 }

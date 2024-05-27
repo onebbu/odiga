@@ -4,6 +4,8 @@
 
 .oauth-login p {
     text-align: center;
+    font-family: JalnanGothic;
+    font-size: 18px;
 }
 
 .login-button {

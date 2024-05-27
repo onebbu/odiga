@@ -5,12 +5,6 @@
 <mapper namespace="com.odiga.mytrip.courseReview.CourseReviewDAO">
 
     <!-- 여행지 정보 가져오기 -->
-    <select id="AllCourseReviews" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
-        select BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN, MAINIMAGE, TAGS, COURSENO
-        from COURSEREVIEW
-        WHERE boardyn = 'Y'
-        order by boardno desc
-    </select>
 
     <select id="detailPage" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
         SELECT BOARDNO, EMAIL, NICKNAME, BOARDTITLE, BOARDCONTENT, BOARDGRADE, BOARDVIEWCOUNT, BOARDLIKECOUNT, BOARDDATE, BOARDYN, MAINIMAGE, TAGS, COURSENO
@@ -55,6 +49,12 @@
         DELETE FROM comments
         WHERE commentId = #{commentId}
     </delete>
+
+    <update id="commentEdit" parameterType="com.odiga.mytrip.courseReview.CommentsVO">
+        UPDATE comments
+        SET commentContent= #{commentContent}
+        WHERE commentId = #{commentId}
+    </update>
     
     <update id="boardGrade" parameterType="int">
         UPDATE COURSEREVIEW
@@ -85,7 +85,7 @@
     </update>
 
     <select id="courseReviewSearch" parameterType="String" resultType="com.odiga.mytrip.courseReview.CourseReviewVO">
-        SELECT boardTitle, boardViewCount, nickname, mainImage, boardGrade
+        SELECT boardDate, boardNo, boardTitle, boardViewCount, nickname, mainImage, boardGrade
         FROM COURSEREVIEW
         WHERE boardYN = 'Y' AND boardTitle LIKE '%' || #{search} || '%'
         ORDER BY boardno DESC
@@ -95,5 +95,11 @@
         UPDATE COURSEREVIEW
         SET boardTitle = #{boardTitle}, boardContent = TO_CLOB(#{boardContent})
         WHERE boardNo = #{boardNo}
+    </update>
+
+    <update id="updateCourseWriteYN" parameterType="int">
+        UPDATE resultlist
+        SET writeYN = 'N'
+        WHERE courseno = (SELECT courseno from coursereview where boardno = #{boardNo})
     </update>
 </mapper>

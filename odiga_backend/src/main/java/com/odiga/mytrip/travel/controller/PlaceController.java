@@ -22,8 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.odiga.mytrip.travel.service.PlaceService;
 import com.odiga.mytrip.travel.vo.TravelListVO;
 
-
-
 @RestController
 public class PlaceController {
     @Autowired
@@ -37,6 +35,7 @@ public class PlaceController {
             @PathVariable("displayStart") String displayStart,
             @PathVariable("order") String order,
             @RequestParam(required = false) String theme) throws IOException {
+        
 
         List<String> catList = new ArrayList<>();
         Map<String, Object> display = new HashMap<>();
@@ -54,7 +53,7 @@ public class PlaceController {
                 display.put("displayEnd", displayEnd);
                 display.put("list", catList);
                 List<TravelListVO> placeList = placeService.placeList(display);
-                System.out.println("CONTROLLER 1::::::::  THEME ???????????????????????/"+theme);
+                System.out.println("CONTROLLER 1::::::::  THEME : "+display.get("list")+" order: "+display.get("order"));
                 return placeList;
             }
             else{

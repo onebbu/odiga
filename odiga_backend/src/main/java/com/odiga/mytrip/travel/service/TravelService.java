@@ -143,8 +143,8 @@ public class TravelService {
         return travelDAO.cattranskr(cat1, cat2, cat3);
     }
     @Transactional
-    public void ReviewUpdate(int reviewno , String reviewcomment){
-        travelDAO.reviewUpdate(reviewno , reviewcomment);
+    public void ReviewUpdate(int reviewno , String reviewcomment , int reviewgrade ){
+        travelDAO.reviewUpdate(reviewno , reviewcomment , reviewgrade);
     }
     @Transactional
     public void ReviewDelete(String reviewno){

@@ -12,10 +12,6 @@ public class CourseReviewService {
     @Autowired
     private CourseReviewDAO courseReviewDAO;
 
-    public List<CourseReviewVO> AllCourseReviews() {
-        return courseReviewDAO.AllCourseReviews();
-    }
-
     public List<CourseReviewVO> detailPage(int boardNo) {
         return courseReviewDAO.detailPage(boardNo);
     }
@@ -71,6 +67,15 @@ public class CourseReviewService {
     @Transactional
     public void courseReviewEdit(CourseReviewVO CourseReviewVO) {
         courseReviewDAO.courseReviewEdit(CourseReviewVO);
+    }
+
+    @Transactional
+    public void commentEdit(CommentsVO commentsVO) {
+        courseReviewDAO.commentEdit(commentsVO);
+    }
+
+    public void updateCourseWriteYN(int boardNo) {
+        courseReviewDAO.updateCourseWriteYN(boardNo);
     }
 
 

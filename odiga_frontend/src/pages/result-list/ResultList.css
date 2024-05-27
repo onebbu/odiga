@@ -14,6 +14,10 @@
     font-style: normal;
 }
 
+.result-list-wrap{
+    background-color: #f3f4f6;
+}
+
 .result-plan {
     display: flex;
     align-items: center;
@@ -23,6 +27,8 @@
 
 .result-plan h6 {
     margin: 0;
+    font-family: JalnanGothic;
+    font-size: 25px;
 }
 
 .wrapper hr {
@@ -33,6 +39,7 @@
 .result-detail {
     flex: 1;
     padding-top: 1rem;
+    background-color: #f3f4f6;
 }
 
 
@@ -121,7 +128,7 @@
 }
 
 .duration-time {
-    background-color: white;
+    background-color: #f3f4f6;
     color: gray;
     font-size: 80%;
     z-index: 0;
@@ -138,7 +145,7 @@
     content: '';
     position: absolute;
     top: -3rem;
-    left: 1.5rem;
+    left: 5%;
     transform: translateX(-50%);
     height: 10rem;
     width: 0.1rem; /* 세로선의 너비 */
@@ -185,6 +192,4 @@
     text-align: center;
     width: 90%;
     margin: auto;
-
-
 }

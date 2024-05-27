@@ -1,19 +1,16 @@
 package com.odiga.mytrip.course.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.RestController;
 import com.odiga.mytrip.course.service.CourseService;
 import com.odiga.mytrip.course.vo.CourseImportVO;
 import com.odiga.mytrip.course.vo.CourseVO;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -35,7 +32,9 @@ public class CourseDisplayController {
     }
     @PostMapping("/courseimport")
     public int saveCourse(@RequestBody CourseImportVO courseImportVO) {
-        int boardNo = courseService.saveCourse(courseImportVO);  
+        int boardNo = courseService.saveCourse(courseImportVO);
+        courseService.updateCourseWriteYN(courseImportVO.getCourseno());
+        System.out.println("CourImportController ::::::::; courseNO" + courseImportVO.getCourseno());
         System.out.println(boardNo);
         return boardNo;
     }

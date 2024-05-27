@@ -40,10 +40,12 @@ function MyLikeList() {
                             <Card className="bg-dark text-white" key={{courseKey}}>
                                 <LocationImage src={likeInfo[courseKey].img} alt={likeInfo[courseKey].title}/>
                                 <Card.ImgOverlay>
-                                    <LikeTitle>{likeInfo[courseKey].title}</LikeTitle>
-                                    <LikeAddr>
-                                        {likeInfo[courseKey].addr}
-                                    </LikeAddr>
+                                    <LikeOverlay>
+                                        <LikeTitle>{likeInfo[courseKey].title}</LikeTitle>
+                                        <LikeAddr>
+                                            {likeInfo[courseKey].addr}
+                                        </LikeAddr>
+                                    </LikeOverlay>
                                 </Card.ImgOverlay>
                             </Card>
                         </Link>
@@ -63,32 +65,50 @@ const Title = styled.h3`
   margin-top: 4rem;
   text-align: center;
   width: 100%;
+  font-family: JalnanGothic;
+  font-size: 25px;
 `;
 
 const GridContainer = styled.div`
   margin-top: 4rem;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
 `;
 
 const LocationImage = styled(Card.Img)`
-  width: 16rem;
-  height: 10rem;
+  width: 25rem;
+  height: 15rem;
   object-fit: cover;
   opacity: 0.85;
   background-color: #f4f4f4;
 `;
 
+const LikeOverlay = styled.div`
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3.2rem;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    
+  `
+
 const LikeTitle = styled(Card.Title)`
-  font-size: 14px;
+  font-family: 'JalnanGothic', sans-serif;
+  font-size: 18px;
   position: absolute;
-  bottom: 8px;
+  bottom: 12px;
   left: 1px;
 `;
 
 const LikeAddr = styled(Card.Text)`
-  font-size: 10px;
+  font-size: 15px;
   position: absolute;
   bottom: 0;
   left: 1px;
@@ -100,4 +120,6 @@ const Message = styled.div`
   margin: auto;
   text-align: center;
   font-size: 1.2rem;
+  font-family: JalnanGothic;
+  font-size: 18px;
 `;

@@ -29,11 +29,13 @@ function ChoosePreference() {
 
     // 다음 페이지로 선택된 값들을 전달하는 함수
     const goToNextPage = () => {
-        if (!sessionStorage.getItem('token')) {
-            alert("로그인이 필요한 서비스 입니다. 로그인 페이지로 이동합니다.");
-            navigate('/login');
-            return;
-        }
+
+        // 규리님 그 sns로그인하면 쿠키에 값이있어서 다음페이지로 못넘어가서 일단 주석처리했습니다. 추후 오류나 문제생길시 수정부탁드립니다.
+        // if (!sessionStorage.getItem('token')) {
+        //     alert("로그인이 필요한 서비스 입니다. 로그인 페이지로 이동합니다.");
+        //     navigate('/login');
+        //     return;
+        // }
 
         // 모든 영역에서 선택된 값들을 검사하여 누락된 값이 있는지 확인
             if (selectedValues.region === null || selectedValues.duration === null || selectedValues.theme.length < 2) {
@@ -219,7 +221,7 @@ const ITEM2 = [
     { icon: date2 , content: '1박2일', code: '1박2일'  },
     { icon: date3 , content: '2박3일', code: '2박3일'  },
 ];
-
+const ACCESS_KEY = 'iUJAIhZJ0Pq3YgEIgxl8kZ1JR2CBVrVxN0d5lZhkJh8';
 const ITEM3 = [
     { icon : "https://source.unsplash.com/featured/?mountain", content : '산' },
     { icon : "https://source.unsplash.com/featured/?beach", content : '바다' },
