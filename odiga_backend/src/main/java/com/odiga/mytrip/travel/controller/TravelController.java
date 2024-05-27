@@ -63,6 +63,7 @@ public class TravelController {
     @PostMapping("/travelLike")
     public void likeAndWish(@RequestBody WishVO request) {
         travelService.wish(request.getContentid(), request.getEmail(), request.getNickname());
+        System.out.println("wish UP");
     }
     @GetMapping("/WishInfo")
     public boolean WishUserInfo(
@@ -70,14 +71,15 @@ public class TravelController {
         @RequestParam(value = "nickname", required = false) String nickname) {
         System.out.println("travelController :: /WishInfo "+contentid+" nickname:: "+nickname);
         if (contentid == null || nickname == null){return false;}
-        else { System.out.println(travelService.WishUserInfo(contentid, nickname));
+        else { System.out.println("like?? "+ travelService.WishUserInfo(contentid, nickname));
              return travelService.WishUserInfo(contentid, nickname); 
         }
     }
 
     @PostMapping("/WishDelete")
     public void Wishremov(@RequestBody WishVO request) {
-        travelService.WishDelete(request.getContentid(), request.getEmail(), request.getNickname());
+        travelService.WishDelete(request.getContentid(), request.getNickname());
+        System.out.println("wishDelete ");
     }
     @GetMapping("/imgs/{contntId}")
     public List<String> getImgs(@PathVariable String contntId) throws IOException{

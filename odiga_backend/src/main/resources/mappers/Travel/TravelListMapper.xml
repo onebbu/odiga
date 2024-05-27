@@ -64,14 +64,14 @@
         DELETE FROM TRAVELREVIEW
         WHERE reviewno = #{reviewno}
     </delete>
-    <insert id="wishPlus" parameterType="com.odiga.mytrip.travel.vo.WishVO">
+    <insert id="wishPlus" parameterType="String">
         INSERT INTO WISHLIST
         (WISHLISTNO, CONTENTID, EMAIL, NICKNAME)
-        VALUES (WISHNO_SEQ.NEXTVAL, #{contentid} , #{email} , #{nickname})
+        VALUES (WISHNO_SEQ.NEXTVAL, #{contentid}, #{email}, #{nickname})
     </insert>
-    <delete id="wishDelete" parameterType="com.odiga.mytrip.travel.vo.WishVO">
+    <delete id="wishDelete" parameterType="String">
         DELETE FROM WISHLIST
-        WHERE CONTENTID = #{contentid} AND EMAIL =#{email} and NICKNAME = #{nickname}
+        WHERE CONTENTID = #{contentid} and NICKNAME = #{nickname}
     </delete>
 
     <select id="selectAllWish" parameterType="String" resultType="com.odiga.mytrip.travel.vo.WishVO">

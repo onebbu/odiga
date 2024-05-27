@@ -24,22 +24,25 @@ function TravelDetailPage({ modalContentId }) {
 
     useEffect(() => {
         if (locaContId) {
-            const fetchData = async () => {
-                try {
-                    const detailResponse = await axios.get(`/detail/${locaContId}`);
-                    setData(detailResponse.data);
-                    setLikes(detailResponse.data.wishlist_count || 0);
-                    setViews(detailResponse.data.viewcount || 0);
-                    const imgsResponse = await axios.get(`/imgs/${locaContId}`);
-                    setImgs(imgsResponse.data);
-                } catch (error) {
-                    console.error('Error fetching data:', error);
-                }
-            };
-
             fetchData();
         }
     }, [locaContId]);
+
+    const fetchData = async () => {
+        try {
+            const detailResponse = await axios.get(`/detail/${locaContId}`);
+            setData(detailResponse.data);
+            setLikes(detailResponse.data.wishlist_count || 0);
+            setViews(detailResponse.data.travelviewcount || 0);
+            const imgsResponse = await axios.get(`/imgs/${locaContId}`);
+            setImgs(imgsResponse.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
+    };
+    const handleNewLike = () => {
+        fetchData();  // 새 하트가 추가될 때마다 fetchData 새로고침
+    };
 
     useEffect(() => {
         if (data) {
@@ -152,38 +155,12 @@ function TravelDetailPage({ modalContentId }) {
                             <div key={index}>
                                 <img src={img} alt={`비슷한 여행지 사진 ${index + 2}`} className="sliderImg" />
                             </div>
-                        // )}
-                        // {imgs && imgs.length > 1 && (
-                        //     <div>
-                        //         <img src={imgs[1]} alt="비슷한 여행지 사진 3" className="sliderImg"/>
-                        //     </div>
-                        // )}
-                        // {imgs && imgs.length > 2 && (
-                        //     <div>
-                        //         <img src={imgs[2]} alt="비슷한 여행지 사진 4" className="sliderImg"/>
-                        //     </div>
-                        // )}
-                        // {imgs && imgs.length > 3 && (
-                        //     <div>
-                        //         <img src={imgs[3]} alt="비슷한 여행지 사진 5" className="sliderImg"/>
-                        //     </div>
-                        // )}
-                        // {imgs && imgs.length > 4 && (
-                        //     <div>
-                        //         <img src={imgs[4]} alt="비슷한 여행지 사진 6" className="sliderImg"/>
-                        //     </div>
-                        // )}
-                        // {imgs && imgs.length > 5 && (
-                        //     <div>
-                        //         <img src={imgs[5]} alt="비슷한 여행지 사진 7" className="sliderImg"/>
-                        //     </div>
-                        // )}
                         ))}
                     </Slider>
                 </section>
 
                 <section id="review-display">
-                    <ReviewDisplay travelInfo={data} modalContentId={locaContId} />
+                    <ReviewDisplay travelInfo={data} onsetLike={handleNewLike}/>
                 </section>
 
             </div>

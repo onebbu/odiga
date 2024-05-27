@@ -1,11 +1,10 @@
 import axios from "axios";
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import styled from 'styled-components';
 import '../TravelDetailPage.css';
 import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart} from "@fortawesome/free-solid-svg-icons";
-import {LoginInfoContext} from "../../login/LoginInfoProvider";
 
 const StarRatingContainer = styled.div`
   display: inline-block;
@@ -40,46 +39,34 @@ function StarRating({starCount, onChange}) {
     );
 }
 
-function ReviewImportForm({onReviewSubmitted, modalContentId}) {
+function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
     const {contentID} = useParams();
     const [reviewComment, setReviewComment] = useState('');
     const [reviewGrade, setReviewGrade] = useState(0);
     const [reviewdate, setReviewdate] = useState();
     const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(0);
     const navigate = useNavigate();
-    const loginInfo = useContext(LoginInfoContext);
-
-    const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
-        console.log("ReviewImportForm :: contentID ??" +modalContentId);
-        if (typeof modalContentId === "undefined" || modalContentId === "" || modalContentId === null) {
-            setLocaContId(contentID);
-        } else {
-            setLocaContId(modalContentId);
-        }
-        const fetchData = async () => {
-            try {
-                if (typeof locaContId !== "undefined" || locaContId !== "") {
-                    // 서버에서 좋아요 상태를 가져오는 요청
-                    console.log("보내기 직전", locaContId);
-                    const response = await axios.get(`/WishInfo?contentid=${locaContId}&nickname=${loginInfo.nickname}`);
-                    if (response.data) {
-                        setLiked(true); // 서버에서 받아온 값이 true이면 liked를 true로 업데이트
-                    } else {
-                        setLiked(false);
-                    }
-                    console.log("그래서 liked?" + liked);
-                }
-            } catch (error) {
-                console.error('Failed to fetch like status:', error);
-            }
-        };
-
         fetchData();
-    }, [modalContentId]);
+    }, [loginInfo]);
 
+    const fetchData = async () => {
+        try {
+            if (contentID!==null) {
+                // 서버에서 좋아요 상태를 가져오는 요청
+                console.log("보내기 직전", contentID);
+                const response = await axios.get(`/WishInfo?contentid=${contentID}&nickname=${loginInfo.nickname}`);
+                if (response.data) {
+                    setLiked(true); // 서버에서 받아온 값이 true이면 liked를 true로 업데이트
+                } else {
+                    setLiked(false);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch like status:', error);
+        }
+    };
     const handleInputChange = (e) => {
         const input = e.target.value;
         if (input.length <= 100) {
@@ -113,7 +100,7 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
             navigate("/login", { state: { from } });
             return;
         }
-        if (!locaContId) {
+        if (!contentID) {
             alert("콘텐츠 ID가 유효하지 않습니다.");
             return;
         }
@@ -122,7 +109,7 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
             return;
         }
         axios.post('/reviewImport', {
-            contentid: locaContId,
+            contentid: contentID,
             reviewcomment: reviewComment,
             reviewgrade: reviewGrade,
             reviewdate: reviewdate,
@@ -151,24 +138,21 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
         try {
             if (liked) {
                 const response = await axios.post(`/WishDelete`, {
-                    contentid: locaContId,
-                    email: loginInfo.email,
+                    contentid: contentID,
                     nickname: loginInfo.nickname
                 });
-                if (response.status === 200) {
-                    setLiked(false);
-                    setLikes(prev => prev - 1);
-                }
+                alert("liked 해제");
+                fetchData(); alert("liked 해제 완료");
+                onsetLike();
             } else {
                 const response = await axios.post(`/travelLike`, {
-                    contentid: locaContId,
+                    contentid: contentID,
                     email: loginInfo.email,
                     nickname: loginInfo.nickname
                 });
-                if (response.status === 200) {
-                    setLiked(true);
-                    setLikes(prev => prev + 1);
-                }
+                alert("liked up");
+                fetchData();
+                onsetLike();
             }
         } catch (error) {
             console.error('Like toggle request failed:', error);

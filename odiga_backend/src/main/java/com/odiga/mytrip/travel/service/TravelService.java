@@ -151,12 +151,12 @@ public class TravelService {
         travelDAO.reviewDelete(reviewno);
     }
     @Transactional
-    public void wish(String contentid , String email , String nickname){
-        travelDAO.wishPlus(contentid, email, nickname);
+    public void wish(String contentid, String email , String nickname){
+        travelDAO.wishPlus(contentid, email , nickname);
     }
     @Transactional
-    public void WishDelete(String contentid , String email , String nickname){
-        travelDAO.wishDelete(contentid, email, nickname);
+    public void WishDelete(String contentid, String nickname){
+        travelDAO.wishDelete(contentid, nickname);
     }
 
     public String TravelGradeAvg(String contentid){
