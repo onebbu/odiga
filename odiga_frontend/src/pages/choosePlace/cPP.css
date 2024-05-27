@@ -23,20 +23,6 @@ aside .space{min-height: 400px; background-color: #F4FFFF;}
 * {
     font-family: 'GmarketSansMedium';
 }
-.buttondesignSave{
-    background-color: #549C9B;  color: white; padding: 8px 15px;
-  font-size: 15px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-
-  &:hover {    background-color: #417977;    width: 148px;      transform: translateX(0);  }
-    border:none;
-    position: fixed;
-    bottom: 80px;
-    right: 20px;
-    z-index: 3000;
-}
 
 /*Drawer.js*/
 .drawer{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; padding-bottom: 10px;}

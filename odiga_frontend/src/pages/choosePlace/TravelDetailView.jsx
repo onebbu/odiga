@@ -6,88 +6,35 @@ import '../traveldetailpage/slick.css';
 import '../traveldetailpage/slick-theme.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart} from "@fortawesome/free-solid-svg-icons";
-import {useNavigate} from 'react-router-dom';
 import {useParams} from 'react-router-dom';
 
 function TravelDetailPage({modalContentId}) {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
     const [imgs, setImgs] = useState(null);
-    const [didMount, setDidMount] = useState(false); // 컴포넌트가 마운트되었는지 여부를 나타내는 상태
-    // let mountCount = 1
-    const [liked, setLiked] = useState(false);
-    const [views, setViews] = useState(0);
-    const navigate = useNavigate();
-    const [tags, setTags] = useState([]);
     const {contentID} = useParams();
 
     const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
-        if (typeof modalContentId === "undefined" || modalContentId === "") {
-            setLocaContId(contentID);
-        } else {
-            setLocaContId(modalContentId);
-        }
-    }, [modalContentId]);
+        setLocaContId(modalContentId || contentID);
+    }, [modalContentId, contentID]);
 
     useEffect(() => {
-
-        if (typeof locaContId !== "undefined" && locaContId !== "") {
+        if (locaContId) {
             axios.get(`/detail/${locaContId}`)
                 .then(response => {
                     setData(response.data);
-                    console.log(data);
+                    setLikes(response.data.wishlist_count || 0);
                 })
                 .catch(error => {
                     console.error('Error fetching data:', error);
                 });
+            axios.get(`/imgs/${locaContId}`)
+                .then(response => setImgs(response.data))
+                .catch(error => console.error('Error fetching data:', error));
         }
     }, [locaContId ]);
-
-
-    useEffect(() => {
-
-        // console.log('mount: ', mountCount)
-        // mountCount++
-        setDidMount(true)
-        return () => {
-            //   console.log('unmount')
-        }
-    }, [])
-
-
-    useEffect(() => {
-        //   console.log('didMount: ', didMount);
-        if (didMount) {
-            // 백엔드 API 호출
-            if (typeof locaContId !== "undefined" && locaContId !== "") {
-                axios.get(`/detail/${locaContId}`)
-                    .then(response => {
-                        setData(response.data); // 데이터를 상태에 저장
-                        // console.log('view count +1');
-                    })
-                    .catch(error => {
-                        console.error('Error fetching data:', error);
-                    });
-            }
-
-        }
-    }, [didMount]);
-
-    useEffect(() => {
-        if (typeof locaContId !== "undefined" && locaContId !== "") {
-            axios.get(`/imgs/${locaContId}`)
-                .then(response => {
-                    setImgs((response.data));
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        }
-
-    }, [didMount])
-
 
     useEffect(() => {
         if (data) {
@@ -97,7 +44,7 @@ function TravelDetailPage({modalContentId}) {
             script.onload = () => {
                 const mapOptions = {
                     center: new window.naver.maps.LatLng(data.mapy, data.mapx),
-                    zoom: 80
+                    zoom: 200
                 };
 
                 const map = new window.naver.maps.Map('map', mapOptions);
@@ -141,32 +88,6 @@ function TravelDetailPage({modalContentId}) {
         slidesToScroll: 1,
         arrows: false,
     };
-
-    useEffect(() => {
-        if (typeof locaContId !== "undefined" && locaContId !== "") {
-            axios.get(`/detail/${locaContId}`)
-                .then(response => {
-                    setData(response.data);
-                    setLikes(response.data.wishlist_count || 0);
-                    setViews(response.data.viewcount || 0);
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
-        }
-    }, []);
-
-    //tag API 호출
-//   useEffect(() => {
-//     axios.get(`/tags/${contentID}`)
-//         .then(response => {
-//             setTags(response.data); // API에서 반환된 태그 데이터를 상태에 저장
-//         })
-//         .catch(error => {
-//             console.error('Error fetching tags:', error);
-//         });
-// }, []);
-
 
     return (
         <div className="inner">
@@ -215,16 +136,6 @@ function TravelDetailPage({modalContentId}) {
                         )}
                     </div>
                 </section>
-                {/* Tag 엔드포인트 완료되면 */}
-                {/* <section className="tagList" id="tag-list">
-                   <div className="tagItem" id="tag-list-placeholder">
-                       {tags.map(tag => (
-                      <div className="tagItemBox" key={tag}>
-                        <p>#{tag}</p>
-                        </div>
-                      ))}
-                   </div>
-                </section> */}
                 <section className="slider" id="similar-destinations">
                     <p>사진을 움직여 둘러보세요!</p>
                     <Slider {...settings} id="similar-destinations-placeholder">
@@ -265,11 +176,9 @@ function TravelDetailPage({modalContentId}) {
                         )}
                     </Slider>
                 </section>
-
             </div>
         </div>
     )
-
 }
 
 export default TravelDetailPage;
