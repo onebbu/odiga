@@ -4,11 +4,10 @@
 import  Editor  from 'ckeditor5-custom-build/build/ckeditor';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import MyCustomUploadAdapterPlugin from './MyUploadAdapter';
-import Base64UploaderPlugin from './Base64Upload';
-
 
 const TextEditor = ({setData}) => {
-    const edrtorConfiguration = {
+    const editorConfiguration = {
+		placeholder: '이곳에 내용을 작성해 주세요!',
 		toolbar: {
 			items: [
 				'heading',
@@ -52,8 +51,7 @@ const TextEditor = ({setData}) => {
     return (
         <CKEditor 
         editor={Editor}
-        config={edrtorConfiguration}
-        data = "<p> 이곳에 내용을 작성해 주세요!</p>"
+        config={editorConfiguration}
         onChange={(event, editor) => {
             setData(editor.getData()); // 에디터 작성 내용 저장 
         }}

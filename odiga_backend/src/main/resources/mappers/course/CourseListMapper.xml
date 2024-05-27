@@ -96,4 +96,10 @@
         SET boardTitle = #{boardTitle}, boardContent = TO_CLOB(#{boardContent})
         WHERE boardNo = #{boardNo}
     </update>
+
+    <update id="updateCourseWriteYN" parameterType="int">
+        UPDATE resultlist
+        SET writeYN = 'N'
+        WHERE courseno = (SELECT courseno from coursereview where boardno = #{boardNo})
+    </update>
 </mapper>
