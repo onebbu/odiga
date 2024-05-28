@@ -73,7 +73,7 @@ function Maincontents() {
                         </div>
                         <div className="cardTitle">
                           <div className="cardUserTitle">
-                            <h5>{cosData.boardtitle}</h5>
+                            <h6>{cosData.boardtitle}</h6>
                           </div>
                           <div className="cardUserDescription">
                             <p>{stripHtmlAndEntities(cosData.boardcontent)}</p>
