@@ -70,8 +70,10 @@ function Myarticle() {
                                         </Card.Title>
                                         <Card.Text>
                                             <StackContainer direction="horizontal" gap={2}>
-                                                {articleList[articleKey]?.tags ? articleList[articleKey].tags.split(" ").map((word, index) => (
-                                                    <HashBadge bg="" key={index}>{word}</HashBadge>
+                                                {articleList[articleKey]?.tags ? articleList[articleKey].tags.split("#").slice(1, 5).map((word, index) => (
+                                                    <HashBadge bg="" key={index}>
+                                                        #{word}
+                                                    </HashBadge>
                                                 )) :  <HashBadge>#태그없음</HashBadge>}
                                             </StackContainer>
                                         </Card.Text>
@@ -117,8 +119,8 @@ const CardContainer = styled(Card)`
 const StackContainer = styled(Stack)`
   position: absolute;
   bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  //left: 50%;
+  //transform: translateX(-50%);
 `;
 
 const LikeBadge = styled(Badge)`

@@ -14,6 +14,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 
 import lombok.RequiredArgsConstructor;
 import java.io.IOException;
+import java.util.UUID;
+
 import org.json.JSONObject;
 
 @RestController
@@ -29,17 +31,19 @@ public class FileUploadController {
    @PostMapping
    public ResponseEntity<String> uploadFile(@RequestParam("upload") MultipartFile file) {
       try {
-         String fileName = file.getOriginalFilename();
+
+         String extension = ""; // 확장자를 저장할 변수 초기화
+         if (file.getOriginalFilename().contains(".")) { // 파일명에 확장자가 있는 경우
+             int dotIndex = file.getOriginalFilename().lastIndexOf('.');
+             extension = file.getOriginalFilename().substring(dotIndex); // 마지막 '.' 이후의 문자열을 확장자로 추출
+         }
+         String fileName = UUID.randomUUID().toString() + extension; // UUID와 확장자를 조합해 새 파일명 생성
          String fileUrl = "https://projectodiga.s3.ap-northeast-2.amazonaws.com/" + fileName;
 
          ObjectMetadata metadata = new ObjectMetadata();
          metadata.setContentType(file.getContentType());
          metadata.setContentLength(file.getSize());
 
-         // Add a check for maximum file size
-         if (file.getSize() > 5242880) {
-            return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("파일 크기가 너무 큽니다.");
-         }
 
          amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
 

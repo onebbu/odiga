@@ -28,7 +28,7 @@ function Comments() {
     const handleSubmit = async () => {
         if (!loginInfo) {
             // 로그인되어 있지 않은 경우
-            alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+            alert("로그���이 필요합니다. 로그인 페이지로 이동합니다.");
             navigate("/login", { state: { from } });
             return;
         }
@@ -54,6 +54,7 @@ function Comments() {
             fetchComments(); // 댓글 목록을 다시 불러옵니다.
             setComment(""); // 댓글 입력 필드 초기화
             setRating(5); // 별점 초기화
+            window.location.reload()
         } catch (error) {
             console.error("댓글 등록 중 오류 발생:", error);
             setResponseError("댓글 등록 중 오류가 발생했습니다.");
@@ -86,7 +87,7 @@ function Comments() {
   const handleDeleteClick = async (commentId) => {
     const confirmDelete = window.confirm("댓글을 삭제하시겠습니까?");
     if (confirmDelete) {
-      await commentDel(commentId);
+      await commentDel(commentId, boardNo);
     }
   };
 
@@ -116,11 +117,12 @@ function Comments() {
   };
   
 
-    const commentDel = async (commentId) => {
+    const commentDel = async (commentId, boardNo) => { // boardNo를 인자로 추가
         try {
-            await axios.post(`/coursereview/commentDel`, {commentId: commentId});
+            await axios.post(`/coursereview/commentDel/${boardNo}`, {commentId: commentId});
             console.log("댓글이 성공적으로 삭제되었습니다.");
             fetchComments(); // 댓글 목록을 다시 불러옵니다.
+            window.location.reload()
         } catch (error) {
             console.error("댓글 삭제 중 오류 발생:", error);
         }
@@ -273,7 +275,7 @@ function Comments() {
                                         cursor: "pointer",
                                         transition: "all 0.3s ease",
                                     }}
-                                    onClick={handleDeleteClick.bind(this, item.commentId)}
+                                    onClick={handleDeleteClick.bind(this, item.commentId, item.boardNo)}
                                 >
                                     삭제
                                 </button>
