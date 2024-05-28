@@ -277,7 +277,7 @@ html, body {
     height: 2px;
     background-color: #ccc;
     margin: 20px 0px;
-    margin-left: 100px;
+    margin-left: 30px;
 }
 
 
@@ -310,7 +310,7 @@ html, body {
 .recommendContentTitle {
     width: 500px;
     height: 50px;
-    margin-left: 190px;
+    margin-left: 150px;
     font-size: 20px;
 }
 
