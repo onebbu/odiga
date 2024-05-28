@@ -1,10 +1,15 @@
 import React, {useState, useEffect} from "react";
-import Styled from "styled-components";
+import styled from "styled-components";
 import axios from "axios";
 import './PL.css';
 
-const Rate=Styled.div`width: 45px; height: 22px; color:white; background-color:#4978ce; padding:2px; text-align: center; line-height:22px; display:inline;`;
-const P=Styled.div`display:inline; font-size:10px; color:#909090;`;
+const Rate = styled.div`width: 80px; height: 22px; color:white; background-color:#00429b; padding:2px; text-align: center;display:inline;
+                        border-radius: 20px 0 20px 20px;
+                        padding: 4px 5px 2px 5px;
+                        p { display:inline; font-size:10px;
+                            color: #80a1cd;
+                        } `;
+const P=styled.div`display:inline; font-size:10px; color:#909090;`;
 
 const Place = ({id, pic, name, region, averageRate, cntRating}) =>{ 
     return(

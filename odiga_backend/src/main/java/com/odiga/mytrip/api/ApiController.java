@@ -12,9 +12,9 @@ import java.net.URL;
 @RestController
 public class ApiController {
 
+    @Autowired
     private final ApiService apiService;
 
-    @Autowired
     public ApiController(ApiService apiService) {
         this.apiService = apiService;
     }
