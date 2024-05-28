@@ -109,7 +109,7 @@ function Maincontents() {
                         </div>
                         <div className="cardTitle">
                           <div className="cardUserTitle">
-                            <h5>{card.boardtitle}</h5>
+                            <h6>{card.boardtitle}</h6>
                           </div>
                           <div className="cardUserDescription">
                             <p>{stripHtmlAndEntities(card.boardcontent)}</p>
