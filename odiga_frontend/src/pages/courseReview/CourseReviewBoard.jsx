@@ -39,7 +39,7 @@ const Place = ({
             <br/>
             <Rate>{boardGrade !== undefined && boardGrade !== null
                 ? boardGrade.toFixed(1)
-                : "평가 없음"}<RateP>/5</RateP></Rate><P>/리뷰 {boardViewCount}개</P>
+                : "평가 없음"}<RateP>/5</RateP></Rate><P>/리뷰 {boardLikeCount}개</P>
         </div>
     );
 };
@@ -283,17 +283,22 @@ const CourseReviewBoard = () => {
     );
 };
 
-const Rate = Styled.div`
+const Rate = styled.div`
+  width: 80px;
   height: 22px;
-      color: white;
-      background-color: #4978ce;
-      //padding: 2px;
-      text-align: center;
-      line-height: 22px;
-      display: inline;
-      border-radius: 6px;
-      padding: 0.1em 0.3em;
-`;
+  color: white;
+  background-color: #00429b;
+  padding: 2px;
+  text-align: center;
+  display: inline;
+  border-radius: 20px 0 20px 20px;
+  padding: 4px 5px 2px 5px;
+
+  p {
+    display: inline;
+    font-size: 10px;
+    color: #80a1cd;
+  } `;
 
 const P = Styled.div`
   display: inline;
