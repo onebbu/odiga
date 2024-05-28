@@ -56,22 +56,8 @@ function TravelDetailPage({modalContentId}) {
 
                 const marker = new window.naver.maps.Marker(markerOptions);
 
-                const contentString = `
-                    <div>
-                        <h2>${data.title}</h2>
-                        <p>${data.addr1}</p>                        
-                        <img src=${data && data.firstimage} style="max-width: 200px;"></img>
-                    </div>
-                `;
-
-                const infoWindow = new window.naver.maps.InfoWindow({
-                    content: contentString
-                });
-
-                window.naver.maps.Event.addListener(marker, 'click', function () {
-                    infoWindow.open(map, marker);
-                });
-            };
+                
+                };
             document.body.appendChild(script);
             return () => {
                 document.body.removeChild(script);
