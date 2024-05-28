@@ -74,5 +74,9 @@ public class CourseReviewService {
         courseReviewDAO.commentEdit(commentsVO);
     }
 
+    public void updateCourseWriteYN(int boardNo) {
+        courseReviewDAO.updateCourseWriteYN(boardNo);
+    }
+
 
 }

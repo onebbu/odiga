@@ -135,6 +135,13 @@ function CourseReviewDetail() {
     setEditedContent(content);
   };
 
+  const handleTitleChange = (event) => {
+    setEditedTitle(event.target.value);
+    if(editedTitle.length > 20){
+      alert("제목은 최대 20글자까지 가능합니다.");
+    }
+  };
+
   const handleSave = async () => {
     const confirmSave = window.confirm("수정한 내용을 저장하시겠습니까?");
     if (confirmSave) {
@@ -198,7 +205,7 @@ function CourseReviewDetail() {
                 <input
                   type="text"
                   value={editedTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onChange={handleTitleChange}
                 />
               ) : (
                 detailsData?.[0]?.boardTitle

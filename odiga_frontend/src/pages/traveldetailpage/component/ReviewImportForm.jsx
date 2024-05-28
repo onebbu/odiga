@@ -1,13 +1,10 @@
 import axios from "axios";
-import React, {useState, useContext, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import styled from 'styled-components';
 import '../TravelDetailPage.css';
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faHeart} from "@fortawesome/free-solid-svg-icons";
-import {useParams} from 'react-router-dom';
-import {LoginInfoContext} from "../../login/LoginInfoProvider";
-
 
 const StarRatingContainer = styled.div`
   display: inline-block;
@@ -19,10 +16,9 @@ const Star = styled.span`
   cursor: pointer;
 `;
 
-
 function StarRating({starCount, onChange}) {
     const [rating, setRating] = useState(0);
-    
+
     const handleStarClick = (selectedRating) => {
         setRating(selectedRating);
         onChange(selectedRating);
@@ -43,28 +39,34 @@ function StarRating({starCount, onChange}) {
     );
 }
 
-function ReviewImportForm({onReviewSubmitted, modalContentId}) {
+function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
     const {contentID} = useParams();
     const [reviewComment, setReviewComment] = useState('');
     const [reviewGrade, setReviewGrade] = useState(0);
     const [reviewdate, setReviewdate] = useState();
     const [liked, setLiked] = useState(false);
-    const [likes, setLikes] = useState(0);
     const navigate = useNavigate();
-    const loginInfo = useContext(LoginInfoContext);
-
-    // 모달 관련
-    const [locaContId, setLocaContId] = useState("");
 
     useEffect(() => {
-        if (typeof modalContentId === "undefined" || modalContentId === "" || modalContentId === null) {
-            setLocaContId(contentID);
-        } else {
-            setLocaContId(modalContentId);
-        }
-    }, [modalContentId]);
+        fetchData();
+    }, [loginInfo]);
 
-    // 리뷰 글자 수 제한
+    const fetchData = async () => {
+        try {
+            if (contentID!==null) {
+                // 서버에서 좋아요 상태를 가져오는 요청
+                console.log("보내기 직전", contentID);
+                const response = await axios.get(`/WishInfo?contentid=${contentID}&nickname=${loginInfo.nickname}`);
+                if (response.data) {
+                    setLiked(true); // 서버에서 받아온 값이 true이면 liked를 true로 업데이트
+                } else {
+                    setLiked(false);
+                }
+            }
+        } catch (error) {
+            console.error('Failed to fetch like status:', error);
+        }
+    };
     const handleInputChange = (e) => {
         const input = e.target.value;
         if (input.length <= 100) {
@@ -75,7 +77,6 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
         }
     };
 
-    //로그인 관련 
     const isUserLoggedIn = () => {
         return Boolean(sessionStorage.getItem('token'));
     };
@@ -92,19 +93,23 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
 
     const location = useLocation();
     const { pathname: from } = location;
+
     const handleSubmit = () => {
         if (!isUserLoggedIn()) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
             navigate("/login", { state: { from } });
             return;
         }
-        console.log("handleSubmit 호출됨", { locaContId, reviewComment, reviewGrade, reviewdate });
-        if (typeof locaContId === "undefined" || locaContId === "") {
+        if (!contentID) {
             alert("콘텐츠 ID가 유효하지 않습니다.");
             return;
         }
+        if (reviewGrade === 0) {
+            alert("별점을 선택해주세요.");
+            return;
+        }
         axios.post('/reviewImport', {
-            contentid: locaContId,
+            contentid: contentID,
             reviewcomment: reviewComment,
             reviewgrade: reviewGrade,
             reviewdate: reviewdate,
@@ -121,71 +126,38 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
             .catch(error => {
                 console.error('에러 :', error);
                 alert("리뷰 제출 중 오류가 발생했습니다.");
-                console.error('에러 :', error);
-                alert("리뷰 제출 중 오류가 발생했습니다.");
             });
     };
 
-
-    // 찜 추가 / 삭제 기능~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~백엔드 엔드포인트 확인해보셔야 함
-
     const handleLikeToggle = async () => {
-        if (!sessionStorage.getItem('token')) {
+        if (!isUserLoggedIn()) {
             alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-            navigate('/login');
+            navigate("/login", { state: { from } });
             return;
         }
         try {
-            if (liked) { // 이미 찜한 상태라면 찜 취소 요청 보냄
+            if (liked) {
                 const response = await axios.post(`/WishDelete`, {
-                    contentid: locaContId,
-                    email: loginInfo.email,
+                    contentid: contentID,
                     nickname: loginInfo.nickname
                 });
-                if (response.status === 200) {
-                    setLiked(false);
-                    setLikes(prev => prev - 1);
-                }
-            } else { // 찜하지 않은 상태라면 찜 추가 요청 보냄
+                alert("liked 해제");
+                fetchData(); alert("liked 해제 완료");
+                onsetLike();
+            } else {
                 const response = await axios.post(`/travelLike`, {
-                    contentid: locaContId,
+                    contentid: contentID,
                     email: loginInfo.email,
                     nickname: loginInfo.nickname
                 });
-                if (response.status === 200) {
-                    setLiked(true);
-                    setLikes(prev => prev + 1);
-                }
+                alert("liked up");
+                fetchData();
+                onsetLike();
             }
         } catch (error) {
             console.error('Like toggle request failed:', error);
         }
     };
-
-
-    //찜 관련 (엔드포인트 임의 지정 travelLike)
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                if (typeof locaContId !== "undefined" || locaContId !== "") {
-                    // 서버에서 좋아요 상태를 가져오는 요청
-                    console.log("보내기 직전", locaContId);
-                    const response = await axios.get(`/WishInfo?contentid=${locaContId}&email=${loginInfo.email}`);
-                    if (response.data === 1) {
-                        setLiked(true); // 서버에서 받아온 값이 1이면 liked를 true로 업데이트
-                    } else {
-                        // 서버에서 받아온 값이 0이나 3이면 liked를 false로 업데이트
-                        setLiked(false);
-                    }
-                }
-            } catch (error) {
-                console.error('Failed to fetch like status:', error);
-            }
-        };
-
-        fetchData();
-    }, [loginInfo.email]);
-
 
     return (
         <div className="reviewImportForm">
@@ -193,19 +165,14 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
             <div className="contourLine4"></div>
             <section className="starBox">
                 <StarRating starCount={5} onChange={setReviewGrade}/>
-                {/* <div className="contourLine5"></div>
-            <button onClick={handleLike} className="LikeButton">
-                  <FontAwesomeIcon icon={faHeart} color={liked ? 'red' : 'gray'}/>
-              </button> */}
             </section>
             <section className="reviewsuccessBox">
                 <div>
-              <textarea className="reviewBox"
-                        value={reviewComment}
-                        onChange={handleInputChange}
-                        placeholder="리뷰를 작성해주세요 (100byte 이하)"
-
-              />
+                    <textarea className="reviewBox"
+                            value={reviewComment}
+                            onChange={handleInputChange}
+                            placeholder="리뷰를 작성해주세요 (100byte 이하)" 
+                    />
                 </div>
                 <div className="successButtonBox">
                     <button className="successButton" onClick={handleSubmit}><h2>완료 ✔</h2></button>
@@ -220,8 +187,7 @@ function ReviewImportForm({onReviewSubmitted, modalContentId}) {
                 </div>
             </section>
         </div>
-    )
-
+    );
 }
 
 export default ReviewImportForm;

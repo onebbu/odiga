@@ -104,5 +104,14 @@
         </choose>
         WHERE boardNo = #{boardNo}
     </update>
+<<<<<<< HEAD
     
+=======
+
+    <update id="updateCourseWriteYN" parameterType="int">
+        UPDATE resultlist
+        SET writeYN = 'N'
+        WHERE courseno = (SELECT courseno from coursereview where boardno = #{boardNo})
+    </update>
+>>>>>>> 0c235796e99bf6080f17aa5f717570207b0cd92e
 </mapper>

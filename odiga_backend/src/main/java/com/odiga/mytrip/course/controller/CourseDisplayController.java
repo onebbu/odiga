@@ -32,7 +32,9 @@ public class CourseDisplayController {
     }
     @PostMapping("/courseimport")
     public int saveCourse(@RequestBody CourseImportVO courseImportVO) {
-        int boardNo = courseService.saveCourse(courseImportVO);  
+        int boardNo = courseService.saveCourse(courseImportVO);
+        courseService.updateCourseWriteYN(courseImportVO.getCourseno());
+        System.out.println("CourImportController ::::::::; courseNO" + courseImportVO.getCourseno());
         System.out.println(boardNo);
         return boardNo;
     }

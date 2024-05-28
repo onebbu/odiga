@@ -63,12 +63,12 @@ const Place = ({id, pic, name, region, cat, averageRate, cntRating}) => { //개�
     return (
         <div key={id} className={`grid-item ${opacity ? '' : 'dragging'}`} ref={drag}>
             <div>
-            <img src={pic} onClick={()=>handleShowModal(id)} />
+                <img src={pic} onClick={()=>handleShowModal(id)} />
                 <h6
-                style={{
-                    display: "inline-block",
-                    fontFamily: "JalnanGothic"
-                }}
+                    style={{
+                        display: "inline-block",
+                        fontFamily: "JalnanGothic"
+                    }}
                 >{name}</h6> <strong style={{
                 backgroundColor, color,
                 fontSize: '75%', fontFamily: "GmarketSansMedium",
@@ -88,7 +88,7 @@ function ListPlace({areacode, order, theme}) {
     const [dataList, setDataList] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [displayStart, setDisplayStart] = useState(1);
-    
+
     const fetchList = () => {
         if (areacode !== null) {
             axios.get(`/place/${displayStart}/${order}`, {
@@ -133,37 +133,37 @@ function ListPlace({areacode, order, theme}) {
 
     return (
         <div>
-          {isLoading ? ( <>
-              <p>Loading....</p>
-              <button onClick={() => setDisplayStart(1)}>다시 시도</button>
-              <br /><br />
+            {isLoading ? ( <>
+                <p>Loading....</p>
+                <button onClick={() => setDisplayStart(1)}>다시 시도</button>
+                <br /><br />
             </> ) : ( <>
-              {dataList && dataList.length > 0 ? (
-                <>
-                  <div style={{ padding: "10px", display: "grid", gridTemplateRows: "1fr", gridTemplateColumns: "1fr 1fr 1fr 1fr", gridGap: "30px" }} >
-                    {dataList.map((data) => (
-                      <Place
-                        key={data.contentid}
-                        id={data.contentid}
-                        pic={data.firstimage}
-                        name={data.title}
-                        region={data.addr1}
-                        cat={data.cat3}
-                        averageRate={data.averageRate}
-                        cntRating={data.cntRating} />
-                    ))}
-                  </div>
-                  <div>
-                    {dataList.length < 100 && ( // 100개 이상은 안보여줌.
-                      <button className="buttondesign" onClick={handleShowMore}> More </button>
-                    )}
-                  </div>
+                    {dataList && dataList.length > 0 ? (
+                        <>
+                            <div style={{ padding: "10px", display: "grid", gridTemplateRows: "1fr", gridTemplateColumns: "1fr 1fr 1fr 1fr", gridGap: "30px" }} >
+                                {dataList.map((data) => (
+                                    <Place
+                                        key={data.contentid}
+                                        id={data.contentid}
+                                        pic={data.firstimage}
+                                        name={data.title}
+                                        region={data.addr1}
+                                        cat={data.cat3}
+                                        averageRate={data.averageRate}
+                                        cntRating={data.cntRating} />
+                                ))}
+                            </div>
+                            <div>
+                                {dataList.length < 100 && ( // 100개 이상은 안보여줌.
+                                    <button className="buttondesign" onClick={handleShowMore}> More </button>
+                                )}
+                            </div>
+                        </>
+                    ) : ( <p>결과가 없습니다.</p> )}
                 </>
-              ) : ( <p>결과가 없습니다.</p> )}
-            </>
-          )}
+            )}
         </div>
-      );
+    );
 }
 
 export default ListPlace;
