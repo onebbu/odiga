@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import axios from "axios";
 import './CP.css';
 import date1 from './img/date_1.png'; import date2 from './img/date_2.png'; import date3 from './img/date_3.png';
 import { useNavigate } from "react-router-dom";
@@ -17,7 +18,35 @@ const Container=styled.div`
     max-width: 56rem; margin-left: auto; margin-right: auto; padding: 6px;
 `;
 
+
+
 function ChoosePreference() {
+        const [item3, setItem3] = useState(ITEM3);
+        const [filteredITEM3, setFilteredITEM3] = useState(item3);
+
+        const searchImages = async () => {
+            const updatedItems = await Promise.all(THEME.map(async (theme, index) => {
+                try {
+                    const response = await axios.get( `/preference/url/${theme.term}` );
+                    const randomInt = Math.floor(Math.random() * 10);
+                    const imageUrl = response.data.results[randomInt]?.urls?.thumb || "";;
+                    return { ...item3[index], icon: imageUrl };
+                } catch (error) {
+                    console.error('Error fetching images:', error);
+                    return { ...item3[index], icon: "" }; // 오류 발생 시 기존 구조 유지
+                }
+            }))
+
+            setItem3(updatedItems);
+        };
+        useEffect(() => {
+            searchImages();
+        },[]);
+
+        useEffect(() =>{
+            console.log("item3???"+item3[3].icon);
+            setFilteredITEM3(item3);
+        },[item3])
 
     const navigate = useNavigate();
     const [selectedValues, setSelectedValues] = useState({
@@ -25,7 +54,7 @@ function ChoosePreference() {
         duration : null,
         theme : []
     });
-    const [filteredITEM3, setFilteredITEM3] = useState(ITEM3);
+    
 
     // 다음 페이지로 선택된 값들을 전달하는 함수
     const goToNextPage = () => {
@@ -86,10 +115,10 @@ function ChoosePreference() {
 
     useEffect(() => {
         const exclusions = regionExclusions[selectedValues.region] || [];
-        const newFilteredITEM3 = ITEM3.filter(item => !exclusions.includes(item.content));
+        const newFilteredITEM3 = filteredITEM3.filter(item => !exclusions.includes(item.content));
         setFilteredITEM3(newFilteredITEM3);
     }, [selectedValues.region]);
-    
+
     return(
         <Wrapper>
             <Container>
@@ -187,6 +216,7 @@ const Button = ({handleClick, isSelected, elementIndex, icon, content }) => {
     );
 }
 
+
 const regionExclusions = {
     '1' : ['바다'], //서울
     '3' : ['바다'], //대전
@@ -221,20 +251,36 @@ const ITEM2 = [
     { icon: date2 , content: '1박2일', code: '1박2일'  },
     { icon: date3 , content: '2박3일', code: '2박3일'  },
 ];
-const ACCESS_KEY = 'iUJAIhZJ0Pq3YgEIgxl8kZ1JR2CBVrVxN0d5lZhkJh8';
+
 const ITEM3 = [
-    { icon : "https://source.unsplash.com/featured/?mountain", content : '산' },
-    { icon : "https://source.unsplash.com/featured/?beach", content : '바다' },
-    { icon : "https://source.unsplash.com/featured/?nature", content : "자연" },
-    { icon : "https://source.unsplash.com/featured/?indoor", content : "실내여행지" },
-    { icon : "https://source.unsplash.com/featured/?cafe", content : "카페" },
-    { icon : "https://source.unsplash.com/featured/?restaurant", content : "식당" },
-    { icon : "https://source.unsplash.com/featured/?shopping", content : "쇼핑" },
-    { icon : "https://source.unsplash.com/featured/?adventure", content : "액티비티" },
-    { icon : "https://source.unsplash.com/featured/?theme park", content : "테마파크" },
-    { icon : "https://source.unsplash.com/featured/?museum", content : "문화역사" },
-    { icon : "https://source.unsplash.com/featured/?trandition", content : "전통시장" },
-    { icon : "https://source.unsplash.com/featured/?festival", content : "축제" }
+    { icon : "", content : '산' },
+    { icon : "", content : '바다' },
+    { icon : "", content : "자연" },
+    { icon : "", content : "실내여행지" },
+    { icon : "", content : "카페" },
+    { icon : "", content : "식당" },
+    { icon : "", content : "쇼핑" },
+    { icon : "", content : "액티비티" },
+    { icon : "", content : "테마파크" },
+    { icon : "", content : "문화역사" },
+    { icon : "", content : "전통시장" },
+    { icon : "", content : "축제" }
+];
+
+
+const THEME = [
+    { term : 'mountain' },
+    { term : 'beach' },
+    { term : 'nature' },
+    { term : 'indoor' },
+    { term : 'cafe' },
+    { term : 'restaurant' },
+    { term : 'shopping' },
+    { term : 'adventure' },
+    { term : 'theme park' },
+    { term : 'museum' },
+    { term : 'tradition' },
+    { term : 'festival' },
 ];
 
 export default ChoosePreference;
