@@ -44,7 +44,7 @@ function TravelDetailPage({modalContentId}) {
             script.onload = () => {
                 const mapOptions = {
                     center: new window.naver.maps.LatLng(data.mapy, data.mapx),
-                    zoom: 200
+                    zoom: 17
                 };
 
                 const map = new window.naver.maps.Map('map', mapOptions);
