@@ -136,6 +136,7 @@ public class TravelController {
                 i++;
             }
             System.out.println("TravelController : 아리아코드 널 아님" + areacode);
+            System.out.println("userWishMap "+userWishMap);
         }
 
         return userWishMap;

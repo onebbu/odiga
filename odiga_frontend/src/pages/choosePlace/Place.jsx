@@ -115,7 +115,7 @@ function ListPlace({areacode, order, theme}) {
     };
 
     const handleShowMore = () => {
-        setDisplayStart(prevDisplayStart => prevDisplayStart + 8);
+        setDisplayStart(prevDisplayStart => prevDisplayStart + 12);
     };
 
     useEffect(() => {
@@ -154,9 +154,7 @@ function ListPlace({areacode, order, theme}) {
                                 ))}
                             </div>
                             <div>
-                                {dataList.length < 100 && ( // 100개 이상은 안보여줌.
                                     <button className="buttondesign" onClick={handleShowMore}> More </button>
-                                )}
                             </div>
                         </>
                     ) : ( <p>결과가 없습니다.</p> )}

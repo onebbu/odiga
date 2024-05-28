@@ -116,6 +116,7 @@ function ChoosePreference() {
     useEffect(() => {
         const exclusions = regionExclusions[selectedValues.region] || [];
         const newFilteredITEM3 = filteredITEM3.filter(item => !exclusions.includes(item.content));
+        setSelectedValues(prevValues => ({ ...prevValues, theme: [] }));
         setFilteredITEM3(newFilteredITEM3);
     }, [selectedValues.region]);
 
