@@ -122,6 +122,7 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
                 setReviewComment('');
                 setReviewGrade(0);
                 onReviewSubmitted();
+                onsetLike();
             })
             .catch(error => {
                 console.error('에러 :', error);

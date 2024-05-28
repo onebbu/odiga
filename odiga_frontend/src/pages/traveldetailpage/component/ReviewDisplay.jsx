@@ -65,6 +65,7 @@ function ReviewDisplay({ travelInfo, onsetLike }) {
             console.log('Submitting updated review:', editedRating);
             fetchReviews();
             cancelEditing();    
+            onsetLike();
         } catch (error) {
             console.error("리뷰 수정 중 오류가 발생했습니다:", error);
         }
@@ -76,6 +77,7 @@ function ReviewDisplay({ travelInfo, onsetLike }) {
             try {
                 await axios.post(`/ReviewDelete/${reviewno}`);
                 fetchReviews();
+                onsetLike();
             } catch (error) {
                 console.error("리뷰 삭제 중 오류가 발생했습니다:", error);
             }

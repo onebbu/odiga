@@ -38,9 +38,10 @@ public class CourseReviewController {
         courseReviewService.boardGrade(boardNo);
     }
 
-    @PostMapping("/coursereview/commentDel")
-    public void commentDel(@RequestBody CommentsVO commentsVO) {
+    @PostMapping("/coursereview/commentDel/{boardNo}")
+    public void commentDel(@PathVariable int boardNo, @RequestBody CommentsVO commentsVO) {
         courseReviewService.commentDel(commentsVO);
+        courseReviewService.boardGrade(boardNo);
     }
 
     @PostMapping("/coursereview/commentEdit")
@@ -67,6 +68,7 @@ public class CourseReviewController {
 
     @PutMapping("/coursereview/update/{boardNo}")
     public void courseReviewEdit(@RequestBody CourseReviewVO CourseReviewVO) {
+        System.out.println("작동");
         courseReviewService.courseReviewEdit(CourseReviewVO);
     }
 
