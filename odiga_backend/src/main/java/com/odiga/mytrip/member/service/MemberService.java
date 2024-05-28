@@ -1,21 +1,16 @@
 package com.odiga.mytrip.member.service;
 
-
 import com.odiga.mytrip.member.dao.MemberDAO;
 import com.odiga.mytrip.member.vo.LoginRequest;
 import com.odiga.mytrip.member.vo.Member;
 import com.odiga.mytrip.member.vo.JoinRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberService {

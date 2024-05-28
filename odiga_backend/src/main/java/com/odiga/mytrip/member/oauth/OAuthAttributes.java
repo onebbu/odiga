@@ -4,9 +4,6 @@ import com.odiga.mytrip.member.vo.Member;
 import com.odiga.mytrip.member.vo.Role;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-
-import java.util.HashMap;
 import java.util.Map;
 
 @Getter

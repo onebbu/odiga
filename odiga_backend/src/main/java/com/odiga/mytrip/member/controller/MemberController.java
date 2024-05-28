@@ -1,29 +1,20 @@
 package com.odiga.mytrip.member.controller;
 
-
 import com.odiga.mytrip.member.jwt.JWTUtil;
 import com.odiga.mytrip.member.oauth.SessionMember;
 import com.odiga.mytrip.member.service.MemberService;
 import com.odiga.mytrip.member.vo.JoinRequest;
 import com.odiga.mytrip.member.vo.LoginRequest;
 import com.odiga.mytrip.member.vo.Member;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 @Slf4j

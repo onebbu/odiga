@@ -44,7 +44,7 @@ const Drawer = ({ isOpen, onClose, loginInfo, areacode }) => {
         }
       });
       setLikeInfo(response.data);
-      console.log("likeInfo 저장함? " + likeInfo);
+      console.log("likeInfo 코스키 " + likeInfo[0].courseKey);
         
     } catch (error) {
         console.error('좋아요 목록 가져오기 실패:', error);

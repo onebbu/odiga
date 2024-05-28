@@ -1,6 +1,5 @@
 package com.odiga.mytrip.member.dao;
 
-import com.odiga.mytrip.member.oauth.OAuthAttributes;
 import com.odiga.mytrip.member.vo.Member;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

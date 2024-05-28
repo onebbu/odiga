@@ -3,7 +3,6 @@ package com.odiga.mytrip.member.jwt;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +11,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
-@Slf4j
 @Component
 public class JWTUtil {
 
@@ -49,8 +47,6 @@ public class JWTUtil {
     // 토큰 생성 메서드
     public String createJwt(String email, String role, Long expiredMs) {
         // 토큰 생성, 삭제
-        Date issuedAt = new Date(System.currentTimeMillis());
-        Date expiration = new Date(System.currentTimeMillis() + expiredMs);
 
         return Jwts.builder()
                 .claim("email", email)

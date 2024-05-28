@@ -5,7 +5,6 @@ import com.odiga.mytrip.member.dao.MemberDAO;
 import com.odiga.mytrip.member.vo.Member;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -21,7 +20,6 @@ import java.util.Collections;
 
 // 구글 로그인 이후 가져온 사용자의 정보(email, name, picture 등)를 기반으로 가입 및 정보 수정, 세션 저장 기능 등의 기능을 수행
 // /oauth2/authorization/google
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
