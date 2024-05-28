@@ -246,24 +246,22 @@ html, body {
 .cardUserTitle h6 {
     font-family: 'JalnanGothic', sans-serif;
     margin: 0;
-    white-space: nowrap; /* h5 요소에도 추가해봅니다 */
-    overflow: hidden; /* h5 요소에도 추가해봅니다 */
-    text-overflow: ellipsis; /* h5 요소에도 추가해봅니다 */
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
 }
 
-/* 텍스트 초과시 말줄임표 문제 해결해야함  */
 .cardUserDescription {
     width: 100%;
     max-height: 65px;
     color: #666;
     overflow: hidden;
     padding-left: 5px;
-    display: -webkit-box; /* Flexbox 기반 레이아웃으로 변경 */
-    -webkit-box-orient: vertical; /* 수직 박스 레이아웃 */
-    -webkit-line-clamp: 2; /* 두 줄로 제한 */
-    line-clamp: 2; /* 표준 속성 */
+    display: -webkit-box; 
+    -webkit-box-orient: vertical; 
+    -webkit-line-clamp: 2; 
+    line-clamp: 2; 
 }
-
 
 .cardCategory {
     color: #007bff;
