@@ -147,12 +147,13 @@ function validateParams(params) {
       axios.post("/MyCourseDisplay", { nickname: loginInfo.nickname })
         .then((response) => {
           const coursesData = Array.isArray(response.data) ? response.data : [];
-          const courseNONO = response.data.filter(data => data.courseno === response.data[0].courseno);
+          const courseNO = response.data.filter(data => data.courseno === response.data[0].courseno);
           setUserData(coursesData);
           if (response.data.length > 0) {
             setAreacode(response.data[0].areacode);
             console.log("Areacode:", response.data[0].areacode);
-            console.log("여행 코스를 성공적으로 가져왔습니다.response.data[0].coursno ", courseNONO);
+            console.log("여행 코스를 성공적으로 가져왔습니다.", courseNO);
+            setCosNo(response.data[0].courseno);
             setSelectedCourse(response.data.filter(data => data.courseno === response.data[0].courseno));
             setMainImage(response.data[0].firstimage);
             handleImageClick(response.data[0].mapx , response.data[0].mapy ,response.data[0].title , response.data[0].addr1 , response.data[0].firstimage ,response.data[0].contentid)
