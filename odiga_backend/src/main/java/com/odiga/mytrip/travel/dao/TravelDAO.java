@@ -19,9 +19,9 @@ public interface TravelDAO {
     void reviewUpdate(int reviewno , String reviewcomment , int reviewgrade);
     void reviewDelete(String reviewno);
     void wishPlus(String contentid , String email , String nickname);
-    void wishDelete(String contentid , String email , String nickname);
+    void wishDelete(String contentid , String nickname);
     String travelGradeAvg(String contentId);
     List<WishVO> selectAllWish(String nickname);
     List<WishVO> selectWishforRegion(String nickname, String areacode);
-    int wishUserInfo(int contentid , String email);
+    int wishUserInfo(int contentid , String nickname);
 }

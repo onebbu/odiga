@@ -221,7 +221,7 @@ const ITEM2 = [
     { icon: date2 , content: '1박2일', code: '1박2일'  },
     { icon: date3 , content: '2박3일', code: '2박3일'  },
 ];
-
+const ACCESS_KEY = 'iUJAIhZJ0Pq3YgEIgxl8kZ1JR2CBVrVxN0d5lZhkJh8';
 const ITEM3 = [
     { icon : "https://source.unsplash.com/featured/?mountain", content : '산' },
     { icon : "https://source.unsplash.com/featured/?beach", content : '바다' },

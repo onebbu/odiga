@@ -230,38 +230,38 @@ function SearchLocation() {
     return (
         <div className="search-container">
             <div className="search-map">
-                    <svg xmlns={southKorea} viewBox="0 0 524 631">
-                        {/* 각 도시 경로에 툴팁과 이벤트 핸들러 추가 */}
-                        {mapData && mapData.map((city) => (
-                            <path
-                                key={city.localeNum}
-                                id={city.locale}
-                                name={city.locale}
-                                d={mapPath[city.locale]}
-                                onClick={() => handleAreaCode(city.localeNum)}
-                                fill={setColorByCount(city.count)}
-                                stroke="#777777"
-                                onMouseOver={(e) => handleMouseOver(e, city.locale, city.count)}
-                                onMouseOut={handleMouseOut}
-                                className={`${areaCode == city.localeNum ? 'active' : ''}`}
-                            />
-                        ))}
-                    </svg>
-                    {tooltip.show && (
-                        <div style={{
-                                position: 'absolute',
-                                left: tooltip.x,
-                                top: tooltip.y,
-                                backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                                color: '#fff',
-                                padding: '5px',
-                                borderRadius: '5px',
-                                zIndex: 9999,
-                            }}
-                        >
-                            <div>{tooltip.cityName}: {tooltip.count}건</div>
-                        </div>
-                    )}
+                <svg xmlns={southKorea} viewBox="0 0 524 631">
+                    {/* 각 도시 경로에 툴팁과 이벤트 핸들러 추가 */}
+                    {mapData && mapData.map((city) => (
+                        <path
+                            key={city.localeNum}
+                            id={city.locale}
+                            name={city.locale}
+                            d={mapPath[city.locale]}
+                            onClick={() => handleAreaCode(city.localeNum)}
+                            fill={setColorByCount(city.count)}
+                            stroke="#777777"
+                            onMouseOver={(e) => handleMouseOver(e, city.locale, city.count)}
+                            onMouseOut={handleMouseOut}
+                            className={`${areaCode == city.localeNum ? 'active' : ''}`}
+                        />
+                    ))}
+                </svg>
+                {tooltip.show && (
+                    <div style={{
+                        position: 'absolute',
+                        left: tooltip.x,
+                        top: tooltip.y,
+                        backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                        color: '#fff',
+                        padding: '5px',
+                        borderRadius: '5px',
+                        zIndex: 9999,
+                    }}
+                    >
+                        <div>{tooltip.cityName}: {tooltip.count}건</div>
+                    </div>
+                )}
             </div>
             <div className="search-wrap">
                 <div className="search-page">
@@ -346,13 +346,13 @@ const Rate = styled.div `width: 80px; height: 22px; color:white; background-colo
           display:inline; font-size:10px;
           color: #80a1cd; /* 원하는 색상으로 변경 */
         }
-`; 
-    const P = styled.div`display: inline;
+`;
+const P = styled.div`display: inline;
       font-size: 12px;
       color: #909090;
       margin-right: 10px;
       margin-left: 10px;`;
-      
+
 const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, cntRating}) => {
 
     const catColors = {
@@ -378,34 +378,33 @@ const Place = ({index, contentid, firstImage, title, addr1, cat3, averageRate, c
 
     return (
         <div key={index} className="search-result-card" >
-                <div style={{ display: "flex", width: '100%' }}>
+            <div style={{ display: "flex", width: '100%' }}>
 
-                    <a href={`/detail/${contentid}`}>
-                        <img src={firstImage}
-                             style={{ width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px' }}/>
-                    </a>
-                    <div style={{ display: "block", width: '100%' }}>
-                        <div style={{ display: "flex",justifyContent:'space-between' }}>
-                            <div> {title} 
+                <a href={`/detail/${contentid}`}>
+                    <img src={firstImage}
+                         style={{ width: '90px', height: '90px', borderRadius: '100px', marginRight: '30px' }}/>
+                </a>
+                <div style={{ display: "block", width: '100%' }}>
+                    <div style={{ display: "flex",justifyContent:'space-between' }}>
+                        <div> {title}
 
-                                <strong style={{
-                                    backgroundColor, color,
-                                    fontSize: '75%',
-                                    fontFamily: "GmarketSansMedium",
-                                    fontWeight: '300',
-                                    padding: '0.25em 0.5em',
-                                    borderRadius: "8px",
-                                    marginLeft: '10px'
-                                }}>{cat3}</strong>
-                            </div>
-                            <div style={{right: "0"}}>
-                                <Rate>{averageRate}<p>/5</p></Rate><P>/{cntRating}개</P>
-                            </div>
+                            <strong style={{
+                                backgroundColor, color,
+                                fontSize: '75%',
+                                fontFamily: "GmarketSansMedium",
+                                fontWeight: '300',
+                                padding: '0.25em 0.5em',
+                                borderRadius: "8px",
+                                marginLeft: '10px'
+                            }}>{cat3}</strong>
                         </div>
-                        <P>{addr1}</P>
+                        <div style={{right: "0"}}>
+                            <Rate>{averageRate}<p>/5</p></Rate><P>/{cntRating}개</P>
+                        </div>
                     </div>
+                    <P>{addr1}</P>
                 </div>
+            </div>
         </div>
     )
 }
-

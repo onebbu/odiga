@@ -2,7 +2,6 @@ package com.odiga.mytrip.search.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +31,12 @@ public class SearchController {
             @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
         
         Map<String, Object> searchQuery = new HashMap<>();
-        List<String> catList = new ArrayList<String>();
+        List<String> catList = new ArrayList<>();
         if (catcode != null && catcode.length() > 0){
             String[] catCodeList = catcode.split(",");
             for(int i = 0; i < catCodeList.length; i++ ){
                 catList.add(catCodeList[i]);
+                System.out.println("catList length" + catList.size());
             } 
             searchQuery.put("catList", catList);
         }
@@ -53,7 +53,6 @@ public class SearchController {
         System.out.println("Controller::::::::: searchQuery" + searchQuery.toString());
         try {
             List<SearchVO> searchList = searchService.SearchList(searchQuery);
-        //    int resultCount = searchService.resultCount(searchQuery);
             searchQuery.put("catcode",catList);
             int resultCount = searchService.getAreaResultCount(searchQuery);
             Map<String, Object> searchResult = new HashMap<>(); // 검색 결과와 결과 개수를 담을 Map 생성

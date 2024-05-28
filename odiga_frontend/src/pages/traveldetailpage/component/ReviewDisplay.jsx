@@ -5,34 +5,22 @@ import ReviewImportForm from './ReviewImportForm';
 import {useParams} from 'react-router-dom';
 import {LoginInfoContext} from "../../login/LoginInfoProvider";
 
-function ReviewDisplay({travelInfo, modalContentId}) {
-    const {contentID} = useParams();
+function ReviewDisplay({ travelInfo, onsetLike }) {
+    const {contentID} = useParams(); // 얘 있으면 modalcontId 도 locaContId 도 다 필요없어서 지워버림 -규
     const [reviews, setReviews] = useState([]);
     const [editingId, setEditingId] = useState(null);
     const [editedContent, setEditedContent] = useState('');
     const [editedRating, setEditedRating] = useState(0);  
     const loginInfo = useContext(LoginInfoContext);
 
-    const [locaContId, setLocaContId] = useState("");
-
-    useEffect(() => {
-        if (typeof modalContentId === "undefined" || modalContentId === "") {
-            setLocaContId(contentID);
-        } else {
-            setLocaContId(modalContentId);
-        }
-    }, [modalContentId]);
-
     useEffect(() => {
         fetchReviews();
-        console.log(reviews);
-    }, [locaContId]);
-
+    }, []);
 
     const fetchReviews = async () => {
         try {
-            if (typeof locaContId !== "undefined" && locaContId !== "") {
-                const response = await axios.get(`/reviews/${locaContId}`);
+            if (contentID != null) {
+                const response = await axios.get(`/reviews/${contentID}`);
                 setReviews(response.data);
             }
         } catch (error) {
@@ -55,7 +43,6 @@ function ReviewDisplay({travelInfo, modalContentId}) {
     };
 
     const startEditing = (review) => {
-        console.log(review);
         setEditingId(review.reviewno);
         setEditedContent(review.reviewcomment);
         setEditedRating(review.reviewgrade); 
@@ -101,7 +88,7 @@ function ReviewDisplay({travelInfo, modalContentId}) {
 
     return (
         <section id="review-display" className="reviewDisplay">
-            <ReviewImportForm onReviewSubmitted={handleNewReview} modalContentId={locaContId}/>
+            <ReviewImportForm onReviewSubmitted={handleNewReview} loginInfo={loginInfo} onsetLike={onsetLike} />
             <div className="averageRatingInner">
                 <h4> Comment ! </h4>
                 {travelInfo ? ( // travelInfo가 존재하는 경우에만 렌더링
