@@ -151,23 +151,22 @@ public class TravelService {
         travelDAO.reviewDelete(reviewno);
     }
     @Transactional
-    public void wish(String contentid , String email , String nickname){
-        travelDAO.wishPlus(contentid, email, nickname);
+    public void wish(String contentid, String email , String nickname){
+        travelDAO.wishPlus(contentid, email , nickname);
     }
     @Transactional
-    public void WishDelete(String contentid , String email , String nickname){
-        travelDAO.wishDelete(contentid, email, nickname);
+    public void WishDelete(String contentid, String nickname){
+        travelDAO.wishDelete(contentid, nickname);
     }
 
     public String TravelGradeAvg(String contentid){
         return travelDAO.travelGradeAvg(contentid);
     }
-    public boolean WishUserInfo(Integer contentid, String email) {
-        if (contentid != null && travelDAO.wishUserInfo(contentid, email) == 1) {
+    public boolean WishUserInfo(Integer contentid, String nickname) {
+        if(travelDAO.wishUserInfo(contentid, nickname) >= 1){
             return true;
-        } else {
-            return false;
         }
+        else return false;
     }
     @Transactional
     public List<WishVO> selectAllWish(String nickname){

@@ -62,6 +62,7 @@ public class CourseReviewController {
     public void articleDelete(@PathVariable int boardNo) {
         System.out.println("삭제요청");
         courseReviewService.articleDelete(boardNo);
+        courseReviewService.updateCourseWriteYN(boardNo);
     }
 
     @PutMapping("/coursereview/update/{boardNo}")

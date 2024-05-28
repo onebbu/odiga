@@ -23,7 +23,7 @@
             <otherwise></otherwise>
         </choose>
         <choose>
-            <when test="catList != null">
+            <when test="catList != null and catList.size() > 0">
                 AND TL.CAT3 IN
                 <foreach item="code" collection="catList" open="(" separator="," close=")">
                     #{code}
@@ -108,7 +108,7 @@
         WHERE areacode = #{areacode}
         and title LIKE '%' || #{text,jdbcType=VARCHAR} || '%'
         <choose>
-            <when test="catcode != null ">
+            <when test="catcode != null and catcode.size() > 0">
                 AND cat3 IN
                 <foreach item="code" collection="catcode" open="(" separator="," close=")">
                     #{code}

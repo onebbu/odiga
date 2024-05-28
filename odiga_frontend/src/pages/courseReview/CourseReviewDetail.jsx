@@ -24,7 +24,7 @@ function CourseReviewDetail() {
   const loginInfo = useContext(LoginInfoContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
-  const [editedTitle, setEditedTitle] = useState("");
+  const [editedTitle, setEditedTitle] = useState(detailsData?.[0]?.boardTitle);
 
     const location = useLocation();
     const { pathname: from } = location;
@@ -118,6 +118,13 @@ function CourseReviewDetail() {
     setEditedContent(content);
   };
 
+  const handleTitleChange = (event) => {
+    setEditedTitle(event.target.value);
+    if(editedTitle.length > 20){
+      alert("제목은 최대 20글자까지 가능합니다.");
+    }
+  };
+
   const handleSave = async () => {
     const confirmSave = window.confirm("수정한 내용을 저장하시겠습니까?");
     if (confirmSave) {
@@ -174,8 +181,8 @@ function CourseReviewDetail() {
               {isEditing ? (
                 <input
                   type="text"
-                  value={detailsData?.[0]?.boardTitle}
-                  onChange={(e) => setEditedTitle(e.target.value)}
+                  value={editedTitle}
+                  onChange={handleTitleChange}
                 />
               ) : (
                 detailsData?.[0]?.boardTitle

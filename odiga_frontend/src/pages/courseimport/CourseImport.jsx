@@ -32,7 +32,10 @@ function CourseImport() {
 
 
   const handleTitleChange = (event) => {
-    setTitle(event.target.value); 
+    setTitle(event.target.value);
+    if(title.length > 20){
+      alert("제목은 최대 20글자까지 가능합니다.");
+    }
   };
 
   useEffect(() => {
@@ -60,44 +63,83 @@ function CourseImport() {
     '6': '부산',
     '7': '울산',
     '8': '세종',
-    '31': '경기도',
-    '32': '강원도',
-    '33': '충청북도',
-    '34': '충청남도',
-    '35': '경상북도',
-    '36': '경상남도',
-    '37': '전라북도',
-    '38': '전라남도',
-    '39': '제주도'
+    '31': '경기',
+    '32': '강원',
+    '33': '충북',
+    '34': '충남',
+    '35': '경북',
+    '36': '경남',
+    '37': '전북',
+    '38': '전남',
+    '39': '제주'
   };
 
   const getAreaName = (code) => {
     return areaCodeToName[code] || "대한민국"; 
   };
 
+  // 필수 매개변수
+const requiredParams = {
+  boardTitle: title,
+  boardContent: boardContent,
+  mainimage: MainImage,
+  areacode: areacode,
+  nickname: loginInfo.nickname,
+  email: loginInfo.email,
+  courseno: cosNo
+};
+
+// 키값과 한글 메시지 매핑 객체
+const paramNamesInKorean = {
+  boardTitle: "제목",
+  boardContent: "내용",
+  mainimage: "메인 이미지",
+  areacode: "지역 코드",
+  nickname: "닉네임",
+  email: "이메일",
+  courseno: "코스 번호"
+};
+
+// 필수 매개변수 검증 함수
+function validateParams(params) {
+  for (const [key, value] of Object.entries(params)) {
+      if (value === undefined || value === null || value === "") {
+        alert(`[${paramNamesInKorean[key]}]을/를 채워주세요.`);
+        return false;
+      }
+  }
+  return true;
+}
+
   const courseImport = () => {
     const areaName = getAreaName(areacode);
     const fullTitle = `[${areaName}] ${title}`;
-    axios.post("/courseimport", {
-      boardTitle: fullTitle,
-      boardContent: boardContent,
-      mainimage: MainImage,
-      tags: tags,
-      areacode: areacode,
-      nickname: loginInfo.nickname,
-      email: loginInfo.email,
-      courseno: cosNo
-    })
-    .then((response) => {
-      console.log(response, "가 전송됐습니다.");
-      alert("여행코스 후기를 작성하였습니다.");
-      // response.data에 boardNo가 포함되어 있다고 가정
-      const boardNo = response.data;
-      navigate(`/coursereview/detail/${boardNo}`);
-    })
-    .catch((error) => {
-      console.error("POST 요청이 실패했습니다:", error);
-    });
+    const isConfirmed = window.confirm(`저장하시겠습니까?`);
+          if (isConfirmed) {
+            if (validateParams(requiredParams)){
+              axios.post("/courseimport", {
+                boardTitle: fullTitle,
+                boardContent: boardContent,
+                mainimage: MainImage,
+                tags: tags,
+                areacode: areacode,
+                nickname: loginInfo.nickname,
+                email: loginInfo.email,
+                courseno: cosNo
+              })
+              .then((response) => {
+                console.log(response, "가 전송됐습니다.");
+                alert("여행코스 후기를 작성하였습니다.");
+                // response.data에 boardNo가 포함되어 있다고 가정
+                const boardNo = response.data;
+                navigate(`/coursereview/detail/${boardNo}`);
+              })
+              .catch((error) => {
+                console.error("POST 요청이 실패했습니다:", error);
+              });
+            }
+          } else { alert("취소되었습니다."); }
+    
   };
 
   const fetchTravelCourse = () => {
@@ -105,12 +147,13 @@ function CourseImport() {
       axios.post("/MyCourseDisplay", { nickname: loginInfo.nickname })
         .then((response) => {
           const coursesData = Array.isArray(response.data) ? response.data : [];
+          const courseNO = response.data.filter(data => data.courseno === response.data[0].courseno);
           setUserData(coursesData);
-          console.log("여행 코스를 성공적으로 가져왔습니다.", response.data);
-          if (response.data.length > 0) {     
+          if (response.data.length > 0) {
             setAreacode(response.data[0].areacode);
+            console.log("Areacode:", response.data[0].areacode);
+            console.log("여행 코스를 성공적으로 가져왔습니다.", courseNO);
             setCosNo(response.data[0].courseno);
-            console.log("Areacode:", response.data[0].areacode); 
             setSelectedCourse(response.data.filter(data => data.courseno === response.data[0].courseno));
             setMainImage(response.data[0].firstimage);
             handleImageClick(response.data[0].mapx , response.data[0].mapy ,response.data[0].title , response.data[0].addr1 , response.data[0].firstimage ,response.data[0].contentid)
@@ -128,6 +171,7 @@ function CourseImport() {
       setTitle("");
       setAreacode(userCourseNO[0].areacode);
       console.log("Selected Areacode:", userCourseNO[0].areacode);
+      setCosNo(courseno);
       handleImageClick(userCourseNO[0].mapx ,userCourseNO[0].mapy , userCourseNO[0].title , userCourseNO[0].addr1 , userCourseNO[0].firstimage , userCourseNO[0].contentid); 
     }
     setSelectedCourse(userCourseNO);
@@ -263,7 +307,7 @@ function CourseImport() {
                 </div>
               ))}
             </div>
-            <div id="travelCourseMap" className="travelCourseMap"></div>
+            <div id="travelCourseMap" className="travelCourseMap" ></div>
           </div>
         </section>
         <section className="buttonBox">       

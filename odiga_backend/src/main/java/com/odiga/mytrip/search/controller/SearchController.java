@@ -31,11 +31,12 @@ public class SearchController {
             @RequestParam(value = "catcode", required = false) String catcode) throws IOException {
         
         Map<String, Object> searchQuery = new HashMap<>();
-        List<String> catList = new ArrayList<String>();
+        List<String> catList = new ArrayList<>();
         if (catcode != null && catcode.length() > 0){
             String[] catCodeList = catcode.split(",");
             for(int i = 0; i < catCodeList.length; i++ ){
                 catList.add(catCodeList[i]);
+                System.out.println("catList length" + catList.size());
             } 
             searchQuery.put("catList", catList);
         }
