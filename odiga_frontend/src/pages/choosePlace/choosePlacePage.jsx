@@ -29,9 +29,9 @@ const Wrapper=Styled.div` display: flex; min-height: 100vh;`;
 const AccordionWrap=Styled.div`width:100%;`;
 const Section=Styled.div` position: relative; border: 1px solid #ccc; width: 75%; gap: 20px;
     display: flex; flex-direction: column; width:80%; padding: 16px;`;
-const OpenButton = Styled.button`position: fixed; top: 100px; right: 100px; width: 200px; height: 60px;
+const OpenButton = Styled.button`position: fixed; top: ${({ top }) => top}px; right: 100px; width: 200px; height: 60px;
     background-color: #549C9B; /* Green */ border: none; border-radius: 0 0 10px 10px; cursor: pointer; outline: none;
-    transition: background-color 0.3s ease; color: white; text-weight: border; font-size: 20px;
+    transition: top 0.3s;  color: white; text-weight: border; font-size: 20px;
     &:hover {  background-color: #417977; /* Darker green on hover */ } `;
 const Position = Styled.div`position:relative; width:25%; height: 100vh;`;
 
@@ -94,7 +94,6 @@ const ChoosePlace = () => {
 
     window.addEventListener("load", handleLoad);
 
-
     setSelectedValues(location.state);
      // 선택한 값이 모두 채워져 있는지 확인하고 targetArea, targetDura, targetTheme 설정
     if (selectedValues && selectedValues.region && selectedValues.duration && selectedValues.theme.length >= 2) {
@@ -113,6 +112,23 @@ const ChoosePlace = () => {
 
   }, [location.state, selectedValues]); 
 
+  const [buttonTop, setButtonTop] = useState(100);
+
+  const handleScroll = () => {
+    if (window.scrollY > 100) {
+      setButtonTop(0);
+    } else {
+      setButtonTop(100);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
+
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
     window.scrollTo({
@@ -127,7 +143,7 @@ const ChoosePlace = () => {
       <Wrapper>
         <CustomizedAccordions duration={targetDura} loginInfo={loginInfo} />
             <Section>  
-              <OpenButton onClick={toggleDrawer}>찜 목록 열기</OpenButton>
+              <OpenButton top={buttonTop} onClick={toggleDrawer}>찜 목록 열기</OpenButton>
               <Drawer isOpen={isDrawerOpen} onClose={toggleDrawer}  loginInfo={loginInfo} areacode={targetArea}/>
               <ItemsWrapper targetAreacode={targetArea}
                             targetTheme={targetTheme}
@@ -152,6 +168,7 @@ const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
     themeName: theme,
     themebackgroundColor: catColors[theme]?.backgroundColor || 'gray',
 }));
+  
   const Orderbtn = ({name, orderID }) => {
     return (
       <div  onClick={()=>setOrder(orderID)} style={{cursor:"pointer", display:"inline", padding:'7px'}}>
@@ -175,8 +192,8 @@ const ItemsWrapper = ({targetAreacode, targetTheme, loginInfo}) => {
                 padding: '0.5em',
                 marginRight:'8px',
                 borderRadius: "8px"
-            }}>
-                {themeItem.themeName}  
+            }} >
+                {themeItem.themeName}
             </span>
           ))}
       </div>

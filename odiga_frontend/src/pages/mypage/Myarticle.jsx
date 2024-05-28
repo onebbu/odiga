@@ -62,13 +62,17 @@ function Myarticle() {
                                     </LikeBadge>
                                     <Card.Body>
                                         <Card.Title>
-                                            {articleList[articleKey].boardTitle}
+                                            <p
+                                                style={{
+                                                    fontFamily: "JalnanGothic",
+                                                    fontSize: "18px"
+                                                }}>{articleList[articleKey].boardTitle}</p>
                                         </Card.Title>
                                         <Card.Text>
                                             <StackContainer direction="horizontal" gap={2}>
-                                                {articleList[articleKey]?.tags && articleList[articleKey].tags.split(" ").map((word, index) => (
+                                                {articleList[articleKey]?.tags ? articleList[articleKey].tags.split(" ").map((word, index) => (
                                                     <HashBadge bg="" key={index}>{word}</HashBadge>
-                                                ))}
+                                                )) :  <HashBadge>#태그없음</HashBadge>}
                                             </StackContainer>
                                         </Card.Text>
                                     </Card.Body>
@@ -125,10 +129,17 @@ const LikeBadge = styled(Badge)`
   right: 0.3rem;
 `;
 
-const HashBadge = styled(Badge)`
-  font-size: 0.6rem;
-  background-color: #A9A9A9;
+const HashBadge = styled.strong`
+  font-size: 60%;
+  font-family: "GmarketSansMedium";
+  font-weight: 300;
+  padding: 0.25em 0.5em;
+  border-radius: 8px;
+  text-align: right;
+  color: white;
+  background-color: grey;
 `;
+
 
 const Message = styled.div`
   text-align: center;

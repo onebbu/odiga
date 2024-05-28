@@ -26,6 +26,7 @@
             TRAVELLIST t ON r.CONTENTID = t.CONTENTID
         WHERE 
             r.nickname = #{nickname}
+            and r.COURSEYN = 'Y'
     </select>
     <insert id="saveCourseData" parameterType="com.odiga.mytrip.course.vo.CourseImportVO" >
         <selectKey keyProperty="boardNo" resultType="int" order="BEFORE">

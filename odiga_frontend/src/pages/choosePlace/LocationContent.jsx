@@ -7,6 +7,7 @@ import axios from "axios";
 import { red } from '@mui/material/colors';
 import PlaceIcon from '@mui/icons-material/Place';
 import TravelDetailPage from "../traveldetailpage/TravelDetailPage";
+import TravelDetailView from "./TravelDetailView";
 
 
 function LocationContent({ show, handleClose, contentId}) {
@@ -102,8 +103,8 @@ function LocationContent({ show, handleClose, contentId}) {
                     <p style={{color:"#808080", fontSize: "1rem"}}> <FavoriteIcon sx={{ color: red[500], fontSize:"medium" }} /> {likeCount} </p>
                 </Modal.Title>
             </Modal.Header>
-            <Modal.Body style={{ textAlign: 'center', fontFamily: "GmarketSansMedium"}}>
-                <TravelDetailPage modalContentId={contentId}/>
+            <Modal.Body style={{left:"-15%", textAlign: 'center', fontFamily: "GmarketSansMedium", width: "130%"}}>
+                <TravelDetailView modalContentId={contentId}/>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>Close</Button>
