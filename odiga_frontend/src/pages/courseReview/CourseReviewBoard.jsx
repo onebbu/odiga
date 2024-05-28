@@ -39,7 +39,7 @@ const Place = ({
             <br/>
             <Rate>{boardGrade !== undefined && boardGrade !== null
                 ? boardGrade.toFixed(1)
-                : "평가 없음"}<RateP>/5</RateP></Rate><P>/리뷰 {boardLikeCount}개</P>
+                : "평가 없음"}<RateP>/5</RateP></Rate><P>/조회수 {boardViewCount}개</P>
         </div>
     );
 };
