@@ -7,14 +7,13 @@ import './slick.css';
 import './slick-theme.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function TravelDetailPage({ modalContentId }) {
     const [likes, setLikes] = useState(0);
     const [data, setData] = useState(null);
     const [imgs, setImgs] = useState([]);
     const [views, setViews] = useState(0);
-    const navigate = useNavigate();
     const { contentID } = useParams();
     const [locaContId, setLocaContId] = useState("");
 
@@ -64,8 +63,6 @@ function TravelDetailPage({ modalContentId }) {
 
                 const marker = new window.naver.maps.Marker(markerOptions);
 
-            
-
             };
             document.body.appendChild(script);
             return () => {
@@ -95,7 +92,7 @@ function TravelDetailPage({ modalContentId }) {
                         <h2>상세 정보</h2>
                         <div className="likeview">
                             <span id="view-count">👀 {views}</span>
-                            <span style={{ marginLeft: '20px' }}><FontAwesomeIcon icon={faHeart} /> {likes}</span>
+                            <span style={{ marginLeft: '20px' }}> <FontAwesomeIcon icon={faHeart} /> {likes}</span>
                         </div>
                     </div>
                     <div className="contourLine3"></div>
