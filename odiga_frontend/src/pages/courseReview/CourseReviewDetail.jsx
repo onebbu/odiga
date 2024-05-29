@@ -267,6 +267,7 @@ function CourseReviewDetail() {
             alignItems: "center",
           }}
         >
+          
           <div style={{ flex: "1" }}>
             <h4>
               <FontAwesomeIcon icon={faQuoteLeft} size="2x" /> &nbsp; 해당
