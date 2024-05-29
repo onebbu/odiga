@@ -19,7 +19,7 @@ import Comments from "./Comments";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
 import CourseReviewCourse from "./CourseReviewCourse";
 import CustomEditor from "./CustomEditor";
-import './CourseReviewDetail.css';
+import HashtagInput from "../courseimport/HashtagInput";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -32,6 +32,8 @@ function CourseReviewDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
+  const [tags, setTags] = useState(null);
+  const [hashtags, setHashtags] = useState(null); // 태그 상태 추가
 
   const location = useLocation();
   const { pathname: from } = location;
@@ -155,7 +157,8 @@ function CourseReviewDetail() {
         await axios.put(`/coursereview/update/${boardNo}`, {
           boardTitle: editedTitle,
           boardContent: editedContent,
-          boardNo: boardNo,         
+          boardNo: boardNo,
+          tags: hashtags,
         });
         alert("수정이 완료되었습니다.");
         setIsEditing(false); // 수정 모드 종료
@@ -167,14 +170,37 @@ function CourseReviewDetail() {
     }
   };
 
-
+  const handleTagsChange = (newTags) => {
+    setHashtags(newTags); // 태그 배열 상태 업데이트
+  };
 
   return (
     <>
-      <section className="container">
-        <section className="titleInner">
-          <div className="title">
-            <h4>
+      <Container>
+        <section
+          style={{
+            width: "100%",
+            backgroundColor: "#f3f4f6",
+            margin: "0 auto",
+            marginBottom: "30px",
+          }}
+        >
+          <div
+            style={{
+              margin: "0 auto",
+              padding: "10px",
+              width: "100%",
+            }}
+            className="section-heading text-center"
+          >
+            <h4
+              style={{
+                fontFamily: "JalnanGothic",
+                fontSize: "25px",
+                padding: "10px",
+                margin: "0 auto",
+              }}
+            >
               {isEditing ? (
                 <input
                   type="text"
@@ -185,33 +211,71 @@ function CourseReviewDetail() {
                 detailsData?.[0]?.boardTitle
               )}
             </h4>
-          </div>
-        </section>        
+            <hr />
+            <h7
+              style={{
+                fontSize: "18px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              <b>작성자 :</b> {detailsData && detailsData[0].nickname}{" "}
+              &nbsp;&nbsp; &nbsp;
+              <b>작성일 :</b> {detailsData && detailsData[0].boardDate} <br />{" "}
+              <br />
+              <FontAwesomeIcon icon={faEye} /> :{" "}
+              {detailsData && detailsData[0].boardViewCount} &nbsp; &nbsp;
+              &nbsp;
+              <FontAwesomeIcon icon={faHeart} /> :{" "}
+              {detailsData && detailsData[0].boardLikeCount} &nbsp; &nbsp;
+              &nbsp;
+              <FontAwesomeIcon icon={faStar} /> :{" "}
+              {detailsData?.[0]?.boardGrade !== undefined &&
+              detailsData?.[0]?.boardGrade !== null
+                ? detailsData[0].boardGrade.toFixed(1)
+                : "평가 없음"}
+            </h7>
+            <br />
+            <hr />
 
-        <section className="Info"> 
-          <div className="UserInfoInner">
-            <div className="UserInfo">
-              <span>{detailsData && detailsData[0].nickname}</span>
-              <div className="contourLineCardInfo"></div>  
-              <span>{detailsData && detailsData[0].boardDate}</span>
-            </div>
-          </div>        
-          <div className="contentInfoInner">
-             <div className="contentInfo">
-              <span className="view">👀 : {detailsData && detailsData[0].boardViewCount} </span>
-              <span className="heart"><FontAwesomeIcon icon={faHeart} style={{color : 'red'}}/> : {detailsData && detailsData[0].boardLikeCount} </span>
-              <span className="star"> <FontAwesomeIcon icon={faStar} style={{color : 'gold'}}/> : {''}
-                     {detailsData?.[0]?.boardGrade !== undefined &&
-                     detailsData?.[0]?.boardGrade !== null
-                     ? detailsData[0].boardGrade.toFixed(1)
-                     : "평가 없음"} 
-              </span>
-             </div>
+            <h7
+              style={{
+                fontSize: "18px",
+                textAlign: "left",
+                margin: "0 auto",
+              }}
+            >
+              {isEditing ? (
+                <HashtagInput onTagsChange={handleTagsChange} />
+              ) : detailsData &&
+                detailsData[0]?.tags !== undefined &&
+                detailsData[0]?.tags !== null ? (
+                detailsData[0].tags
+              ) : (
+                "#태그 없음"
+              )}
+            </h7>
+            <hr />
           </div>
-        </section>
 
-        <section className="mainReviewInner">
-        {!isEditing ? (
+          <Div
+            style={{
+              textAlign: "left",
+              margin: "10px auto",
+              width: "98%",
+              minHeight: "30em",
+              marginBottom: "30px",
+              padding: "30px",
+              border: "1px solid #e5e5e5",
+              backgroundColor: "white",
+            }}
+          >
+            <div style={{ display: "flex" }}>
+              <div
+                className="ck ck-editor__main"
+                style={{width: "100%", wordBreak: "break-all" }}
+              >
+                {!isEditing ? (
                   <div
                     className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
                     dangerouslySetInnerHTML={{
@@ -236,85 +300,20 @@ function CourseReviewDetail() {
                     boardNo={boardNo}
                   />
                 )}
-        </section>
-
-        <section className="tagInner">
-          <div className="tag">        
-                 {detailsData &&
-                detailsData[0]?.tags !== undefined &&
-                detailsData[0]?.tags !== null ? (
-                detailsData[0].tags
-              ) : (
-                "#태그 없음"
-              )}
-          </div>
-        </section>
-
-        <section className="travelCoursebox">
-            <h5 style={{fontWeight : 'bold', marginTop :'70px', fontSize : '26px'}}>{detailsData && detailsData[0].nickname}&nbsp;님의 여행코스 정보</h5>
-          <div className="contourLinecourseReview"></div>
-          <div className="travelCourse">
+              </div>
+            </div>
+          </Div>
+          <h7
+            style={{
+              fontFamily: "JalnanGothic",
+              fontSize: "18px",
+            }}
+          >
+            {detailsData && detailsData[0].nickname}&nbsp;님의 여행코스 정보
+          </h7>
           <CourseReviewCourse detailsData={detailsData} />
-          </div>
-        </section>
 
-        <section>
-        <div
-          style={{
-            margin: "50px 0 50px 0",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          
-          <div style={{ flex: "1" }}>
-            <h4>
-              <FontAwesomeIcon icon={faQuoteLeft} size="2x" /> &nbsp; 해당
-              코스가 마음에 드시나요? &nbsp;
-              <FontAwesomeIcon icon={faQuoteRight} size="2x" />
-            </h4>
-            하트를 누르시면 활용하여 최적의 여행지를 추천해 드리겠습니다.
-          </div>
-          <div style={{ margin: "20px auto" }}>
-            <button
-              className="btn btn-primary"
-              onClick={handleLike}
-              style={{
-                background: "none",
-                border: "none",
-                padding: "0",
-                margin: "0",
-              }}
-            >
-              {liked ? (
-                <>
-                  <FontAwesomeIcon
-                    icon={solidHeart}
-                    size="4x"
-                    style={{ color: "red", marginRight: "100px" }}
-                  />
-                </>
-              ) : (
-                <>
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    size="4x"
-                    style={{ color: "red", marginRight: "100px" }}
-                  />
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-        </section>
-        
-        <section className="commentInner">
-        <Comments />
-        </section>
-        
-        <section>
-        <div
+          <div
             style={{
               margin: "0px auto",
               width: "100%",
@@ -413,9 +412,58 @@ function CourseReviewDetail() {
                 </>
               )}
           </div>
+          <br />
         </section>
+        <div
+          style={{
+            margin: "50px 0 50px 0",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <div style={{ flex: "1" }}>
+            <h4>
+              <FontAwesomeIcon icon={faQuoteLeft} size="2x" /> &nbsp; 해당
+              코스가 마음에 드시나요? &nbsp;
+              <FontAwesomeIcon icon={faQuoteRight} size="2x" />
+            </h4>
+            하트를 누르시면 활용하여 최적의 여행지를 추천해 드리겠습니다.
+          </div>
+          <div style={{ margin: "20px auto" }}>
+            <button
+              className="btn btn-primary"
+              onClick={handleLike}
+              style={{
+                background: "none",
+                border: "none",
+                padding: "0",
+                margin: "0",
+              }}
+            >
+              {liked ? (
+                <>
+                  <FontAwesomeIcon
+                    icon={solidHeart}
+                    size="4x"
+                    style={{ color: "red", marginRight: "100px" }}
+                  />
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon
+                    icon={faHeart}
+                    size="4x"
+                    style={{ color: "red", marginRight: "100px" }}
+                  />
+                </>
+              )}
+            </button>
+          </div>
+        </div>
 
-      </section>
+        <Comments />
+      </Container>
     </>
   );
 }
