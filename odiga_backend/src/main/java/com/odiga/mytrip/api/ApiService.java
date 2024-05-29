@@ -1,6 +1,5 @@
 package com.odiga.mytrip.api;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +10,6 @@ public class ApiService {
 
     private final ApiDAO apiDAO;
 
-    @Autowired
     public ApiService(ApiDAO apiDAO) {
         this.apiDAO = apiDAO;
     }

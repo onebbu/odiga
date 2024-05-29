@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -137,6 +136,7 @@ public class TravelController {
                 i++;
             }
             System.out.println("TravelController : 아리아코드 널 아님" + areacode);
+            System.out.println("userWishMap "+userWishMap);
         }
 
         return userWishMap;

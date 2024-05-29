@@ -52,7 +52,7 @@ function TravelDetailPage({ modalContentId }) {
             script.onload = () => {
                 const mapOptions = {
                     center: new window.naver.maps.LatLng(data.mapy, data.mapx),
-                    zoom: 80
+                    zoom: 17
                 };
 
                 const map = new window.naver.maps.Map('map', mapOptions);
@@ -64,21 +64,8 @@ function TravelDetailPage({ modalContentId }) {
 
                 const marker = new window.naver.maps.Marker(markerOptions);
 
-                const contentString = `
-                    <div>
-                        <h2>${data.title}</h2>
-                        <p>${data.addr1}</p>
-                        <img src=${data.firstimage} style="max-width: 200px;"></img>
-                    </div>
-                `;
+            
 
-                const infoWindow = new window.naver.maps.InfoWindow({
-                    content: contentString
-                });
-
-                window.naver.maps.Event.addListener(marker, 'click', function () {
-                    infoWindow.open(map, marker);
-                });
             };
             document.body.appendChild(script);
             return () => {
@@ -119,9 +106,9 @@ function TravelDetailPage({ modalContentId }) {
                     <div id="map" style={{ width: '80%', height: '500px' }}></div>
                 </section>
 
-                {/* 밑에 이 section 안쓰는거 아님???????? */}
-                {/* <section className="tagList" id="tag-list"style={{backgroundColor:'hotpink'}}> 
-                    <div className="tagItem" id="tag-list-placeholder" style={{backgroundColor:'hotpink'}}>
+                
+                 <section className="tagList" id="tag-list"> 
+                    <div className="tagItem" id="tag-list-placeholder">
                         {data && (
                             <>
                                 {data.cat1 && (
@@ -142,7 +129,7 @@ function TravelDetailPage({ modalContentId }) {
                             </>
                         )}
                     </div>
-                </section> */}
+                </section> 
                 <section className="slider" id="similar-destinations">
                     <p>사진을 움직여 둘러보세요!</p>
                     <Slider {...settings}>

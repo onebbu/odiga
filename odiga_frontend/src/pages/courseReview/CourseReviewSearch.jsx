@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { faSearch, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -13,7 +13,7 @@ const CenteredContainer = styled.div`
 const SearchForm = styled.form`
   display: flex;
   align-items: center;
-  width: 500px; /* 최대 너비 설정 */
+  width: 500px;
   margin-top: 70px;
 `;
 
@@ -48,23 +48,27 @@ const SearchButton = styled.button`
   }
 `;
 
-const CourseReviewSearch = ({ setPosts, setCurrentPage }) => {
+const CourseReviewSearch = memo(({ setPosts, setCurrentPage }) => {
   const [query, setQuery] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await axios.get("/coursereviewsearch", {
         params: {
-          query: query, // 검색어를 query 파라미터로 전달
+          query: query,
         },
       });
       const fetchedPosts = response.data;
-      setPosts(fetchedPosts); // 상위 컴포넌트로 전달된 setPosts 함수를 호출하여 상태 업데이트
-      setCurrentPage(1); // 페이지를 1페이지로 설정
+      setPosts(fetchedPosts);
+      setCurrentPage(1);
     } catch (error) {
       console.error("검색 중 오류 발생:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -77,12 +81,12 @@ const CourseReviewSearch = ({ setPosts, setCurrentPage }) => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <SearchButton type="submit">
-          <FontAwesomeIcon icon={faSearch} />
+        <SearchButton type="submit" disabled={isLoading}>
+          {isLoading ? <FontAwesomeIcon icon={faSpinner} spin /> : <FontAwesomeIcon icon={faSearch} />}
         </SearchButton>
       </SearchForm>
     </CenteredContainer>
   );
-};
+});
 
 export default CourseReviewSearch;

@@ -7,7 +7,13 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios, { all } from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import {Link, useParams, useNavigate, Await, useLocation} from "react-router-dom";
+import {
+  Link,
+  useParams,
+  useNavigate,
+  Await,
+  useLocation,
+} from "react-router-dom";
 import styled from "styled-components";
 import Comments from "./Comments";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
@@ -24,10 +30,10 @@ function CourseReviewDetail() {
   const loginInfo = useContext(LoginInfoContext);
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
-  const [editedTitle, setEditedTitle] = useState(detailsData?.[0]?.boardTitle);
+  const [editedTitle, setEditedTitle] = useState("");
 
-    const location = useLocation();
-    const { pathname: from } = location;
+  const location = useLocation();
+  const { pathname: from } = location;
 
   console.log("로그인정보 :" + loginInfo.email);
   useEffect(() => {
@@ -66,6 +72,12 @@ function CourseReviewDetail() {
     }
   }, [didMount, boardNo, isEditing]);
 
+  useEffect(() => {
+    if (detailsData && detailsData[0]?.boardTitle) {
+      setEditedTitle(detailsData[0]?.boardTitle);
+    }
+  }, [detailsData]);
+
   const handleLike = async () => {
     if (loginInfo) {
       try {
@@ -75,12 +87,14 @@ function CourseReviewDetail() {
           setLiked(true);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "true");
           alert("좋아요를 눌렀습니다.");
+          window.location.reload()
         } else {
           await axios.post(`/coursereview/likeCancel/${boardNo}`);
           setLikeCount((prevCount) => prevCount - 1);
           setLiked(false);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "false");
           alert("좋아요를 취소하였습니다.");
+          window.location.reload()
         }
       } catch (error) {
         console.error("게시물 좋아요 중 오류 발생:", error);
@@ -88,7 +102,7 @@ function CourseReviewDetail() {
     } else {
       // 로그인되지 않은 경우, 로그인 알림 표시
       alert("로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        navigate("/login", { state: { from } });
+      navigate("/login", { state: { from } });
       // 로그인 페이지로 이동하거나 다른 처리를 수행할 수 있음
     }
   };
@@ -134,6 +148,7 @@ function CourseReviewDetail() {
         return;
       }
 
+      // console.log("해쉬 " + hashtags);
       try {
         // 서버에 수정된 내용 업데이트 요청
         await axios.put(`/coursereview/update/${boardNo}`, {
@@ -222,10 +237,14 @@ function CourseReviewDetail() {
                 margin: "0 auto",
               }}
             >
-              {detailsData?.[0]?.tags !== undefined &&
-              detailsData?.[0]?.tags !== null
-                ? detailsData[0].tags
-                : "#태그 없음"}
+
+                {detailsData &&
+                detailsData[0]?.tags !== undefined &&
+                detailsData[0]?.tags !== null ? (
+                detailsData[0].tags
+              ) : (
+                "#태그 없음"
+              )}
             </h7>
             <hr />
           </div>
@@ -240,11 +259,13 @@ function CourseReviewDetail() {
               padding: "30px",
               border: "1px solid #e5e5e5",
               backgroundColor: "white",
-              overflow: "scroll",
             }}
           >
             <div style={{ display: "flex" }}>
-              <div className="ck ck-editor__main" style={{ width: "100%" , wordBreak : "break-all"}}>
+              <div
+                className="ck ck-editor__main"
+                style={{width: "100%", wordBreak: "break-all" }}
+              >
                 {!isEditing ? (
                   <div
                     className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
@@ -279,7 +300,7 @@ function CourseReviewDetail() {
               fontSize: "18px",
             }}
           >
-            여행코스 정보
+            {detailsData && detailsData[0].nickname}&nbsp;님의 여행코스 정보
           </h7>
           <CourseReviewCourse detailsData={detailsData} />
 

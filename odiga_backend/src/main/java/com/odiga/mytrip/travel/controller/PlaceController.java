@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 import com.odiga.mytrip.travel.service.PlaceService;
 import com.odiga.mytrip.travel.vo.TravelListVO;
@@ -109,9 +110,18 @@ public class PlaceController {
                 placeService.SaveResult(resultMap);
             }
         }
-
         return COURSENO;
     }
 
+    @GetMapping("/preference/url/{searchTerm}")
+    public String preferenceUnplashAPI(@PathVariable("searchTerm") String term)  throws IOException{
+        String ACCESS_KEY = "iUJAIhZJ0Pq3YgEIgxl8kZ1JR2CBVrVxN0d5lZhkJh8";
+        String apiurl = "https://api.unsplash.com/search/photos/?query="+ term +"&client_id="+ACCESS_KEY;
+
+        RestTemplate restTemplate = new RestTemplate();
+        String jsonResponse = restTemplate.getForObject(apiurl, String.class);
+        
+        return jsonResponse;
+    }
 }
  

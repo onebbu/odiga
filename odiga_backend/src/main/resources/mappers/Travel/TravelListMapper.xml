@@ -48,6 +48,7 @@
         SELECT *
         FROM TRAVELREVIEW
         WHERE contentId = #{contentId}
+        order by reviewdate desc
     </select>
     
     <select id="cattranskr" resultType="com.odiga.mytrip.travel.vo.TravelCatKorVO">

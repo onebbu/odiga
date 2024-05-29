@@ -43,8 +43,21 @@ const Drawer = ({ isOpen, onClose, loginInfo, areacode }) => {
           areacode: areacode
         }
       });
-      setLikeInfo(response.data);
-      console.log("likeInfo 저장함? " + likeInfo);
+      // 데이터 변환
+      const data = response.data.userWishMap;
+      const transformedData = Object.keys(data).reduce((acc, key) => {
+        const item = data[key];
+        acc[key] = {
+            contentid: item.contentId,
+            img: item.img,
+            title: item.title,
+            addr: item.addr
+        };
+        return acc;
+    }, {});
+    
+    setLikeInfo(transformedData);
+    console.log(likeInfo[0].contentid);
         
     } catch (error) {
         console.error('좋아요 목록 가져오기 실패:', error);
@@ -62,9 +75,14 @@ const Drawer = ({ isOpen, onClose, loginInfo, areacode }) => {
       <H2> {loginInfo.nickname} 님의 찜 목록 </H2>
       {isOpen ? ( 
           <div className="drawer">
-            {Object.keys(likeInfo).map((courseKey) => (
-              <Place key={courseKey} id={courseKey} pic={likeInfo[courseKey].img} name={likeInfo[courseKey].title} region={likeInfo[courseKey].addr}/>
-            ))}
+            {Object.values(likeInfo).map((data) => (
+                  <Place
+                      key={data.contentid}
+                      id={data.contentid}
+                      pic={data.img}
+                      name={data.title}
+                      region={data.addr} />
+            ))}                  
           </div>
         ) : ( <Message> 찜 목록이 비어있습니다. </Message> )
       }
@@ -82,6 +100,9 @@ const Place = ({id, pic, name, region }) =>{ //개별 플레이스 drag 가능~
           isDragging: monitor.isDragging(),
       }),
   });
+  useEffect(()=>{
+    console.log("drag ID"+ id);
+  },[drag])
 
   const opacity = isDragging ? 0 : 1;
 

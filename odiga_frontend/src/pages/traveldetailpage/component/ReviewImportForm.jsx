@@ -122,6 +122,7 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
                 setReviewComment('');
                 setReviewGrade(0);
                 onReviewSubmitted();
+                onsetLike();
             })
             .catch(error => {
                 console.error('에러 :', error);
@@ -141,8 +142,8 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
                     contentid: contentID,
                     nickname: loginInfo.nickname
                 });
-                alert("liked 해제");
-                fetchData(); alert("liked 해제 완료");
+                alert("좋아요를 취소하셨습니다.");
+                fetchData(); 
                 onsetLike();
             } else {
                 const response = await axios.post(`/travelLike`, {
@@ -150,7 +151,7 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
                     email: loginInfo.email,
                     nickname: loginInfo.nickname
                 });
-                alert("liked up");
+                alert("좋아요를 누르셨습니다!");
                 fetchData();
                 onsetLike();
             }
