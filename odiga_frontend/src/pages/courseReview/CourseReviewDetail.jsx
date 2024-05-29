@@ -56,6 +56,7 @@ function CourseReviewDetail() {
         const { boardLikeCount } = response.data[0];
         setDetailsData(response.data);
         setLikeCount(boardLikeCount);
+        setEditedContent(response.data[0].boardContent);
         // 로컬 스토리지에서 좋아요 상태 확인
         const storedLikedStatus = localStorage.getItem(
           `liked_${boardNo}_${loginInfo.email}`

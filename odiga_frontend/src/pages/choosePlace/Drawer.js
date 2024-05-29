@@ -44,7 +44,7 @@ const Drawer = ({ isOpen, onClose, loginInfo, areacode }) => {
         }
       });
       // 데이터 변환
-      const data = response.data.userWishMap;
+      const data = response.data;
       const transformedData = Object.keys(data).reduce((acc, key) => {
         const item = data[key];
         acc[key] = {
