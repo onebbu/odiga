@@ -93,15 +93,7 @@
 
     <update id="courseReviewEdit" parameterType="com.odiga.mytrip.courseReview.CourseReviewVO">
         UPDATE COURSEREVIEW
-        SET boardTitle = #{boardTitle}, boardContent = TO_CLOB(#{boardContent}), tags = 
-        <choose>
-            <when test="tags != null">
-                #{tags}
-            </when>
-            <otherwise>
-                ''
-            </otherwise>
-        </choose>
+        SET boardTitle = #{boardTitle}, boardContent = TO_CLOB(#{boardContent})
         WHERE boardNo = #{boardNo}
     </update>
 

@@ -19,7 +19,6 @@ import Comments from "./Comments";
 import { LoginInfoContext } from "../login/LoginInfoProvider";
 import CourseReviewCourse from "./CourseReviewCourse";
 import CustomEditor from "./CustomEditor";
-import HashtagInput from "../courseimport/HashtagInput";
 
 function CourseReviewDetail() {
   const { boardNo } = useParams();
@@ -32,8 +31,6 @@ function CourseReviewDetail() {
   const [isEditing, setIsEditing] = useState(false);
   const [editedContent, setEditedContent] = useState("");
   const [editedTitle, setEditedTitle] = useState("");
-  const [tags, setTags] = useState(null);
-  const [hashtags, setHashtags] = useState(null); // 태그 상태 추가
 
   const location = useLocation();
   const { pathname: from } = location;
@@ -158,7 +155,6 @@ function CourseReviewDetail() {
           boardTitle: editedTitle,
           boardContent: editedContent,
           boardNo: boardNo,
-          tags: hashtags,
         });
         alert("수정이 완료되었습니다.");
         setIsEditing(false); // 수정 모드 종료
@@ -168,10 +164,6 @@ function CourseReviewDetail() {
         console.error("게시물 수정 중 오류 발생:", error);
       }
     }
-  };
-
-  const handleTagsChange = (newTags) => {
-    setHashtags(newTags); // 태그 배열 상태 업데이트
   };
 
   return (
@@ -245,12 +237,8 @@ function CourseReviewDetail() {
                 margin: "0 auto",
               }}
             >
-              {isEditing ? (
-                <HashtagInput
-                onTagsChange={handleTagsChange}
-                initialTags={detailsData[0]?.tags ? detailsData[0].tags.split('#').slice(1).map(tag => `#${tag}`) : []}
-              />
-              ) : detailsData &&
+
+                {detailsData &&
                 detailsData[0]?.tags !== undefined &&
                 detailsData[0]?.tags !== null ? (
                 detailsData[0].tags
