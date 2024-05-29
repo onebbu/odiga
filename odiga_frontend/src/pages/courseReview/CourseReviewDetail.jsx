@@ -56,6 +56,7 @@ function CourseReviewDetail() {
         const { boardLikeCount } = response.data[0];
         setDetailsData(response.data);
         setLikeCount(boardLikeCount);
+        setEditedContent(response.data[0].boardContent);
         // 로컬 스토리지에서 좋아요 상태 확인
         const storedLikedStatus = localStorage.getItem(
           `liked_${boardNo}_${loginInfo.email}`
@@ -149,7 +150,6 @@ function CourseReviewDetail() {
         return;
       }
 
-      // console.log("해쉬 " + hashtags);
       try {
         // 서버에 수정된 내용 업데이트 요청
         await axios.put(`/coursereview/update/${boardNo}`, {
@@ -167,8 +167,6 @@ function CourseReviewDetail() {
     }
   };
 
-
-
   return (
     <>
       <section className="container">
@@ -176,11 +174,7 @@ function CourseReviewDetail() {
           <div className="coursereviewtitle">
             <h4>
               {isEditing ? (
-                <input
-                  type="text"
-                  value={editedTitle}
-                  onChange={handleTitleChange}
-                />
+                <input type="text" value={editedTitle} onChange={handleTitleChange} />
               ) : (
                 detailsData?.[0]?.boardTitle
               )}
@@ -213,26 +207,14 @@ function CourseReviewDetail() {
 
         <section className="mainReviewInner">
         {!isEditing ? (
-                  <div
-                    className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
+                  <div className="ck ck-content ck-editor__editable ck-rounded-corners ck-editor__editable_inline ck-blurred"
                     dangerouslySetInnerHTML={{
-                      __html:
-                        detailsData &&
-                        detailsData[0] &&
-                        detailsData[0].boardContent
-                          ? detailsData[0].boardContent
-                          : "",
+                      __html: detailsData && detailsData[0] && detailsData[0].boardContent ? detailsData[0].boardContent : "",
                     }}
                   />
                 ) : (
                   <CustomEditor
-                    initialValue={
-                      detailsData &&
-                      detailsData[0] &&
-                      detailsData[0].boardContent
-                        ? detailsData[0].boardContent
-                        : ""
-                    }
+                    initialValue={ detailsData && detailsData[0] && detailsData[0].boardContent ? detailsData[0].boardContent : "" }
                     onChange={handleEditorChange}
                     boardNo={boardNo}
                   />
@@ -241,18 +223,14 @@ function CourseReviewDetail() {
 
         <section className="tagInner">
           <div className="tag">        
-                 {detailsData &&
-                detailsData[0]?.tags !== undefined &&
-                detailsData[0]?.tags !== null ? (
-                detailsData[0].tags
-              ) : (
-                "#태그 없음"
-              )}
+                {detailsData && detailsData[0]?.tags !== undefined && detailsData[0]?.tags !== null ? 
+                  ( detailsData[0].tags ) : ( "#태그 없음" )}
           </div>
         </section>
 
         <section className="travelCoursebox">
-            <h5 style={{fontWeight : 'bold', marginTop :'70px', fontSize : '26px'}}>{detailsData && detailsData[0].nickname}&nbsp;님의 여행코스 정보</h5>
+            <h5 style={{fontWeight : 'bold', marginTop :'70px', fontSize : '26px'}}>
+              {detailsData && detailsData[0].nickname}&nbsp;님의 여행코스 정보</h5>
           <div className="contourLinecourseReview"></div>
           <div className="travelCourse">
           <CourseReviewCourse detailsData={detailsData} />
@@ -260,15 +238,7 @@ function CourseReviewDetail() {
         </section>
 
         <section>
-        <div
-          style={{
-            margin: "50px 0 50px 0",
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-
+        <div style={{ margin: "50px 0 50px 0", width: "100%", display: "flex", alignItems: "center", }} >
           <div style={{ flex: "1" }}>
             <h4>
               <FontAwesomeIcon icon={faQuoteLeft} size="2x" /> &nbsp; 해당
@@ -281,29 +251,12 @@ function CourseReviewDetail() {
             <button
               className="btn btn-primary"
               onClick={handleLike}
-              style={{
-                background: "none",
-                border: "none",
-                padding: "0",
-                margin: "0",
-              }}
+              style={{ background: "none", border: "none", padding: "0", margin: "0", }}
             >
               {liked ? (
-                <>
-                  <FontAwesomeIcon
-                    icon={solidHeart}
-                    size="4x"
-                    style={{ color: "red", marginRight: "100px" }}
-                  />
-                </>
+                <> <FontAwesomeIcon icon={solidHeart} size="4x" style={{ color: "red", marginRight: "100px" }} /> </>
               ) : (
-                <>
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    size="4x"
-                    style={{ color: "red", marginRight: "100px" }}
-                  />
-                </>
+                <> <FontAwesomeIcon icon={faHeart} size="4x" style={{ color: "red", marginRight: "100px" }} /> </>
               )}
             </button>
           </div>
@@ -311,109 +264,26 @@ function CourseReviewDetail() {
         </section>
         
         <section className="commentInner">
-        <Comments />
+          <Comments />
         </section>
         
         <section>
-        <div
-            style={{
-              margin: "0px auto",
-              width: "100%",
-              marginTop: "30px",
-              marginBottom: "30px",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {!isEditing ? (
-              <Link
-                className="btn btn-primary"
-                style={{
-                  width: "100px",
-                  borderColor: "#13294b",
-                  backgroundColor: "#13294b",
-                  color: "#fff",
-                }}
-                to="/coursereview"
-              >
-                목 록
-              </Link>
-            ) : (
-              ""
-            )}
-
-            {detailsData &&
-              detailsData[0] &&
-              loginInfo &&
-              loginInfo.email === detailsData[0].email && (
-                <>
-                  {!isEditing ? (
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        width: "100px",
-                        borderColor: "#13294b",
-                        backgroundColor: "#13294b",
-                        color: "#fff",
-                        float: "right",
-                        margin: "0 10px 0 10px",
-                      }}
-                      onClick={handleEdit}
-                    >
-                      수 정
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        width: "100px",
-                        borderColor: "#13294b",
-                        backgroundColor: "#13294b",
-                        color: "#fff",
-                        float: "right",
-                        margin: "0 10px 0 10px",
-                      }}
-                      onClick={handleSave}
-                    >
-                      저 장
-                    </button>
-                  )}
-
-                  {!isEditing ? (
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        width: "100px",
-                        borderColor: "#13294b",
-                        backgroundColor: "#13294b",
-                        color: "#fff",
-                        margin: "0 10px 0 0",
-                        float: "right",
-                      }}
-                      onClick={handleDelete}
-                    >
-                      삭 제
-                    </button>
-                  ) : (
-                    <button
-                      className="btn btn-primary"
-                      style={{
-                        width: "100px",
-                        borderColor: "#13294b",
-                        backgroundColor: "#13294b",
-                        color: "#fff",
-                        margin: "0 10px 0 0",
-                        float: "right",
-                      }}
-                      onClick={editCancel}
-                    >
-                      취 소
-                    </button>
-                  )}
-                </>
-              )}
-          </div>
+          <div style={{ margin: "0px auto", width: "100%", marginTop: "30px", marginBottom: "30px", display: "flex", justifyContent: "center", alignItems: "center", }} >
+              {!isEditing ? (
+                <Link className="btn btn-primary" to="/coursereview" > 목 록 </Link>
+              ) : ( "" )}
+              {detailsData && detailsData[0] && loginInfo && loginInfo.email === detailsData[0].email && (
+                  <> {!isEditing ? (
+                    <>
+                      <button className="btn btn-primary" onClick={handleEdit} > 수 정 </button>
+                      <button className="btn btn-primary" onClick={handleDelete} > 삭 제 </button> </>
+                    ) : ( <>
+                      <button className="btn btn-primary" onClick={handleSave} >  저 장 </button>
+                      <button className="btn btn-primary" onClick={editCancel} > 취 소 </button> </>
+                    )}
+                  </>
+                )}
+            </div>
         </section>
 
       </section>
