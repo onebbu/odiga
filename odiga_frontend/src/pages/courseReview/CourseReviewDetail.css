@@ -1,0 +1,108 @@
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 150px 0px 0px 0px;
+}
+
+.contourLinecourseReview {
+    width: 60%;
+    border-top: 3px solid #ccc;
+    margin: 20px 0px;
+}
+
+.titleInner{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+    }.title {
+        padding: 10px 20px 10px 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        border-radius: 10px;
+        background-color:lightblue; 
+        } .title h4 {
+            font-weight: bold;
+            margin: 0;
+            color: white;   
+            }
+
+.Info {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    } .UserInfoInner{
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        } .UserInfo {
+            padding: 5px 10px 5px 10px;
+            display: flex;
+            justify-content: center;
+            font-size: 18px;
+            align-items: center;
+            border-radius: 10px;
+            border: 2px solid #A9A9A9;   
+            font-weight: bold; 
+            }
+
+.contentInfoInner {
+    margin-left: 5px;
+    } .contentInfo {
+        display: flex;
+        justify-content: start;
+        } .contentInfo span {
+            margin: 5px 8px 5px 8px;
+        } .view {
+            border-radius: 10px;
+            padding: 5px;
+            background-color: #ADD8E6;
+        } .heart {
+            border-radius: 10px;
+            padding: 5px;
+            background-color: #FFE4E1;
+        } .star {
+            border-radius: 10px;
+            padding: 5px;
+            background-color:  #FAFAD2;
+        }
+
+.mainReviewInner {
+    width: 100%;
+    height: auto;
+    border: 3px solid #ccc;
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.tagInner{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    } .tag {
+        margin-top: 15px;
+        padding: 10px;
+        background-color:cornsilk;
+        border-radius: 10px;
+        }
+
+.travelCoursebox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    } .travelCourse {
+        width: 100%;
+        }
+
+.commentInner {
+    width: 100%;
+}
