@@ -20,7 +20,7 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 30px;
-    }.title {
+    }.coursereviewtitle {
         padding: 10px 20px 10px 20px;
         display: flex;
         justify-content: center;
@@ -28,7 +28,7 @@
         border: none;
         border-radius: 10px;
         background-color:lightblue; 
-        } .title h4 {
+        } .coursereviewtitle h4 {
             font-weight: bold;
             margin: 0;
             color: white;   
