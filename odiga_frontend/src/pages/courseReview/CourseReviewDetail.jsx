@@ -173,7 +173,7 @@ function CourseReviewDetail() {
     <>
       <section className="container">
         <section className="titleInner">
-          <div className="title">
+          <div className="coursereviewtitle">
             <h4>
               {isEditing ? (
                 <input
@@ -267,7 +267,7 @@ function CourseReviewDetail() {
             alignItems: "center",
           }}
         >
-          
+
           <div style={{ flex: "1" }}>
             <h4>
               <FontAwesomeIcon icon={faQuoteLeft} size="2x" /> &nbsp; 해당
