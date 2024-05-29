@@ -186,7 +186,8 @@ function CourseReviewDetail() {
               )}
             </h4>
           </div>
-        </section>        
+        </section>      
+          
 
         <section className="Info"> 
           <div className="UserInfoInner">
