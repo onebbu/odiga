@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './couseImport.css';
 import styled from 'styled-components';
 
-function HashtagInput({ onTagsChange }) {
+function HashtagInput({ initialTags = [], onTagsChange }) {
   const [hashtags, setHashtags] = useState([]);
   const [inputValue, setInputValue] = useState('');
 
@@ -41,6 +41,10 @@ function HashtagInput({ onTagsChange }) {
     // 태그가 변경되었음을 통짜 String으로 상위 컴포넌트로 전달
     onTagsChange(updatedTags.join(' '));
   };
+
+  useEffect(() => {
+    setHashtags(initialTags);
+  }, []);
 
   return (
     <div className="hashTagBox">

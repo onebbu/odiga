@@ -246,7 +246,10 @@ function CourseReviewDetail() {
               }}
             >
               {isEditing ? (
-                <HashtagInput onTagsChange={handleTagsChange} />
+                <HashtagInput
+                onTagsChange={handleTagsChange}
+                initialTags={detailsData[0]?.tags ? detailsData[0].tags.split('#').slice(1).map(tag => `#${tag}`) : []}
+              />
               ) : detailsData &&
                 detailsData[0]?.tags !== undefined &&
                 detailsData[0]?.tags !== null ? (
