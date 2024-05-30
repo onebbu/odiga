@@ -40,14 +40,14 @@ function ChoosePreference() {
             setItem3(updatedItems);
         };
         useEffect(() => {
+            window.scrollTo(0, 0);
             searchImages();
         },[]);
 
         useEffect(() =>{
             console.log("item3???"+item3[3].icon);
             setFilteredITEM3(item3);
-        },[item3])
-
+        },[item3]);
     const navigate = useNavigate();
     const [selectedValues, setSelectedValues] = useState({
         region : null,

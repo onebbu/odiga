@@ -5,7 +5,7 @@ import './cPP.css';
 import { Box } from './Box.js';
 
 // 왼쪽에 Drop할 Container 구현.
-const DropContainer = ({ onSaveData  }) => { //onSaveData 를 props로 받음
+const DropContainer = ({ nickname, scheduleID, onSave }) => { //onSaveData 를 props로 받음
   const [boxes, setBoxes] = useState([]);
   
   const handleDrop = (item) => {
@@ -51,19 +51,34 @@ const DropContainer = ({ onSaveData  }) => { //onSaveData 를 props로 받음
         ],
       }),
     )
-  }, [boxes])  //[] => [boxes]
+  }, [boxes])
 
   useEffect(() => {
 
-    const updatedData = boxes.map((data,index) => ({
-      travelNum: index +1,
-      contentId: data.id,
-      name : data.name,
-      address: data.region
-    }));
+    // const updatedData = boxes.map((data,index) => ({
+    //   travelNum: index +1,
+    //   contentId: data.id,
+    //   name : data.name,
+    //   address: data.region
+    // }));
 
-    onSaveData(updatedData); // onSaveData 이벤트 핸들러 호출 전에 상태 업데이트
-  }, [boxes]);
+    // onSaveData(updatedData); // onSaveData 이벤트 핸들러 호출 전에 상태 업데이트
+      console.log("boxes", boxes);
+      console.log("Schedule ID:", scheduleID);
+      // 리스트를 순회하면서 각 요소에서 필요한 정보를 추출하여 상태를 업데이트
+      const updatedData = boxes.map((data, index) => ({
+        courseDay: scheduleID,
+        travelNum : index +1,
+        contentId : data.id,
+        name : data.name,
+        address : data.region,
+        nickname : nickname
+      }));
+
+      console.log("업데이트 데이터???????????????", updatedData);
+      onSave(updatedData);
+
+  }, [boxes, scheduleID]);
 
   const renderBoxes = () => {
     return boxes.map((box, index) => (
