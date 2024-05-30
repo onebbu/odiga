@@ -299,22 +299,29 @@ function SearchLocation() {
                     <div className="search-results-container">
                         <div className="search-results">
                             {searchResults.length > 0 ? (
-                                searchResults.map((result, index) => (
-                                    <Link key={result.contentid}
-                                          to={`/detail/${result.contentid}`}
-                                          style={{textDecoration: 'none'}}
-                                    >
-                                        <Place key={result.contentid}
-                                               index={index}
-                                               contentid={result.contentid}
-                                               firstImage={result.firstImage}
-                                               title={result.title}
-                                               addr1={result.addr1}
-                                               cat3={result.cat3}
-                                               averageRate={result.averageRate}
-                                               cntRating={result.cntRating}/>
-                                    </Link>
-                                ))
+                                searchResults.map((result, index) => {
+                                    let roundedRate = parseFloat(result.averageRate);
+                                    roundedRate = roundedRate.toFixed(1);
+                                    return (
+                                        <Link
+                                            key={result.contentid}
+                                            to={`/detail/${result.contentid}`}
+                                            style={{ textDecoration: 'none' }}
+                                        >
+                                            <Place
+                                                key={result.contentid}
+                                                index={index}
+                                                contentid={result.contentid}
+                                                firstImage={result.firstImage}
+                                                title={result.title}
+                                                addr1={result.addr1}
+                                                cat3={result.cat3}
+                                                averageRate={roundedRate}
+                                                cntRating={result.cntRating}
+                                            />
+                                        </Link>
+                                    );
+                                })
                             ) : (
                                 <p>검색 결과가 없습니다.</p>
                             )}
