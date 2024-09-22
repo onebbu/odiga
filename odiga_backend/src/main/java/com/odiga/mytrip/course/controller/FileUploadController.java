@@ -19,7 +19,7 @@ import java.util.UUID;
 import org.json.JSONObject;
 
 @RestController
-@RequestMapping("/upload")
+@RequestMapping("/api/upload")
 @RequiredArgsConstructor
 public class FileUploadController {
 
