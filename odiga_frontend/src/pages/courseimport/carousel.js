@@ -56,7 +56,7 @@ function Carousel({selectedCourse, MainImage, setMainImage , userdata }) {
       if (mapx && mapy) {
         // userdata가 존재하는 경우
         const script = document.createElement('script');
-        script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+        script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=x78ecx2lf5&callback=initMap';
         script.async = true;
         script.onload = () => {
           const mapOptions = {
@@ -96,7 +96,7 @@ function Carousel({selectedCourse, MainImage, setMainImage , userdata }) {
       } else {
         // userdata가 없는 경우 서울역 좌표를 기본으로 사용
         const script = document.createElement('script');
-        script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+        script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=x78ecx2lf5&callback=initMap';
         script.async = true;
         script.onload = () => {
           const mapOptions = {

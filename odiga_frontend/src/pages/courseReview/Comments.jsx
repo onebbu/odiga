@@ -40,7 +40,7 @@ function Comments() {
 
         try {
             const response = await axios.post(
-                `/coursereview/commentWrite/${boardNo}`,
+                `/api/coursereview/commentWrite/${boardNo}`,
                 {
                     boardNo: boardNo,
                     commentContent: comment,
@@ -76,7 +76,7 @@ function Comments() {
 
     const fetchComments = async () => {
         try {
-            const response = await axios.get(`/coursereview/allComments/${boardNo}`);
+            const response = await axios.get(`/api/coursereview/allComments/${boardNo}`);
             setAllComments(response.data);
         } catch (error) {
             console.error("댓글 목록을 불러오는 중 오류 발생:", error);
@@ -105,7 +105,7 @@ function Comments() {
     const confirmEdit = window.confirm("댓글을 수정하시겠습니까?");
     if (confirmEdit) {
       try {
-        await axios.post(`/coursereview/commentEdit`, { commentId: commentId, commentContent: editComment });
+        await axios.post(`/api/coursereview/commentEdit`, { commentId: commentId, commentContent: editComment });
         fetchComments(); // 댓글 목록을 다시 불러옵니다.
         setEditing(false);
       } catch (error) {

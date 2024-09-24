@@ -20,7 +20,7 @@ function ReviewDisplay({ travelInfo, onsetLike }) {
     const fetchReviews = async () => {
         try {
             if (contentID != null) {
-                const response = await axios.get(`/reviews/${contentID}`);
+                const response = await axios.get(`/api/reviews/${contentID}`);
                 setReviews(response.data);
             }
         } catch (error) {
@@ -56,7 +56,7 @@ function ReviewDisplay({ travelInfo, onsetLike }) {
 
     const submitEdit = async (reviewno) => {
         try {
-            await axios.post(`/ReviewUpdate`,
+            await axios.post(`/api/ReviewUpdate`,
                 {
                     reviewno: reviewno,
                     reviewcomment: editedContent,
@@ -75,7 +75,7 @@ function ReviewDisplay({ travelInfo, onsetLike }) {
         console.log(reviewno);
         if (window.confirm("리뷰를 삭제하시겠습니까?")) {
             try {
-                await axios.post(`/ReviewDelete/${reviewno}`);
+                await axios.post(`/api/ReviewDelete/${reviewno}`);
                 fetchReviews();
                 onsetLike();
             } catch (error) {

@@ -38,7 +38,7 @@ const Drawer = ({ isOpen, onClose, loginInfo, areacode }) => {
 
     const fetchData = async () => {
     try {
-      const response = await axios.get(`/mypage/mylike/${loginInfo.nickname}`, {
+      const response = await axios.get(`/api/mypage/mylike/${loginInfo.nickname}`, {
         params: {
           areacode: areacode
         }

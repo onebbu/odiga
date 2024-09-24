@@ -12,10 +12,10 @@ function handleLogout() {
 
             // oauth 로그아웃의 경우
             // /auth/logout 엔드포인트로 POST 요청(SecurityConfig 삭제 요청)
-            await axios.post('/auth/logout')
+            await axios.post('/api/auth/logout')
 
             // 로그아웃 후 로직
-            window.location.href = '/login';
+            window.location.href = '/api/login';
         } catch (error) {
             console.error('로그아웃 실패:', error);
         }

@@ -43,19 +43,19 @@ const KakaoSharing = () => {
             const response = await axios.post('/sendPw', {pw: sharePw, courseNo});
             console.log(response.data); // 성공 시 응답 확인
 
-            // Kakao로 공유하기
+             // Kakao로 공유하기
             Kakao.Share.sendDefault({
                 objectType: 'text',
                 text: `여행 비밀번호는 ${sharePw}입니다. \n여행 일정 보러가기 버튼을 누른 후 비밀번호를 입력해주세요!`,
                 link: {
-                    mobileWebUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
-                    webUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
+                    mobileWebUrl: `http://13.125.150.232/api/result-list/${nickname}/${courseNo}`,
+                    webUrl: `http://13.125.150.232/api/result-list/${nickname}/${courseNo}`,
                 },
                 buttons: [
                     {
                         title: '여행 일정 보러 가기',
                         link: {
-                            webUrl: `http://localhost:3000/result-list/${nickname}/${courseNo}`,
+                            webUrl: `http://13.125.150.232/api/result-list/${nickname}/${courseNo}`,
                         },
                     },
                 ],

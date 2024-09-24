@@ -91,7 +91,7 @@ function ListPlace({areacode, order, theme}) {
 
     const fetchList = () => {
         if (areacode !== null) {
-            axios.get(`/place/${displayStart}/${order}`, {
+            axios.get(`/api/place/${displayStart}/${order}`, {
                 params: {
                     areacode: areacode,
                     theme: theme.join(',') //displayStart,order는 PathVariable로 넘기고 areacode,theme는 param으로 넘기려구용 ㅎㅎ

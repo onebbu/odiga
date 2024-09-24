@@ -31,7 +31,7 @@ function ListPlace({order}) {
     
     const fetchList = () => {
 
-            axios.get(`/place/${displayStart}/${order}`
+            axios.get(`/api/place/${displayStart}/${order}`
             ).then((response) => {
                     const newData = response.data || [];
                     setDataList((prevDataList) => {

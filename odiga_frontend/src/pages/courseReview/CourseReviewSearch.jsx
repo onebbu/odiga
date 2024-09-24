@@ -57,7 +57,7 @@ const CourseReviewSearch = memo(({ setPosts, setCurrentPage }) => {
     setIsLoading(true);
 
     try {
-      const response = await axios.get("/coursereviewsearch", {
+      const response = await axios.get("/api/coursereviewsearch", {
         params: {
           query: query,
         },

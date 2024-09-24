@@ -56,7 +56,7 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
             if (contentID!==null) {
                 // 서버에서 좋아요 상태를 가져오는 요청
                 console.log("보내기 직전", contentID);
-                const response = await axios.get(`/WishInfo?contentid=${contentID}&nickname=${loginInfo.nickname}`);
+                const response = await axios.get(`/api/WishInfo?contentid=${contentID}&nickname=${loginInfo.nickname}`);
                 if (response.data) {
                     setLiked(true); // 서버에서 받아온 값이 true이면 liked를 true로 업데이트
                 } else {
@@ -108,7 +108,7 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
             alert("별점을 선택해주세요.");
             return;
         }
-        axios.post('/reviewImport', {
+        axios.post('/api/reviewImport', {
             contentid: contentID,
             reviewcomment: reviewComment,
             reviewgrade: reviewGrade,
@@ -138,7 +138,7 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
         }
         try {
             if (liked) {
-                const response = await axios.post(`/WishDelete`, {
+                const response = await axios.post(`/api/WishDelete`, {
                     contentid: contentID,
                     nickname: loginInfo.nickname
                 });
@@ -146,7 +146,7 @@ function ReviewImportForm({onReviewSubmitted, loginInfo, onsetLike}) {
                 fetchData(); 
                 onsetLike();
             } else {
-                const response = await axios.post(`/travelLike`, {
+                const response = await axios.post(`/api/travelLike`, {
                     contentid: contentID,
                     email: loginInfo.email,
                     nickname: loginInfo.nickname

@@ -66,7 +66,7 @@ export default function SignUp() {
         try {
             await SignUpSchema.validate(formData, {abortEarly: false}); // 유효성 검사 수행
             // 유효성 검사 통과 후에만 axios post 요청을 보냄
-            const response = await axios.post('/auth/join', formData);
+            const response = await axios.post('/api/auth/join', formData);
             const result = response.data;
 
             console.log("result", result);
@@ -194,7 +194,7 @@ export default function SignUp() {
                                 </SignUpButton>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <SignUpLink href="http://localhost:3000/login" variant="body2">
+                                        <SignUpLink href="http://13.125.150.232/api/login" variant="body2">
                                             이미 아이디가 있으신가요? 로그인하기
                                         </SignUpLink>
                                     </Grid>
