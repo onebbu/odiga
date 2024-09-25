@@ -117,7 +117,7 @@ function validateParams(params) {
     const isConfirmed = window.confirm(`저장하시겠습니까?`);
           if (isConfirmed) {
             if (validateParams(requiredParams)){
-              axios.post("/courseimport", {
+              axios.post("/api/courseimport", {
                 boardTitle: fullTitle,
                 boardContent: boardContent,
                 mainimage: MainImage,
@@ -144,7 +144,7 @@ function validateParams(params) {
 
   const fetchTravelCourse = () => {
     if (loginInfo.nickname) {
-      axios.post("/MyCourseDisplay", { nickname: loginInfo.nickname })
+      axios.post("/api/MyCourseDisplay", { nickname: loginInfo.nickname })
         .then((response) => {
           const coursesData = Array.isArray(response.data) ? response.data : [];
           const courseNO = response.data.filter(data => data.courseno === response.data[0].courseno);
@@ -194,7 +194,7 @@ function validateParams(params) {
     console.log("Main Image:", imgSrc); 
 
     const script = document.createElement('script');
-    script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+    script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=x78ecx2lf5&callback=initMap';
     script.async = true;
     document.body.appendChild(script);
 

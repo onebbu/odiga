@@ -18,7 +18,7 @@ const CourseReading = ({ detailsData }) => {
           const nickname = detailsData[0].nickname;
           const courseNo = detailsData[0].courseNo;
 
-          const response = await axios.get(`/courseId/${nickname}/${courseNo}`);
+          const response = await axios.get(`/api/courseId/${nickname}/${courseNo}`);
           setData(response.data);
         }
       } catch (error) {

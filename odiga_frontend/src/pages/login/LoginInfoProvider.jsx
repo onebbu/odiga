@@ -26,13 +26,13 @@ const LoginInfoProvider = ({children}) => {
                 // 엔드포인트로 GET 요청을 보냅니다.
                 if (token == null) {
                     console.log("oauth 로그인")
-                    response = await axios.get('/auth/oauth-info');
+                    response = await axios.get('/api/auth/oauth-info');
                     data = response.data;
                     setLoginInfo(data);
                     console.log(data);
                 } else {
                     console.log("jwt 로그인")
-                    response = await axios.get('/auth/jwt-info', config);
+                    response = await axios.get('/api/auth/jwt-info', config);
                     data = response.data;
                     setLoginInfo(data);
                     console.log(data);

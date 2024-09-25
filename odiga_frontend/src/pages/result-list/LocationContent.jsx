@@ -19,7 +19,7 @@ function LocationContent(
     useEffect(() => {
         async function fetchData() {
             try {
-                const result = await axios.get(`/contentId/${contentId}`);
+                const result = await axios.get(`/api/contentId/${contentId}`);
                 setData(result.data);
             } catch (error) {
                 console.error("Error fetching data:", error);

@@ -66,7 +66,7 @@ export default function Login() {
 
             await LoginSchema.validate(formData, {abortEarly: false}); // 유효성 검사 수행
             // 유효성 검사 통과 후에만 axios post 요청을 보냄
-            const response = await axios.post('/auth/login', formData);
+            const response = await axios.post('/api/auth/login', formData);
             const result = response.data;
 
             if (result === "EMAIL_PASSWORD_NOT_MATCH") {
@@ -165,7 +165,7 @@ export default function Login() {
                                 </LoginButton>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <LoginLink href="http://localhost:3000/sign-up" variant="body2">
+                                        <LoginLink href="http://13.125.150.232/api/sign-up" variant="body2">
                                             계정이 없으신가요? 회원가입하기
                                         </LoginLink>
                                         {/*<LoginLink href="#" variant="body2">*/}

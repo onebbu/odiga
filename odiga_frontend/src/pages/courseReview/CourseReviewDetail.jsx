@@ -52,7 +52,7 @@ function CourseReviewDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`/coursereview/detail/${boardNo}`);
+        const response = await axios.get(`/api/coursereview/detail/${boardNo}`);
         const { boardLikeCount } = response.data[0];
         setDetailsData(response.data);
         setLikeCount(boardLikeCount);
@@ -84,14 +84,14 @@ function CourseReviewDetail() {
     if (loginInfo) {
       try {
         if (!liked) {
-          await axios.post(`/coursereview/like/${boardNo}`);
+          await axios.post(`/api/coursereview/like/${boardNo}`);
           setLikeCount((prevCount) => prevCount + 1);
           setLiked(true);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "true");
           alert("좋아요를 눌렀습니다.");
           window.location.reload()
         } else {
-          await axios.post(`/coursereview/likeCancel/${boardNo}`);
+          await axios.post(`/api/coursereview/likeCancel/${boardNo}`);
           setLikeCount((prevCount) => prevCount - 1);
           setLiked(false);
           localStorage.setItem(`liked_${boardNo}_${loginInfo.email}`, "false");
@@ -113,7 +113,7 @@ function CourseReviewDetail() {
     const confirmDelete = window.confirm("게시글을 삭제 하시겠습니까?");
     if (confirmDelete) {
       try {
-        await axios.put(`/coursereview/delete/${boardNo}`);
+        await axios.put(`/api/coursereview/delete/${boardNo}`);
         alert("게시글이 삭제 되었습니다");
         navigate("/coursereview"); // navigate로 페이지 이동
       } catch (error) {

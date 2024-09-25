@@ -354,7 +354,7 @@ function CustomizedAccordions({duration, loginInfo, bottom}) {
       const sendDataToServer = (savedData, title) => {
           console.log("전송될 데이터: ", savedData);
           console.log("title: ",title);
-          axios.post(`/place/savedata/${title}`, savedData)
+          axios.post(`/api/place/savedata/${title}`, savedData)
             .then((response) => {
               // 성공적으로 전송되었을 때의 처리
               console.log('데이터를 성공적으로 전송했습니다.' + response.data +"   ");

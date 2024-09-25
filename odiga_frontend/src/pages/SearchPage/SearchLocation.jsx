@@ -75,7 +75,7 @@ function SearchLocation() {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('/categories');
+            const response = await axios.get('/api/categories');
             setCatList(response.data);
         } catch (error) {
             console.error('Error fetching categories:', error);
@@ -85,7 +85,7 @@ function SearchLocation() {
     const fetchSearchResults = async (page) => {
         try {
             console.log("page: "+page+" text: "+searchText+" areacode: "+areaCode+" order: "+order+" catcode: "+catCode);
-            const response = await axios.get('/search', {
+            const response = await axios.get('/api/search', {
                 params: {
                     page: page,
                     text: searchText,
@@ -109,7 +109,7 @@ function SearchLocation() {
 
     const fetchAreaCounts = async () => {
         try {
-            const response = await axios.get('/count-areas', {
+            const response = await axios.get('/api/count-areas', {
                 params: {
                     text: searchText,
                     catcode: catCode.join(',')

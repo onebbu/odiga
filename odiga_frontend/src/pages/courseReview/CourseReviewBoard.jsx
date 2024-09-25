@@ -53,7 +53,7 @@ const CourseReviewBoard = () => {
 
     const fetchData = async () => {
         try {
-            const response = await axios.get("/coursereviewsearch", {
+            const response = await axios.get("/api/coursereviewsearch", {
                 params: {
                     query: ""
                 },

@@ -29,11 +29,11 @@ function TravelDetailPage({ modalContentId }) {
 
     const fetchData = async () => {
         try {
-            const detailResponse = await axios.get(`/detail/${locaContId}`);
+            const detailResponse = await axios.get(`/api/detail/${locaContId}`);
             setData(detailResponse.data);
             setLikes(detailResponse.data.wishlist_count || 0);
             setViews(detailResponse.data.travelviewcount || 0);
-            const imgsResponse = await axios.get(`/imgs/${locaContId}`);
+            const imgsResponse = await axios.get(`/api/imgs/${locaContId}`);
             setImgs(imgsResponse.data);
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -46,7 +46,7 @@ function TravelDetailPage({ modalContentId }) {
     useEffect(() => {
         if (data) {
             const script = document.createElement('script');
-            script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=qdemuo7rvh&callback=initMap';
+            script.src = 'https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=x78ecx2lf5&callback=initMap';
             script.async = true;
             script.onload = () => {
                 const mapOptions = {

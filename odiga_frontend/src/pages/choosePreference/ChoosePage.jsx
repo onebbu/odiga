@@ -27,7 +27,7 @@ function ChoosePreference() {
         const searchImages = async () => {
             const updatedItems = await Promise.all(THEME.map(async (theme, index) => {
                 try {
-                    const response = await axios.get( `/preference/url/${theme.term}` );
+                    const response = await axios.get( `/api/preference/url/${theme.term}` );
                     const randomInt = Math.floor(Math.random() * 10);
                     const imageUrl = response.data.results[randomInt]?.urls?.thumb || "";;
                     return { ...item3[index], icon: imageUrl };

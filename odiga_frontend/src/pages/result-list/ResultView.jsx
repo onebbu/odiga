@@ -20,7 +20,7 @@ export default function ResultView() {
     useEffect(() => {
         async function fetchData() {
             try {
-                const result = await axios.get(`/courseId/${nickname}/${courseNo}`);
+                const result = await axios.get(`/api/courseId/${nickname}/${courseNo}`);
                 const newData = result.data;
                 setData(newData);
                 // 데이터를 가져온 후에 공유 비밀번호 설정
@@ -55,10 +55,10 @@ export default function ResultView() {
                 let response;
                 if (token === null) {
                     console.log("oauth 로그인");
-                    response = await axios.get('/auth/oauth-info');
+                    response = await axios.get('/api/auth/oauth-info');
                 } else {
                     console.log("jwt 로그인");
-                    response = await axios.get('/auth/jwt-info', config);
+                    response = await axios.get('/api/auth/jwt-info', config);
                 }
                 const data = response.data;
                 // loginInfo 상태 업데이트

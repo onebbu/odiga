@@ -19,7 +19,7 @@ function Myarticle() {
         if (loginInfo) {
             const fetchData = async () => {
                 try {
-                    const response = await axios.get(`/my-page/my-article/` + loginInfo.nickname);
+                    const response = await axios.get(`/api/my-page/my-article/` + loginInfo.nickname);
                     setArticleList(response.data);
                 } catch (error) {
                     console.error('사용자 게시글 가져오기 실패:', error);

@@ -19,7 +19,7 @@ function Mycourse() {
         if (loginInfo) {
             const fetchData = async () => {
                 try {
-                    const response = await axios.get(`/mypage/mycourse/` + loginInfo.nickname);
+                    const response = await axios.get(`/api/mypage/mycourse/` + loginInfo.nickname);
                     setCourseInfo(response.data);
                 } catch (error) {
                     console.error('코스 가져오기 실패:', error);
@@ -32,7 +32,7 @@ function Mycourse() {
 
     const handleSubmit = async (courseKey) => {
         try {
-            const response = await axios.post(`/delete`, {courseKey});
+            const response = await axios.post(`/api/delete`, {courseKey});
             window.location.reload();
         } catch (error) {
             console.error('삭제 실패:', error);
