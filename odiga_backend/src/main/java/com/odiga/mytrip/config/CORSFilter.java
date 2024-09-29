@@ -11,7 +11,7 @@ import org.springframework.web.filter.CorsFilter;
 public class CORSFilter {
 
     // CORS 필터
-    @Value("${custum.address}")
+    @Value("${server.address}")
     private String address;
 
     @Bean
