@@ -14,9 +14,9 @@ function OauthLoginButton() {
         <div className="oauth-login">
             <p className="title">SNS로 로그인하기</p>
             <div className="login-button">
-                <div className="google-login">
-                    <Link to={`${process.env.REACT_APP_SERVER_ADDRESS}/oauth2/authorization/google`}><img src={googleLoginIcon}/></Link>
-                </div>
+                {/*<div className="google-login">*/}
+                {/*    <Link to={`${process.env.REACT_APP_SERVER_ADDRESS}/oauth2/authorization/google`}><img src={googleLoginIcon}/></Link>*/}
+                {/*</div>*/}
                 <div className="naver-login">
                     <Link to={`${process.env.REACT_APP_SERVER_ADDRESS}/oauth2/authorization/naver`}><img src={naverLoginIcon}/></Link>
                 </div>
