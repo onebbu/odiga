@@ -4,6 +4,7 @@ import com.odiga.mytrip.member.jwt.JWTFilter;
 import com.odiga.mytrip.member.jwt.JWTUtil;
 import com.odiga.mytrip.member.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,9 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
     }
+
+    @Value("${custum.address}")
+    private String address;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -64,12 +68,12 @@ public class SecurityConfig {
                         logout
                                 .logoutUrl("/auth/logout") // 로그아웃 엔드포인트를 설정합니다.
                                 .invalidateHttpSession(true) // HTTP 세션을 무효화합니다.
-                                .logoutSuccessUrl("http://localhost:3000") // 로그아웃 성공 시 리다이렉트할 경로를 설정합니다.
+                                .logoutSuccessUrl(address) // 로그아웃 성공 시 리다이렉트할 경로를 설정합니다.
                                 .deleteCookies("JSESSIONID") // 쿠키를 삭제합니다.
                 )
                 .oauth2Login(oauth2 ->
                         oauth2
-                                .defaultSuccessUrl("http://localhost:3000/", true) // 구글 로그인 성공 후 리디렉션될 URI를 설정합니다.
+                                .defaultSuccessUrl(address, true) // 구글 로그인 성공 후 리디렉션될 URI를 설정합니다.
                 );
 
 
