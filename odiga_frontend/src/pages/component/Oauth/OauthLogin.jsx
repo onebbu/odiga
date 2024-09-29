@@ -8,18 +8,20 @@ import {useEffect} from "react";
 
 function OauthLoginButton() {
 
+
+
     return(
         <div className="oauth-login">
             <p className="title">SNS로 로그인하기</p>
             <div className="login-button">
                 <div className="google-login">
-                    <Link to="http://localhost:8080/oauth2/authorization/google"><img src={googleLoginIcon}/></Link>
+                    <Link to={`${process.env.REACT_APP_SERVER_ADDRESS}/oauth2/authorization/google`}><img src={googleLoginIcon}/></Link>
                 </div>
                 <div className="naver-login">
-                    <Link to="http://localhost:8080/oauth2/authorization/naver"><img src={naverLoginIcon}/></Link>
+                    <Link to={`${process.env.REACT_APP_SERVER_ADDRESS}/oauth2/authorization/naver`}><img src={naverLoginIcon}/></Link>
                 </div>
                 <div className="kakao-login">
-                    <Link to="http://localhost:8080/oauth2/authorization/kakao"><img src={kakaoLoginIcon}/></Link>
+                    <Link to={`${process.env.REACT_APP_SERVER_ADDRESS}/oauth2/authorization/kakao`}><img src={kakaoLoginIcon}/></Link>
                 </div>
             </div>
         </div>

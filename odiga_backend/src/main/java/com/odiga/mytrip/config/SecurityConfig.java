@@ -29,7 +29,7 @@ public class SecurityConfig {
         return configuration.getAuthenticationManager();
     }
 
-    @Value("${custum.address}")
+    @Value("${server.address}")
     private String address;
 
     @Bean
