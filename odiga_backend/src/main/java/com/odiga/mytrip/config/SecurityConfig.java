@@ -68,12 +68,12 @@ public class SecurityConfig {
                         logout
                                 .logoutUrl("/auth/logout") // 로그아웃 엔드포인트를 설정합니다.
                                 .invalidateHttpSession(true) // HTTP 세션을 무효화합니다.
-                                .logoutSuccessUrl(address) // 로그아웃 성공 시 리다이렉트할 경로를 설정합니다.
+                                .logoutSuccessUrl("http://" + address + "/auth/logout-success") // 로그아웃 성공 시 리다이렉트할 경로를 설정합니다.
                                 .deleteCookies("JSESSIONID") // 쿠키를 삭제합니다.
                 )
                 .oauth2Login(oauth2 ->
                         oauth2
-                                .defaultSuccessUrl(address, true) // 구글 로그인 성공 후 리디렉션될 URI를 설정합니다.
+                                .defaultSuccessUrl("http://" + address + "/home", true) // 구글 로그인 성공 후 리디렉션될 URI를 설정합니다.
                 );
 
 
