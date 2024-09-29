@@ -194,7 +194,7 @@ export default function SignUp() {
                                 </SignUpButton>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <SignUpLink href={`${process.env.REACT_APP_SERVER_ADDRESS}/login`} variant="body2">
+                                        <SignUpLink href="/login" variant="body2">
                                             이미 아이디가 있으신가요? 로그인하기
                                         </SignUpLink>
                                     </Grid>
