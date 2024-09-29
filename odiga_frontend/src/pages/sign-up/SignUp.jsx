@@ -194,7 +194,7 @@ export default function SignUp() {
                                 </SignUpButton>
                                 <Grid container justifyContent="flex-end">
                                     <Grid item>
-                                        <SignUpLink href="http://13.125.150.232/api/login" variant="body2">
+                                        <SignUpLink href="http://13.125.150.232/login" variant="body2">
                                             이미 아이디가 있으신가요? 로그인하기
                                         </SignUpLink>
                                     </Grid>
